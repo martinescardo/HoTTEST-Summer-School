@@ -1,19 +1,19 @@
---
+
 Martin Escardo
 Notes originally written for the module "Advanced Functional Programming"
 at the School of Computer Science of the University of Birmingham, UK.
---
 
-<!--
+
+<!
 ```agda
-{-# OPTIONS --without-K --safe #-}
+{-# OPTIONS without-K --safe #-}
 
 module negation where
 
 open import general-notation
 open import prelude
 ```
--->
+>
 # Reasoning with negation
 
 [Recall that](empty-type.lagda.md) we defined the negation `¬ A` of a type `A` to be the function type `A → 0`,
@@ -75,11 +75,11 @@ dni A R a u = u a
 ¬¬-intro {A} = dni A 𝟘
 ```
 We don't always have `¬¬ A → A` in proofs-as-programs. This has to do with *computability theory*. But sometimes we do. For example, if we know that `A ∔ ¬ A` then `¬¬A → A` follows:
-<!--
+<!
 ```agda
-private -- because it is defined elsewhere, and it is here for illustration only
+private  because it is defined elsewhere, and it is here for illustration only
 ```
--->
+>
 ```agda
  ¬¬-elim : {A : Type} → A ∔ ¬ A → ¬¬ A → A
  ¬¬-elim (inl x) f = x

@@ -1,18 +1,18 @@
---
+
 Martin Escardo
 Notes originally written for the module "Advanced Functional Programming"
 at the School of Computer Science of the University of Birmingham, UK.
---
 
-<!--
+
+<!
 ```agda
-{-# OPTIONS --without-K --safe #-}
+{-# OPTIONS without-K --safe #-}
 
 module binary-products-as-products where
 
 open import prelude
 ```
--->
+>
 
 ## Binary products as a special case of arbitrary products
 

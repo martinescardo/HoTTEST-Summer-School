@@ -1,12 +1,12 @@
---
+
 Martin Escardo
 Notes originally written for the module "Advanced Functional Programming"
 at the School of Computer Science of the University of Birmingham, UK.
---
 
-<!--
+
+<!
 ```agda
-{-# OPTIONS --without-K --safe #-}
+{-# OPTIONS without-K --safe #-}
 
 module searchability where
 
@@ -14,7 +14,7 @@ open import prelude
 open import negation
 open import decidability
 ```
--->
+>
 # Examples of searchable sets
 
 Recall that we defined exhaustibly searchable types in the module [decidability](decidability.lagda.md). Let's adopt a shorter name for the purposes of this module.

@@ -1,18 +1,18 @@
---
+
 Martin Escardo
 Notes originally written for the module "Advanced Functional Programming"
 at the School of Computer Science of the University of Birmingham, UK.
---
 
-<!--
+
+<!
 ```agda
-{-# OPTIONS --without-K --safe #-}
+{-# OPTIONS without-K --safe #-}
 
 module empty-type where
 
 open import general-notation
 ```
--->
+>
 # The empty type 𝟘
 
 It is convenient to have an empty type `𝟘`, with no elements at all. For example, this can be used in order to define [negation](negation.lagda.md), among other things.

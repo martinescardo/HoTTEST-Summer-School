@@ -1,18 +1,18 @@
---
+
 Martin Escardo
 Notes originally written for the module "Advanced Functional Programming"
 at the School of Computer Science of the University of Birmingham, UK.
---
 
-<!--
+
+<!
 ```agda
-{-# OPTIONS --without-K --safe #-}
+{-# OPTIONS without-K --safe #-}
 
 module binary-type where
 
 open import general-notation
 ```
--->
+>
 ## The binary type 𝟚
 
 This type can be defined to be `𝟙 ∔ 𝟙` using [binary sums](binary-sums.lagda.md), but we give a direct definition which will allow us to discuss some relationships between the various type formers of Basic MLTT.

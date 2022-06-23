@@ -1,15 +1,15 @@
---
+
 Martin Escardo
 Notes originally written for the module "Advanced Functional Programming"
 at the School of Computer Science of the University of Birmingham, UK.
---
+
 
 # General notation
 
-The option `--without-K` will be explained later (it concerns the identity type). The option `--safe` disables experimental features of Agda that may make it *inconsistent*, that is, allow to prove false statements such as `0 = 1`.
+The option `without-K` will be explained later (it concerns the identity type). The option `--safe` disables experimental features of Agda that may make it *inconsistent*, that is, allow to prove false statements such as `0 = 1`.
 
 ```agda
-{-# OPTIONS --without-K --safe #-}
+{-# OPTIONS without-K --safe #-}
 ```
 
 Any Agda file is a module with the same name as the file.

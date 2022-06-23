@@ -1,26 +1,26 @@
---
+
 Martin Escardo
 Notes originally written for the module "Advanced Functional Programming"
 at the School of Computer Science of the University of Birmingham, UK.
---
 
-<!--
+
+<!
 ```agda
-{-# OPTIONS --without-K --safe #-}
+{-# OPTIONS without-K --safe #-}
 
 module introduction where
 ```
--->
+>
 # Introduction to Advanced Functional Programming
 
 ## Initial examples of types in Agda
 
-<!--
+<!
 In Agda, types are called sets by default. For the purposes of HoTT/UF, we prefer to stick to "Type".
 ```agda
 Type = Set
 ```
--->
+>
 
 Here are some examples of types:
 
@@ -222,12 +222,12 @@ forth (suc x) (suc y) p = I
 
 ## Propositions as types
 
-The [Curry--Howard interpretation of logic](https://en.wikipedia.org/wiki/Curry%E2%80%93Howard_correspondence), after [Haskell Curry](https://en.wikipedia.org/wiki/Haskell_Curry) and [William Howard](https://en.wikipedia.org/wiki/William_Alvin_Howard), interprets logical statements, also known as propositions, as *types*. [Per Martin-Löf](https://en.wikipedia.org/wiki/Per_Martin-L%C3%B6f) extended this interpretation of propositions as types with equality, by introducing the identity type discussed above.
+The [CurryHoward interpretation of logic](https://en.wikipedia.org/wiki/Curry%E2%80%93Howard_correspondence), after [Haskell Curry](https://en.wikipedia.org/wiki/Haskell_Curry) and [William Howard](https://en.wikipedia.org/wiki/William_Alvin_Howard), interprets logical statements, also known as propositions, as *types*. [Per Martin-Löf](https://en.wikipedia.org/wiki/Per_Martin-L%C3%B6f) extended this interpretation of propositions as types with equality, by introducing the identity type discussed above.
 
-An incomplete table of the Curry--Howard--Martin-Löf interpretation of logical propositions is the following:
+An incomplete table of the CurryHoward--Martin-Löf interpretation of logical propositions is the following:
 
 | Proposition  | Type                                  |
-| ---          | ---                                   |
+| -          | ---                                   |
 | A implies B  | function type A → B                   |
 | ∀ x : A, B x | dependent function type (x : A) → B x |
 | equality     | identity type `_≡_`                   |
@@ -247,7 +247,7 @@ or, using logical symbolism,
 For more complex examples of reasoning about programs, we need to complete the following table:
 
 | Logic        | English                    | Type          |
-| ---          | ---                        | ---           |
+| -          | ---                        | ---           |
 | ¬ A          | not A                      | ?             |
 | A ∧ B        | A and B                    | ?             |
 | A ∨ B        | A or B                     | ?             |

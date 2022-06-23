@@ -1,18 +1,18 @@
---
+
 Martin Escardo
 Notes originally written for the module "Advanced Functional Programming"
 at the School of Computer Science of the University of Birmingham, UK.
---
 
-<!--
+
+<!
 ```agda
-{-# OPTIONS --without-K --safe #-}
+{-# OPTIONS without-K --safe #-}
 
 module binary-sums-as-sums where
 
 open import prelude
 ```
--->
+>
 
 ## Binary sums as a special case of arbitrary sums
 

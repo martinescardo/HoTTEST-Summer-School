@@ -1,18 +1,18 @@
---
+
 Martin Escardo
 Notes originally written for the module "Advanced Functional Programming"
 at the School of Computer Science of the University of Birmingham, UK.
---
 
-<!--
+
+<!
 ```agda
-{-# OPTIONS --without-K --safe #-}
+{-# OPTIONS without-K --safe #-}
 
 module Fin where
 
 open import general-notation
 ```
--->
+>
 # Finite types
 
 We now define a type `Fin n` which has exactly `n` elements, where `n : ℕ` is a natural number.

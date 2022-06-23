@@ -1,8 +1,8 @@
---
+
 Martin Escardo
 Notes originally written for the module "Advanced Functional Programming"
 at the School of Computer Science of the University of Birmingham, UK.
---
+
 
 # Hedberg's Theorem
 
@@ -12,7 +12,7 @@ Hedberg's Theorem, whose proof is short, but quite difficult to understand, even
 Agda has the axiom `K` discussed above enabled by default. We are disabling it in all modules, including this. The reason is that towards the end of term we intend to give examples of types that are not sets, and explain why they are interesting.
 
 ```agda
-{-# OPTIONS --without-K --safe #-}
+{-# OPTIONS without-K --safe #-}
 
 module Hedbergs-Theorem where
 

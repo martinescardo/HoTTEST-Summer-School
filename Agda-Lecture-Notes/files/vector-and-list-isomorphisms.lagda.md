@@ -1,18 +1,18 @@
---
+
 Martin Escardo
 Notes originally written for the module "Advanced Functional Programming"
 at the School of Computer Science of the University of Birmingham, UK.
---
 
-<!--
+
+<!
 ```agda
-{-# OPTIONS --without-K --safe #-}
+{-# OPTIONS without-K --safe #-}
 
 module vector-and-list-isomorphisms where
 
 open import prelude
 ```
--->
+>
 # Vector and list isomorphisms
 
 There are deliberate gaps in this file for you to fill.
