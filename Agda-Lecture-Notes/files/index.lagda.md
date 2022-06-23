@@ -16,7 +16,6 @@ import Fin
 import Hedbergs-Theorem
 import List-functions
 import List
-import Maybe
 import Vector-functions
 import Vector
 import binary-products-as-products
