@@ -24,8 +24,8 @@ Martin Escardo. Notes originally written for the module "Advanced Functional Pro
     1. [Binary sums as a special case of sums](files/binary-sums-as-sums.lagda.md)
     1. [Binary products as a special case of products](files/binary-products-as-products.lagda.md)
  1. More types, their elimination principles, and their isomorphism with Basic MLTT types
-    1. [Booleans](files/Bool.lagda.md) and [Booleans as a Basic MLTT type](files/Bool-functions.lagda.md)
-    1. [Finite types](files/Fin.lagda.md)
+    1. [Booleans](files/Bool.lagda.md) and their manifestation as [Basic MLTT type](files/Bool-functions.lagda.md)
+    1. [Finite types](files/Fin.lagda.md) and their manifestation as [Basic MLTT type](files/Fin-functions.lagda.md)
     1. [Lists](files/List.lagda.md)
     1. [Vectors](files/Vector.lagda.md)
     1. [List and vector isomorphisms](files/vector-and-list-isomorphisms.lagda.md)
