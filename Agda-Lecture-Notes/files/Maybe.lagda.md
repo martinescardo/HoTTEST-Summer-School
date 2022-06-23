@@ -1,12 +1,12 @@
 
-Martin Escardo
+Martin Escardo.
 Notes originally written for the module "Advanced Functional Programming"
 at the School of Computer Science of the University of Birmingham, UK.
 
 
 <!
 ```agda
-{-# OPTIONS without-K --safe #-}
+{-# OPTIONS --without-K --safe #-}
 
 module Maybe where
 
