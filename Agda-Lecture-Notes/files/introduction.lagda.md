@@ -11,7 +11,7 @@ at the School of Computer Science of the University of Birmingham, UK.
 module introduction where
 ```
 -->
-# Introduction to Advanced Functional Programming
+# Introduction to Agda
 
 ## Initial examples of types in Agda
 
@@ -100,31 +100,7 @@ _++_ : {A : Type} → List A → List A → List A
 
 infixr 20 _++_
 
-map : {A B : Type} → (A → B) → List A → List B
-map f []        = []
-map f (x :: xs) = f x :: map f xs
-
-[_] : {A : Type} → A → List A
-[ x ] = x :: []
-
-reverse : {A : Type} → List A → List A
-reverse []        = []
-reverse (x :: xs) = reverse xs ++ [ x ]
-
-rev-append : {A : Type} → List A → List A → List A
-rev-append []        ys = ys
-rev-append (x :: xs) ys = rev-append xs (x :: ys)
-
-rev : {A : Type} → List A → List A
-rev xs = rev-append xs []
 ```
-
-The function `reverse` is slow for large lists as it runs in quadratic
-time, but the function `rev` is much faster as it runs in linear
-time. Although the algorithm for `reverse` is simple and clear, that
-for `rev` is slightly more complicated, and so perhaps we would like
-to make sure that we didn't make a mistake, by proving that `reverse
-xs` and `rev xs` are equal. We will do that later.
 
 ## More sophisticated examples of types in Agda
 
