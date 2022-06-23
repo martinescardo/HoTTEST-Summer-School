@@ -40,5 +40,5 @@ import searchability
 import sums-equality
 import sums
 import unit-type
-import vector-and-list-isomorphisms
+-- import vector-and-list-isomorphisms
 ```
