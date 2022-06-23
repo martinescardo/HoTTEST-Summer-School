@@ -4,7 +4,7 @@ Notes originally written for the module "Advanced Functional Programming"
 at the School of Computer Science of the University of Birmingham, UK.
 
 
-<!
+<!--
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
@@ -12,7 +12,7 @@ module sums where
 
 open import general-notation
 ```
->
+-->
 # The sum type former `Σ`
 
 Very often in computation we work with the type of pairs `(x , y)` with `x : A` and `y : B` where `A` and `B` are types. We will write `A × B` for the type of such pairs, and call it the [*cartesian product*](https://en.wikipedia.org/wiki/Cartesian_product). We will define this type as a particular case of a more general type, whose elements are again of the form `(x , y)` but with the difference that `x : A` and `y : B x` where `A : Type` and `B : A → Type`. The difference amounts to the fact that the type of the second component `y` depends on the first element `x`. The default notation for this type will be `Σ {A} B`, or simply `Σ B` when `A` can be inferred from the context, but we will also introduce the more common sum notation `Σ x ꞉ A , B x`. This type is also called the [disjoint union](https://en.wikipedia.org/wiki/Disjoint_union) of the type family `B : A → Type`.
@@ -26,12 +26,12 @@ Another example, which iterates the `Σ` type construction, is `Σ x : ℕ , Σ 
 ## Definition
 
 The `Σ` type can be defined in Agda using a `data` declaration as follows:
-<!
+<!--
 ```agda
 module _ where
  private
 ```
->
+-->
 ```agda
   data Σ {A : Type } (B : A → Type) : Type  where
    _,_ : (x : A) (y : B x) → Σ {A} B

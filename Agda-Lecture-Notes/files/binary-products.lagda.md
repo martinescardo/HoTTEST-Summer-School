@@ -4,7 +4,7 @@ Notes originally written for the module "Advanced Functional Programming"
 at the School of Computer Science of the University of Birmingham, UK.
 
 
-<!
+<!--
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
@@ -12,7 +12,7 @@ module binary-products where
 
 open import general-notation
 ```
->
+-->
 # The cartesian-product type former `_×_`
 
 As [discussed before](sums.lagda.md), the cartesian product `A × B` is simply `Σ {A} (λ x → B)` which means that for `(x , y) : A × B` the type of `y` is always `B`, independently of what `x` is. Using our special syntax for `Σ` this can be defined as follows in Agda:

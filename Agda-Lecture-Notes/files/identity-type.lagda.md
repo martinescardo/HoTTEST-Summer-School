@@ -4,7 +4,7 @@ Notes originally written for the module "Advanced Functional Programming"
 at the School of Computer Science of the University of Birmingham, UK.
 
 
-<!
+<!--
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
@@ -12,7 +12,7 @@ module identity-type where
 
 open import general-notation
 ```
->
+-->
 # The identity type former `_≡_`
 
 The original and main terminology for the following type is *identity type*, but sometimes it is also called the *equality type*. Sometimes this is also called *propositional equality*, but we will avoid this terminology as it sometimes leads to confusion.

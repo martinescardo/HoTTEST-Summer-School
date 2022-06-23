@@ -4,7 +4,7 @@ Notes originally written for the module "Advanced Functional Programming"
 at the School of Computer Science of the University of Birmingham, UK.
 
 
-<!
+<!--
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
@@ -12,7 +12,7 @@ module Bool where
 
 open import general-notation
 ```
->
+-->
 # The booleans
 
 We discuss the elimination principle for the booleans. The booleans

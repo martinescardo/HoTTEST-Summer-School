@@ -4,7 +4,7 @@ Notes originally written for the module "Advanced Functional Programming"
 at the School of Computer Science of the University of Birmingham, UK.
 
 
-<!
+<!--
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
@@ -12,7 +12,7 @@ module Bool-functions where
 
 open import prelude
 ```
->
+-->
 # The booleans
 
 The booleans are isomorphic to a Basic MLTT type:

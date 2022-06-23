@@ -4,7 +4,7 @@ Notes originally written for the module "Advanced Functional Programming"
 at the School of Computer Science of the University of Birmingham, UK.
 
 
-<!
+<!--
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
@@ -12,7 +12,7 @@ module List-functions where
 
 open import prelude
 ```
->
+-->
 # Some functions on lists
 
 ## Length, concatenation, map and singleton lists

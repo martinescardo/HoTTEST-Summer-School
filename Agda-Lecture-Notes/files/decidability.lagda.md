@@ -4,7 +4,7 @@ Notes originally written for the module "Advanced Functional Programming"
 at the School of Computer Science of the University of Birmingham, UK.
 
 
-<!
+<!--
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
@@ -13,7 +13,7 @@ module decidability where
 open import prelude
 open import negation
 ```
->
+-->
 # Propositions as types versus propositions as booleans
 
 When programming in conventional programming languages such as Haskell, C, Java or Python, etc., we use *booleans* rather than *types* to encode logical propositions. But this works only because we restrict ourselves to *decidable* propositions, as we'll see below.
@@ -82,12 +82,12 @@ Consider the logical statement "x is even". This is decidable, because
 there is an easy algorithm that tells whether a natural number `x` is
 even or not. In programming languages we write this algorithm as a
 procedure that returns a boolean. But an equally valid definition is to say that `x` is even if there is a natural number `y` such that `x = 2 * y`. This definition doesn't automatically give an algorithm to check whether or not `x` is odd.
-<!
+<!--
 ```agda
 module _ where
  private
 ```
->
+-->
 ```agda
   is-even : ℕ → Type
   is-even x = Σ y ꞉ ℕ , x ≡ 2 * y

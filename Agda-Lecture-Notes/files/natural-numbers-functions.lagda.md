@@ -4,7 +4,7 @@ Notes originally written for the module "Advanced Functional Programming"
 at the School of Computer Science of the University of Birmingham, UK.
 
 
-<!
+<!--
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
@@ -14,7 +14,7 @@ module natural-numbers-functions where
 open import prelude
 open import negation
 ```
->
+-->
 # Natural numbers functions, relations and properties
 
 ## Some general properties

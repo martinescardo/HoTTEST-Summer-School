@@ -4,23 +4,23 @@ Notes originally written for the module "Advanced Functional Programming"
 at the School of Computer Science of the University of Birmingham, UK.
 
 
-<!
+<!--
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
 module introduction where
 ```
->
+-->
 # Introduction to Advanced Functional Programming
 
 ## Initial examples of types in Agda
 
-<!
+<!--
 In Agda, types are called sets by default. For the purposes of HoTT/UF, we prefer to stick to "Type".
 ```agda
 Type = Set
 ```
->
+-->
 
 Here are some examples of types:
 

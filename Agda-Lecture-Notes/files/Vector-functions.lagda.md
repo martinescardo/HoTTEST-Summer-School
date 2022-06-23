@@ -4,7 +4,7 @@ Notes originally written for the module "Advanced Functional Programming"
 at the School of Computer Science of the University of Birmingham, UK.
 
 
-<!
+<!--
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
@@ -12,7 +12,7 @@ module Vector-functions where
 
 open import prelude
 ```
->
+-->
 # Some functions on vectors
 
 As mentioned in the [introduction](introduction.lagda.md), vectors allow us to have safe `head` and `tail` functions.

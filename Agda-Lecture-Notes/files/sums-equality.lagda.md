@@ -4,7 +4,7 @@ Notes originally written for the module "Advanced Functional Programming"
 at the School of Computer Science of the University of Birmingham, UK.
 
 
-<!
+<!--
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
@@ -15,7 +15,7 @@ open import sums
 open import binary-products
 open import identity-type
 ```
->
+-->
 # Equality in `Σ` types
 
 The material here is rather subtle.

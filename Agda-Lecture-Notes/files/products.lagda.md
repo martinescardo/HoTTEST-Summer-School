@@ -4,7 +4,7 @@ Notes originally written for the module "Advanced Functional Programming"
 at the School of Computer Science of the University of Birmingham, UK.
 
 
-<!
+<!--
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
@@ -12,7 +12,7 @@ module products where
 
 open import general-notation
 ```
->
+-->
 
 # Products
 
@@ -21,13 +21,13 @@ We discuss function types of the form `A → B` (called non-dependent function t
 ## The identity function
 
 To *introduce* functions, we use `λ`-abstractions like in Haskell. For example, the identity function can be defined as follows:
-<!
+<!--
 The following trick allows us to check the correctness of alternative definitions without name clashes:
 ```agda
 module _ where
  private
 ```
->
+-->
 ```agda
   id : {A : Type} → A → A
   id = λ x → x
@@ -64,12 +64,12 @@ This is because in order to show that this universal quantification holds, we ha
 ## Dependent function composition
 
 Composition can be defined for "non-dependent functions", as in usual mathematics and in Haskell, and, more generally, with dependent functions. With non-dependent functions, it has the following type and definition:
-<!
+<!--
 ```agda
 module _ where
  private
 ```
->
+-->
 ```agda
   _∘_ : {A B C : Type} → (B → C) → (A → B) → (A → C)
   g ∘ f = λ x → g (f x)

@@ -4,7 +4,7 @@ Notes originally written for the module "Advanced Functional Programming"
 at the School of Computer Science of the University of Birmingham, UK.
 
 
-<!
+<!--
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
@@ -13,7 +13,7 @@ module negation where
 open import general-notation
 open import prelude
 ```
->
+-->
 # Reasoning with negation
 
 [Recall that](empty-type.lagda.md) we defined the negation `¬ A` of a type `A` to be the function type `A → 0`,

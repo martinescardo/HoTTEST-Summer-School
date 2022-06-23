@@ -4,7 +4,7 @@ Notes originally written for the module "Advanced Functional Programming"
 at the School of Computer Science of the University of Birmingham, UK.
 
 
-<!
+<!--
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
@@ -12,7 +12,7 @@ module empty-type where
 
 open import general-notation
 ```
->
+-->
 # The empty type 𝟘
 
 It is convenient to have an empty type `𝟘`, with no elements at all. For example, this can be used in order to define [negation](negation.lagda.md), among other things.
@@ -24,7 +24,7 @@ And that's the complete definition. The list of constructors that define the typ
 
 Perhaps counter-intuitively, there is one function `𝟘 → 𝟘`, namely the [identity function](products.lagda.md). So although the type `𝟘` is empty, the type `𝟘 → 𝟘` is non-empty. In fact, the non-dependent elimination principle generalizes that.
 
-## Proposition as type interpretation
+## Proposition as types interpretation
 
 The empty type is used to interpret "false". Because there is no way to prove the statement `false`, we use the empty type to represent `false` as a type.
 
