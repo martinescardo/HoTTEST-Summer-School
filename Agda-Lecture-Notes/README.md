@@ -29,7 +29,7 @@ Martin Escardo. Notes originally written for the module "Advanced Functional Pro
     1. [Lists](files/List.lagda.md)
     1. [Vectors](files/Vector.lagda.md)
     1. [List and vector isomorphisms](files/vector-and-list-isomorphisms.lagda.md)
- 1. More functional programs with the above types:
+ 1. More constructions and proofs with the above types:
     1. [Natural numbers](/files/LectureNotes/files/natural-numbers-functions.lagda.md)
     1. [Booleans](/files/LectureNotes/files/Bool-functions.lagda.md)
     1. [Finite types](/files/LectureNotes/files/Fin-functions.lagda.md)
