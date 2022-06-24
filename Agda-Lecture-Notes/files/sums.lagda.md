@@ -21,7 +21,7 @@ Very often in computation we work with the type of pairs `(x , y)` with `x : A` 
 
 A simple example is the type `Σ xs ꞉ List X , Vector X (length xs)` with `X : Type`. An element of this type is a pair `(xs , ys)` where `xs` is a list and `ys` is a vector of the same length as `xs`.
 
-Another example, which iterates the `Σ` type construction, is `Σ x : ℕ , Σ y : ℕ , Σ z : ℕ , x ≡ y * z`. An element of this type is now a quadruple `(x , (y , (z , p)))` where `x y z : ℕ` and `p : x ≡ y * z`. That is, the fourth component ensures that `x y z : ℕ` are allowed in the tuple if, and only if, `x ≡ y * z`. We will see more interesting examples shortly.
+Another example, which iterates the `Σ` type construction, is `Σ x : ℕ , Σ y : ℕ , Σ z : ℕ , x ＝ y * z`. An element of this type is now a quadruple `(x , (y , (z , p)))` where `x y z : ℕ` and `p : x ＝ y * z`. That is, the fourth component ensures that `x y z : ℕ` are allowed in the tuple if, and only if, `x ＝ y * z`. We will see more interesting examples shortly.
 
 ## Definition
 
@@ -94,6 +94,6 @@ So the elimination principle for `Σ` is what was called `curry` in Haskell in i
 
 Regarding logic, the `Σ` type is used to interpret the existential quantifier `∃`. The logical proposition `∃ x : X, A x`,  that is, "there exists x : X such that A x", is interpreted as the type `Σ x ꞉ X , A x`. The reason is that to show that `∃ x : X, A x` we have to exhibit an example `x : X` and  show that `x` satisfies the condition `A x` with some `y : A x`, in a pair `(x , y)`.
 
-For example, the type `Σ x : ℕ , Σ y : ℕ , Σ z : ℕ , x ≡ y * z` can be interpreted as saying that "there are natural numbers x, y, and z such that x = y * z", which is true as witnessed by the element `(6,2,3,refl 6)` of that type. But there are many other witnesses of this type, of course, such as `(10,5,2,refl 10)`.
+For example, the type `Σ x : ℕ , Σ y : ℕ , Σ z : ℕ , x ＝ y * z` can be interpreted as saying that "there are natural numbers x, y, and z such that x = y * z", which is true as witnessed by the element `(6,2,3,refl 6)` of that type. But there are many other witnesses of this type, of course, such as `(10,5,2,refl 10)`.
 
-It is important to notice that it is possible to write types that correspond to false logical statements, and hence are empty. For example, consider `Σ x : ℕ , x ≡ x + 1`. There is no natural number that is its own successor, of course, and so this type is empty. While this type is empty, the type `¬ (Σ x : ℕ , x ≡ x + 1)` has an element, as we will see, which witnesses the fact that "there doesn't exist a natural number `x` such that x = x + 1`.
+It is important to notice that it is possible to write types that correspond to false logical statements, and hence are empty. For example, consider `Σ x : ℕ , x ＝ x + 1`. There is no natural number that is its own successor, of course, and so this type is empty. While this type is empty, the type `¬ (Σ x : ℕ , x ＝ x + 1)` has an element, as we will see, which witnesses the fact that "there doesn't exist a natural number `x` such that x = x + 1`.

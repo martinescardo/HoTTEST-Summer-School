@@ -71,7 +71,7 @@ private
  example₀ : Vector' ℕ 3
  example₀ = 1 ::' 2 ::' 3 ::' ([]' {ℕ})
 
- example₁ : example₀ ≡ (1 , 2 , 3 , ⋆)
+ example₁ : example₀ ＝ (1 , 2 , 3 , ⋆)
  example₁ = refl _
 
 open import isomorphisms
@@ -102,12 +102,12 @@ private
  open _≅_
  open is-bijection
 
- example₂ : bijection Vector-iso (1 :: 2 :: 3 :: []) ≡ (1 , 2 , 3 , ⋆)
+ example₂ : bijection Vector-iso (1 :: 2 :: 3 :: []) ＝ (1 , 2 , 3 , ⋆)
  example₂ = refl _
 
  example₄ : Vector ℕ 3
  example₄ = inverse (bijectivity Vector-iso) (1 , 2 , 3 , ⋆)
 
- example₅ : example₄ ≡ 1 :: 2 :: 3 :: []
+ example₅ : example₄ ＝ 1 :: 2 :: 3 :: []
  example₅ = refl _
 ```

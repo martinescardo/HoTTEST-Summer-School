@@ -46,7 +46,7 @@ lists-from-vectors {A} = record { bijection = f ; bijectivity = f-is-bijection }
 ```agda
 open import List-functions
 
-vectors-from-lists : {A : Type} (n : ℕ) → Vector A n ≅ (Σ xs ꞉ List A , (length xs ≡ n))
+vectors-from-lists : {A : Type} (n : ℕ) → Vector A n ≅ (Σ xs ꞉ List A , (length xs ＝ n))
 vectors-from-lists {A} n = record { bijection = f ; bijectivity = f-is-bijection }
  where
   f : {!!} → {!!}

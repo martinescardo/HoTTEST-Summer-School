@@ -69,7 +69,7 @@ is-empty A = A → 𝟘
 ```
 So notice that this is the same definition as that of negation.
 
-Here is another example of a type that is empty. In the [introduction](introduction.lagda.md) we defined the identity type former `_≡_`, which [we will revisit](identity-type.lagda.md), and we have that, for example, the type `3 ≡ 4` is empty, whereas the type `3 ≡ 3` has an element `refl 3`. Here are some examples coded in Agda:
+Here is another example of a type that is empty. In the [introduction](introduction.lagda.md) we defined the identity type former `_＝_`, which [we will revisit](identity-type.lagda.md), and we have that, for example, the type `3 ＝ 4` is empty, whereas the type `3 ＝ 3` has an element `refl 3`. Here are some examples coded in Agda:
 ```agda
 𝟘-is-empty : is-empty 𝟘
 𝟘-is-empty = 𝟘-nondep-elim

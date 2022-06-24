@@ -18,7 +18,7 @@ We now complete the proposition-as-types interpretation of logic.
 | ¬ A             | not A                      | A → ℕ₀        | A → 𝟘         | [negation](negation.lagda.md)                       |                                       |
 | ∀ x : A, B x    | for all x:A, B x           | Π x : A , B x | (x : A) → B x | [product](products.lagda.md)                         | dependent function type               |
 | ∃ x : A, B x    | there is x:A such that B x | Σ x ꞉ A , B x | Σ x ꞉ A , B x | [sum](sums.lagda.md)                                 | disjoint union, <br> dependent pair type   |
-| x = y           | x equals y                 | Id x y        | x ≡ y         | [identity type](identity-type.lagda.md)             | equality type, <br> propositional equality |
+| x = y           | x equals y                 | Id x y        | x ＝ y         | [identity type](identity-type.lagda.md)             | equality type, <br> propositional equality |
 
 ## Remarks
 
