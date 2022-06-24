@@ -28,11 +28,11 @@ open import isomorphisms
         (Isomorphism f' (Inverse g' η' ε'))
        = Isomorphism (f' ∘ f)
           (Inverse (g ∘ g')
-            (λ x → g (g' (f' (f x))) ＝⟨ ap g (η' (f x)) ⟩
-                   g (f x)           ＝⟨ η x ⟩
+            (λ x → g (g' (f' (f x))) ≡⟨ ap g (η' (f x)) ⟩
+                   g (f x)           ≡⟨ η x ⟩
                    x                 ∎)
-            (λ y → f' (f (g (g' y))) ＝⟨ ap f' (ε (g' y)) ⟩
-                   f' (g' y)         ＝⟨ ε' y ⟩
+            (λ y → f' (f (g (g' y))) ≡⟨ ap f' (ε (g' y)) ⟩
+                   f' (g' y)         ≡⟨ ε' y ⟩
                    y                 ∎))
 ```
 

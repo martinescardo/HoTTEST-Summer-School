@@ -27,7 +27,7 @@ We now discuss *why* we use *types* to encode logical propositions, and
 
 **Counter-example.** We *can't check* equality of functions of type `ℕ → ℕ`, for instance. Intuitively, to check that two functions `f` and `g` of this type are equal, we need to check infinitely many cases, namely `f x = g x` for all `x : ℕ`. But, we are afraid, intuition is not enough. This has to be proved. Luckily in our case, [Alan Turing](https://en.wikipedia.org/wiki/Alan_Turing) provided the basis to prove that. He showed that the [Halting Problem](https://en.wikipedia.org/wiki/Halting_problem) can't be solved by an algorithm in any programming language. It follows from this that we can't check whether two such functions `f` and `g` are equal or not using an algorithm.
 
-The above examples and counter-examples show that sometimes we can decide equality with an algorithm, and sometimes we can't. However, for example, the identity type `_＝_` applies to *all* types, whether they have decidable equality or not, and this is why it is useful. We can think about equality, not only in our heads but also in Agda, without worrying whether it can be *checked* to be true or not by a computer. The identity type is not about *checking* equality. It is about asserting that two things are equal, and then proving this ourselves. In fact, equality is very often not checkable by the computer. It is instead about *stating* and *proving* or *disproving* equalities, where the proving and disproving is done by people (the lecturers and the students in this case), by hard, intelligent work.
+The above examples and counter-examples show that sometimes we can decide equality with an algorithm, and sometimes we can't. However, for example, the identity type `_≡_` applies to *all* types, whether they have decidable equality or not, and this is why it is useful. We can think about equality, not only in our heads but also in Agda, without worrying whether it can be *checked* to be true or not by a computer. The identity type is not about *checking* equality. It is about asserting that two things are equal, and then proving this ourselves. In fact, equality is very often not checkable by the computer. It is instead about *stating* and *proving* or *disproving* equalities, where the proving and disproving is done by people (the lecturers and the students in this case), by hard, intelligent work.
 
 ## Decidable propositions
 
@@ -51,27 +51,27 @@ The following shows that a type `A` is decidable if and only if there is `b : Bo
 
 For the purposes of this handout, understanding the following proof is not important at a first reading. What is important is to understand *what* the type of the following function is saying, which is what we explained above.
 ```agda
-decidability-with-booleans : (A : Type) → is-decidable A ⇔ Σ b ꞉ Bool , (A ⇔ b ＝ true)
+decidability-with-booleans : (A : Type) → is-decidable A ⇔ Σ b ꞉ Bool , (A ⇔ b ≡ true)
 decidability-with-booleans A = f , g
  where
-  f : is-decidable A → Σ b ꞉ Bool , (A ⇔ b ＝ true)
+  f : is-decidable A → Σ b ꞉ Bool , (A ⇔ b ≡ true)
   f (inl x) = true , (α , β)
    where
-    α : A → true ＝ true
+    α : A → true ≡ true
     α _ = refl true
 
-    β : true ＝ true → A
+    β : true ≡ true → A
     β _ = x
 
   f (inr ν) = false , (α , β)
    where
-    α : A → false ＝ true
+    α : A → false ≡ true
     α x = 𝟘-elim (ν x)
 
-    β : false ＝ true → A
+    β : false ≡ true → A
     β ()
 
-  g : (Σ b ꞉ Bool , (A ⇔ b ＝ true)) → is-decidable A
+  g : (Σ b ꞉ Bool , (A ⇔ b ≡ true)) → is-decidable A
   g (true ,  α , β) = inl (β (refl true))
   g (false , α , β) = inr (λ x → false-is-not-true (α x))
 ```
@@ -90,7 +90,7 @@ module _ where
 -->
 ```agda
   is-even : ℕ → Type
-  is-even x = Σ y ꞉ ℕ , x ＝ 2 * y
+  is-even x = Σ y ꞉ ℕ , x ≡ 2 * y
 ```
 This says what to be even *means*. But it doesn't say how we *check* with a computer program whether a number is even or not, which would be given by a function `check-even : ℕ → Bool`.
 ```agda
@@ -101,7 +101,7 @@ This says what to be even *means*. But it doesn't say how we *check* with a comp
 
 For this function to be correct, it has to be the case that
 
- > `is-even x ⇔ check-even x ＝ true`
+ > `is-even x ⇔ check-even x ≡ true`
 
 **Exercise.** We believe you have learned enough Agda, try this.
 
@@ -119,50 +119,50 @@ is-decidable-predicate {X} A = (x : X) → is-decidable (A x)
 ```
 In our example, this means that we can tell whether a number is even or not.
 
-Next we show that a predicate `A` is decidable if and only if there is a boolean valued function `α` such that `A x` holds if and only if `α x ＝ true`. In the above example, `A` plays the role of `is-even` and `alpha` plays the role of `check-even`.
+Next we show that a predicate `A` is decidable if and only if there is a boolean valued function `α` such that `A x` holds if and only if `α x ≡ true`. In the above example, `A` plays the role of `is-even` and `alpha` plays the role of `check-even`.
 
 Again, what is important at a first reading of this handout is not to understand the proof but what the type of the function is saying. But we will discuss the proof in lectures.
 
 ```agda
 predicate-decidability-with-booleans : {X : Type} (A : X → Type)
                                      → is-decidable-predicate A
-                                     ⇔ Σ α ꞉ (X → Bool) , ((x : X) → A x ⇔ α x ＝ true)
+                                     ⇔ Σ α ꞉ (X → Bool) , ((x : X) → A x ⇔ α x ≡ true)
 predicate-decidability-with-booleans {X} A = f , g
  where
-  f : is-decidable-predicate A → Σ α ꞉ (X → Bool) , ((x : X) → A x ⇔ α x ＝ true)
+  f : is-decidable-predicate A → Σ α ꞉ (X → Bool) , ((x : X) → A x ⇔ α x ≡ true)
   f d = α , β
    where
     α : X → Bool
     α x = fst (lr-implication I (d x))
      where
-      I : is-decidable (A x) ⇔ Σ b ꞉ Bool , (A x ⇔ b ＝ true)
+      I : is-decidable (A x) ⇔ Σ b ꞉ Bool , (A x ⇔ b ≡ true)
       I = decidability-with-booleans (A x)
 
-    β : (x : X) → A x ⇔ α x ＝ true
+    β : (x : X) → A x ⇔ α x ≡ true
     β x = ϕ , γ
      where
-      I : is-decidable (A x) → Σ b ꞉ Bool , (A x ⇔ b ＝ true)
+      I : is-decidable (A x) → Σ b ꞉ Bool , (A x ⇔ b ≡ true)
       I = lr-implication (decidability-with-booleans (A x))
 
-      II : Σ b ꞉ Bool , (A x ⇔ b ＝ true)
+      II : Σ b ꞉ Bool , (A x ⇔ b ≡ true)
       II = I (d x)
 
-      ϕ : A x → α x ＝ true
+      ϕ : A x → α x ≡ true
       ϕ = lr-implication (snd II)
 
-      γ : α x ＝ true → A x
+      γ : α x ≡ true → A x
       γ = rl-implication (snd II)
 
-  g : (Σ α ꞉ (X → Bool) , ((x : X) → A x ⇔ α x ＝ true)) → is-decidable-predicate A
+  g : (Σ α ꞉ (X → Bool) , ((x : X) → A x ⇔ α x ≡ true)) → is-decidable-predicate A
   g (α , ϕ) = d
    where
     d : is-decidable-predicate A
     d x = III
      where
-      I : (Σ b ꞉ Bool , (A x ⇔ b ＝ true)) → is-decidable (A x)
+      I : (Σ b ꞉ Bool , (A x ⇔ b ≡ true)) → is-decidable (A x)
       I = rl-implication (decidability-with-booleans (A x))
 
-      II : Σ b ꞉ Bool , (A x ⇔ b ＝ true)
+      II : Σ b ꞉ Bool , (A x ⇔ b ≡ true)
       II = (α x , ϕ x)
 
       III : is-decidable (A x)
@@ -285,7 +285,7 @@ A particular case of interest regarding the above discussion is the notion of a 
 
 ```agda
 has-decidable-equality : Type → Type
-has-decidable-equality X = (x y : X) → is-decidable (x ＝ y)
+has-decidable-equality X = (x y : X) → is-decidable (x ≡ y)
 ```
 **Exercise.** Show, in Agda, that a type `X` has decidable equality if and only if there is a function `X → X → Bool` that checks whether two elements of `X` are equal or not.
 
@@ -305,16 +305,16 @@ open import natural-numbers-functions
 ℕ-has-decidable-equality (suc x) 0       = inr suc-is-not-zero
 ℕ-has-decidable-equality (suc x) (suc y) = III
  where
-  IH : is-decidable (x ＝ y)
+  IH : is-decidable (x ≡ y)
   IH = ℕ-has-decidable-equality x y
 
-  I : x ＝ y → suc x ＝ suc y
+  I : x ≡ y → suc x ≡ suc y
   I = ap suc
 
-  II : suc x ＝ suc y → x ＝ y
+  II : suc x ≡ suc y → x ≡ y
   II = suc-is-injective
 
-  III : is-decidable (suc x ＝ suc y)
+  III : is-decidable (suc x ≡ suc y)
   III = map-decidable I II IH
 ```
 
@@ -337,22 +337,22 @@ private
  f-equals-g 0       = refl (f 0)
  f-equals-g (suc x) = goal
   where
-   IH : f x ＝ g x
+   IH : f x ≡ g x
    IH = f-equals-g x
 
-   goal : f (suc x) ＝ g (suc x)
-   goal = f (suc x) ＝⟨ refl _ ⟩
-          suc x     ＝⟨ refl _ ⟩
-          suc (f x) ＝⟨ ap suc IH ⟩
-          suc (g x) ＝⟨ refl _ ⟩
+   goal : f (suc x) ≡ g (suc x)
+   goal = f (suc x) ≡⟨ refl _ ⟩
+          suc x     ≡⟨ refl _ ⟩
+          suc (f x) ≡⟨ ap suc IH ⟩
+          suc (g x) ≡⟨ refl _ ⟩
           g (suc x) ∎
 
  f-not-equals-h : ¬ (f ∼ h)
  f-not-equals-h e = contradiction d
   where
-   d : 0 ＝ 1
+   d : 0 ≡ 1
    d = e 0
 
-   contradiction : ¬ (0 ＝ 1)
+   contradiction : ¬ (0 ≡ 1)
    contradiction ()
 ```

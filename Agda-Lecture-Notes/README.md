@@ -14,7 +14,7 @@ Martin Escardo. Notes originally written for the module "Advanced Functional Pro
     1. [Sum types](files/sums.lagda.md) `Σ`
     1. [Binary products](files/binary-products.lagda.md) `_×_`
     1. [Binary sums](files/binary-sums.lagda.md) `_∔_`
-    1. [Identity types](files/identity-type.lagda.md) `_＝_`
+    1. [Identity types](files/identity-type.lagda.md) `_≡_`
     1. [Natural numbers](files/natural-numbers-type.lagda.md) `ℕ`
     1. [Negation](files/negation.lagda.md) `¬`
     1. [Function extensionality](files/function-extensionality.lagda.md)

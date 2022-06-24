@@ -100,7 +100,7 @@ one-negation-implies-three = ¬¬-intro
 It is useful to introduce a notation for the negation of the [identity type](identity-type.lagda.md):
 ```agda
 _≢_ : {X : Type} → X → X → Type
-x ≢ y = ¬ (x ＝ y)
+x ≢ y = ¬ (x ≡ y)
 
 ≢-sym : {X : Type} {x y : X} → x ≢ y → y ≢ x
 ≢-sym = contrapositive sym
@@ -113,11 +113,11 @@ true-is-not-false ()
 ```
 The following is more interesting:
 ```agda
-not-false-is-true : (x : Bool) → x ≢ false → x ＝ true
+not-false-is-true : (x : Bool) → x ≢ false → x ≡ true
 not-false-is-true true  f = refl true
 not-false-is-true false f = 𝟘-elim (f (refl false))
 
-not-true-is-false : (x : Bool) → x ≢ true → x ＝ false
+not-true-is-false : (x : Bool) → x ≢ true → x ≡ false
 not-true-is-false true  f = 𝟘-elim (f (refl true))
 not-true-is-false false f = refl false
 ```

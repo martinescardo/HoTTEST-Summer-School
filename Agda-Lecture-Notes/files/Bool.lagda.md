@@ -106,17 +106,17 @@ not false = true
 Then we can prove that `not` can be expressed using `if-then-else`:
 ```agda
 open import identity-type
-not-defined-with-if : (b : Bool) → not b ＝ if b then false else true
+not-defined-with-if : (b : Bool) → not b ≡ if b then false else true
 not-defined-with-if true  = refl false
 not-defined-with-if false = refl true
 ```
 Using the eliminator, this can be proved as follows:
 ```agda
-not-defined-with-if₀ : (b : Bool) → not b ＝ if b then false else true
+not-defined-with-if₀ : (b : Bool) → not b ≡ if b then false else true
 not-defined-with-if₀ = Bool-elim A x y
  where
   A : Bool → Type
-  A b = not b ＝ if b then false else true
+  A b = not b ≡ if b then false else true
 
   x : A true
   x = refl false
@@ -126,21 +126,21 @@ not-defined-with-if₀ = Bool-elim A x y
 ```
 Of course, we can "in-line" the definitions of the `where` clause:
 ```agda
-not-defined-with-if₁ : (b : Bool) → not b ＝ if b then false else true
+not-defined-with-if₁ : (b : Bool) → not b ≡ if b then false else true
 not-defined-with-if₁ = Bool-elim
-                        (λ b → not b ＝ if b then false else true)
+                        (λ b → not b ≡ if b then false else true)
                         (refl false)
                         (refl true)
 ```
 This is shorter but probably less readable. The following is even shorter, using the fact that Agda can infer the property `A : Bool → Type` we want to prove automatically. We use `_` to tell Agda "please figure out yourself what this argument in the function has to be":
 ```agda
-not-defined-with-if₂ : (b : Bool) → not b ＝ if b then false else true
+not-defined-with-if₂ : (b : Bool) → not b ≡ if b then false else true
 not-defined-with-if₂ = Bool-elim _ (refl false) (refl true)
 ```
 In situations where we try to use `_` but Agda can't determine that there is a *unique* answer to what `_` should be, the colour yellow is used to indicate this in the syntax highlighting, accompanied by an error message. To give another example, we first define the notion of an [involution](https://en.wikipedia.org/wiki/Involution_(mathematics)), or involutive function:
 ```agda
 is-involution : {X : Type} → (X → X) → Type
-is-involution {X} f = (x : X) → f (f x) ＝ x
+is-involution {X} f = (x : X) → f (f x) ≡ x
 ```
 For example, list reversal is an involution. Another example is boolean negation:
 ```agda
@@ -149,7 +149,7 @@ not-is-involution = Bool-elim _ (refl true) (refl false)
 ```
 A proof without mentioning `is-involution` and without using the eliminator is also possible, of course:
 ```agda
-not-is-involution' : (b : Bool) → not (not b) ＝ b
+not-is-involution' : (b : Bool) → not (not b) ≡ b
 not-is-involution' true  = refl true
 not-is-involution' false = refl false
 ```
@@ -159,7 +159,7 @@ Very often we will give definitions by pattern-matching as above instead of
 Notice that in the definition of `is-involution` we needed to explicitly indicate the implicit argument `X` using curly brackets. Agda allows the notation `∀` in order to be able to omit the type `X`, provided it can be inferred automaticaly, which it can in our situation:
 ```agda
 is-involution' : {X : Type} → (X → X) → Type
-is-involution' f = ∀ x → f (f x) ＝ x
+is-involution' f = ∀ x → f (f x) ≡ x
 ```
 
 ## Some useful functions

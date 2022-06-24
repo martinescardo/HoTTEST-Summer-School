@@ -45,24 +45,24 @@ Fin-isomorphism n = record { bijection = f n ; bijectivity = f-is-bijection n }
   gf (suc n) zero    = refl zero
   gf (suc n) (suc k) = γ
    where
-    IH : g n (f n k) ＝ k
+    IH : g n (f n k) ≡ k
     IH = gf n k
 
-    γ = g (suc n) (f (suc n) (suc k)) ＝⟨ refl _ ⟩
-        g (suc n) (suc' (f n k))      ＝⟨ refl _ ⟩
-        suc (g n (f n k))             ＝⟨ ap suc IH ⟩
+    γ = g (suc n) (f (suc n) (suc k)) ≡⟨ refl _ ⟩
+        g (suc n) (suc' (f n k))      ≡⟨ refl _ ⟩
+        suc (g n (f n k))             ≡⟨ ap suc IH ⟩
         suc k                         ∎
 
   fg : (n : ℕ) → f n ∘ g n ∼ id
   fg (suc n) (inl ⋆) = refl (inl ⋆)
   fg (suc n) (inr k) = γ
    where
-    IH : f n (g n k) ＝ k
+    IH : f n (g n k) ≡ k
     IH = fg n k
 
-    γ = f (suc n) (g (suc n) (suc' k)) ＝⟨ refl _ ⟩
-        f (suc n) (suc (g n k))        ＝⟨ refl _ ⟩
-        suc' (f n (g n k))             ＝⟨ ap suc' IH ⟩
+    γ = f (suc n) (g (suc n) (suc' k)) ≡⟨ refl _ ⟩
+        f (suc n) (suc (g n k))        ≡⟨ refl _ ⟩
+        suc' (f n (g n k))             ≡⟨ ap suc' IH ⟩
         suc' k                         ∎
 
   f-is-bijection : (n : ℕ) → is-bijection (f n)

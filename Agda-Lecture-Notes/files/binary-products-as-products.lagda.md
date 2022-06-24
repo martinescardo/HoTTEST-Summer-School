@@ -56,7 +56,7 @@ binary-product-isomorphism funext A₀ A₁ = record { bijection = f ; bijectivi
     p 𝟎 = refl (h 𝟎)
     p 𝟏 = refl (h 𝟏)
 
-    γ : f (g h) ＝ h
+    γ : f (g h) ≡ h
     γ = funext p
 
   f-is-bijection : is-bijection f

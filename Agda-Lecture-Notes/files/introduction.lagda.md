@@ -156,43 +156,43 @@ The following definition says that for any natural number `x` we can find an ele
 ℕ-refl 0       = ⋆
 ℕ-refl (suc x) = ℕ-refl x
 ```
-## The identity type former `_＝_`
+## The identity type former `_≡_`
 
 It is possible to generalize the above definition
 for any type in place of that of natural numbers as follows:
 ```agda
-data _＝_ {A : Type} : A → A → Type where
- refl : (x : A) → x ＝ x
+data _≡_ {A : Type} : A → A → Type where
+ refl : (x : A) → x ≡ x
 
-infix 0 _＝_
+infix 0 _≡_
 ```
 Here are some functions we can define with the identity type:
 ```agda
-trans : {A : Type} {x y z : A} → x ＝ y → y ＝ z → x ＝ z
+trans : {A : Type} {x y z : A} → x ≡ y → y ≡ z → x ≡ z
 trans (refl x) (refl x) = refl x
 
-sym : {A : Type} {x y : A} → x ＝ y → y ＝ x
+sym : {A : Type} {x y : A} → x ≡ y → y ≡ x
 sym (refl x) = refl x
 
-ap : {A B : Type} (f : A → B) {x y : A} → x ＝ y → f x ＝ f y
+ap : {A B : Type} (f : A → B) {x y : A} → x ≡ y → f x ≡ f y
 ap f (refl x) = refl (f x)
 ```
 
 The identity type is a little bit subtle and there is a lot to say about it.
-For the moment, let's convince ourselves that we can convert back and forth between the types `x ＝ y` and `x ≣ y`, in the case that `A` is the type of natural numbers, as follows:
+For the moment, let's convince ourselves that we can convert back and forth between the types `x ≡ y` and `x ≣ y`, in the case that `A` is the type of natural numbers, as follows:
 
 ```agda
-back : (x y : ℕ) → x ＝ y → x ≣ y
+back : (x y : ℕ) → x ≡ y → x ≣ y
 back x x (refl x) = ℕ-refl x
 
-forth : (x y : ℕ) → x ≣ y → x ＝ y
+forth : (x y : ℕ) → x ≣ y → x ≡ y
 forth 0       0       ⋆ = refl 0
 forth (suc x) (suc y) p = I
  where
-  IH : x ＝ y
+  IH : x ≡ y
   IH = forth x y p
 
-  I : suc x ＝ suc y
+  I : suc x ≡ suc y
   I = ap suc IH
 ```
 
@@ -206,11 +206,11 @@ An incomplete table of the CurryHoward--Martin-Löf interpretation of logical pr
 | -          | ---                                   |
 | A implies B  | function type A → B                   |
 | ∀ x : A, B x | dependent function type (x : A) → B x |
-| equality     | identity type `_＝_`                   |
+| equality     | identity type `_≡_`                   |
 
 This fragment of logic was enough for us to be able to write the correctness of `rev` as the type
 
-> `{A : Type} (xs : List A) → rev xs ＝ reverse xs`
+> `{A : Type} (xs : List A) → rev xs ≡ reverse xs`
 
 which we can read as
 
@@ -230,7 +230,7 @@ For more complex examples of reasoning about programs, we need to complete the f
 | A → B        | A implies B                | A → B         |
 | ∀ x : A, B x | for all x:A, B x           | (x : A) → B x |
 | ∃ x : A, B x | there is x:A such that B x | ?             |
-| x = y        | x equals y                 | x ＝ y         |
+| x = y        | x equals y                 | x ≡ y         |
 
 This will be the subject of future handouts.
 
@@ -242,7 +242,7 @@ Notice that we didn't write a *proof*, in the usual mathematical sense, of the s
 
 We instead wrote a *program* of type
 
-> {A : Type} (xs : List A) → rev xs ＝ reverse xs
+> {A : Type} (xs : List A) → rev xs ≡ reverse xs
 
 This is precisely the point of "propositions as types": proofs become functional programs. You may not know a lot (or even anything) about proofs, but you certainly know a lot about functional programming. The interpretation of logical statements as types allows you to apply your expertise as a functional programmer to write (rigorous) proofs checked by the computer.
 

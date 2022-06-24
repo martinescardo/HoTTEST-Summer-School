@@ -6,7 +6,7 @@ at the School of Computer Science of the University of Birmingham, UK.
 
 # Hedberg's Theorem
 
-Sometimes we wish to know that the identity type `x ＝ y` has at most one element for all elements `x` and `y` of a type. In this case we say that the type is a set. Alternatively, one says that the type satisfies *uniqueness of identity proofs* (UIP), or that it satisfies the *K axiom*. Perhaps surprisingly, this can't be proved for all types. But it can be proved for quite a few types, including the booleans, natural numbers, and functions `ℕ → ℕ`, among many others.
+Sometimes we wish to know that the identity type `x ≡ y` has at most one element for all elements `x` and `y` of a type. In this case we say that the type is a set. Alternatively, one says that the type satisfies *uniqueness of identity proofs* (UIP), or that it satisfies the *K axiom*. Perhaps surprisingly, this can't be proved for all types. But it can be proved for quite a few types, including the booleans, natural numbers, and functions `ℕ → ℕ`, among many others.
 
 Hedberg's Theorem, whose proof is short, but quite difficult to understand, even for experts in Martin-Löf type theory, is a main tool for establishing that some types are sets.
 Agda has the axiom `K` discussed above enabled by default. We are disabling it in all modules, including this. The reason is that towards the end of term we intend to give examples of types that are not sets, and explain why they are interesting.
@@ -20,7 +20,7 @@ open import prelude
 open import negation
 
 is-prop : Type → Type
-is-prop X = (x y : X) → x ＝ y
+is-prop X = (x y : X) → x ≡ y
 
 𝟘-is-prop : is-prop 𝟘
 𝟘-is-prop () ()
@@ -29,47 +29,47 @@ is-prop X = (x y : X) → x ＝ y
 𝟙-is-prop ⋆ ⋆ = refl ⋆
 
 is-set : Type → Type
-is-set X = (x y : X) → is-prop (x ＝ y)
+is-set X = (x y : X) → is-prop (x ≡ y)
 
 is-constant : {X Y : Type} → (X → Y) → Type
-is-constant {X} f = (x x' : X) → f x ＝ f x'
+is-constant {X} f = (x x' : X) → f x ≡ f x'
 
 has-constant-endofunction : Type → Type
 has-constant-endofunction X = Σ f ꞉ (X → X), is-constant f
 
-⁻¹-left∙ : {X : Type} {x y : X} (p : x ＝ y)
-         → p ⁻¹ ∙ p ＝ refl y
+⁻¹-left∙ : {X : Type} {x y : X} (p : x ≡ y)
+         → p ⁻¹ ∙ p ≡ refl y
 ⁻¹-left∙ (refl x) = refl (refl x)
 
-⁻¹-right∙ : {X : Type} {x y : X} (p : x ＝ y)
-          → p ∙ p ⁻¹ ＝ refl x
+⁻¹-right∙ : {X : Type} {x y : X} (p : x ≡ y)
+          → p ∙ p ⁻¹ ≡ refl x
 ⁻¹-right∙ (refl x) = refl (refl x)
 
 Hedbergs-Lemma : {X : Type} (x : X)
-               → ((y : X) → has-constant-endofunction (x ＝ y))
-               → (y : X) → is-prop (x ＝ y)
+               → ((y : X) → has-constant-endofunction (x ≡ y))
+               → (y : X) → is-prop (x ≡ y)
 Hedbergs-Lemma {X} x c y p q = II
  where
-  f : (y : X) → x ＝ y → x ＝ y
+  f : (y : X) → x ≡ y → x ≡ y
   f y = fst (c y)
 
-  κ : (y : X) (p q : x ＝ y) → f y p ＝ f y q
+  κ : (y : X) (p q : x ≡ y) → f y p ≡ f y q
   κ y = snd (c y)
 
-  I : (y : X) (p : x ＝ y) → (f x (refl x))⁻¹ ∙ f y p ＝ p
+  I : (y : X) (p : x ≡ y) → (f x (refl x))⁻¹ ∙ f y p ≡ p
   I x (refl x) = r
    where
-    r : (f x (refl x)) ⁻¹ ∙ f x (refl x) ＝ refl x
+    r : (f x (refl x)) ⁻¹ ∙ f x (refl x) ≡ refl x
     r = ⁻¹-left∙ (f x (refl x))
 
-  II = p                         ＝⟨ (I y p)⁻¹                          ⟩
-       (f x (refl x))⁻¹ ∙ f y p  ＝⟨ ap ((f x (refl x))⁻¹ ∙_) (κ y p q) ⟩
-       (f x (refl x))⁻¹ ∙ f y q  ＝⟨ I y q                              ⟩
+  II = p                         ≡⟨ (I y p)⁻¹                          ⟩
+       (f x (refl x))⁻¹ ∙ f y p  ≡⟨ ap ((f x (refl x))⁻¹ ∙_) (κ y p q) ⟩
+       (f x (refl x))⁻¹ ∙ f y q  ≡⟨ I y q                              ⟩
        q                         ∎
 
 
 is-Hedberg-type : Type → Type
-is-Hedberg-type X = (x y : X) → has-constant-endofunction (x ＝ y)
+is-Hedberg-type X = (x y : X) → has-constant-endofunction (x ≡ y)
 
 Hedberg-types-are-sets : (X : Type)
                        → is-Hedberg-type X
