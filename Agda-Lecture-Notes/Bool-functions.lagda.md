@@ -8,9 +8,9 @@ at the School of Computer Science of the University of Birmingham, UK.
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
-module Agda-Lecture-Notes.Bool-functions where
+module Bool-functions where
 
-open import Agda-Lecture-Notes.prelude
+open import prelude
 ```
 -->
 # The booleans
@@ -18,7 +18,7 @@ open import Agda-Lecture-Notes.prelude
 The booleans are isomorphic to a Basic MLTT type:
 
 ```agda
-open import Agda-Lecture-Notes.isomorphisms
+open import isomorphisms
 
 Bool-isomorphism : Bool ≅ 𝟙 ∔ 𝟙
 Bool-isomorphism = record { bijection = f ; bijectivity = f-is-bijection }

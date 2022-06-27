@@ -8,9 +8,9 @@ at the School of Computer Science of the University of Birmingham, UK.
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
-module Agda-Lecture-Notes.binary-sums where
+module binary-sums where
 
-open import Agda-Lecture-Notes.general-notation
+open import general-notation
 ```
 -->
 
@@ -47,7 +47,7 @@ Now suppose we want to define a dependent function `(z : A ∔ B) → C z`. How 
 ```
 So the eliminator amounts to simply definition by cases. In terms of logic, it says that in order to show that "for all z : A ∔ B we have that C z holds" it is enough to show two things: (1) "for all x : A it is the case that C (inl x) holds", and (2) "forall y : B it is the case that C (inr y) holds". This is not only sufficient, but also necessary:
 ```agda
-open import Agda-Lecture-Notes.binary-products
+open import binary-products
 
 ∔-split : {A B : Type} (C : A ∔ B → Type)
         → ((z : A ∔ B) → C z)

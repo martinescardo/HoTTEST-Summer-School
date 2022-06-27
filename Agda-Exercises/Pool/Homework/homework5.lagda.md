@@ -5,18 +5,18 @@
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
-module Agda-Exercises.Pool.Homework.homework5 where
+module Pool.Homework.homework5 where
 
-open import Agda-Lecture-Notes.prelude hiding (Bool-elim)
-open import Agda-Lecture-Notes.natural-numbers-functions hiding (_≤_ ; is-even ; +-assoc ; +-comm)
-open import Agda-Lecture-Notes.List-functions
-open import Agda-Lecture-Notes.isomorphisms
+open import prelude hiding (Bool-elim)
+open import natural-numbers-functions hiding (_≤_ ; is-even ; +-assoc ; +-comm)
+open import List-functions
+open import isomorphisms
 ```
 We will also want to use some things from the Lab and Homework sheet of Week 4:
 
 ```agda
-open import Agda-Exercises.Pool.Homework.homework4-solutions
-open import Agda-Exercises.Pool.Lab.lab4-solutions
+open import Pool.Homework.homework4-solutions
+open import Pool.Lab.lab4-solutions
 ```
 
 ## Part I: More on length

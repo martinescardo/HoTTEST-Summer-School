@@ -8,9 +8,9 @@ at the School of Computer Science of the University of Birmingham, UK.
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
-module Agda-Lecture-Notes.isomorphisms where
+module isomorphisms where
 
-open import Agda-Lecture-Notes.prelude
+open import prelude
 
 ```
 -->
@@ -58,8 +58,8 @@ Notice that `inverse` plays the role of `g`. The reason we use `inverse` is that
 ## Some basic examples
 
 ```agda
-open import Agda-Lecture-Notes.binary-type
-open import Agda-Lecture-Notes.Bool
+open import binary-type
+open import Bool
 
 Bool-𝟚-isomorphism : Bool ≅ 𝟚
 Bool-𝟚-isomorphism = record { bijection = f ; bijectivity = f-is-bijection }

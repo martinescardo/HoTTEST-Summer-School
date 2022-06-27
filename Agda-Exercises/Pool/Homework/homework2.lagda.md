@@ -7,9 +7,9 @@ Please complete Part II of this week's Lab Sheet before moving on to these exerc
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
-module Agda-Exercises.Pool.Homework.homework2 where
+module Pool.Homework.homework2 where
 
-open import Agda-Lecture-Notes.prelude hiding (id ; _∘_)
+open import prelude hiding (id ; _∘_)
 ```
 
 ### Exercise 1.1

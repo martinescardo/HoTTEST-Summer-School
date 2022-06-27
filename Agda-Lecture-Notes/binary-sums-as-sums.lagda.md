@@ -8,9 +8,9 @@ at the School of Computer Science of the University of Birmingham, UK.
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
-module Agda-Lecture-Notes.binary-sums-as-sums where
+module binary-sums-as-sums where
 
-open import Agda-Lecture-Notes.prelude
+open import prelude
 ```
 -->
 
@@ -18,7 +18,7 @@ open import Agda-Lecture-Notes.prelude
 
 Using the binary type `𝟚`, binary sums can be seen as a special case of arbitrary sums as follows:
 ```agda
-open import Agda-Lecture-Notes.binary-type
+open import binary-type
 
 _∔'_ : Type → Type → Type
 A₀ ∔' A₁ = Σ n ꞉ 𝟚 , A n
@@ -30,7 +30,7 @@ A₀ ∔' A₁ = Σ n ꞉ 𝟚 , A n
 
 To justify this claim, we establish an isomorphism.
 ```agda
-open import Agda-Lecture-Notes.isomorphisms
+open import isomorphisms
 
 binary-sum-isomorphism : (A₀ A₁ : Type) → A₀ ∔ A₁ ≅ A₀ ∔' A₁
 binary-sum-isomorphism A₀ A₁ = record { bijection = f ; bijectivity = f-is-bijection }

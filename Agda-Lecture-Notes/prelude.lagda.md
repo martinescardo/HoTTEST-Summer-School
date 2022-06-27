@@ -7,18 +7,18 @@ at the School of Computer Science of the University of Birmingham, UK.
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
-module Agda-Lecture-Notes.prelude where
+module prelude where
 
-open import Agda-Lecture-Notes.general-notation public
-open import Agda-Lecture-Notes.empty-type public
-open import Agda-Lecture-Notes.unit-type public
-open import Agda-Lecture-Notes.binary-sums public
-open import Agda-Lecture-Notes.binary-products public
-open import Agda-Lecture-Notes.sums public
-open import Agda-Lecture-Notes.products public
-open import Agda-Lecture-Notes.identity-type public
-open import Agda-Lecture-Notes.natural-numbers-type public
-open import Agda-Lecture-Notes.Bool public
-open import Agda-Lecture-Notes.List public
-open import Agda-Lecture-Notes.Vector public
+open import general-notation public
+open import empty-type public
+open import unit-type public
+open import binary-sums public
+open import binary-products public
+open import sums public
+open import products public
+open import identity-type public
+open import natural-numbers-type public
+open import Bool public
+open import List public
+open import Vector public
 ```

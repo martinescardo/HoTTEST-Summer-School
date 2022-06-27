@@ -2,9 +2,9 @@
 
 ```agda
 {-# OPTIONS --without-K --safe #-}
-module Agda-Exercises.Pool.Lab.lab2 where
+module Pool.Lab.lab2 where
 
-open import Agda-Lecture-Notes.prelude hiding (if_then_else_;_||_)
+open import prelude hiding (if_then_else_;_||_)
 ```
 
 ## Part I: Booleans

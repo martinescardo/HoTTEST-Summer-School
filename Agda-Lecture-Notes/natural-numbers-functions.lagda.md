@@ -8,11 +8,11 @@ at the School of Computer Science of the University of Birmingham, UK.
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
-module Agda-Lecture-Notes.natural-numbers-functions where
+module natural-numbers-functions where
 
 
-open import Agda-Lecture-Notes.prelude
-open import Agda-Lecture-Notes.negation
+open import prelude
+open import negation
 ```
 -->
 # Natural numbers functions, relations and properties

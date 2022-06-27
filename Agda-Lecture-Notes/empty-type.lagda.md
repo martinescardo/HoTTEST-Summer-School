@@ -8,9 +8,9 @@ at the School of Computer Science of the University of Birmingham, UK.
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
-module Agda-Lecture-Notes.empty-type where
+module empty-type where
 
-open import Agda-Lecture-Notes.general-notation
+open import general-notation
 ```
 -->
 # The empty type 𝟘
@@ -74,7 +74,7 @@ Here is another example of a type that is empty. In the [introduction](introduct
 𝟘-is-empty : is-empty 𝟘
 𝟘-is-empty = 𝟘-nondep-elim
 
-open import Agda-Lecture-Notes.unit-type
+open import unit-type
 
 𝟙-is-nonempty : ¬ is-empty 𝟙
 𝟙-is-nonempty f = f ⋆

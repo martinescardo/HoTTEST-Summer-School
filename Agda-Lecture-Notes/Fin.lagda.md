@@ -8,9 +8,9 @@ at the School of Computer Science of the University of Birmingham, UK.
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
-module Agda-Lecture-Notes.Fin where
+module Fin where
 
-open import Agda-Lecture-Notes.general-notation
+open import general-notation
 ```
 -->
 # Finite types
@@ -18,7 +18,7 @@ open import Agda-Lecture-Notes.general-notation
 We now define a type `Fin n` which has exactly `n` elements, where `n : ℕ` is a natural number.
 
 ```agda
-open import Agda-Lecture-Notes.natural-numbers-type public
+open import natural-numbers-type public
 
 data Fin : ℕ → Type where
  zero : {n : ℕ} → Fin (suc n)
@@ -40,7 +40,7 @@ private
 And these are all the elements of `Fin 3`. Notice that `Fin 0` is empty:
 ```agda
 
-open import Agda-Lecture-Notes.empty-type public
+open import empty-type public
 
 Fin-0-is-empty : is-empty (Fin 0)
 Fin-0-is-empty ()

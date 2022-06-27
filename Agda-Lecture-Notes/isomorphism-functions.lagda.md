@@ -8,10 +8,10 @@ at the School of Computer Science of the University of Birmingham, UK.
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
-module Agda-Lecture-Notes.isomorphism-functions where
+module isomorphism-functions where
 
-open import Agda-Lecture-Notes.prelude
-open import Agda-Lecture-Notes.isomorphisms
+open import prelude
+open import isomorphisms
 ```
 -->
 # Some constructions with isomorphisms

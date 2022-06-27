@@ -8,11 +8,11 @@ at the School of Computer Science of the University of Birmingham, UK.
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
-module Agda-Lecture-Notes.searchability where
+module searchability where
 
-open import Agda-Lecture-Notes.prelude
-open import Agda-Lecture-Notes.negation
-open import Agda-Lecture-Notes.decidability
+open import prelude
+open import negation
+open import decidability
 ```
 -->
 # Examples of searchable sets
@@ -70,7 +70,7 @@ is-searchable = is-exhaustively-searchable
 ## `Fin' n` is searchable
 
 ```agda
-open import Agda-Lecture-Notes.Fin-functions
+open import Fin-functions
 
 Fin'-is-searchable : (n : ℕ) → is-searchable (Fin' n)
 Fin'-is-searchable 0       = 𝟘-is-searchable
@@ -82,7 +82,7 @@ Fin'-is-searchable (suc n) = ∔-is-searchable
 ## Searchable types are closed under isomorphism
 
 ```agda
-open import Agda-Lecture-Notes.isomorphisms
+open import isomorphisms
 
 ≅-is-searchable : {X Y : Type}
                 → is-searchable X
@@ -107,7 +107,7 @@ open import Agda-Lecture-Notes.isomorphisms
 ## `𝟚` is searchable
 
 ```agda
-open import Agda-Lecture-Notes.binary-type
+open import binary-type
 
 𝟙∔𝟙-is-searchable : is-searchable (𝟙 ∔ 𝟙)
 𝟙∔𝟙-is-searchable = ∔-is-searchable 𝟙-is-searchable 𝟙-is-searchable
@@ -140,8 +140,8 @@ open import Agda-Lecture-Notes.binary-type
 ## `Fin n` is searchable
 
 ```agda
-open import Agda-Lecture-Notes.Fin
-open import Agda-Lecture-Notes.isomorphism-functions
+open import Fin
+open import isomorphism-functions
 
 Fin-is-searchable : (n : ℕ) → is-searchable (Fin n)
 Fin-is-searchable n = ≅-is-searchable

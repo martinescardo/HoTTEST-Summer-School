@@ -8,9 +8,9 @@ at the School of Computer Science of the University of Birmingham, UK.
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
-module Agda-Lecture-Notes.Fin-functions where
+module Fin-functions where
 
-open import Agda-Lecture-Notes.prelude
+open import prelude
 ```
 -->
 
@@ -27,8 +27,8 @@ zero' = inl ⋆
 suc'  : {n : ℕ} → Fin' n → Fin' (suc n)
 suc' = inr
 
-open import Agda-Lecture-Notes.Fin
-open import Agda-Lecture-Notes.isomorphisms
+open import Fin
+open import isomorphisms
 
 Fin-isomorphism : (n : ℕ) → Fin n ≅ Fin' n
 Fin-isomorphism n = record { bijection = f n ; bijectivity = f-is-bijection n }

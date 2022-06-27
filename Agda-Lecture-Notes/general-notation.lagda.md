@@ -15,7 +15,7 @@ The option `--without-K` will be explained later (it concerns the identity type)
 Any Agda file is a module with the same name as the file.
 
 ```agda
-module Agda-Lecture-Notes.general-notation where
+module general-notation where
 ```
 
 Agda calls types `sets` by default, but we prefer to refer to them by their traditional name.

@@ -8,9 +8,9 @@ at the School of Computer Science of the University of Birmingham, UK.
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
-module Agda-Lecture-Notes.Bool where
+module Bool where
 
-open import Agda-Lecture-Notes.general-notation
+open import general-notation
 ```
 -->
 # The booleans
@@ -36,7 +36,7 @@ In general, the non-dependent elimination principle of a type explains how to "g
 Notice that both `x` (the `then` branch) and `y` (the `else` branch) have the same type, name `A`. Using dependent type, we can have different types in the dependent version of the eliminator. We make the type `A` depend on the boolean condition of the `if-then-else`. This means that now we will have `A : Bool → Type` instead of `A : Bool`. This is a function that given a boolean `b : Bool`, returns a type `A b`. Functions whose return value is a type are also called *type families*. Also `A b` is called a *dependent type*. It depends on the value of the boolean `b`. Here is an example, which we make private to this module.
 ```agda
 private
- open import Agda-Lecture-Notes.natural-numbers-type
+ open import natural-numbers-type
  A-example : Bool → Type
  A-example true  = ℕ
  A-example false = Bool
@@ -105,7 +105,7 @@ not false = true
 ```
 Then we can prove that `not` can be expressed using `if-then-else`:
 ```agda
-open import Agda-Lecture-Notes.identity-type
+open import identity-type
 not-defined-with-if : (b : Bool) → not b ≡ if b then false else true
 not-defined-with-if true  = refl false
 not-defined-with-if false = refl true

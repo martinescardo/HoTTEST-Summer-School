@@ -3,10 +3,10 @@
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
-module Agda-Exercises.Pool.Homework.homework3-solutions where
+module Pool.Homework.homework3-solutions where
 
-open import Agda-Lecture-Notes.prelude hiding (𝟘-nondep-elim)
-open import Agda-Exercises.Pool.Lab.lab3-solutions
+open import prelude hiding (𝟘-nondep-elim)
+open import Pool.Lab.lab3-solutions
 
 ∔-assoc : {A B C : Type} → A ∔ (B ∔ C) → (A ∔ B) ∔ C
 ∔-assoc (inl a)       = inl (inl a)

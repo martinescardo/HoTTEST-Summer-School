@@ -8,9 +8,9 @@ at the School of Computer Science of the University of Birmingham, UK.
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
-module Agda-Lecture-Notes.identity-type where
+module identity-type where
 
-open import Agda-Lecture-Notes.general-notation
+open import general-notation
 ```
 -->
 # The identity type former `_≡_`

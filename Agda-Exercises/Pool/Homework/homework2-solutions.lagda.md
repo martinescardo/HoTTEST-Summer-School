@@ -3,9 +3,9 @@
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
-module Agda-Exercises.Pool.Homework.homework2-solutions where
+module Pool.Homework.homework2-solutions where
 
-open import Agda-Lecture-Notes.prelude hiding (id ; _∘_)
+open import prelude hiding (id ; _∘_)
 
 ap² : {A : Type} (f : A → A) {x y : A} → x ≡ y → f (f x) ≡ f (f y)
 ap² f e = ap f (ap f e)

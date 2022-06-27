@@ -3,10 +3,10 @@
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
-module Agda-Exercises.Pool.Lab.lab4 where
+module Pool.Lab.lab4 where
 
-open import Agda-Lecture-Notes.prelude
-open import Agda-Lecture-Notes.List-functions
+open import prelude
+open import List-functions
 ```
 
 ## Part I: Reverse is an involution

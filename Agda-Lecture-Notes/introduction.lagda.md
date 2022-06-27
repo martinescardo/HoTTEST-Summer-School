@@ -8,7 +8,7 @@ at the School of Computer Science of the University of Birmingham, UK.
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
-module Agda-Lecture-Notes.introduction where
+module introduction where
 ```
 -->
 # Introduction to Agda

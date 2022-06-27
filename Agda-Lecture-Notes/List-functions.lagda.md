@@ -8,9 +8,9 @@ at the School of Computer Science of the University of Birmingham, UK.
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
-module Agda-Lecture-Notes.List-functions where
+module List-functions where
 
-open import Agda-Lecture-Notes.prelude
+open import prelude
 ```
 -->
 # Some functions on lists
@@ -18,8 +18,8 @@ open import Agda-Lecture-Notes.prelude
 ## Length, concatenation, map and singleton lists
 
 ```agda
-open import Agda-Lecture-Notes.List
-open import Agda-Lecture-Notes.natural-numbers-type
+open import List
+open import natural-numbers-type
 
 length : {A : Type} → List A → ℕ
 length []        = 0

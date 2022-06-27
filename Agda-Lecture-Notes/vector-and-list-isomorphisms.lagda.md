@@ -8,9 +8,9 @@ at the School of Computer Science of the University of Birmingham, UK.
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
-module Agda-Lecture-Notes.vector-and-list-isomorphisms where
+module vector-and-list-isomorphisms where
 
-open import Agda-Lecture-Notes.prelude
+open import prelude
 ```
 -->
 # Vector and list isomorphisms
@@ -20,7 +20,7 @@ There are deliberate gaps in this file for you to fill.
 ## The type of lists can be defined from that of vectors
 
 ```agda
-open import Agda-Lecture-Notes.isomorphisms
+open import isomorphisms
 
 lists-from-vectors : {A : Type} → List A ≅ (Σ n ꞉ ℕ , Vector A n)
 lists-from-vectors {A} = record { bijection = f ; bijectivity = f-is-bijection }
@@ -44,7 +44,7 @@ lists-from-vectors {A} = record { bijection = f ; bijectivity = f-is-bijection }
 ## The type of vectors can be defined from that of lists
 
 ```agda
-open import Agda-Lecture-Notes.List-functions
+open import List-functions
 
 vectors-from-lists : {A : Type} (n : ℕ) → Vector A n ≅ (Σ xs ꞉ List A , (length xs ≡ n))
 vectors-from-lists {A} n = record { bijection = f ; bijectivity = f-is-bijection }

@@ -1,10 +1,10 @@
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
-module Agda-Exercises.Pool.Lab.lab4-solutions where
+module Pool.Lab.lab4-solutions where
 
-open import Agda-Lecture-Notes.prelude
-open import Agda-Lecture-Notes.List-functions
+open import prelude
+open import List-functions
 
 reverse-lemma : {X : Type} (x : X) (xs : List X)
               → x :: reverse xs ≡ reverse (xs ++ [ x ])

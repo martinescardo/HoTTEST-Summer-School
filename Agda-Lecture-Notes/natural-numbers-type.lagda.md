@@ -8,9 +8,9 @@ at the School of Computer Science of the University of Birmingham, UK.
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
-module Agda-Lecture-Notes.natural-numbers-type where
+module natural-numbers-type where
 
-open import Agda-Lecture-Notes.general-notation
+open import general-notation
 ```
 -->
 # The type `ℕ` of natural numbers

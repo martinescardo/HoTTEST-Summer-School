@@ -1,13 +1,13 @@
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
-module Agda-Exercises.Pool.Homework.homework6-solutions where
+module Pool.Homework.homework6-solutions where
 
-open import Agda-Lecture-Notes.prelude
-open import Agda-Lecture-Notes.isomorphisms
-open import Agda-Lecture-Notes.natural-numbers-functions
-open import Agda-Lecture-Notes.Fin
-open import Agda-Lecture-Notes.Vector
+open import prelude
+open import isomorphisms
+open import natural-numbers-functions
+open import Fin
+open import Vector
 
 
 ×-distributivity-+ : (X Y Z : Type) → (X ∔ Y) × Z ≅ (X × Z) ∔ (Y × Z)

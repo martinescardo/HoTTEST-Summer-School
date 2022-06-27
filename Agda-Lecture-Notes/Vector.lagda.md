@@ -8,16 +8,16 @@ at the School of Computer Science of the University of Birmingham, UK.
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
-module Agda-Lecture-Notes.Vector where
+module Vector where
 
-open import Agda-Lecture-Notes.general-notation
+open import general-notation
 ```
 -->
 # Vectors
 
 This type has already been briefly discussed in the [introduction](introduction.lagda.md).
 ```agda
-open import Agda-Lecture-Notes.natural-numbers-type
+open import natural-numbers-type
 
 data Vector (A : Type) : ℕ → Type where
  []   : Vector A 0

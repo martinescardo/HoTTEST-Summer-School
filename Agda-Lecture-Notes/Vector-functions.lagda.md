@@ -8,9 +8,9 @@ at the School of Computer Science of the University of Birmingham, UK.
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
-module Agda-Lecture-Notes.Vector-functions where
+module Vector-functions where
 
-open import Agda-Lecture-Notes.prelude
+open import prelude
 ```
 -->
 # Some functions on vectors
@@ -26,7 +26,7 @@ tail (x :: xs) = xs
 
 We can also define a safe indexing function on vectors using [finite types](Fin.lagda.md) as follows.
 ```agda
-open import Agda-Lecture-Notes.Fin
+open import Fin
 
 _!!_ : ∀ {X n} → Vector X n → Fin n → X
 (x :: xs) !! zero  = x
@@ -52,8 +52,8 @@ infixr 20 _++_
 ## Vectors represented as a Basic MLTT type
 
 ```agda
-open import Agda-Lecture-Notes.unit-type
-open import Agda-Lecture-Notes.binary-products
+open import unit-type
+open import binary-products
 
 Vector' : Type → ℕ → Type
 Vector' A 0       = 𝟙
@@ -74,7 +74,7 @@ private
  example₁ : example₀ ≡ (1 , 2 , 3 , ⋆)
  example₁ = refl _
 
-open import Agda-Lecture-Notes.isomorphisms
+open import isomorphisms
 
 Vector-iso : {A : Type} {n : ℕ} → Vector A n ≅ Vector' A n
 Vector-iso {A} {n} = record { bijection = f n ; bijectivity = f-is-bijection n }

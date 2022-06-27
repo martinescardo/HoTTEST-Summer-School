@@ -14,10 +14,10 @@ Agda has the axiom `K` discussed above enabled by default. We are disabling it i
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
-module Agda-Lecture-Notes.Hedbergs-Theorem where
+module Hedbergs-Theorem where
 
-open import Agda-Lecture-Notes.prelude
-open import Agda-Lecture-Notes.negation
+open import prelude
+open import negation
 
 is-prop : Type → Type
 is-prop X = (x y : X) → x ≡ y
@@ -87,7 +87,7 @@ empty-types-have-constant-endofunction : {X : Type}
                                        → has-constant-endofunction X
 empty-types-have-constant-endofunction e = (id , (λ x x' → 𝟘-elim (e x)))
 
-open import Agda-Lecture-Notes.decidability
+open import decidability
 
 decidable-types-have-constant-endofunctions : {X : Type}
                                             → is-decidable X

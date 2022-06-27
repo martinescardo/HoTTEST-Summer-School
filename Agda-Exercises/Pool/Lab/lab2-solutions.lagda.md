@@ -3,9 +3,9 @@
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
-module Agda-Exercises.Pool.Lab.lab2-solutions where
+module Pool.Lab.lab2-solutions where
 
-open import Agda-Lecture-Notes.prelude hiding (_||_)
+open import prelude hiding (_||_)
 
 _≣_ : Bool → Bool → Type
 true  ≣ true  = 𝟙

@@ -8,10 +8,10 @@ at the School of Computer Science of the University of Birmingham, UK.
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
-module Agda-Lecture-Notes.negation where
+module negation where
 
-open import Agda-Lecture-Notes.general-notation
-open import Agda-Lecture-Notes.prelude
+open import general-notation
+open import prelude
 ```
 -->
 # Reasoning with negation
@@ -166,8 +166,8 @@ Notice how these are particular cases of [`curry` and `uncurry`](https://en.wiki
 
 Here is a proof of the implication truth-table:
 ```agda
-open import Agda-Lecture-Notes.empty-type
-open import Agda-Lecture-Notes.unit-type
+open import empty-type
+open import unit-type
 
 implication-truth-table : ((𝟘 → 𝟘) ⇔ 𝟙)
                         × ((𝟘 → 𝟙) ⇔ 𝟙)

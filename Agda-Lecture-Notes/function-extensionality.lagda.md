@@ -8,9 +8,9 @@ at the School of Computer Science of the University of Birmingham, UK.
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
-module Agda-Lecture-Notes.function-extensionality where
+module function-extensionality where
 
-open import Agda-Lecture-Notes.general-notation
+open import general-notation
 ```
 -->
 
@@ -19,7 +19,7 @@ open import Agda-Lecture-Notes.general-notation
 Recall that we defined pointwise equality `f ∼ g` of functions in the [identity type handout](identity-type.lagda.md).
 The principle of function extensionality says that pointwise equal functions are equal and is given by the following type `FunExt`:
 ```agda
-open import Agda-Lecture-Notes.identity-type
+open import identity-type
 
 FunExt = {A : Type} {B : A → Type} {f g : (x : A) → B x} → f ∼ g → f ≡ g
 ```

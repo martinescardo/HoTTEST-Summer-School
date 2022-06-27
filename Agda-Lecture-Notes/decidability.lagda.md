@@ -8,10 +8,10 @@ at the School of Computer Science of the University of Birmingham, UK.
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
-module Agda-Lecture-Notes.decidability where
+module decidability where
 
-open import Agda-Lecture-Notes.prelude
-open import Agda-Lecture-Notes.negation
+open import prelude
+open import negation
 ```
 -->
 # Propositions as types versus propositions as booleans
@@ -297,7 +297,7 @@ Bool-has-decidable-equality true  false = inr true-is-not-false
 Bool-has-decidable-equality false true  = inr false-is-not-true
 Bool-has-decidable-equality false false = inl (refl false)
 
-open import Agda-Lecture-Notes.natural-numbers-functions
+open import natural-numbers-functions
 
 ℕ-has-decidable-equality : has-decidable-equality ℕ
 ℕ-has-decidable-equality 0       0       = inl (refl zero)

@@ -5,10 +5,10 @@
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
-module Agda-Exercises.Pool.Homework.homework3 where
+module Pool.Homework.homework3 where
 
-open import Agda-Lecture-Notes.prelude
-open import Agda-Exercises.Pool.Lab.lab3-solutions
+open import prelude
+open import Pool.Lab.lab3-solutions
 ```
 
 ## Part I: Associativity and Commutativity of ∔ and ×

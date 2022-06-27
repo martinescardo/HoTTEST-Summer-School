@@ -4,10 +4,10 @@
 
 ```agda
 {-# OPTIONS --without-K --safe #-}
-module Agda-Exercises.Pool.Homework.homework4 where
+module Pool.Homework.homework4 where
 
-open import Agda-Lecture-Notes.prelude
-open import Agda-Lecture-Notes.List-functions hiding (++-assoc)
+open import prelude
+open import List-functions hiding (++-assoc)
 ```
 
 ## Part I: Commutativity of addition of natural numbers

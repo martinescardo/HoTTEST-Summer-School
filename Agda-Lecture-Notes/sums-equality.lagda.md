@@ -8,12 +8,12 @@ at the School of Computer Science of the University of Birmingham, UK.
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
-module Agda-Lecture-Notes.sums-equality where
+module sums-equality where
 
-open import Agda-Lecture-Notes.general-notation
-open import Agda-Lecture-Notes.sums
-open import Agda-Lecture-Notes.binary-products
-open import Agda-Lecture-Notes.identity-type
+open import general-notation
+open import sums
+open import binary-products
+open import identity-type
 ```
 -->
 # Equality in `Σ` types

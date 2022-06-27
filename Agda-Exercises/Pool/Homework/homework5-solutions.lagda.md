@@ -1,17 +1,17 @@
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
-module Agda-Exercises.Pool.Homework.homework5-solutions where
+module Pool.Homework.homework5-solutions where
 
-open import Agda-Lecture-Notes.prelude hiding (Bool-elim)
-open import Agda-Lecture-Notes.natural-numbers-functions hiding (_≤_ ; is-even ; +-assoc ; +-comm)
-open import Agda-Lecture-Notes.List-functions
-open import Agda-Lecture-Notes.isomorphisms
-open import Agda-Lecture-Notes.negation
+open import prelude hiding (Bool-elim)
+open import natural-numbers-functions hiding (_≤_ ; is-even ; +-assoc ; +-comm)
+open import List-functions
+open import isomorphisms
+open import negation
 
-open import Agda-Exercises.Pool.Homework.homework4-solutions
-open import Agda-Exercises.Pool.Lab.lab4-solutions
-open import Agda-Exercises.Pool.Lab.lab5-solutions
+open import Pool.Homework.homework4-solutions
+open import Pool.Lab.lab4-solutions
+open import Pool.Lab.lab5-solutions
 
 length-of-reverse : {A : Type} (xs : List A)
                   → length (reverse xs) ≡ length xs

@@ -3,9 +3,9 @@
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
-module Agda-Exercises.Pool.Lab.lab3 where
+module Pool.Lab.lab3 where
 
-open import Agda-Lecture-Notes.prelude hiding (𝟘-nondep-elim)
+open import prelude hiding (𝟘-nondep-elim)
 ```
 
 Before we proceed with the exercises, we introduce a some convenient notation

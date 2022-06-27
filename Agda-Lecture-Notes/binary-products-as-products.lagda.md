@@ -8,9 +8,9 @@ at the School of Computer Science of the University of Birmingham, UK.
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
-module Agda-Lecture-Notes.binary-products-as-products where
+module binary-products-as-products where
 
-open import Agda-Lecture-Notes.prelude
+open import prelude
 ```
 -->
 
@@ -18,7 +18,7 @@ open import Agda-Lecture-Notes.prelude
 
 Using the [binary type](binary-type.lagda.md) `𝟚`, binary products can be seen as a special case of arbitrary products as follows:
 ```agda
-open import Agda-Lecture-Notes.binary-type
+open import binary-type
 
 _×'_ : Type → Type → Type
 A₀ ×' A₁ = Π n ꞉ 𝟚 , A n
@@ -33,8 +33,8 @@ We could have written the type `Π n ꞉ 𝟚 , A n` as simply `(n : 𝟚) → A
 
 To justify this claim, we establish an [isomorphism](isomorphism.lagda.md). But we need to assume [function extensionality](function-extensionality.lagda.md) for this purpose.
 ```agda
-open import Agda-Lecture-Notes.isomorphisms
-open import Agda-Lecture-Notes.function-extensionality
+open import isomorphisms
+open import function-extensionality
 
 binary-product-isomorphism : FunExt → (A₀ A₁ : Type) → A₀ × A₁ ≅ A₀ ×' A₁
 binary-product-isomorphism funext A₀ A₁ = record { bijection = f ; bijectivity = f-is-bijection }
