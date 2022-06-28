@@ -224,26 +224,6 @@ For more complex examples of reasoning about programs, we need to complete the f
 
 This will be the subject of future handouts.
 
-## Proofs as (functional) programs
-
-Notice that we didn't write a *proof*, in the usual mathematical sense, of the statement
-
-> for any type `A` and any list `xs`, we have that `rev xs = reverse xs`.
-
-We instead wrote a *program* of type
-
-> {A : Type} (xs : List A) → rev xs ≡ reverse xs
-
-This is precisely the point of "propositions as types": proofs become functional programs. You may not know a lot (or even anything) about proofs, but you certainly know a lot about functional programming. The interpretation of logical statements as types allows you to apply your expertise as a functional programmer to write (rigorous) proofs checked by the computer.
-
-> If your Agda program compiles without errors, your proof, written as a program, is correct!
-
-The computer checks your proof for you. A proof is nothing but a functional program.
-
-## Is Agda unique in being able to express both programs and logical statements?
-
-No, for example, there are also [Coq](https://coq.inria.fr/) and [Lean](https://leanprover.github.io/) among many others.
-
 ## Agda manual
 
 Please study the [Agda manual](https://agda.readthedocs.io/en/latest/) as a complement to these lecture notes.
