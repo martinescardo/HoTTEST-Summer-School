@@ -208,17 +208,7 @@ An incomplete table of the CurryHoward--Martin-Löf interpretation of logical pr
 | ∀ x : A, B x | dependent function type (x : A) → B x |
 | equality     | identity type `_≡_`                   |
 
-This fragment of logic was enough for us to be able to write the correctness of `rev` as the type
-
-> `{A : Type} (xs : List A) → rev xs ≡ reverse xs`
-
-which we can read as
-
-> for any type `A` and any list `xs`, we have that `rev xs = reverse xs`,
-
-or, using logical symbolism,
-
-> `∀ A : Type, ∀ xs : List A, rev xs = reverse xs`.
+This was enough for our examples above.
 
 For more complex examples of reasoning about programs, we need to complete the following table:
 
