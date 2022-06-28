@@ -9,19 +9,19 @@ at the School of Computer Science of the University of Birmingham, UK.
 
 module index where
 
-import Bool-functions
 import Bool
-import Fin-functions
+import Bool-functions
 import Fin
+import Fin-functions
 import Hedbergs-Theorem
-import List-functions
 import List
-import Vector-functions
+import List-functions
 import Vector
-import binary-products-as-products
+import Vector-functions
 import binary-products
-import binary-sums-as-sums
+import binary-products-as-products
 import binary-sums
+import binary-sums-as-sums
 import binary-type
 import decidability
 import empty-type
@@ -36,8 +36,8 @@ import negation
 import prelude
 import products
 import searchability
-import sums-equality
 import sums
+import sums-equality
 import unit-type
 -- import vector-and-list-isomorphisms
 ```
