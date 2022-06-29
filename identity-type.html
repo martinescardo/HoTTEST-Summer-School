@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>HoTTEST Summer School 2022 Lecture Notes</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+</head>
+
+<body class="text-page">
+<main>
+<div id="post-toc-container" style="padding-left: 1em; padding-right: 1em;">
+
+  <article>
+
+<p>Martin Escardo. Notes originally written for the module “Advanced
+Functional Programming” at the School of Computer Science of the
+University of Birmingham, UK.</p>
+<!--
+<pre class="Agda"><a id="178" class="Symbol">{-#</a> <a id="182" class="Keyword">OPTIONS</a> <a id="190" class="Pragma">--without-K</a> <a id="202" class="Pragma">--safe</a> <a id="209" class="Symbol">#-}</a>
+
+<a id="214" class="Keyword">module</a> <a id="221" href="identity-type.html" class="Module">identity-type</a> <a id="235" class="Keyword">where</a>
+
+<a id="242" class="Keyword">open</a> <a id="247" class="Keyword">import</a> <a id="254" href="general-notation.html" class="Module">general-notation</a>
+</pre>-->
+<h1 id="the-identity-type-former-__">The identity type former
+<code>_≡_</code></h1>
+The original and main terminology for the following type is <em>identity
+type</em>, but sometimes it is also called the <em>equality type</em>.
+Sometimes this is also called <em>propositional equality</em>, but we
+will avoid this terminology as it sometimes leads to confusion.
+<pre class="Agda"><a id="578" class="Keyword">data</a> <a id="_≡_"></a><a id="583" href="identity-type.html#583" data-type="A → A → Set" class="Datatype Operator">_≡_</a> <a id="587" class="Symbol">{</a><a id="588" href="identity-type.html#588" class="Bound">A</a> <a id="590" class="Symbol">:</a> <a id="592" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="596" class="Symbol">}</a> <a id="598" class="Symbol">:</a> <a id="600" href="identity-type.html#588" class="Bound">A</a> <a id="602" class="Symbol">→</a> <a id="604" href="identity-type.html#588" class="Bound">A</a> <a id="606" class="Symbol">→</a> <a id="608" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a> <a id="613" class="Keyword">where</a>
+ <a id="_≡_.refl"></a><a id="620" href="identity-type.html#620" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="625" class="Symbol">:</a> <a id="627" class="Symbol">(</a><a id="628" href="identity-type.html#628" class="Bound">x</a> <a id="630" class="Symbol">:</a> <a id="632" href="identity-type.html#588" class="Bound">A</a><a id="633" class="Symbol">)</a> <a id="635" class="Symbol">→</a> <a id="637" href="identity-type.html#628" class="Bound">x</a> <a id="639" href="identity-type.html#583" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="641" href="identity-type.html#628" class="Bound">x</a>
+
+<a id="644" class="Keyword">infix</a> <a id="650" class="Number">0</a> <a id="652" href="identity-type.html#583" data-type="A → A → Set" class="Datatype Operator">_≡_</a>
+</pre>
+<h2 id="elimination-principle">Elimination principle</h2>
+The elimination principle for this type, also called <code>J</code> in
+the literature, is defined as follows:
+<pre class="Agda"><a id="≡-elim"></a><a id="794" href="identity-type.html#794" data-type="(A : (x y : X) → x ≡ y → Type) →
+((x : X) → A x x (refl x)) → (x y : X) (p : x ≡ y) → A x y p" class="Function">≡-elim</a> <a id="801" class="Symbol">:</a> <a id="803" class="Symbol">{</a><a id="804" href="identity-type.html#804" class="Bound">X</a> <a id="806" class="Symbol">:</a> <a id="808" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="812" class="Symbol">}</a> <a id="814" class="Symbol">(</a><a id="815" href="identity-type.html#815" class="Bound">A</a> <a id="817" class="Symbol">:</a> <a id="819" class="Symbol">(</a><a id="820" href="identity-type.html#820" class="Bound">x</a> <a id="822" href="identity-type.html#822" class="Bound">y</a> <a id="824" class="Symbol">:</a> <a id="826" href="identity-type.html#804" class="Bound">X</a><a id="827" class="Symbol">)</a> <a id="829" class="Symbol">→</a> <a id="831" href="identity-type.html#820" class="Bound">x</a> <a id="833" href="identity-type.html#583" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="835" href="identity-type.html#822" class="Bound">y</a> <a id="837" class="Symbol">→</a> <a id="839" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="843" class="Symbol">)</a>
+       <a id="852" class="Symbol">→</a> <a id="854" class="Symbol">((</a><a id="856" href="identity-type.html#856" class="Bound">x</a> <a id="858" class="Symbol">:</a> <a id="860" href="identity-type.html#804" class="Bound">X</a><a id="861" class="Symbol">)</a> <a id="863" class="Symbol">→</a> <a id="865" href="identity-type.html#815" class="Bound">A</a> <a id="867" href="identity-type.html#856" class="Bound">x</a> <a id="869" href="identity-type.html#856" class="Bound">x</a> <a id="871" class="Symbol">(</a><a id="872" href="identity-type.html#620" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="877" href="identity-type.html#856" class="Bound">x</a><a id="878" class="Symbol">))</a>
+       <a id="888" class="Symbol">→</a> <a id="890" class="Symbol">(</a><a id="891" href="identity-type.html#891" class="Bound">x</a> <a id="893" href="identity-type.html#893" class="Bound">y</a> <a id="895" class="Symbol">:</a> <a id="897" href="identity-type.html#804" class="Bound">X</a><a id="898" class="Symbol">)</a> <a id="900" class="Symbol">(</a><a id="901" href="identity-type.html#901" class="Bound">p</a> <a id="903" class="Symbol">:</a> <a id="905" href="identity-type.html#891" class="Bound">x</a> <a id="907" href="identity-type.html#583" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="909" href="identity-type.html#893" class="Bound">y</a><a id="910" class="Symbol">)</a> <a id="912" class="Symbol">→</a> <a id="914" href="identity-type.html#815" class="Bound">A</a> <a id="916" href="identity-type.html#891" class="Bound">x</a> <a id="918" href="identity-type.html#893" class="Bound">y</a> <a id="920" href="identity-type.html#901" class="Bound">p</a>
+<a id="922" href="identity-type.html#794" data-type="(A : (x y : X) → x ≡ y → Type) →
+((x : X) → A x x (refl x)) → (x y : X) (p : x ≡ y) → A x y p" class="Function">≡-elim</a> <a id="929" href="identity-type.html#929" class="Bound">A</a> <a id="931" href="identity-type.html#931" class="Bound">f</a> <a id="933" href="identity-type.html#933" class="Bound">x</a> <a id="935" href="identity-type.html#933" class="Bound">x</a> <a id="937" class="Symbol">(</a><a id="938" href="identity-type.html#620" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="943" href="identity-type.html#933" class="Bound">x</a><a id="944" class="Symbol">)</a> <a id="946" class="Symbol">=</a> <a id="948" href="identity-type.html#931" class="Bound">f</a> <a id="950" href="identity-type.html#933" class="Bound">x</a>
+</pre>
+<p>This says that in order to show that <code>A x y p</code> holds for
+all <code>x y : X</code> and <code>p : x ≡ y</code>, it is enough to
+show that <code>A x x (refl x)</code> holds for all <code>x : X</code>.
+In the literature, this elimination principle is called <code>J</code>.
+Again, we are not going to use it explicitly, because we can use
+definitions by pattern matching on <code>refl</code>, just as we did for
+defining it.</p>
+We also have the non-dependent version of the eliminator:
+<pre class="Agda"><a id="≡-nondep-elim"></a><a id="1378" href="identity-type.html#1378" data-type="(A : X → X → Type) → ((x : X) → A x x) → (x y : X) → x ≡ y → A x y" class="Function">≡-nondep-elim</a> <a id="1392" class="Symbol">:</a> <a id="1394" class="Symbol">{</a><a id="1395" href="identity-type.html#1395" class="Bound">X</a> <a id="1397" class="Symbol">:</a> <a id="1399" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="1403" class="Symbol">}</a> <a id="1405" class="Symbol">(</a><a id="1406" href="identity-type.html#1406" class="Bound">A</a> <a id="1408" class="Symbol">:</a> <a id="1410" href="identity-type.html#1395" class="Bound">X</a> <a id="1412" class="Symbol">→</a> <a id="1414" href="identity-type.html#1395" class="Bound">X</a> <a id="1416" class="Symbol">→</a> <a id="1418" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="1422" class="Symbol">)</a>
+              <a id="1438" class="Symbol">→</a> <a id="1440" class="Symbol">((</a><a id="1442" href="identity-type.html#1442" class="Bound">x</a> <a id="1444" class="Symbol">:</a> <a id="1446" href="identity-type.html#1395" class="Bound">X</a><a id="1447" class="Symbol">)</a> <a id="1449" class="Symbol">→</a> <a id="1451" href="identity-type.html#1406" class="Bound">A</a> <a id="1453" href="identity-type.html#1442" class="Bound">x</a> <a id="1455" href="identity-type.html#1442" class="Bound">x</a><a id="1456" class="Symbol">)</a>
+              <a id="1472" class="Symbol">→</a> <a id="1474" class="Symbol">(</a><a id="1475" href="identity-type.html#1475" class="Bound">x</a> <a id="1477" href="identity-type.html#1477" class="Bound">y</a> <a id="1479" class="Symbol">:</a> <a id="1481" href="identity-type.html#1395" class="Bound">X</a><a id="1482" class="Symbol">)</a> <a id="1484" class="Symbol">→</a> <a id="1486" href="identity-type.html#1475" class="Bound">x</a> <a id="1488" href="identity-type.html#583" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="1490" href="identity-type.html#1477" class="Bound">y</a> <a id="1492" class="Symbol">→</a> <a id="1494" href="identity-type.html#1406" class="Bound">A</a> <a id="1496" href="identity-type.html#1475" class="Bound">x</a> <a id="1498" href="identity-type.html#1477" class="Bound">y</a>
+<a id="1500" href="identity-type.html#1378" data-type="(A : X → X → Type) → ((x : X) → A x x) → (x y : X) → x ≡ y → A x y" class="Function">≡-nondep-elim</a> <a id="1514" href="identity-type.html#1514" class="Bound">A</a> <a id="1516" class="Symbol">=</a> <a id="1518" href="identity-type.html#794" data-type="(A : (x y : X) → x ≡ y → Type) →
+((x : X) → A x x (refl x)) → (x y : X) (p : x ≡ y) → A x y p" class="Function">≡-elim</a> <a id="1525" class="Symbol">(λ</a> <a id="1528" href="identity-type.html#1528" class="Bound">x</a> <a id="1530" href="identity-type.html#1530" class="Bound">y</a> <a id="1532" href="identity-type.html#1532" class="Bound">_</a> <a id="1534" class="Symbol">→</a> <a id="1536" href="identity-type.html#1514" class="Bound">A</a> <a id="1538" href="identity-type.html#1528" class="Bound">x</a> <a id="1540" href="identity-type.html#1530" class="Bound">y</a><a id="1541" class="Symbol">)</a>
+</pre>
+<p>A property of two variables like <code>A</code> above is referred to
+as a <em>relation</em>. The assumption <code>(x : X) → A x x</code> says
+that the relation is reflexive. Then the non-dependent version of the
+principle says that the reflexive relation given by the identity type
+<code>_≡_</code> can always be mapped to any reflexive relation, or we
+may say that <code>_≡_</code> is the smallest reflexive relation on the
+type <code>X</code>.</p>
+<h2 id="fundamental-constructions-with-the-identity-type">Fundamental
+constructions with the identity type</h2>
+As an exercise, you may try to rewrite the following definitions to use
+<code>≡-nondep-elim</code> instead of pattern matching on
+<code>refl</code>:
+<pre class="Agda"><a id="trans"></a><a id="2120" href="identity-type.html#2120" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function">trans</a> <a id="2126" class="Symbol">:</a> <a id="2128" class="Symbol">{</a><a id="2129" href="identity-type.html#2129" class="Bound">A</a> <a id="2131" class="Symbol">:</a> <a id="2133" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="2137" class="Symbol">}</a> <a id="2139" class="Symbol">{</a><a id="2140" href="identity-type.html#2140" class="Bound">x</a> <a id="2142" href="identity-type.html#2142" class="Bound">y</a> <a id="2144" href="identity-type.html#2144" class="Bound">z</a> <a id="2146" class="Symbol">:</a> <a id="2148" href="identity-type.html#2129" class="Bound">A</a><a id="2149" class="Symbol">}</a> <a id="2151" class="Symbol">→</a> <a id="2153" href="identity-type.html#2140" class="Bound">x</a> <a id="2155" href="identity-type.html#583" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="2157" href="identity-type.html#2142" class="Bound">y</a> <a id="2159" class="Symbol">→</a> <a id="2161" href="identity-type.html#2142" class="Bound">y</a> <a id="2163" href="identity-type.html#583" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="2165" href="identity-type.html#2144" class="Bound">z</a> <a id="2167" class="Symbol">→</a> <a id="2169" href="identity-type.html#2140" class="Bound">x</a> <a id="2171" href="identity-type.html#583" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="2173" href="identity-type.html#2144" class="Bound">z</a>
+<a id="2175" href="identity-type.html#2120" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function">trans</a> <a id="2181" href="identity-type.html#2181" class="Bound">p</a> <a id="2183" class="Symbol">(</a><a id="2184" href="identity-type.html#620" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="2189" href="identity-type.html#2189" class="Bound">y</a><a id="2190" class="Symbol">)</a> <a id="2192" class="Symbol">=</a> <a id="2194" href="identity-type.html#2181" class="Bound">p</a>
+
+<a id="sym"></a><a id="2197" href="identity-type.html#2197" data-type="x ≡ y → y ≡ x" class="Function">sym</a> <a id="2201" class="Symbol">:</a> <a id="2203" class="Symbol">{</a><a id="2204" href="identity-type.html#2204" class="Bound">A</a> <a id="2206" class="Symbol">:</a> <a id="2208" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="2212" class="Symbol">}</a> <a id="2214" class="Symbol">{</a><a id="2215" href="identity-type.html#2215" class="Bound">x</a> <a id="2217" href="identity-type.html#2217" class="Bound">y</a> <a id="2219" class="Symbol">:</a> <a id="2221" href="identity-type.html#2204" class="Bound">A</a><a id="2222" class="Symbol">}</a> <a id="2224" class="Symbol">→</a> <a id="2226" href="identity-type.html#2215" class="Bound">x</a> <a id="2228" href="identity-type.html#583" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="2230" href="identity-type.html#2217" class="Bound">y</a> <a id="2232" class="Symbol">→</a> <a id="2234" href="identity-type.html#2217" class="Bound">y</a> <a id="2236" href="identity-type.html#583" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="2238" href="identity-type.html#2215" class="Bound">x</a>
+<a id="2240" href="identity-type.html#2197" data-type="x ≡ y → y ≡ x" class="Function">sym</a> <a id="2244" class="Symbol">(</a><a id="2245" href="identity-type.html#620" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="2250" href="identity-type.html#2250" class="Bound">x</a><a id="2251" class="Symbol">)</a> <a id="2253" class="Symbol">=</a> <a id="2255" href="identity-type.html#620" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="2260" href="identity-type.html#2250" class="Bound">x</a>
+
+<a id="ap"></a><a id="2263" href="identity-type.html#2263" data-type="(f : A → B) → x ≡ y → f x ≡ f y" class="Function">ap</a> <a id="2266" class="Symbol">:</a> <a id="2268" class="Symbol">{</a><a id="2269" href="identity-type.html#2269" class="Bound">A</a> <a id="2271" href="identity-type.html#2271" class="Bound">B</a> <a id="2273" class="Symbol">:</a> <a id="2275" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="2279" class="Symbol">}</a> <a id="2281" class="Symbol">(</a><a id="2282" href="identity-type.html#2282" class="Bound">f</a> <a id="2284" class="Symbol">:</a> <a id="2286" href="identity-type.html#2269" class="Bound">A</a> <a id="2288" class="Symbol">→</a> <a id="2290" href="identity-type.html#2271" class="Bound">B</a><a id="2291" class="Symbol">)</a> <a id="2293" class="Symbol">{</a><a id="2294" href="identity-type.html#2294" class="Bound">x</a> <a id="2296" href="identity-type.html#2296" class="Bound">y</a> <a id="2298" class="Symbol">:</a> <a id="2300" href="identity-type.html#2269" class="Bound">A</a><a id="2301" class="Symbol">}</a> <a id="2303" class="Symbol">→</a> <a id="2305" href="identity-type.html#2294" class="Bound">x</a> <a id="2307" href="identity-type.html#583" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="2309" href="identity-type.html#2296" class="Bound">y</a> <a id="2311" class="Symbol">→</a> <a id="2313" href="identity-type.html#2282" class="Bound">f</a> <a id="2315" href="identity-type.html#2294" class="Bound">x</a> <a id="2317" href="identity-type.html#583" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="2319" href="identity-type.html#2282" class="Bound">f</a> <a id="2321" href="identity-type.html#2296" class="Bound">y</a>
+<a id="2323" href="identity-type.html#2263" data-type="(f : A → B) → x ≡ y → f x ≡ f y" class="Function">ap</a> <a id="2326" href="identity-type.html#2326" class="Bound">f</a> <a id="2328" class="Symbol">(</a><a id="2329" href="identity-type.html#620" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="2334" href="identity-type.html#2334" class="Bound">x</a><a id="2335" class="Symbol">)</a> <a id="2337" class="Symbol">=</a> <a id="2339" href="identity-type.html#620" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="2344" class="Symbol">(</a><a id="2345" href="identity-type.html#2326" class="Bound">f</a> <a id="2347" href="identity-type.html#2334" class="Bound">x</a><a id="2348" class="Symbol">)</a>
+
+<a id="ap₂"></a><a id="2351" href="identity-type.html#2351" data-type="(f : A → B → C) → x ≡ x&#39; → y ≡ y&#39; → f x y ≡ f x&#39; y&#39;" class="Function">ap₂</a> <a id="2355" class="Symbol">:</a> <a id="2357" class="Symbol">{</a><a id="2358" href="identity-type.html#2358" class="Bound">A</a> <a id="2360" href="identity-type.html#2360" class="Bound">B</a> <a id="2362" href="identity-type.html#2362" class="Bound">C</a> <a id="2364" class="Symbol">:</a> <a id="2366" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="2370" class="Symbol">}</a> <a id="2372" class="Symbol">(</a><a id="2373" href="identity-type.html#2373" class="Bound">f</a> <a id="2375" class="Symbol">:</a> <a id="2377" href="identity-type.html#2358" class="Bound">A</a> <a id="2379" class="Symbol">→</a> <a id="2381" href="identity-type.html#2360" class="Bound">B</a> <a id="2383" class="Symbol">→</a> <a id="2385" href="identity-type.html#2362" class="Bound">C</a><a id="2386" class="Symbol">)</a> <a id="2388" class="Symbol">{</a><a id="2389" href="identity-type.html#2389" class="Bound">x</a> <a id="2391" href="identity-type.html#2391" class="Bound">x&#39;</a> <a id="2394" class="Symbol">:</a> <a id="2396" href="identity-type.html#2358" class="Bound">A</a><a id="2397" class="Symbol">}</a> <a id="2399" class="Symbol">{</a><a id="2400" href="identity-type.html#2400" class="Bound">y</a> <a id="2402" href="identity-type.html#2402" class="Bound">y&#39;</a> <a id="2405" class="Symbol">:</a> <a id="2407" href="identity-type.html#2360" class="Bound">B</a><a id="2408" class="Symbol">}</a>
+    <a id="2414" class="Symbol">→</a> <a id="2416" href="identity-type.html#2389" class="Bound">x</a> <a id="2418" href="identity-type.html#583" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="2420" href="identity-type.html#2391" class="Bound">x&#39;</a> <a id="2423" class="Symbol">→</a> <a id="2425" href="identity-type.html#2400" class="Bound">y</a> <a id="2427" href="identity-type.html#583" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="2429" href="identity-type.html#2402" class="Bound">y&#39;</a> <a id="2432" class="Symbol">→</a> <a id="2434" href="identity-type.html#2373" class="Bound">f</a> <a id="2436" href="identity-type.html#2389" class="Bound">x</a> <a id="2438" href="identity-type.html#2400" class="Bound">y</a> <a id="2440" href="identity-type.html#583" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="2442" href="identity-type.html#2373" class="Bound">f</a> <a id="2444" href="identity-type.html#2391" class="Bound">x&#39;</a> <a id="2447" href="identity-type.html#2402" class="Bound">y&#39;</a>
+<a id="2450" href="identity-type.html#2351" data-type="(f : A → B → C) → x ≡ x&#39; → y ≡ y&#39; → f x y ≡ f x&#39; y&#39;" class="Function">ap₂</a> <a id="2454" href="identity-type.html#2454" class="Bound">f</a> <a id="2456" class="Symbol">(</a><a id="2457" href="identity-type.html#620" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="2462" href="identity-type.html#2462" class="Bound">x</a><a id="2463" class="Symbol">)</a> <a id="2465" class="Symbol">(</a><a id="2466" href="identity-type.html#620" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="2471" href="identity-type.html#2471" class="Bound">y</a><a id="2472" class="Symbol">)</a> <a id="2474" class="Symbol">=</a> <a id="2476" href="identity-type.html#620" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="2481" class="Symbol">(</a><a id="2482" href="identity-type.html#2454" class="Bound">f</a> <a id="2484" href="identity-type.html#2462" class="Bound">x</a> <a id="2486" href="identity-type.html#2471" class="Bound">y</a><a id="2487" class="Symbol">)</a>
+
+<a id="transport"></a><a id="2490" href="identity-type.html#2490" data-type="(A : X → Type) → x ≡ y → A x → A y" class="Function">transport</a> <a id="2500" class="Symbol">:</a> <a id="2502" class="Symbol">{</a><a id="2503" href="identity-type.html#2503" class="Bound">X</a> <a id="2505" class="Symbol">:</a> <a id="2507" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="2511" class="Symbol">}</a> <a id="2513" class="Symbol">(</a><a id="2514" href="identity-type.html#2514" class="Bound">A</a> <a id="2516" class="Symbol">:</a> <a id="2518" href="identity-type.html#2503" class="Bound">X</a> <a id="2520" class="Symbol">→</a> <a id="2522" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="2526" class="Symbol">)</a>
+          <a id="2538" class="Symbol">→</a> <a id="2540" class="Symbol">{</a><a id="2541" href="identity-type.html#2541" class="Bound">x</a> <a id="2543" href="identity-type.html#2543" class="Bound">y</a> <a id="2545" class="Symbol">:</a> <a id="2547" href="identity-type.html#2503" class="Bound">X</a><a id="2548" class="Symbol">}</a> <a id="2550" class="Symbol">→</a> <a id="2552" href="identity-type.html#2541" class="Bound">x</a> <a id="2554" href="identity-type.html#583" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="2556" href="identity-type.html#2543" class="Bound">y</a> <a id="2558" class="Symbol">→</a> <a id="2560" href="identity-type.html#2514" class="Bound">A</a> <a id="2562" href="identity-type.html#2541" class="Bound">x</a> <a id="2564" class="Symbol">→</a> <a id="2566" href="identity-type.html#2514" class="Bound">A</a> <a id="2568" href="identity-type.html#2543" class="Bound">y</a>
+<a id="2570" href="identity-type.html#2490" data-type="(A : X → Type) → x ≡ y → A x → A y" class="Function">transport</a> <a id="2580" href="identity-type.html#2580" class="Bound">A</a> <a id="2582" class="Symbol">(</a><a id="2583" href="identity-type.html#620" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="2588" href="identity-type.html#2588" class="Bound">x</a><a id="2589" class="Symbol">)</a> <a id="2591" href="identity-type.html#2591" class="Bound">a</a> <a id="2593" class="Symbol">=</a> <a id="2595" href="identity-type.html#2591" class="Bound">a</a>
+</pre>
+<p>We have already seen the first three. In the literature,
+<code>ap</code> is often called <code>cong</code>. In logical terms, the
+last one, often called <code>subst</code> in the literature, says that
+if <code>x</code> is equal <code>y</code> and <code>A x</code> holds,
+then so does <code>A y</code>. That is, we can substitute equals for
+equals in logical statements.</p>
+<h2 id="hottuf-notation">HoTT/UF notation</h2>
+<pre class="Agda"><a id="_∙_"></a><a id="2924" href="identity-type.html#2924" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function Operator">_∙_</a> <a id="2928" class="Symbol">:</a> <a id="2930" class="Symbol">{</a><a id="2931" href="identity-type.html#2931" class="Bound">A</a> <a id="2933" class="Symbol">:</a> <a id="2935" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="2939" class="Symbol">}</a> <a id="2941" class="Symbol">{</a><a id="2942" href="identity-type.html#2942" class="Bound">x</a> <a id="2944" href="identity-type.html#2944" class="Bound">y</a> <a id="2946" href="identity-type.html#2946" class="Bound">z</a> <a id="2948" class="Symbol">:</a> <a id="2950" href="identity-type.html#2931" class="Bound">A</a><a id="2951" class="Symbol">}</a> <a id="2953" class="Symbol">→</a> <a id="2955" href="identity-type.html#2942" class="Bound">x</a> <a id="2957" href="identity-type.html#583" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="2959" href="identity-type.html#2944" class="Bound">y</a> <a id="2961" class="Symbol">→</a> <a id="2963" href="identity-type.html#2944" class="Bound">y</a> <a id="2965" href="identity-type.html#583" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="2967" href="identity-type.html#2946" class="Bound">z</a> <a id="2969" class="Symbol">→</a> <a id="2971" href="identity-type.html#2942" class="Bound">x</a> <a id="2973" href="identity-type.html#583" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="2975" href="identity-type.html#2946" class="Bound">z</a>
+<a id="2977" href="identity-type.html#2924" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function Operator">_∙_</a> <a id="2981" class="Symbol">=</a> <a id="2983" href="identity-type.html#2120" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function">trans</a>
+
+<a id="2990" class="Keyword">infixl</a> <a id="2997" class="Number">7</a> <a id="2999" href="identity-type.html#2924" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function Operator">_∙_</a>
+
+<a id="_⁻¹"></a><a id="3004" href="identity-type.html#3004" data-type="x ≡ y → y ≡ x" class="Function Operator">_⁻¹</a> <a id="3008" class="Symbol">:</a> <a id="3010" class="Symbol">{</a><a id="3011" href="identity-type.html#3011" class="Bound">A</a> <a id="3013" class="Symbol">:</a> <a id="3015" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="3019" class="Symbol">}</a> <a id="3021" class="Symbol">{</a><a id="3022" href="identity-type.html#3022" class="Bound">x</a> <a id="3024" href="identity-type.html#3024" class="Bound">y</a> <a id="3026" class="Symbol">:</a> <a id="3028" href="identity-type.html#3011" class="Bound">A</a><a id="3029" class="Symbol">}</a> <a id="3031" class="Symbol">→</a> <a id="3033" href="identity-type.html#3022" class="Bound">x</a> <a id="3035" href="identity-type.html#583" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="3037" href="identity-type.html#3024" class="Bound">y</a> <a id="3039" class="Symbol">→</a> <a id="3041" href="identity-type.html#3024" class="Bound">y</a> <a id="3043" href="identity-type.html#583" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="3045" href="identity-type.html#3022" class="Bound">x</a>
+<a id="3047" href="identity-type.html#3004" data-type="x ≡ y → y ≡ x" class="Function Operator">_⁻¹</a> <a id="3051" class="Symbol">=</a> <a id="3053" href="identity-type.html#2197" data-type="x ≡ y → y ≡ x" class="Function">sym</a>
+
+<a id="3058" class="Keyword">infix</a>  <a id="3065" class="Number">40</a> <a id="3068" href="identity-type.html#3004" data-type="x ≡ y → y ≡ x" class="Function Operator">_⁻¹</a>
+
+</pre>
+<h2 id="pointwise-equality-of-functions">Pointwise equality of
+functions</h2>
+It is often convenient to work with <em>pointwise equality</em> of
+functions, defined as follows:
+<pre class="Agda"><a id="_∼_"></a><a id="3214" href="identity-type.html#3214" data-type="((x : A) → B x) → ((x : A) → B x) → Type" class="Function Operator">_∼_</a> <a id="3218" class="Symbol">:</a> <a id="3220" class="Symbol">{</a><a id="3221" href="identity-type.html#3221" class="Bound">A</a> <a id="3223" class="Symbol">:</a> <a id="3225" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="3229" class="Symbol">}</a> <a id="3231" class="Symbol">{</a><a id="3232" href="identity-type.html#3232" class="Bound">B</a> <a id="3234" class="Symbol">:</a> <a id="3236" href="identity-type.html#3221" class="Bound">A</a> <a id="3238" class="Symbol">→</a> <a id="3240" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="3244" class="Symbol">}</a> <a id="3246" class="Symbol">→</a> <a id="3248" class="Symbol">((</a><a id="3250" href="identity-type.html#3250" class="Bound">x</a> <a id="3252" class="Symbol">:</a> <a id="3254" href="identity-type.html#3221" class="Bound">A</a><a id="3255" class="Symbol">)</a> <a id="3257" class="Symbol">→</a> <a id="3259" href="identity-type.html#3232" class="Bound">B</a> <a id="3261" href="identity-type.html#3250" class="Bound">x</a><a id="3262" class="Symbol">)</a> <a id="3264" class="Symbol">→</a> <a id="3266" class="Symbol">((</a><a id="3268" href="identity-type.html#3268" class="Bound">x</a> <a id="3270" class="Symbol">:</a> <a id="3272" href="identity-type.html#3221" class="Bound">A</a><a id="3273" class="Symbol">)</a> <a id="3275" class="Symbol">→</a> <a id="3277" href="identity-type.html#3232" class="Bound">B</a> <a id="3279" href="identity-type.html#3268" class="Bound">x</a><a id="3280" class="Symbol">)</a> <a id="3282" class="Symbol">→</a> <a id="3284" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a>
+<a id="3289" href="identity-type.html#3289" class="Bound">f</a> <a id="3291" href="identity-type.html#3214" data-type="((x : A) → B x) → ((x : A) → B x) → Type" class="Function Operator">∼</a> <a id="3293" href="identity-type.html#3293" class="Bound">g</a> <a id="3295" class="Symbol">=</a> <a id="3297" class="Symbol">∀</a> <a id="3299" href="identity-type.html#3299" class="Bound">x</a> <a id="3301" class="Symbol">→</a> <a id="3303" href="identity-type.html#3289" class="Bound">f</a> <a id="3305" href="identity-type.html#3299" class="Bound">x</a> <a id="3307" href="identity-type.html#583" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="3309" href="identity-type.html#3293" class="Bound">g</a> <a id="3311" href="identity-type.html#3299" class="Bound">x</a>
+
+<a id="3314" class="Keyword">infix</a> <a id="3320" class="Number">0</a> <a id="3322" href="identity-type.html#3214" data-type="((x : A) → B x) → ((x : A) → B x) → Type" class="Function Operator">_∼_</a>
+</pre>
+<p>Unfortunately, it is not provable or disprovable in Agda that
+pointwise equal functions are equal, that is, that <code>f ∼ g</code>
+implies <code>f ≡ g</code> (but it is provable in <a
+href="https://agda.readthedocs.io/en/latest/language/cubical.html">Cubical
+Agda</a>, which is outside the scope of these lecture notes). This
+principle is very useful and is called <a
+href="function-extensionality.lagda.md">function extensionality</a>.</p>
+<h2 id="notation-for-equality-reasoning">Notation for equality
+reasoning</h2>
+<p>When writing <code>trans p q</code> we lose type information of the
+identifications <code>p : x ≡ y</code> and <code>q : y ≡ z</code>, which
+makes some definitions using <code>trans</code> hard to read. We now
+introduce notation to be able to write e.g.</p>
+<blockquote>
+<p><code>x ≡⟨ p ⟩</code></p>
+</blockquote>
+<blockquote>
+<p><code>y ≡⟨ q ⟩</code></p>
+</blockquote>
+<blockquote>
+<p><code>z ≡⟨ r ⟩</code></p>
+</blockquote>
+<blockquote>
+<p><code>t ∎</code></p>
+</blockquote>
+<p>rather than the more unreadable
+<code>trans p (trans q r) : x ≡ t</code>.</p>
+<pre class="Agda"><a id="_≡⟨_⟩_"></a><a id="4108" href="identity-type.html#4108" data-type="(x : X) → x ≡ y → y ≡ z → x ≡ z" class="Function Operator">_≡⟨_⟩_</a> <a id="4115" class="Symbol">:</a> <a id="4117" class="Symbol">{</a><a id="4118" href="identity-type.html#4118" class="Bound">X</a> <a id="4120" class="Symbol">:</a> <a id="4122" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="4126" class="Symbol">}</a> <a id="4128" class="Symbol">(</a><a id="4129" href="identity-type.html#4129" class="Bound">x</a> <a id="4131" class="Symbol">:</a> <a id="4133" href="identity-type.html#4118" class="Bound">X</a><a id="4134" class="Symbol">)</a> <a id="4136" class="Symbol">{</a><a id="4137" href="identity-type.html#4137" class="Bound">y</a> <a id="4139" href="identity-type.html#4139" class="Bound">z</a> <a id="4141" class="Symbol">:</a> <a id="4143" href="identity-type.html#4118" class="Bound">X</a><a id="4144" class="Symbol">}</a> <a id="4146" class="Symbol">→</a> <a id="4148" href="identity-type.html#4129" class="Bound">x</a> <a id="4150" href="identity-type.html#583" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="4152" href="identity-type.html#4137" class="Bound">y</a> <a id="4154" class="Symbol">→</a> <a id="4156" href="identity-type.html#4137" class="Bound">y</a> <a id="4158" href="identity-type.html#583" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="4160" href="identity-type.html#4139" class="Bound">z</a> <a id="4162" class="Symbol">→</a> <a id="4164" href="identity-type.html#4129" class="Bound">x</a> <a id="4166" href="identity-type.html#583" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="4168" href="identity-type.html#4139" class="Bound">z</a>
+<a id="4170" href="identity-type.html#4170" class="Bound">x</a> <a id="4172" href="identity-type.html#4108" data-type="(x : X) → x ≡ y → y ≡ z → x ≡ z" class="Function Operator">≡⟨</a> <a id="4175" href="identity-type.html#4175" class="Bound">p</a> <a id="4177" href="identity-type.html#4108" data-type="(x : X) → x ≡ y → y ≡ z → x ≡ z" class="Function Operator">⟩</a> <a id="4179" href="identity-type.html#4179" class="Bound">q</a> <a id="4181" class="Symbol">=</a> <a id="4183" href="identity-type.html#2120" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function">trans</a> <a id="4189" href="identity-type.html#4175" class="Bound">p</a> <a id="4191" href="identity-type.html#4179" class="Bound">q</a>
+
+<a id="_∎"></a><a id="4194" href="identity-type.html#4194" data-type="(x : X) → x ≡ x" class="Function Operator">_∎</a> <a id="4197" class="Symbol">:</a> <a id="4199" class="Symbol">{</a><a id="4200" href="identity-type.html#4200" class="Bound">X</a> <a id="4202" class="Symbol">:</a> <a id="4204" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="4208" class="Symbol">}</a> <a id="4210" class="Symbol">(</a><a id="4211" href="identity-type.html#4211" class="Bound">x</a> <a id="4213" class="Symbol">:</a> <a id="4215" href="identity-type.html#4200" class="Bound">X</a><a id="4216" class="Symbol">)</a> <a id="4218" class="Symbol">→</a> <a id="4220" href="identity-type.html#4211" class="Bound">x</a> <a id="4222" href="identity-type.html#583" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="4224" href="identity-type.html#4211" class="Bound">x</a>
+<a id="4226" href="identity-type.html#4226" class="Bound">x</a> <a id="4228" href="identity-type.html#4194" data-type="(x : X) → x ≡ x" class="Function Operator">∎</a> <a id="4230" class="Symbol">=</a> <a id="4232" href="identity-type.html#620" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="4237" href="identity-type.html#4226" class="Bound">x</a>
+
+<a id="4240" class="Keyword">infixr</a>  <a id="4248" class="Number">0</a> <a id="4250" href="identity-type.html#4108" data-type="(x : X) → x ≡ y → y ≡ z → x ≡ z" class="Function Operator">_≡⟨_⟩_</a>
+<a id="4257" class="Keyword">infix</a>   <a id="4265" class="Number">1</a> <a id="4267" href="identity-type.html#4194" data-type="(x : X) → x ≡ x" class="Function Operator">_∎</a>
+</pre>
+<p>We’ll see examples of uses of this in other handouts.</p>
+
+  </article>
+</div>
+</main>
+</body>
+<style>
+
+:root {
+  --text-bg: #fff;
+  --text-fg: #222;
+  --shadow: #000;
+  --primary: #0054F4;
+  --secondary: #9C1BD6;
+  --modal-bg: #ccccccaa;
+  --warning-bg: #fef08a;
+  --code-bg: var(--text-bg);
+  --code-fg: var(--text-fg);
+  --code-keyword: #BB3B13;
+  --code-string:  #d52753;
+  --code-number:  #8A1060;
+  --code-module:  #8A1060;
+  --code-field:   #9C1BD6;
+  --code-constructor: #207B1D;
+  --code-highlight: #F5DEB3;
+  --search-selected: #e2e8f0;
+  --details-summary: #b2ebf2;
+  --details-open:    #80deea;
+  --depgraph-edge: #eee;
+  --blockquote-bg: #d8b4fe; }
+
+.diagram-dark {
+  display: none !important; }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-bg: #282C34;
+    --text-fg: #bfbfbf;
+    --shadow: #475569;
+    --primary: #61AFEF;
+    --secondary: #C878DD;
+    --modal-bg: #282C34aa;
+    --warning-bg: #991b1b;
+    --code-keyword:     #E5C07B;
+    --code-string:      #E06C75;
+    --code-number:      #98C379;
+    --code-module:      #56B6C2;
+    --code-field:       #C878DD;
+    --code-constructor: #98C379;
+    --code-highlight: #ef444499;
+    --search-selected: #474e5e;
+    --details-summary: #5b21b6;
+    --details-open:    #4c1d95;
+    --depgraph-edge: #474e5e;
+    --blockquote-bg: #475569; }
+  div.warning {
+    --shadow: #7f1d1d
+  ; }
+  input {
+    background-color: #334155;
+    border: 1px solid #475569;
+    color: var(--text-fg); }
+  body {
+    scrollbar-color: #3b4454 #2b2e33; }
+  .diagram-dark {
+    display: block !important; }
+  .diagram-light {
+    display: none !important; } }
+
+table {
+  margin: auto;
+  border-collapse: collapse; }
+  table td, table th {
+    text-align: center;
+    padding: 0px 1em 0px 1em; }
+
+body {
+  font-family: "Inria Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  width: 100%;
+  font-size: var(--font-size);
+  overflow-x: clip; }
+
+div#post-toc-container { max-width: 120ch; margin: auto; }
+
+/* Aspects. */
+.Agda {
+  /* NameKinds. */
+  /* OtherAspects. */
+  /* Standard attributes. */
+  font-family: 'iosevka', 'Iosevka', 'Fantasque Sans Mono', 'Roboto Mono', monospace;
+  font-weight: 400; }
+  .Agda .Comment {
+    color: var(--code-fg);
+    font-style: italic; }
+  .Agda .Background {
+    background-color: var(--code-bg); }
+  .Agda .Markup {
+    color: var(--code-fg); }
+  .Agda .Keyword {
+    color: var(--code-keyword); }
+  .Agda .String {
+    color: var(--code-string); }
+  .Agda .Number {
+    color: var(--code-number); }
+  .Agda .Symbol {
+    color: var(--code-fg); }
+  .Agda .PrimitiveType {
+    color: var(--primary); }
+  .Agda .Pragma {
+    color: var(--code-fg); }
+  .Agda .Bound {
+    color: var(--code-fg) !important; }
+  .Agda .Generalizable {
+    color: var(--code-fg) !important; }
+  .Agda .InductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .CoinductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .Datatype {
+    color: var(--primary) !important; }
+  .Agda .Field {
+    color: var(--code-field) !important; }
+  .Agda .Function {
+    color: var(--primary) !important; }
+  .Agda .Module {
+    color: var(--code-module) !important; }
+  .Agda .Postulate {
+    color: var(--primary) !important; }
+  .Agda .Primitive {
+    color: var(--primary) !important; }
+  .Agda .Record {
+    color: var(--primary) !important; }
+  .Agda .UnsolvedMeta {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .UnsolvedConstraint {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .TerminationProblem {
+    color: var(--code-fg);
+    background: #FFA07A; }
+  .Agda .IncompletePattern {
+    color: var(--code-fg);
+    background: #F5DEB3; }
+  .Agda .Error {
+    color: red;
+    text-decoration: underline; }
+  .Agda .TypeChecks {
+    color: var(--code-fg);
+    background: #ADD8E6; }
+  .Agda .ShadowingInTelescope {
+    color: var(--code-fg);
+    background: #808080; }
+  .Agda .Deadcode {
+    color: var(--code-keyword);
+    font-weight: bold; }
+  .Agda a {
+    text-decoration: none; }
+  .Agda a[href]:hover {
+    text-decoration: 2px var(--primary) underline; }
+  .Agda a[href]:target {
+    animation: highlight 2.5s; }
+  body.text-page .Agda {
+    font-size: var(--code-font-size); }
+
+pre.Agda, div.sourceCode, pre {
+  border-radius: 0;
+  box-shadow: none;
+  overflow-y: clip;
+  margin: 0;
+  padding: 1em;
+  padding-top: 0.25em;
+  padding-bottom: 0.25em;
+  background-color: var(--code-bg);
+  color: var(--code-fg); 
+  font-size: var(--code-font-size); }
+
+</html>

@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>HoTTEST Summer School 2022 Lecture Notes</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+</head>
+
+<body class="text-page">
+<main>
+<div id="post-toc-container" style="padding-left: 1em; padding-right: 1em;">
+
+  <article>
+
+<p>Martin Escardo. Notes originally written for the module “Advanced
+Functional Programming” at the School of Computer Science of the
+University of Birmingham, UK.</p>
+<!--
+<pre class="Agda"><a id="178" class="Symbol">{-#</a> <a id="182" class="Keyword">OPTIONS</a> <a id="190" class="Pragma">--without-K</a> <a id="202" class="Pragma">--safe</a> <a id="209" class="Symbol">#-}</a>
+
+<a id="214" class="Keyword">module</a> <a id="221" href="binary-sums.html" class="Module">binary-sums</a> <a id="233" class="Keyword">where</a>
+
+<a id="240" class="Keyword">open</a> <a id="245" class="Keyword">import</a> <a id="252" href="general-notation.html" class="Module">general-notation</a>
+</pre>-->
+<h1 id="the-binary-sum-type-former-__">The binary-sum type former
+<code>_∔_</code></h1>
+This is the same as (or, more precisely, <a
+href="isomorphisms.lagda.md">isomorphic</a> to) the <code>Either</code>
+type defined earlier (you can try this as an exercise). The notation in
+type theory is <code>_+_</code>, but we want to reserve this for
+addition of natural numbers, and hence we use the same symbol with a dot
+on top:
+<pre class="Agda"><a id="623" class="Keyword">data</a> <a id="_∔_"></a><a id="628" href="binary-sums.html#628" data-type="Type → Type → Set" class="Datatype Operator">_∔_</a> <a id="632" class="Symbol">(</a><a id="633" href="binary-sums.html#633" class="Bound">A</a> <a id="635" href="binary-sums.html#635" class="Bound">B</a> <a id="637" class="Symbol">:</a> <a id="639" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="643" class="Symbol">)</a> <a id="645" class="Symbol">:</a> <a id="647" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a> <a id="652" class="Keyword">where</a>
+ <a id="_∔_.inl"></a><a id="659" href="binary-sums.html#659" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="663" class="Symbol">:</a> <a id="665" href="binary-sums.html#633" class="Bound">A</a> <a id="667" class="Symbol">→</a> <a id="669" href="binary-sums.html#633" class="Bound">A</a> <a id="671" href="binary-sums.html#628" data-type="Type → Type → Set" class="Datatype Operator">∔</a> <a id="673" href="binary-sums.html#635" class="Bound">B</a>
+ <a id="_∔_.inr"></a><a id="676" href="binary-sums.html#676" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="680" class="Symbol">:</a> <a id="682" href="binary-sums.html#635" class="Bound">B</a> <a id="684" class="Symbol">→</a> <a id="686" href="binary-sums.html#633" class="Bound">A</a> <a id="688" href="binary-sums.html#628" data-type="Type → Type → Set" class="Datatype Operator">∔</a> <a id="690" href="binary-sums.html#635" class="Bound">B</a>
+
+<a id="693" class="Keyword">infixr</a> <a id="700" class="Number">20</a> <a id="703" href="binary-sums.html#628" data-type="Type → Type → Set" class="Datatype Operator">_∔_</a>
+</pre>
+<p>The type <code>A ∔ B</code> is called the coproduct of <code>A</code>
+and <code>B</code>, or the sum of <code>A</code> and <code>B</code>, or
+the disjoint union of <code>A</code> and <code>B</code>. The elements of
+<code>A ∔ B</code> are of the form <code>inl x</code> with
+<code>x : A</code> and <code>inr y</code> with <code>y : B</code>.</p>
+<p>In terms of computation, we use the type <code>A ∔ B</code> when we
+want to put the two types together into a single type. It is also
+possible to write <code>A ∔ A</code>, in which case we will have two
+copies of the type <code>A</code>, so that now every element
+<code>x</code> of <code>A</code> has two different incarnations
+<code>inl a</code> and <code>inr a</code> in the type
+<code>A ∔ A</code>. For example, the <a href="unit-type.lagda.md">unit
+type</a> <code>𝟙</code> has exactly one element, namely
+<code>⋆ : 𝟙</code>, and hence the type <code>𝟙 ∔ 𝟙</code> has precisely
+two elements, namely <code>inl ⋆</code> and <code>inr ⋆</code>.</p>
+<h2 id="logical-disjunction-or">Logical disjunction (“or”)</h2>
+<p>In terms of logic, we use the type <code>A ∔ B</code> to express “A
+or B”. This is because in order for “A or B” to hold, at least one of A
+and B must hold. The type <code>A → A ∔ B</code> of the function
+<code>inl</code> is interpreted as saying that if A holds then so does
+“A or B”, and similarly, the type of B → A ∔ B of the function
+<code>inr</code> says that if B holds then so does “A or B”. In other
+words, if <code>x : A</code> is a proof of <code>A</code>, then
+<code>inl x : A + B</code> is a proof of <code>A or B</code>, and if
+<code>y : B</code> is a proof of B, them <code>inr y : A + B</code> is a
+proof of “A or B”. Here when we said “proof” we meant “program” after
+the propositions-as-types and proofs-as-programs paradigm.</p>
+<h2 id="elimination-principle">Elimination principle</h2>
+<p>Now suppose we want to define a dependent function
+<code>(z : A ∔ B) → C z</code>. How can we do that? If we have two
+functions <code>f : (x : A) → C (inl x)</code> and
+<code>g : (y : B) → C (inr y)</code>, then, given
+<code>z : A ∔ B</code>, we can inspect whether <code>z</code> is of the
+form <code>inl x</code> with <code>x : A</code> or of the form
+<code>inr y</code> with <code>y : B</code>, and the respectively apply
+<code>f</code> or <code>g</code> to get an element of <code>C z</code>.
+This procedure is called the <em>elimination</em> principle for the type
+former <code>_∔_</code> and can be written in Agda as follows:</p>
+<pre class="Agda"><a id="∔-elim"></a><a id="2599" href="binary-sums.html#2599" data-type="(C : A ∔ B → Type) →
+((x : A) → C (inl x)) → ((y : B) → C (inr y)) → (z : A ∔ B) → C z" class="Function">∔-elim</a> <a id="2606" class="Symbol">:</a> <a id="2608" class="Symbol">{</a><a id="2609" href="binary-sums.html#2609" class="Bound">A</a> <a id="2611" href="binary-sums.html#2611" class="Bound">B</a> <a id="2613" class="Symbol">:</a> <a id="2615" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="2619" class="Symbol">}</a> <a id="2621" class="Symbol">(</a><a id="2622" href="binary-sums.html#2622" class="Bound">C</a> <a id="2624" class="Symbol">:</a> <a id="2626" href="binary-sums.html#2609" class="Bound">A</a> <a id="2628" href="binary-sums.html#628" data-type="Type → Type → Set" class="Datatype Operator">∔</a> <a id="2630" href="binary-sums.html#2611" class="Bound">B</a> <a id="2632" class="Symbol">→</a> <a id="2634" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="2638" class="Symbol">)</a>
+       <a id="2647" class="Symbol">→</a> <a id="2649" class="Symbol">((</a><a id="2651" href="binary-sums.html#2651" class="Bound">x</a> <a id="2653" class="Symbol">:</a> <a id="2655" href="binary-sums.html#2609" class="Bound">A</a><a id="2656" class="Symbol">)</a> <a id="2658" class="Symbol">→</a> <a id="2660" href="binary-sums.html#2622" class="Bound">C</a> <a id="2662" class="Symbol">(</a><a id="2663" href="binary-sums.html#659" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="2667" href="binary-sums.html#2651" class="Bound">x</a><a id="2668" class="Symbol">))</a>
+       <a id="2678" class="Symbol">→</a> <a id="2680" class="Symbol">((</a><a id="2682" href="binary-sums.html#2682" class="Bound">y</a> <a id="2684" class="Symbol">:</a> <a id="2686" href="binary-sums.html#2611" class="Bound">B</a><a id="2687" class="Symbol">)</a> <a id="2689" class="Symbol">→</a> <a id="2691" href="binary-sums.html#2622" class="Bound">C</a> <a id="2693" class="Symbol">(</a><a id="2694" href="binary-sums.html#676" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="2698" href="binary-sums.html#2682" class="Bound">y</a><a id="2699" class="Symbol">))</a>
+       <a id="2709" class="Symbol">→</a> <a id="2711" class="Symbol">(</a><a id="2712" href="binary-sums.html#2712" class="Bound">z</a> <a id="2714" class="Symbol">:</a> <a id="2716" href="binary-sums.html#2609" class="Bound">A</a> <a id="2718" href="binary-sums.html#628" data-type="Type → Type → Set" class="Datatype Operator">∔</a> <a id="2720" href="binary-sums.html#2611" class="Bound">B</a><a id="2721" class="Symbol">)</a> <a id="2723" class="Symbol">→</a> <a id="2725" href="binary-sums.html#2622" class="Bound">C</a> <a id="2727" href="binary-sums.html#2712" class="Bound">z</a>
+<a id="2729" href="binary-sums.html#2599" data-type="(C : A ∔ B → Type) →
+((x : A) → C (inl x)) → ((y : B) → C (inr y)) → (z : A ∔ B) → C z" class="Function">∔-elim</a> <a id="2736" href="binary-sums.html#2736" class="Bound">C</a> <a id="2738" href="binary-sums.html#2738" class="Bound">f</a> <a id="2740" href="binary-sums.html#2740" class="Bound">g</a> <a id="2742" class="Symbol">(</a><a id="2743" href="binary-sums.html#659" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="2747" href="binary-sums.html#2747" class="Bound">x</a><a id="2748" class="Symbol">)</a> <a id="2750" class="Symbol">=</a> <a id="2752" href="binary-sums.html#2738" class="Bound">f</a> <a id="2754" href="binary-sums.html#2747" class="Bound">x</a>
+<a id="2756" href="binary-sums.html#2599" data-type="(C : A ∔ B → Type) →
+((x : A) → C (inl x)) → ((y : B) → C (inr y)) → (z : A ∔ B) → C z" class="Function">∔-elim</a> <a id="2763" href="binary-sums.html#2763" class="Bound">C</a> <a id="2765" href="binary-sums.html#2765" class="Bound">f</a> <a id="2767" href="binary-sums.html#2767" class="Bound">g</a> <a id="2769" class="Symbol">(</a><a id="2770" href="binary-sums.html#676" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="2774" href="binary-sums.html#2774" class="Bound">y</a><a id="2775" class="Symbol">)</a> <a id="2777" class="Symbol">=</a> <a id="2779" href="binary-sums.html#2767" class="Bound">g</a> <a id="2781" href="binary-sums.html#2774" class="Bound">y</a>
+</pre>
+So the eliminator amounts to simply definition by cases. In terms of
+logic, it says that in order to show that “for all z : A ∔ B we have
+that C z holds” it is enough to show two things: (1) “for all x : A it
+is the case that C (inl x) holds”, and (2) “forall y : B it is the case
+that C (inr y) holds”. This is not only sufficient, but also necessary:
+<pre class="Agda"><a id="3148" class="Keyword">open</a> <a id="3153" class="Keyword">import</a> <a id="3160" href="binary-products.html" class="Module">binary-products</a>
+
+<a id="∔-split"></a><a id="3177" href="binary-sums.html#3177" data-type="(C : A ∔ B → Type) →
+((z : A ∔ B) → C z) → ((x : A) → C (inl x)) × ((y : B) → C (inr y))" class="Function">∔-split</a> <a id="3185" class="Symbol">:</a> <a id="3187" class="Symbol">{</a><a id="3188" href="binary-sums.html#3188" class="Bound">A</a> <a id="3190" href="binary-sums.html#3190" class="Bound">B</a> <a id="3192" class="Symbol">:</a> <a id="3194" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="3198" class="Symbol">}</a> <a id="3200" class="Symbol">(</a><a id="3201" href="binary-sums.html#3201" class="Bound">C</a> <a id="3203" class="Symbol">:</a> <a id="3205" href="binary-sums.html#3188" class="Bound">A</a> <a id="3207" href="binary-sums.html#628" data-type="Type → Type → Set" class="Datatype Operator">∔</a> <a id="3209" href="binary-sums.html#3190" class="Bound">B</a> <a id="3211" class="Symbol">→</a> <a id="3213" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="3217" class="Symbol">)</a>
+        <a id="3227" class="Symbol">→</a> <a id="3229" class="Symbol">((</a><a id="3231" href="binary-sums.html#3231" class="Bound">z</a> <a id="3233" class="Symbol">:</a> <a id="3235" href="binary-sums.html#3188" class="Bound">A</a> <a id="3237" href="binary-sums.html#628" data-type="Type → Type → Set" class="Datatype Operator">∔</a> <a id="3239" href="binary-sums.html#3190" class="Bound">B</a><a id="3240" class="Symbol">)</a> <a id="3242" class="Symbol">→</a> <a id="3244" href="binary-sums.html#3201" class="Bound">C</a> <a id="3246" href="binary-sums.html#3231" class="Bound">z</a><a id="3247" class="Symbol">)</a>
+        <a id="3257" class="Symbol">→</a> <a id="3259" class="Symbol">((</a><a id="3261" href="binary-sums.html#3261" class="Bound">x</a> <a id="3263" class="Symbol">:</a> <a id="3265" href="binary-sums.html#3188" class="Bound">A</a><a id="3266" class="Symbol">)</a> <a id="3268" class="Symbol">→</a> <a id="3270" href="binary-sums.html#3201" class="Bound">C</a> <a id="3272" class="Symbol">(</a><a id="3273" href="binary-sums.html#659" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="3277" href="binary-sums.html#3261" class="Bound">x</a><a id="3278" class="Symbol">))</a> <a id="3281" href="binary-products.html#626" data-type="Type → Type → Type" class="Function Operator">×</a> <a id="3283" class="Symbol">((</a><a id="3285" href="binary-sums.html#3285" class="Bound">y</a> <a id="3287" class="Symbol">:</a> <a id="3289" href="binary-sums.html#3190" class="Bound">B</a><a id="3290" class="Symbol">)</a> <a id="3292" class="Symbol">→</a> <a id="3294" href="binary-sums.html#3201" class="Bound">C</a> <a id="3296" class="Symbol">(</a><a id="3297" href="binary-sums.html#676" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="3301" href="binary-sums.html#3285" class="Bound">y</a><a id="3302" class="Symbol">))</a>
+<a id="3305" href="binary-sums.html#3177" data-type="(C : A ∔ B → Type) →
+((z : A ∔ B) → C z) → ((x : A) → C (inl x)) × ((y : B) → C (inr y))" class="Function">∔-split</a> <a id="3313" class="Symbol">{</a><a id="3314" href="binary-sums.html#3314" class="Bound">A</a><a id="3315" class="Symbol">}</a> <a id="3317" class="Symbol">{</a><a id="3318" href="binary-sums.html#3318" class="Bound">B</a><a id="3319" class="Symbol">}</a> <a id="3321" href="binary-sums.html#3321" class="Bound">C</a> <a id="3323" href="binary-sums.html#3323" class="Bound">h</a> <a id="3325" class="Symbol">=</a> <a id="3327" href="binary-sums.html#3342" data-type="(C : A ∔ B → Type) → ((z : A ∔ B) → C z) → (x : A) → C (inl x)" class="Function">f</a> <a id="3329" href="sums.html#2478" data-type="(fst : A) (snd : B fst) → Σ B" class="InductiveConstructor Operator">,</a> <a id="3331" href="binary-sums.html#3387" data-type="(C : A ∔ B → Type) → ((z : A ∔ B) → C z) → (y : B) → C (inr y)" class="Function">g</a>
+ <a id="3334" class="Keyword">where</a>
+  <a id="3342" href="binary-sums.html#3342" data-type="(C : A ∔ B → Type) → ((z : A ∔ B) → C z) → (x : A) → C (inl x)" class="Function">f</a> <a id="3344" class="Symbol">:</a> <a id="3346" class="Symbol">(</a><a id="3347" href="binary-sums.html#3347" class="Bound">x</a> <a id="3349" class="Symbol">:</a> <a id="3351" href="binary-sums.html#3314" class="Bound">A</a><a id="3352" class="Symbol">)</a> <a id="3354" class="Symbol">→</a> <a id="3356" href="binary-sums.html#3321" class="Bound">C</a> <a id="3358" class="Symbol">(</a><a id="3359" href="binary-sums.html#659" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="3363" href="binary-sums.html#3347" class="Bound">x</a><a id="3364" class="Symbol">)</a>
+  <a id="3368" href="binary-sums.html#3342" data-type="(C : A ∔ B → Type) → ((z : A ∔ B) → C z) → (x : A) → C (inl x)" class="Function">f</a> <a id="3370" href="binary-sums.html#3370" class="Bound">x</a> <a id="3372" class="Symbol">=</a> <a id="3374" href="binary-sums.html#3323" class="Bound">h</a> <a id="3376" class="Symbol">(</a><a id="3377" href="binary-sums.html#659" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="3381" href="binary-sums.html#3370" class="Bound">x</a><a id="3382" class="Symbol">)</a>
+
+  <a id="3387" href="binary-sums.html#3387" data-type="(C : A ∔ B → Type) → ((z : A ∔ B) → C z) → (y : B) → C (inr y)" class="Function">g</a> <a id="3389" class="Symbol">:</a> <a id="3391" class="Symbol">(</a><a id="3392" href="binary-sums.html#3392" class="Bound">y</a> <a id="3394" class="Symbol">:</a> <a id="3396" href="binary-sums.html#3318" class="Bound">B</a><a id="3397" class="Symbol">)</a> <a id="3399" class="Symbol">→</a> <a id="3401" href="binary-sums.html#3321" class="Bound">C</a> <a id="3403" class="Symbol">(</a><a id="3404" href="binary-sums.html#676" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="3408" href="binary-sums.html#3392" class="Bound">y</a><a id="3409" class="Symbol">)</a>
+  <a id="3413" href="binary-sums.html#3387" data-type="(C : A ∔ B → Type) → ((z : A ∔ B) → C z) → (y : B) → C (inr y)" class="Function">g</a> <a id="3415" href="binary-sums.html#3415" class="Bound">y</a> <a id="3417" class="Symbol">=</a> <a id="3419" href="binary-sums.html#3323" class="Bound">h</a> <a id="3421" class="Symbol">(</a><a id="3422" href="binary-sums.html#676" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="3426" href="binary-sums.html#3415" class="Bound">y</a><a id="3427" class="Symbol">)</a>
+</pre>
+There is also a version of the eliminator in which <code>C</code>
+doesn’t depend on <code>z : A ∔ B</code> and is always the same:
+<pre class="Agda"><a id="∔-nondep-elim"></a><a id="3551" href="binary-sums.html#3551" data-type="(A → C) → (B → C) → A ∔ B → C" class="Function">∔-nondep-elim</a> <a id="3565" class="Symbol">:</a> <a id="3567" class="Symbol">{</a><a id="3568" href="binary-sums.html#3568" class="Bound">A</a> <a id="3570" href="binary-sums.html#3570" class="Bound">B</a> <a id="3572" href="binary-sums.html#3572" class="Bound">C</a> <a id="3574" class="Symbol">:</a> <a id="3576" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="3580" class="Symbol">}</a>
+              <a id="3596" class="Symbol">→</a> <a id="3598" class="Symbol">(</a><a id="3599" href="binary-sums.html#3568" class="Bound">A</a> <a id="3601" class="Symbol">→</a> <a id="3603" href="binary-sums.html#3572" class="Bound">C</a><a id="3604" class="Symbol">)</a>
+              <a id="3620" class="Symbol">→</a> <a id="3622" class="Symbol">(</a><a id="3623" href="binary-sums.html#3570" class="Bound">B</a> <a id="3625" class="Symbol">→</a> <a id="3627" href="binary-sums.html#3572" class="Bound">C</a><a id="3628" class="Symbol">)</a>
+              <a id="3644" class="Symbol">→</a> <a id="3646" class="Symbol">(</a><a id="3647" href="binary-sums.html#3568" class="Bound">A</a> <a id="3649" href="binary-sums.html#628" data-type="Type → Type → Set" class="Datatype Operator">∔</a> <a id="3651" href="binary-sums.html#3570" class="Bound">B</a> <a id="3653" class="Symbol">→</a> <a id="3655" href="binary-sums.html#3572" class="Bound">C</a><a id="3656" class="Symbol">)</a>
+<a id="3658" href="binary-sums.html#3551" data-type="(A → C) → (B → C) → A ∔ B → C" class="Function">∔-nondep-elim</a> <a id="3672" class="Symbol">{</a><a id="3673" href="binary-sums.html#3673" class="Bound">A</a><a id="3674" class="Symbol">}</a> <a id="3676" class="Symbol">{</a><a id="3677" href="binary-sums.html#3677" class="Bound">B</a><a id="3678" class="Symbol">}</a> <a id="3680" class="Symbol">{</a><a id="3681" href="binary-sums.html#3681" class="Bound">C</a><a id="3682" class="Symbol">}</a> <a id="3684" class="Symbol">=</a> <a id="3686" href="binary-sums.html#2599" data-type="(C : A ∔ B → Type) →
+((x : A) → C (inl x)) → ((y : B) → C (inr y)) → (z : A ∔ B) → C z" class="Function">∔-elim</a> <a id="3693" class="Symbol">(λ</a> <a id="3696" href="binary-sums.html#3696" class="Bound">z</a> <a id="3698" class="Symbol">→</a> <a id="3700" href="binary-sums.html#3681" class="Bound">C</a><a id="3701" class="Symbol">)</a>
+</pre>
+In terms of logic, this means that in order to show that “A or B implies
+C”, it is enough to show that both “A implies C” and “B implies C”. This
+also can be inverted:
+<pre class="Agda"><a id="∔-nondep-split"></a><a id="3883" href="binary-sums.html#3883" data-type="(A ∔ B → C) → (A → C) × (B → C)" class="Function">∔-nondep-split</a> <a id="3898" class="Symbol">:</a> <a id="3900" class="Symbol">{</a><a id="3901" href="binary-sums.html#3901" class="Bound">A</a> <a id="3903" href="binary-sums.html#3903" class="Bound">B</a> <a id="3905" href="binary-sums.html#3905" class="Bound">C</a> <a id="3907" class="Symbol">:</a> <a id="3909" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="3913" class="Symbol">}</a>
+               <a id="3930" class="Symbol">→</a> <a id="3932" class="Symbol">(</a><a id="3933" href="binary-sums.html#3901" class="Bound">A</a> <a id="3935" href="binary-sums.html#628" data-type="Type → Type → Set" class="Datatype Operator">∔</a> <a id="3937" href="binary-sums.html#3903" class="Bound">B</a> <a id="3939" class="Symbol">→</a> <a id="3941" href="binary-sums.html#3905" class="Bound">C</a><a id="3942" class="Symbol">)</a>
+               <a id="3959" class="Symbol">→</a> <a id="3961" class="Symbol">(</a><a id="3962" href="binary-sums.html#3901" class="Bound">A</a> <a id="3964" class="Symbol">→</a> <a id="3966" href="binary-sums.html#3905" class="Bound">C</a><a id="3967" class="Symbol">)</a> <a id="3969" href="binary-products.html#626" data-type="Type → Type → Type" class="Function Operator">×</a> <a id="3971" class="Symbol">(</a><a id="3972" href="binary-sums.html#3903" class="Bound">B</a> <a id="3974" class="Symbol">→</a> <a id="3976" href="binary-sums.html#3905" class="Bound">C</a><a id="3977" class="Symbol">)</a>
+<a id="3979" href="binary-sums.html#3883" data-type="(A ∔ B → C) → (A → C) × (B → C)" class="Function">∔-nondep-split</a> <a id="3994" class="Symbol">{</a><a id="3995" href="binary-sums.html#3995" class="Bound">A</a><a id="3996" class="Symbol">}</a> <a id="3998" class="Symbol">{</a><a id="3999" href="binary-sums.html#3999" class="Bound">B</a><a id="4000" class="Symbol">}</a> <a id="4002" class="Symbol">{</a><a id="4003" href="binary-sums.html#4003" class="Bound">C</a><a id="4004" class="Symbol">}</a> <a id="4006" class="Symbol">=</a> <a id="4008" href="binary-sums.html#3177" data-type="(C : A ∔ B → Type) →
+((z : A ∔ B) → C z) → ((x : A) → C (inl x)) × ((y : B) → C (inr y))" class="Function">∔-split</a> <a id="4016" class="Symbol">(λ</a> <a id="4019" href="binary-sums.html#4019" class="Bound">z</a> <a id="4021" class="Symbol">→</a> <a id="4023" href="binary-sums.html#4003" class="Bound">C</a><a id="4024" class="Symbol">)</a>
+</pre>
+<p>In terms of logic, this means that if <code>A or B implies C</code>
+then both <code>A implies C</code> and <code>B implies C</code>.</p>
+<h2 id="alternative-definition-of-__">Alternative definition of
+<code>_∔_</code></h2>
+<p>There is <a href="binary-sums-as-sums.lagda.md">another way to define
+binary sums</a> as a special case of <code>Σ</code>.</p>
+
+  </article>
+</div>
+</main>
+</body>
+<style>
+
+:root {
+  --text-bg: #fff;
+  --text-fg: #222;
+  --shadow: #000;
+  --primary: #0054F4;
+  --secondary: #9C1BD6;
+  --modal-bg: #ccccccaa;
+  --warning-bg: #fef08a;
+  --code-bg: var(--text-bg);
+  --code-fg: var(--text-fg);
+  --code-keyword: #BB3B13;
+  --code-string:  #d52753;
+  --code-number:  #8A1060;
+  --code-module:  #8A1060;
+  --code-field:   #9C1BD6;
+  --code-constructor: #207B1D;
+  --code-highlight: #F5DEB3;
+  --search-selected: #e2e8f0;
+  --details-summary: #b2ebf2;
+  --details-open:    #80deea;
+  --depgraph-edge: #eee;
+  --blockquote-bg: #d8b4fe; }
+
+.diagram-dark {
+  display: none !important; }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-bg: #282C34;
+    --text-fg: #bfbfbf;
+    --shadow: #475569;
+    --primary: #61AFEF;
+    --secondary: #C878DD;
+    --modal-bg: #282C34aa;
+    --warning-bg: #991b1b;
+    --code-keyword:     #E5C07B;
+    --code-string:      #E06C75;
+    --code-number:      #98C379;
+    --code-module:      #56B6C2;
+    --code-field:       #C878DD;
+    --code-constructor: #98C379;
+    --code-highlight: #ef444499;
+    --search-selected: #474e5e;
+    --details-summary: #5b21b6;
+    --details-open:    #4c1d95;
+    --depgraph-edge: #474e5e;
+    --blockquote-bg: #475569; }
+  div.warning {
+    --shadow: #7f1d1d
+  ; }
+  input {
+    background-color: #334155;
+    border: 1px solid #475569;
+    color: var(--text-fg); }
+  body {
+    scrollbar-color: #3b4454 #2b2e33; }
+  .diagram-dark {
+    display: block !important; }
+  .diagram-light {
+    display: none !important; } }
+
+table {
+  margin: auto;
+  border-collapse: collapse; }
+  table td, table th {
+    text-align: center;
+    padding: 0px 1em 0px 1em; }
+
+body {
+  font-family: "Inria Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  width: 100%;
+  font-size: var(--font-size);
+  overflow-x: clip; }
+
+div#post-toc-container { max-width: 120ch; margin: auto; }
+
+/* Aspects. */
+.Agda {
+  /* NameKinds. */
+  /* OtherAspects. */
+  /* Standard attributes. */
+  font-family: 'iosevka', 'Iosevka', 'Fantasque Sans Mono', 'Roboto Mono', monospace;
+  font-weight: 400; }
+  .Agda .Comment {
+    color: var(--code-fg);
+    font-style: italic; }
+  .Agda .Background {
+    background-color: var(--code-bg); }
+  .Agda .Markup {
+    color: var(--code-fg); }
+  .Agda .Keyword {
+    color: var(--code-keyword); }
+  .Agda .String {
+    color: var(--code-string); }
+  .Agda .Number {
+    color: var(--code-number); }
+  .Agda .Symbol {
+    color: var(--code-fg); }
+  .Agda .PrimitiveType {
+    color: var(--primary); }
+  .Agda .Pragma {
+    color: var(--code-fg); }
+  .Agda .Bound {
+    color: var(--code-fg) !important; }
+  .Agda .Generalizable {
+    color: var(--code-fg) !important; }
+  .Agda .InductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .CoinductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .Datatype {
+    color: var(--primary) !important; }
+  .Agda .Field {
+    color: var(--code-field) !important; }
+  .Agda .Function {
+    color: var(--primary) !important; }
+  .Agda .Module {
+    color: var(--code-module) !important; }
+  .Agda .Postulate {
+    color: var(--primary) !important; }
+  .Agda .Primitive {
+    color: var(--primary) !important; }
+  .Agda .Record {
+    color: var(--primary) !important; }
+  .Agda .UnsolvedMeta {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .UnsolvedConstraint {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .TerminationProblem {
+    color: var(--code-fg);
+    background: #FFA07A; }
+  .Agda .IncompletePattern {
+    color: var(--code-fg);
+    background: #F5DEB3; }
+  .Agda .Error {
+    color: red;
+    text-decoration: underline; }
+  .Agda .TypeChecks {
+    color: var(--code-fg);
+    background: #ADD8E6; }
+  .Agda .ShadowingInTelescope {
+    color: var(--code-fg);
+    background: #808080; }
+  .Agda .Deadcode {
+    color: var(--code-keyword);
+    font-weight: bold; }
+  .Agda a {
+    text-decoration: none; }
+  .Agda a[href]:hover {
+    text-decoration: 2px var(--primary) underline; }
+  .Agda a[href]:target {
+    animation: highlight 2.5s; }
+  body.text-page .Agda {
+    font-size: var(--code-font-size); }
+
+pre.Agda, div.sourceCode, pre {
+  border-radius: 0;
+  box-shadow: none;
+  overflow-y: clip;
+  margin: 0;
+  padding: 1em;
+  padding-top: 0.25em;
+  padding-bottom: 0.25em;
+  background-color: var(--code-bg);
+  color: var(--code-fg); 
+  font-size: var(--code-font-size); }
+
+</html>

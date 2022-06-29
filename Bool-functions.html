@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>HoTTEST Summer School 2022 Lecture Notes</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+</head>
+
+<body class="text-page">
+<main>
+<div id="post-toc-container" style="padding-left: 1em; padding-right: 1em;">
+
+  <article>
+
+<p>Martin Escardo. Notes originally written for the module “Advanced
+Functional Programming” at the School of Computer Science of the
+University of Birmingham, UK.</p>
+<!--
+<pre class="Agda"><a id="178" class="Symbol">{-#</a> <a id="182" class="Keyword">OPTIONS</a> <a id="190" class="Pragma">--without-K</a> <a id="202" class="Pragma">--safe</a> <a id="209" class="Symbol">#-}</a>
+
+<a id="214" class="Keyword">module</a> <a id="221" href="Bool-functions.html" class="Module">Bool-functions</a> <a id="236" class="Keyword">where</a>
+
+<a id="243" class="Keyword">open</a> <a id="248" class="Keyword">import</a> <a id="255" href="prelude.html" class="Module">prelude</a>
+</pre>-->
+<h1 id="the-booleans">The booleans</h1>
+<p>The booleans are isomorphic to a Basic MLTT type:</p>
+<pre class="Agda"><a id="346" class="Keyword">open</a> <a id="351" class="Keyword">import</a> <a id="358" href="isomorphisms.html" class="Module">isomorphisms</a>
+
+<a id="Bool-isomorphism"></a><a id="372" href="Bool-functions.html#372" data-type="Bool ≅ 𝟙 ∔ 𝟙" class="Function">Bool-isomorphism</a> <a id="389" class="Symbol">:</a> <a id="391" href="Bool.html#450" data-type="Set" class="Datatype">Bool</a> <a id="396" href="isomorphisms.html#1871" data-type="(A B : Type) → Type" class="Record Operator">≅</a> <a id="398" href="unit-type.html#352" data-type="Type" class="Record">𝟙</a> <a id="400" href="binary-sums.html#628" data-type="Type → Type → Set" class="Datatype Operator">∔</a> <a id="402" href="unit-type.html#352" data-type="Type" class="Record">𝟙</a>
+<a id="404" href="Bool-functions.html#372" data-type="Bool ≅ 𝟙 ∔ 𝟙" class="Function">Bool-isomorphism</a> <a id="421" class="Symbol">=</a> <a id="423" class="Keyword">record</a> <a id="430" class="Symbol">{</a> <a id="432" href="isomorphisms.html#1937" data-type="A ≅ B → A → B" class="Field">bijection</a> <a id="442" class="Symbol">=</a> <a id="444" href="Bool-functions.html#488" data-type="Bool → 𝟙 ∔ 𝟙" class="Function">f</a> <a id="446" class="Symbol">;</a> <a id="448" href="isomorphisms.html#1959" data-type="(r : A ≅ B) → is-bijection (bijection r)" class="Field">bijectivity</a> <a id="460" class="Symbol">=</a> <a id="462" href="Bool-functions.html#744" data-type="is-bijection f" class="Function">f-is-bijection</a> <a id="477" class="Symbol">}</a>
+ <a id="480" class="Keyword">where</a>
+  <a id="488" href="Bool-functions.html#488" data-type="Bool → 𝟙 ∔ 𝟙" class="Function">f</a> <a id="490" class="Symbol">:</a> <a id="492" href="Bool.html#450" data-type="Set" class="Datatype">Bool</a> <a id="497" class="Symbol">→</a> <a id="499" href="unit-type.html#352" data-type="Type" class="Record">𝟙</a> <a id="501" href="binary-sums.html#628" data-type="Type → Type → Set" class="Datatype Operator">∔</a> <a id="503" href="unit-type.html#352" data-type="Type" class="Record">𝟙</a>
+  <a id="507" href="Bool-functions.html#488" data-type="Bool → 𝟙 ∔ 𝟙" class="Function">f</a> <a id="509" href="Bool.html#474" data-type="Bool" class="InductiveConstructor">false</a> <a id="515" class="Symbol">=</a> <a id="517" href="binary-sums.html#659" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="521" href="unit-type.html#382" data-type="𝟙" class="InductiveConstructor">⋆</a>
+  <a id="525" href="Bool-functions.html#488" data-type="Bool → 𝟙 ∔ 𝟙" class="Function">f</a> <a id="527" href="Bool.html#469" data-type="Bool" class="InductiveConstructor">true</a>  <a id="533" class="Symbol">=</a> <a id="535" href="binary-sums.html#676" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="539" href="unit-type.html#382" data-type="𝟙" class="InductiveConstructor">⋆</a>
+
+  <a id="544" href="Bool-functions.html#544" data-type="𝟙 ∔ 𝟙 → Bool" class="Function">g</a> <a id="546" class="Symbol">:</a> <a id="548" href="unit-type.html#352" data-type="Type" class="Record">𝟙</a> <a id="550" href="binary-sums.html#628" data-type="Type → Type → Set" class="Datatype Operator">∔</a> <a id="552" href="unit-type.html#352" data-type="Type" class="Record">𝟙</a> <a id="554" class="Symbol">→</a> <a id="556" href="Bool.html#450" data-type="Set" class="Datatype">Bool</a>
+  <a id="563" href="Bool-functions.html#544" data-type="𝟙 ∔ 𝟙 → Bool" class="Function">g</a> <a id="565" class="Symbol">(</a><a id="566" href="binary-sums.html#659" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="570" href="unit-type.html#382" data-type="𝟙" class="InductiveConstructor">⋆</a><a id="571" class="Symbol">)</a> <a id="573" class="Symbol">=</a> <a id="575" href="Bool.html#474" data-type="Bool" class="InductiveConstructor">false</a>
+  <a id="583" href="Bool-functions.html#544" data-type="𝟙 ∔ 𝟙 → Bool" class="Function">g</a> <a id="585" class="Symbol">(</a><a id="586" href="binary-sums.html#676" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="590" href="unit-type.html#382" data-type="𝟙" class="InductiveConstructor">⋆</a><a id="591" class="Symbol">)</a> <a id="593" class="Symbol">=</a> <a id="595" href="Bool.html#469" data-type="Bool" class="InductiveConstructor">true</a>
+
+  <a id="603" href="Bool-functions.html#603" data-type="(g ∘ f) ∼ id" class="Function">gf</a> <a id="606" class="Symbol">:</a> <a id="608" href="Bool-functions.html#544" data-type="𝟙 ∔ 𝟙 → Bool" class="Function">g</a> <a id="610" href="products.html#3375" data-type="((y : B) → C y) → (f : A → B) (x : A) → C (f x)" class="Function Operator">∘</a> <a id="612" href="Bool-functions.html#488" data-type="Bool → 𝟙 ∔ 𝟙" class="Function">f</a> <a id="614" href="identity-type.html#3214" data-type="((x : A) → B x) → ((x : A) → B x) → Type" class="Function Operator">∼</a> <a id="616" href="products.html#1013" data-type="A → A" class="Function">id</a>
+  <a id="621" href="Bool-functions.html#603" data-type="(g ∘ f) ∼ id" class="Function">gf</a> <a id="624" href="Bool.html#469" data-type="Bool" class="InductiveConstructor">true</a>  <a id="630" class="Symbol">=</a> <a id="632" href="identity-type.html#620" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="637" href="Bool.html#469" data-type="Bool" class="InductiveConstructor">true</a>
+  <a id="644" href="Bool-functions.html#603" data-type="(g ∘ f) ∼ id" class="Function">gf</a> <a id="647" href="Bool.html#474" data-type="Bool" class="InductiveConstructor">false</a> <a id="653" class="Symbol">=</a> <a id="655" href="identity-type.html#620" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="660" href="Bool.html#474" data-type="Bool" class="InductiveConstructor">false</a>
+
+  <a id="669" href="Bool-functions.html#669" data-type="(f ∘ g) ∼ id" class="Function">fg</a> <a id="672" class="Symbol">:</a> <a id="674" href="Bool-functions.html#488" data-type="Bool → 𝟙 ∔ 𝟙" class="Function">f</a> <a id="676" href="products.html#3375" data-type="((y : B) → C y) → (f : A → B) (x : A) → C (f x)" class="Function Operator">∘</a> <a id="678" href="Bool-functions.html#544" data-type="𝟙 ∔ 𝟙 → Bool" class="Function">g</a> <a id="680" href="identity-type.html#3214" data-type="((x : A) → B x) → ((x : A) → B x) → Type" class="Function Operator">∼</a> <a id="682" href="products.html#1013" data-type="A → A" class="Function">id</a>
+  <a id="687" href="Bool-functions.html#669" data-type="(f ∘ g) ∼ id" class="Function">fg</a> <a id="690" class="Symbol">(</a><a id="691" href="binary-sums.html#659" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="695" href="unit-type.html#382" data-type="𝟙" class="InductiveConstructor">⋆</a><a id="696" class="Symbol">)</a> <a id="698" class="Symbol">=</a> <a id="700" href="identity-type.html#620" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="705" class="Symbol">(</a><a id="706" href="binary-sums.html#659" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="710" href="unit-type.html#382" data-type="𝟙" class="InductiveConstructor">⋆</a><a id="711" class="Symbol">)</a>
+  <a id="715" href="Bool-functions.html#669" data-type="(f ∘ g) ∼ id" class="Function">fg</a> <a id="718" class="Symbol">(</a><a id="719" href="binary-sums.html#676" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="723" href="unit-type.html#382" data-type="𝟙" class="InductiveConstructor">⋆</a><a id="724" class="Symbol">)</a> <a id="726" class="Symbol">=</a> <a id="728" href="identity-type.html#620" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="733" class="Symbol">(</a><a id="734" href="binary-sums.html#676" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="738" href="unit-type.html#382" data-type="𝟙" class="InductiveConstructor">⋆</a><a id="739" class="Symbol">)</a>
+
+  <a id="744" href="Bool-functions.html#744" data-type="is-bijection f" class="Function">f-is-bijection</a> <a id="759" class="Symbol">:</a> <a id="761" href="isomorphisms.html#1706" data-type="(f : A → B) → Type" class="Record">is-bijection</a> <a id="774" href="Bool-functions.html#488" data-type="Bool → 𝟙 ∔ 𝟙" class="Function">f</a>
+  <a id="778" href="Bool-functions.html#744" data-type="is-bijection f" class="Function">f-is-bijection</a> <a id="793" class="Symbol">=</a> <a id="795" class="Keyword">record</a> <a id="802" class="Symbol">{</a> <a id="804" href="isomorphisms.html#1789" data-type="is-bijection f → B → A" class="Field">inverse</a> <a id="812" class="Symbol">=</a> <a id="814" href="Bool-functions.html#544" data-type="𝟙 ∔ 𝟙 → Bool" class="Function">g</a> <a id="816" class="Symbol">;</a> <a id="818" href="isomorphisms.html#1807" data-type="(r : is-bijection f) → (inverse r ∘ f) ∼ id" class="Field">η</a> <a id="820" class="Symbol">=</a> <a id="822" href="Bool-functions.html#603" data-type="(g ∘ f) ∼ id" class="Function">gf</a> <a id="825" class="Symbol">;</a> <a id="827" href="isomorphisms.html#1836" data-type="(r : is-bijection f) → (f ∘ inverse r) ∼ id" class="Field">ε</a> <a id="829" class="Symbol">=</a> <a id="831" href="Bool-functions.html#669" data-type="(f ∘ g) ∼ id" class="Function">fg</a> <a id="834" class="Symbol">}</a>
+</pre>
+
+  </article>
+</div>
+</main>
+</body>
+<style>
+
+:root {
+  --text-bg: #fff;
+  --text-fg: #222;
+  --shadow: #000;
+  --primary: #0054F4;
+  --secondary: #9C1BD6;
+  --modal-bg: #ccccccaa;
+  --warning-bg: #fef08a;
+  --code-bg: var(--text-bg);
+  --code-fg: var(--text-fg);
+  --code-keyword: #BB3B13;
+  --code-string:  #d52753;
+  --code-number:  #8A1060;
+  --code-module:  #8A1060;
+  --code-field:   #9C1BD6;
+  --code-constructor: #207B1D;
+  --code-highlight: #F5DEB3;
+  --search-selected: #e2e8f0;
+  --details-summary: #b2ebf2;
+  --details-open:    #80deea;
+  --depgraph-edge: #eee;
+  --blockquote-bg: #d8b4fe; }
+
+.diagram-dark {
+  display: none !important; }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-bg: #282C34;
+    --text-fg: #bfbfbf;
+    --shadow: #475569;
+    --primary: #61AFEF;
+    --secondary: #C878DD;
+    --modal-bg: #282C34aa;
+    --warning-bg: #991b1b;
+    --code-keyword:     #E5C07B;
+    --code-string:      #E06C75;
+    --code-number:      #98C379;
+    --code-module:      #56B6C2;
+    --code-field:       #C878DD;
+    --code-constructor: #98C379;
+    --code-highlight: #ef444499;
+    --search-selected: #474e5e;
+    --details-summary: #5b21b6;
+    --details-open:    #4c1d95;
+    --depgraph-edge: #474e5e;
+    --blockquote-bg: #475569; }
+  div.warning {
+    --shadow: #7f1d1d
+  ; }
+  input {
+    background-color: #334155;
+    border: 1px solid #475569;
+    color: var(--text-fg); }
+  body {
+    scrollbar-color: #3b4454 #2b2e33; }
+  .diagram-dark {
+    display: block !important; }
+  .diagram-light {
+    display: none !important; } }
+
+table {
+  margin: auto;
+  border-collapse: collapse; }
+  table td, table th {
+    text-align: center;
+    padding: 0px 1em 0px 1em; }
+
+body {
+  font-family: "Inria Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  width: 100%;
+  font-size: var(--font-size);
+  overflow-x: clip; }
+
+div#post-toc-container { max-width: 120ch; margin: auto; }
+
+/* Aspects. */
+.Agda {
+  /* NameKinds. */
+  /* OtherAspects. */
+  /* Standard attributes. */
+  font-family: 'iosevka', 'Iosevka', 'Fantasque Sans Mono', 'Roboto Mono', monospace;
+  font-weight: 400; }
+  .Agda .Comment {
+    color: var(--code-fg);
+    font-style: italic; }
+  .Agda .Background {
+    background-color: var(--code-bg); }
+  .Agda .Markup {
+    color: var(--code-fg); }
+  .Agda .Keyword {
+    color: var(--code-keyword); }
+  .Agda .String {
+    color: var(--code-string); }
+  .Agda .Number {
+    color: var(--code-number); }
+  .Agda .Symbol {
+    color: var(--code-fg); }
+  .Agda .PrimitiveType {
+    color: var(--primary); }
+  .Agda .Pragma {
+    color: var(--code-fg); }
+  .Agda .Bound {
+    color: var(--code-fg) !important; }
+  .Agda .Generalizable {
+    color: var(--code-fg) !important; }
+  .Agda .InductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .CoinductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .Datatype {
+    color: var(--primary) !important; }
+  .Agda .Field {
+    color: var(--code-field) !important; }
+  .Agda .Function {
+    color: var(--primary) !important; }
+  .Agda .Module {
+    color: var(--code-module) !important; }
+  .Agda .Postulate {
+    color: var(--primary) !important; }
+  .Agda .Primitive {
+    color: var(--primary) !important; }
+  .Agda .Record {
+    color: var(--primary) !important; }
+  .Agda .UnsolvedMeta {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .UnsolvedConstraint {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .TerminationProblem {
+    color: var(--code-fg);
+    background: #FFA07A; }
+  .Agda .IncompletePattern {
+    color: var(--code-fg);
+    background: #F5DEB3; }
+  .Agda .Error {
+    color: red;
+    text-decoration: underline; }
+  .Agda .TypeChecks {
+    color: var(--code-fg);
+    background: #ADD8E6; }
+  .Agda .ShadowingInTelescope {
+    color: var(--code-fg);
+    background: #808080; }
+  .Agda .Deadcode {
+    color: var(--code-keyword);
+    font-weight: bold; }
+  .Agda a {
+    text-decoration: none; }
+  .Agda a[href]:hover {
+    text-decoration: 2px var(--primary) underline; }
+  .Agda a[href]:target {
+    animation: highlight 2.5s; }
+  body.text-page .Agda {
+    font-size: var(--code-font-size); }
+
+pre.Agda, div.sourceCode, pre {
+  border-radius: 0;
+  box-shadow: none;
+  overflow-y: clip;
+  margin: 0;
+  padding: 1em;
+  padding-top: 0.25em;
+  padding-bottom: 0.25em;
+  background-color: var(--code-bg);
+  color: var(--code-fg); 
+  font-size: var(--code-font-size); }
+
+</html>

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>HoTTEST Summer School 2022 Lecture Notes</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+</head>
+
+<body class="text-page">
+<main>
+<div id="post-toc-container" style="padding-left: 1em; padding-right: 1em;">
+
+  <article>
+
+<p>Martin Escardo. Notes originally written for the module “Advanced
+Functional Programming” at the School of Computer Science of the
+University of Birmingham, UK.</p>
+<!--
+<pre class="Agda"><a id="178" class="Symbol">{-#</a> <a id="182" class="Keyword">OPTIONS</a> <a id="190" class="Pragma">--without-K</a> <a id="202" class="Pragma">--safe</a> <a id="209" class="Symbol">#-}</a>
+
+<a id="214" class="Keyword">module</a> <a id="221" href="binary-sums-as-sums.html" class="Module">binary-sums-as-sums</a> <a id="241" class="Keyword">where</a>
+
+<a id="248" class="Keyword">open</a> <a id="253" class="Keyword">import</a> <a id="260" href="prelude.html" class="Module">prelude</a>
+</pre>-->
+<h2 id="binary-sums-as-a-special-case-of-arbitrary-sums">Binary sums as
+a special case of arbitrary sums</h2>
+Using the binary type <code>𝟚</code>, binary sums can be seen as a
+special case of arbitrary sums as follows:
+<pre class="Agda"><a id="436" class="Keyword">open</a> <a id="441" class="Keyword">import</a> <a id="448" href="binary-type.html" class="Module">binary-type</a>
+
+<a id="_∔&#39;_"></a><a id="461" href="binary-sums-as-sums.html#461" data-type="Type → Type → Type" class="Function Operator">_∔&#39;_</a> <a id="466" class="Symbol">:</a> <a id="468" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a> <a id="473" class="Symbol">→</a> <a id="475" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a> <a id="480" class="Symbol">→</a> <a id="482" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a>
+<a id="487" href="binary-sums-as-sums.html#487" class="Bound">A₀</a> <a id="490" href="binary-sums-as-sums.html#461" data-type="Type → Type → Type" class="Function Operator">∔&#39;</a> <a id="493" href="binary-sums-as-sums.html#493" class="Bound">A₁</a> <a id="496" class="Symbol">=</a> <a id="498" href="sums.html#3564" data-type="(A : Type) → (A → Type) → Type" class="Function">Σ</a> <a id="500" href="binary-sums-as-sums.html#500" class="Bound">n</a> <a id="502" href="sums.html#3564" data-type="(A : Type) → (A → Type) → Type" class="Function">꞉</a> <a id="504" href="binary-type.html#524" data-type="Set" class="Datatype">𝟚</a> <a id="506" href="sums.html#3564" data-type="(A : Type) → (A → Type) → Type" class="Function">,</a> <a id="508" href="binary-sums-as-sums.html#521" data-type="(A₀ A₁ : Type) → 𝟚 → Type" class="Function">A</a> <a id="510" href="binary-sums-as-sums.html#500" class="Bound">n</a>
+ <a id="513" class="Keyword">where</a>
+  <a id="521" href="binary-sums-as-sums.html#521" data-type="(A₀ A₁ : Type) → 𝟚 → Type" class="Function">A</a> <a id="523" class="Symbol">:</a> <a id="525" href="binary-type.html#524" data-type="Set" class="Datatype">𝟚</a> <a id="527" class="Symbol">→</a> <a id="529" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a>
+  <a id="536" href="binary-sums-as-sums.html#521" data-type="(A₀ A₁ : Type) → 𝟚 → Type" class="Function">A</a> <a id="538" href="binary-type.html#540" data-type="𝟚" class="InductiveConstructor">𝟎</a> <a id="540" class="Symbol">=</a> <a id="542" href="binary-sums-as-sums.html#487" class="Bound">A₀</a>
+  <a id="547" href="binary-sums-as-sums.html#521" data-type="(A₀ A₁ : Type) → 𝟚 → Type" class="Function">A</a> <a id="549" href="binary-type.html#542" data-type="𝟚" class="InductiveConstructor">𝟏</a> <a id="551" class="Symbol">=</a> <a id="553" href="binary-sums-as-sums.html#493" class="Bound">A₁</a>
+</pre>
+To justify this claim, we establish an isomorphism.
+<pre class="Agda"><a id="621" class="Keyword">open</a> <a id="626" class="Keyword">import</a> <a id="633" href="isomorphisms.html" class="Module">isomorphisms</a>
+
+<a id="binary-sum-isomorphism"></a><a id="647" href="binary-sums-as-sums.html#647" data-type="(A₀ A₁ : Type) → A₀ ∔ A₁ ≅ (A₀ ∔&#39; A₁)" class="Function">binary-sum-isomorphism</a> <a id="670" class="Symbol">:</a> <a id="672" class="Symbol">(</a><a id="673" href="binary-sums-as-sums.html#673" class="Bound">A₀</a> <a id="676" href="binary-sums-as-sums.html#676" class="Bound">A₁</a> <a id="679" class="Symbol">:</a> <a id="681" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="685" class="Symbol">)</a> <a id="687" class="Symbol">→</a> <a id="689" href="binary-sums-as-sums.html#673" class="Bound">A₀</a> <a id="692" href="binary-sums.html#628" data-type="Type → Type → Set" class="Datatype Operator">∔</a> <a id="694" href="binary-sums-as-sums.html#676" class="Bound">A₁</a> <a id="697" href="isomorphisms.html#1871" data-type="(A B : Type) → Type" class="Record Operator">≅</a> <a id="699" href="binary-sums-as-sums.html#673" class="Bound">A₀</a> <a id="702" href="binary-sums-as-sums.html#461" data-type="Type → Type → Type" class="Function Operator">∔&#39;</a> <a id="705" href="binary-sums-as-sums.html#676" class="Bound">A₁</a>
+<a id="708" href="binary-sums-as-sums.html#647" data-type="(A₀ A₁ : Type) → A₀ ∔ A₁ ≅ (A₀ ∔&#39; A₁)" class="Function">binary-sum-isomorphism</a> <a id="731" href="binary-sums-as-sums.html#731" class="Bound">A₀</a> <a id="734" href="binary-sums-as-sums.html#734" class="Bound">A₁</a> <a id="737" class="Symbol">=</a> <a id="739" class="Keyword">record</a> <a id="746" class="Symbol">{</a> <a id="748" href="isomorphisms.html#1937" data-type="A ≅ B → A → B" class="Field">bijection</a> <a id="758" class="Symbol">=</a> <a id="760" href="binary-sums-as-sums.html#804" data-type="(A₀ A₁ : Type) → A₀ ∔ A₁ → A₀ ∔&#39; A₁" class="Function">f</a> <a id="762" class="Symbol">;</a> <a id="764" href="isomorphisms.html#1959" data-type="(r : A ≅ B) → is-bijection (bijection r)" class="Field">bijectivity</a> <a id="776" class="Symbol">=</a> <a id="778" href="binary-sums-as-sums.html#1102" data-type="(A₀ A₁ : Type) → is-bijection (f A₀ A₁)" class="Function">f-is-bijection</a> <a id="793" class="Symbol">}</a>
+ <a id="796" class="Keyword">where</a>
+  <a id="804" href="binary-sums-as-sums.html#804" data-type="(A₀ A₁ : Type) → A₀ ∔ A₁ → A₀ ∔&#39; A₁" class="Function">f</a> <a id="806" class="Symbol">:</a> <a id="808" href="binary-sums-as-sums.html#731" class="Bound">A₀</a> <a id="811" href="binary-sums.html#628" data-type="Type → Type → Set" class="Datatype Operator">∔</a> <a id="813" href="binary-sums-as-sums.html#734" class="Bound">A₁</a> <a id="816" class="Symbol">→</a> <a id="818" href="binary-sums-as-sums.html#731" class="Bound">A₀</a> <a id="821" href="binary-sums-as-sums.html#461" data-type="Type → Type → Type" class="Function Operator">∔&#39;</a> <a id="824" href="binary-sums-as-sums.html#734" class="Bound">A₁</a>
+  <a id="829" href="binary-sums-as-sums.html#804" data-type="(A₀ A₁ : Type) → A₀ ∔ A₁ → A₀ ∔&#39; A₁" class="Function">f</a> <a id="831" class="Symbol">(</a><a id="832" href="binary-sums.html#659" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="836" href="binary-sums-as-sums.html#836" class="Bound">x₀</a><a id="838" class="Symbol">)</a> <a id="840" class="Symbol">=</a> <a id="842" href="binary-type.html#540" data-type="𝟚" class="InductiveConstructor">𝟎</a> <a id="844" href="sums.html#2478" data-type="(fst : A) (snd : B fst) → Σ B" class="InductiveConstructor Operator">,</a> <a id="846" href="binary-sums-as-sums.html#836" class="Bound">x₀</a>
+  <a id="851" href="binary-sums-as-sums.html#804" data-type="(A₀ A₁ : Type) → A₀ ∔ A₁ → A₀ ∔&#39; A₁" class="Function">f</a> <a id="853" class="Symbol">(</a><a id="854" href="binary-sums.html#676" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="858" href="binary-sums-as-sums.html#858" class="Bound">x₁</a><a id="860" class="Symbol">)</a> <a id="862" class="Symbol">=</a> <a id="864" href="binary-type.html#542" data-type="𝟚" class="InductiveConstructor">𝟏</a> <a id="866" href="sums.html#2478" data-type="(fst : A) (snd : B fst) → Σ B" class="InductiveConstructor Operator">,</a> <a id="868" href="binary-sums-as-sums.html#858" class="Bound">x₁</a>
+
+  <a id="874" href="binary-sums-as-sums.html#874" data-type="(A₀ A₁ : Type) → A₀ ∔&#39; A₁ → A₀ ∔ A₁" class="Function">g</a> <a id="876" class="Symbol">:</a> <a id="878" href="binary-sums-as-sums.html#731" class="Bound">A₀</a> <a id="881" href="binary-sums-as-sums.html#461" data-type="Type → Type → Type" class="Function Operator">∔&#39;</a> <a id="884" href="binary-sums-as-sums.html#734" class="Bound">A₁</a> <a id="887" class="Symbol">→</a> <a id="889" href="binary-sums-as-sums.html#731" class="Bound">A₀</a> <a id="892" href="binary-sums.html#628" data-type="Type → Type → Set" class="Datatype Operator">∔</a> <a id="894" href="binary-sums-as-sums.html#734" class="Bound">A₁</a>
+  <a id="899" href="binary-sums-as-sums.html#874" data-type="(A₀ A₁ : Type) → A₀ ∔&#39; A₁ → A₀ ∔ A₁" class="Function">g</a> <a id="901" class="Symbol">(</a><a id="902" href="binary-type.html#540" data-type="𝟚" class="InductiveConstructor">𝟎</a> <a id="904" href="sums.html#2478" data-type="(fst : A) (snd : B fst) → Σ B" class="InductiveConstructor Operator">,</a> <a id="906" href="binary-sums-as-sums.html#906" class="Bound">x₀</a><a id="908" class="Symbol">)</a> <a id="910" class="Symbol">=</a> <a id="912" href="binary-sums.html#659" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="916" href="binary-sums-as-sums.html#906" class="Bound">x₀</a>
+  <a id="921" href="binary-sums-as-sums.html#874" data-type="(A₀ A₁ : Type) → A₀ ∔&#39; A₁ → A₀ ∔ A₁" class="Function">g</a> <a id="923" class="Symbol">(</a><a id="924" href="binary-type.html#542" data-type="𝟚" class="InductiveConstructor">𝟏</a> <a id="926" href="sums.html#2478" data-type="(fst : A) (snd : B fst) → Σ B" class="InductiveConstructor Operator">,</a> <a id="928" href="binary-sums-as-sums.html#928" class="Bound">x₁</a><a id="930" class="Symbol">)</a> <a id="932" class="Symbol">=</a> <a id="934" href="binary-sums.html#676" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="938" href="binary-sums-as-sums.html#928" class="Bound">x₁</a>
+
+  <a id="944" href="binary-sums-as-sums.html#944" data-type="(A₀ A₁ : Type) → (g A₀ A₁ ∘ f A₀ A₁) ∼ id" class="Function">gf</a> <a id="947" class="Symbol">:</a> <a id="949" href="binary-sums-as-sums.html#874" data-type="(A₀ A₁ : Type) → A₀ ∔&#39; A₁ → A₀ ∔ A₁" class="Function">g</a> <a id="951" href="products.html#3375" data-type="((y : B) → C y) → (f : A → B) (x : A) → C (f x)" class="Function Operator">∘</a> <a id="953" href="binary-sums-as-sums.html#804" data-type="(A₀ A₁ : Type) → A₀ ∔ A₁ → A₀ ∔&#39; A₁" class="Function">f</a> <a id="955" href="identity-type.html#3214" data-type="((x : A) → B x) → ((x : A) → B x) → Type" class="Function Operator">∼</a> <a id="957" href="products.html#1013" data-type="A → A" class="Function">id</a>
+  <a id="962" href="binary-sums-as-sums.html#944" data-type="(A₀ A₁ : Type) → (g A₀ A₁ ∘ f A₀ A₁) ∼ id" class="Function">gf</a> <a id="965" class="Symbol">(</a><a id="966" href="binary-sums.html#659" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="970" href="binary-sums-as-sums.html#970" class="Bound">x₀</a><a id="972" class="Symbol">)</a> <a id="974" class="Symbol">=</a> <a id="976" href="identity-type.html#620" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="981" class="Symbol">(</a><a id="982" href="binary-sums.html#659" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="986" href="binary-sums-as-sums.html#970" class="Bound">x₀</a><a id="988" class="Symbol">)</a>
+  <a id="992" href="binary-sums-as-sums.html#944" data-type="(A₀ A₁ : Type) → (g A₀ A₁ ∘ f A₀ A₁) ∼ id" class="Function">gf</a> <a id="995" class="Symbol">(</a><a id="996" href="binary-sums.html#676" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="1000" href="binary-sums-as-sums.html#1000" class="Bound">x₁</a><a id="1002" class="Symbol">)</a> <a id="1004" class="Symbol">=</a> <a id="1006" href="identity-type.html#620" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="1011" class="Symbol">(</a><a id="1012" href="binary-sums.html#676" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="1016" href="binary-sums-as-sums.html#1000" class="Bound">x₁</a><a id="1018" class="Symbol">)</a>
+
+  <a id="1023" href="binary-sums-as-sums.html#1023" data-type="(A₀ A₁ : Type) → (f A₀ A₁ ∘ g A₀ A₁) ∼ id" class="Function">fg</a> <a id="1026" class="Symbol">:</a> <a id="1028" href="binary-sums-as-sums.html#804" data-type="(A₀ A₁ : Type) → A₀ ∔ A₁ → A₀ ∔&#39; A₁" class="Function">f</a> <a id="1030" href="products.html#3375" data-type="((y : B) → C y) → (f : A → B) (x : A) → C (f x)" class="Function Operator">∘</a> <a id="1032" href="binary-sums-as-sums.html#874" data-type="(A₀ A₁ : Type) → A₀ ∔&#39; A₁ → A₀ ∔ A₁" class="Function">g</a> <a id="1034" href="identity-type.html#3214" data-type="((x : A) → B x) → ((x : A) → B x) → Type" class="Function Operator">∼</a> <a id="1036" href="products.html#1013" data-type="A → A" class="Function">id</a>
+  <a id="1041" href="binary-sums-as-sums.html#1023" data-type="(A₀ A₁ : Type) → (f A₀ A₁ ∘ g A₀ A₁) ∼ id" class="Function">fg</a> <a id="1044" class="Symbol">(</a><a id="1045" href="binary-type.html#540" data-type="𝟚" class="InductiveConstructor">𝟎</a> <a id="1047" href="sums.html#2478" data-type="(fst : A) (snd : B fst) → Σ B" class="InductiveConstructor Operator">,</a> <a id="1049" href="binary-sums-as-sums.html#1049" class="Bound">x₀</a><a id="1051" class="Symbol">)</a> <a id="1053" class="Symbol">=</a> <a id="1055" href="identity-type.html#620" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="1060" class="Symbol">(</a><a id="1061" href="binary-type.html#540" data-type="𝟚" class="InductiveConstructor">𝟎</a> <a id="1063" href="sums.html#2478" data-type="(fst : A) (snd : B fst) → Σ B" class="InductiveConstructor Operator">,</a> <a id="1065" href="binary-sums-as-sums.html#1049" class="Bound">x₀</a><a id="1067" class="Symbol">)</a>
+  <a id="1071" href="binary-sums-as-sums.html#1023" data-type="(A₀ A₁ : Type) → (f A₀ A₁ ∘ g A₀ A₁) ∼ id" class="Function">fg</a> <a id="1074" class="Symbol">(</a><a id="1075" href="binary-type.html#542" data-type="𝟚" class="InductiveConstructor">𝟏</a> <a id="1077" href="sums.html#2478" data-type="(fst : A) (snd : B fst) → Σ B" class="InductiveConstructor Operator">,</a> <a id="1079" href="binary-sums-as-sums.html#1079" class="Bound">x₁</a><a id="1081" class="Symbol">)</a> <a id="1083" class="Symbol">=</a> <a id="1085" href="identity-type.html#620" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="1090" class="Symbol">(</a><a id="1091" href="binary-type.html#542" data-type="𝟚" class="InductiveConstructor">𝟏</a> <a id="1093" href="sums.html#2478" data-type="(fst : A) (snd : B fst) → Σ B" class="InductiveConstructor Operator">,</a> <a id="1095" href="binary-sums-as-sums.html#1079" class="Bound">x₁</a><a id="1097" class="Symbol">)</a>
+
+  <a id="1102" href="binary-sums-as-sums.html#1102" data-type="(A₀ A₁ : Type) → is-bijection (f A₀ A₁)" class="Function">f-is-bijection</a> <a id="1117" class="Symbol">:</a> <a id="1119" href="isomorphisms.html#1706" data-type="(f : A → B) → Type" class="Record">is-bijection</a> <a id="1132" href="binary-sums-as-sums.html#804" data-type="(A₀ A₁ : Type) → A₀ ∔ A₁ → A₀ ∔&#39; A₁" class="Function">f</a>
+  <a id="1136" href="binary-sums-as-sums.html#1102" data-type="(A₀ A₁ : Type) → is-bijection (f A₀ A₁)" class="Function">f-is-bijection</a> <a id="1151" class="Symbol">=</a> <a id="1153" class="Keyword">record</a> <a id="1160" class="Symbol">{</a> <a id="1162" href="isomorphisms.html#1789" data-type="is-bijection f → B → A" class="Field">inverse</a> <a id="1170" class="Symbol">=</a> <a id="1172" href="binary-sums-as-sums.html#874" data-type="(A₀ A₁ : Type) → A₀ ∔&#39; A₁ → A₀ ∔ A₁" class="Function">g</a> <a id="1174" class="Symbol">;</a> <a id="1176" href="isomorphisms.html#1807" data-type="(r : is-bijection f) → (inverse r ∘ f) ∼ id" class="Field">η</a> <a id="1178" class="Symbol">=</a> <a id="1180" href="binary-sums-as-sums.html#944" data-type="(A₀ A₁ : Type) → (g A₀ A₁ ∘ f A₀ A₁) ∼ id" class="Function">gf</a> <a id="1183" class="Symbol">;</a> <a id="1185" href="isomorphisms.html#1836" data-type="(r : is-bijection f) → (f ∘ inverse r) ∼ id" class="Field">ε</a> <a id="1187" class="Symbol">=</a> <a id="1189" href="binary-sums-as-sums.html#1023" data-type="(A₀ A₁ : Type) → (f A₀ A₁ ∘ g A₀ A₁) ∼ id" class="Function">fg</a> <a id="1192" class="Symbol">}</a>
+</pre>
+
+  </article>
+</div>
+</main>
+</body>
+<style>
+
+:root {
+  --text-bg: #fff;
+  --text-fg: #222;
+  --shadow: #000;
+  --primary: #0054F4;
+  --secondary: #9C1BD6;
+  --modal-bg: #ccccccaa;
+  --warning-bg: #fef08a;
+  --code-bg: var(--text-bg);
+  --code-fg: var(--text-fg);
+  --code-keyword: #BB3B13;
+  --code-string:  #d52753;
+  --code-number:  #8A1060;
+  --code-module:  #8A1060;
+  --code-field:   #9C1BD6;
+  --code-constructor: #207B1D;
+  --code-highlight: #F5DEB3;
+  --search-selected: #e2e8f0;
+  --details-summary: #b2ebf2;
+  --details-open:    #80deea;
+  --depgraph-edge: #eee;
+  --blockquote-bg: #d8b4fe; }
+
+.diagram-dark {
+  display: none !important; }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-bg: #282C34;
+    --text-fg: #bfbfbf;
+    --shadow: #475569;
+    --primary: #61AFEF;
+    --secondary: #C878DD;
+    --modal-bg: #282C34aa;
+    --warning-bg: #991b1b;
+    --code-keyword:     #E5C07B;
+    --code-string:      #E06C75;
+    --code-number:      #98C379;
+    --code-module:      #56B6C2;
+    --code-field:       #C878DD;
+    --code-constructor: #98C379;
+    --code-highlight: #ef444499;
+    --search-selected: #474e5e;
+    --details-summary: #5b21b6;
+    --details-open:    #4c1d95;
+    --depgraph-edge: #474e5e;
+    --blockquote-bg: #475569; }
+  div.warning {
+    --shadow: #7f1d1d
+  ; }
+  input {
+    background-color: #334155;
+    border: 1px solid #475569;
+    color: var(--text-fg); }
+  body {
+    scrollbar-color: #3b4454 #2b2e33; }
+  .diagram-dark {
+    display: block !important; }
+  .diagram-light {
+    display: none !important; } }
+
+table {
+  margin: auto;
+  border-collapse: collapse; }
+  table td, table th {
+    text-align: center;
+    padding: 0px 1em 0px 1em; }
+
+body {
+  font-family: "Inria Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  width: 100%;
+  font-size: var(--font-size);
+  overflow-x: clip; }
+
+div#post-toc-container { max-width: 120ch; margin: auto; }
+
+/* Aspects. */
+.Agda {
+  /* NameKinds. */
+  /* OtherAspects. */
+  /* Standard attributes. */
+  font-family: 'iosevka', 'Iosevka', 'Fantasque Sans Mono', 'Roboto Mono', monospace;
+  font-weight: 400; }
+  .Agda .Comment {
+    color: var(--code-fg);
+    font-style: italic; }
+  .Agda .Background {
+    background-color: var(--code-bg); }
+  .Agda .Markup {
+    color: var(--code-fg); }
+  .Agda .Keyword {
+    color: var(--code-keyword); }
+  .Agda .String {
+    color: var(--code-string); }
+  .Agda .Number {
+    color: var(--code-number); }
+  .Agda .Symbol {
+    color: var(--code-fg); }
+  .Agda .PrimitiveType {
+    color: var(--primary); }
+  .Agda .Pragma {
+    color: var(--code-fg); }
+  .Agda .Bound {
+    color: var(--code-fg) !important; }
+  .Agda .Generalizable {
+    color: var(--code-fg) !important; }
+  .Agda .InductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .CoinductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .Datatype {
+    color: var(--primary) !important; }
+  .Agda .Field {
+    color: var(--code-field) !important; }
+  .Agda .Function {
+    color: var(--primary) !important; }
+  .Agda .Module {
+    color: var(--code-module) !important; }
+  .Agda .Postulate {
+    color: var(--primary) !important; }
+  .Agda .Primitive {
+    color: var(--primary) !important; }
+  .Agda .Record {
+    color: var(--primary) !important; }
+  .Agda .UnsolvedMeta {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .UnsolvedConstraint {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .TerminationProblem {
+    color: var(--code-fg);
+    background: #FFA07A; }
+  .Agda .IncompletePattern {
+    color: var(--code-fg);
+    background: #F5DEB3; }
+  .Agda .Error {
+    color: red;
+    text-decoration: underline; }
+  .Agda .TypeChecks {
+    color: var(--code-fg);
+    background: #ADD8E6; }
+  .Agda .ShadowingInTelescope {
+    color: var(--code-fg);
+    background: #808080; }
+  .Agda .Deadcode {
+    color: var(--code-keyword);
+    font-weight: bold; }
+  .Agda a {
+    text-decoration: none; }
+  .Agda a[href]:hover {
+    text-decoration: 2px var(--primary) underline; }
+  .Agda a[href]:target {
+    animation: highlight 2.5s; }
+  body.text-page .Agda {
+    font-size: var(--code-font-size); }
+
+pre.Agda, div.sourceCode, pre {
+  border-radius: 0;
+  box-shadow: none;
+  overflow-y: clip;
+  margin: 0;
+  padding: 1em;
+  padding-top: 0.25em;
+  padding-bottom: 0.25em;
+  background-color: var(--code-bg);
+  color: var(--code-fg); 
+  font-size: var(--code-font-size); }
+
+</html>
