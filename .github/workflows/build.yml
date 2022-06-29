@@ -34,4 +34,4 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@4.1.7
         with:
           branch: gh-pages
-          folder: _build/site
+          folder: Agda/_build/site
