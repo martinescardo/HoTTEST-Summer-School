@@ -17,23 +17,13 @@
 
   <article>
 
-<p>Martin Escardo. Notes originally written for the module “Advanced
-Functional Programming” at the School of Computer Science of the
-University of Birmingham, UK.</p>
-<!--
-<pre class="Agda"><a id="178" class="Symbol">{-#</a> <a id="182" class="Keyword">OPTIONS</a> <a id="190" class="Pragma">--without-K</a> <a id="202" class="Pragma">--safe</a> <a id="209" class="Symbol">#-}</a>
-
-<a id="214" class="Keyword">module</a> <a id="221" href="negation.html" class="Module">negation</a> <a id="230" class="Keyword">where</a>
-
-<a id="237" class="Keyword">open</a> <a id="242" class="Keyword">import</a> <a id="249" href="general-notation.html" class="Module">general-notation</a>
-<a id="266" class="Keyword">open</a> <a id="271" class="Keyword">import</a> <a id="278" href="prelude.html" class="Module">prelude</a>
-</pre>-->
-<h1 id="reasoning-with-negation">Reasoning with negation</h1>
+<a id=modnegation></a>
+<h2 id="reasoning-with-negation">Reasoning with negation</h2>
 <p><a href="empty-type.lagda.md">Recall that</a> we defined the negation
 <code>¬ A</code> of a type <code>A</code> to be the function type
 <code>A → 0</code>, and that we also wrote <code>is-empty A</code> as a
 synonym of <code>¬ A</code>.</p>
-<h2 id="emptiness-of-the-empty-type">Emptiness of the empty type</h2>
+<h3 id="emptiness-of-the-empty-type">Emptiness of the empty type</h3>
 We have the following two proofs of “not false” or “the empty type is
 empty”:
 <pre class="Agda"><a id="not-false"></a><a id="611" href="negation.html#611" data-type="¬ 𝟘" class="Function">not-false</a> <a id="621" class="Symbol">:</a> <a id="623" href="empty-type.html#1641" data-type="Type → Type" class="Function Operator">¬</a> <a id="625" href="empty-type.html#479" data-type="Set" class="Datatype">𝟘</a>
@@ -46,14 +36,14 @@ empty”:
 target type of the function type is <code>𝟘</code>. We will begin by
 proving some things about negation by generalizing <code>𝟘</code> to any
 type <code>R</code> of “results”.</p>
-<h2 id="implication-from-disjunction-and-negation">Implication from
-disjunction and negation</h2>
+<h3 id="implication-from-disjunction-and-negation">Implication from
+disjunction and negation</h3>
 If <code>¬ A</code> or <code>B</code>, then <code>A implies B</code>:
 <pre class="Agda"><a id="implication-from-disjunction-and-negation"></a><a id="984" href="negation.html#984" data-type="¬ A ∔ B → A → B" class="Function">implication-from-disjunction-and-negation</a> <a id="1026" class="Symbol">:</a> <a id="1028" class="Symbol">{</a><a id="1029" href="negation.html#1029" class="Bound">A</a> <a id="1031" href="negation.html#1031" class="Bound">B</a> <a id="1033" class="Symbol">:</a> <a id="1035" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="1039" class="Symbol">}</a> <a id="1041" class="Symbol">→</a> <a id="1043" href="empty-type.html#1641" data-type="Type → Type" class="Function Operator">¬</a> <a id="1045" href="negation.html#1029" class="Bound">A</a> <a id="1047" href="binary-sums.html#628" data-type="Type → Type → Set" class="Datatype Operator">∔</a> <a id="1049" href="negation.html#1031" class="Bound">B</a> <a id="1051" class="Symbol">→</a> <a id="1053" class="Symbol">(</a><a id="1054" href="negation.html#1029" class="Bound">A</a> <a id="1056" class="Symbol">→</a> <a id="1058" href="negation.html#1031" class="Bound">B</a><a id="1059" class="Symbol">)</a>
 <a id="1061" href="negation.html#984" data-type="¬ A ∔ B → A → B" class="Function">implication-from-disjunction-and-negation</a> <a id="1103" class="Symbol">(</a><a id="1104" href="binary-sums.html#659" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="1108" href="negation.html#1108" class="Bound">f</a><a id="1109" class="Symbol">)</a> <a id="1111" href="negation.html#1111" class="Bound">a</a> <a id="1113" class="Symbol">=</a> <a id="1115" href="empty-type.html#1725" data-type="(x : 𝟘) → A x" class="Function">𝟘-elim</a> <a id="1122" class="Symbol">(</a><a id="1123" href="negation.html#1108" class="Bound">f</a> <a id="1125" href="negation.html#1111" class="Bound">a</a><a id="1126" class="Symbol">)</a>
 <a id="1128" href="negation.html#984" data-type="¬ A ∔ B → A → B" class="Function">implication-from-disjunction-and-negation</a> <a id="1170" class="Symbol">(</a><a id="1171" href="binary-sums.html#676" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="1175" href="negation.html#1175" class="Bound">b</a><a id="1176" class="Symbol">)</a> <a id="1178" href="negation.html#1178" class="Bound">a</a> <a id="1180" class="Symbol">=</a> <a id="1182" href="negation.html#1175" class="Bound">b</a>
 </pre>
-<h2 id="contrapositives">Contrapositives</h2>
+<h3 id="contrapositives">Contrapositives</h3>
 If <code>A</code> implies <code>B</code>, then <code>B → R</code>
 implies <code>A → R</code>:
 <pre class="Agda"><a id="arrow-contravariance"></a><a id="1268" href="negation.html#1268" data-type="(A → B) → (B → R) → A → R" class="Function">arrow-contravariance</a> <a id="1289" class="Symbol">:</a> <a id="1291" class="Symbol">{</a><a id="1292" href="negation.html#1292" class="Bound">A</a> <a id="1294" href="negation.html#1294" class="Bound">B</a> <a id="1296" href="negation.html#1296" class="Bound">R</a> <a id="1298" class="Symbol">:</a> <a id="1300" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="1304" class="Symbol">}</a>
@@ -70,7 +60,7 @@ of an implication <code>A → B</code> is the implication
 </pre>
 <p>This can also be read as “if we have a function A → B and B is empty,
 then also A must be empty”.</p>
-<h2 id="double-and-triple-negations">Double and triple negations</h2>
+<h3 id="double-and-triple-negations">Double and triple negations</h3>
 <p>We now introduce notation for double and triple negation, to reduce
 the number of needed brackets:</p>
 <pre class="Agda"><a id="¬¬_"></a><a id="1951" href="negation.html#1951" data-type="Type → Type" class="Function Operator">¬¬_</a> <a id="¬¬¬_"></a><a id="1955" href="negation.html#1955" data-type="Type → Type" class="Function Operator">¬¬¬_</a> <a id="1960" class="Symbol">:</a> <a id="1962" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a> <a id="1967" class="Symbol">→</a> <a id="1969" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a>
@@ -105,8 +95,8 @@ conversely:
 <a id="one-negation-implies-three"></a><a id="2933" href="negation.html#2933" data-type="¬ A → ¬¬¬ A" class="Function">one-negation-implies-three</a> <a id="2960" class="Symbol">:</a> <a id="2962" class="Symbol">{</a><a id="2963" href="negation.html#2963" class="Bound">A</a> <a id="2965" class="Symbol">:</a> <a id="2967" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="2971" class="Symbol">}</a> <a id="2973" class="Symbol">→</a> <a id="2975" href="empty-type.html#1641" data-type="Type → Type" class="Function Operator">¬</a> <a id="2977" href="negation.html#2963" class="Bound">A</a> <a id="2979" class="Symbol">→</a> <a id="2981" href="negation.html#1955" data-type="Type → Type" class="Function Operator">¬¬¬</a> <a id="2985" href="negation.html#2963" class="Bound">A</a>
 <a id="2987" href="negation.html#2933" data-type="¬ A → ¬¬¬ A" class="Function">one-negation-implies-three</a> <a id="3014" class="Symbol">=</a> <a id="3016" href="negation.html#2192" data-type="A → ¬¬ A" class="Function">¬¬-intro</a>
 </pre>
-<h2 id="negation-of-the-identity-type">Negation of the identity
-type</h2>
+<h3 id="negation-of-the-identity-type">Negation of the identity
+type</h3>
 It is useful to introduce a notation for the negation of the <a
 href="identity-type.lagda.md">identity type</a>:
 <pre class="Agda"><a id="_≢_"></a><a id="3174" href="negation.html#3174" data-type="X → X → Type" class="Function Operator">_≢_</a> <a id="3178" class="Symbol">:</a> <a id="3180" class="Symbol">{</a><a id="3181" href="negation.html#3181" class="Bound">X</a> <a id="3183" class="Symbol">:</a> <a id="3185" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="3189" class="Symbol">}</a> <a id="3191" class="Symbol">→</a> <a id="3193" href="negation.html#3181" class="Bound">X</a> <a id="3195" class="Symbol">→</a> <a id="3197" href="negation.html#3181" class="Bound">X</a> <a id="3199" class="Symbol">→</a> <a id="3201" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a>
@@ -130,13 +120,13 @@ The following is more interesting:
 <a id="3653" href="negation.html#3599" data-type="(x : Bool) → x ≢ true → x ≡ false" class="Function">not-true-is-false</a> <a id="3671" href="Bool.html#469" data-type="Bool" class="InductiveConstructor">true</a>  <a id="3677" href="negation.html#3677" class="Bound">f</a> <a id="3679" class="Symbol">=</a> <a id="3681" href="empty-type.html#1725" data-type="(x : 𝟘) → A x" class="Function">𝟘-elim</a> <a id="3688" class="Symbol">(</a><a id="3689" href="negation.html#3677" class="Bound">f</a> <a id="3691" class="Symbol">(</a><a id="3692" href="identity-type.html#620" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="3697" href="Bool.html#469" data-type="Bool" class="InductiveConstructor">true</a><a id="3701" class="Symbol">))</a>
 <a id="3704" href="negation.html#3599" data-type="(x : Bool) → x ≢ true → x ≡ false" class="Function">not-true-is-false</a> <a id="3722" href="Bool.html#474" data-type="Bool" class="InductiveConstructor">false</a> <a id="3728" href="negation.html#3728" class="Bound">f</a> <a id="3730" class="Symbol">=</a> <a id="3732" href="identity-type.html#620" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="3737" href="Bool.html#474" data-type="Bool" class="InductiveConstructor">false</a>
 </pre>
-<h2 id="disjointness-of-binary-sums">Disjointness of binary sums</h2>
+<h3 id="disjointness-of-binary-sums">Disjointness of binary sums</h3>
 We now show something that is intuitively the case:
 <pre class="Agda"><a id="inl-is-not-inr"></a><a id="3840" href="negation.html#3840" data-type="inl x ≢ inr y" class="Function">inl-is-not-inr</a> <a id="3855" class="Symbol">:</a> <a id="3857" class="Symbol">{</a><a id="3858" href="negation.html#3858" class="Bound">X</a> <a id="3860" href="negation.html#3860" class="Bound">Y</a> <a id="3862" class="Symbol">:</a> <a id="3864" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="3868" class="Symbol">}</a> <a id="3870" class="Symbol">{</a><a id="3871" href="negation.html#3871" class="Bound">x</a> <a id="3873" class="Symbol">:</a> <a id="3875" href="negation.html#3858" class="Bound">X</a><a id="3876" class="Symbol">}</a> <a id="3878" class="Symbol">{</a><a id="3879" href="negation.html#3879" class="Bound">y</a> <a id="3881" class="Symbol">:</a> <a id="3883" href="negation.html#3860" class="Bound">Y</a><a id="3884" class="Symbol">}</a> <a id="3886" class="Symbol">→</a> <a id="3888" href="binary-sums.html#659" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="3892" href="negation.html#3871" class="Bound">x</a> <a id="3894" href="negation.html#3174" data-type="X → X → Type" class="Function Operator">≢</a> <a id="3896" href="binary-sums.html#676" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="3900" href="negation.html#3879" class="Bound">y</a>
 <a id="3902" href="negation.html#3840" data-type="inl x ≢ inr y" class="Function">inl-is-not-inr</a> <a id="3917" class="Symbol">()</a>
 </pre>
 <p>Agda just knows it.</p>
-<h2 id="disjunctions-and-negation">Disjunctions and negation</h2>
+<h3 id="disjunctions-and-negation">Disjunctions and negation</h3>
 If <code>A or B</code> holds and <code>B</code> is false, then
 <code>A</code> must hold:
 <pre class="Agda"><a id="right-fails-gives-left-holds"></a><a id="4040" href="negation.html#4040" data-type="A ∔ B → ¬ B → A" class="Function">right-fails-gives-left-holds</a> <a id="4069" class="Symbol">:</a> <a id="4071" class="Symbol">{</a><a id="4072" href="negation.html#4072" class="Bound">A</a> <a id="4074" href="negation.html#4074" class="Bound">B</a> <a id="4076" class="Symbol">:</a> <a id="4078" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="4082" class="Symbol">}</a> <a id="4084" class="Symbol">→</a> <a id="4086" href="negation.html#4072" class="Bound">A</a> <a id="4088" href="binary-sums.html#628" data-type="Type → Type → Set" class="Datatype Operator">∔</a> <a id="4090" href="negation.html#4074" class="Bound">B</a> <a id="4092" class="Symbol">→</a> <a id="4094" href="empty-type.html#1641" data-type="Type → Type" class="Function Operator">¬</a> <a id="4096" href="negation.html#4074" class="Bound">B</a> <a id="4098" class="Symbol">→</a> <a id="4100" href="negation.html#4072" class="Bound">A</a>
@@ -147,8 +137,8 @@ If <code>A or B</code> holds and <code>B</code> is false, then
 <a id="4262" href="negation.html#4200" data-type="A ∔ B → ¬ A → B" class="Function">left-fails-gives-right-holds</a> <a id="4291" class="Symbol">(</a><a id="4292" href="binary-sums.html#659" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="4296" href="negation.html#4296" class="Bound">a</a><a id="4297" class="Symbol">)</a> <a id="4299" href="negation.html#4299" class="Bound">f</a> <a id="4301" class="Symbol">=</a> <a id="4303" href="empty-type.html#1725" data-type="(x : 𝟘) → A x" class="Function">𝟘-elim</a> <a id="4310" class="Symbol">(</a><a id="4311" href="negation.html#4299" class="Bound">f</a> <a id="4313" href="negation.html#4296" class="Bound">a</a><a id="4314" class="Symbol">)</a>
 <a id="4316" href="negation.html#4200" data-type="A ∔ B → ¬ A → B" class="Function">left-fails-gives-right-holds</a> <a id="4345" class="Symbol">(</a><a id="4346" href="binary-sums.html#676" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="4350" href="negation.html#4350" class="Bound">b</a><a id="4351" class="Symbol">)</a> <a id="4353" href="negation.html#4353" class="Bound">f</a> <a id="4355" class="Symbol">=</a> <a id="4357" href="negation.html#4350" class="Bound">b</a>
 </pre>
-<h2 id="negation-of-the-existential-quantifier">Negation of the
-existential quantifier:</h2>
+<h3 id="negation-of-the-existential-quantifier">Negation of the
+existential quantifier:</h3>
 If there is no <code>x : X</code> with <code>A x</code>, then for all
 <code>x : X</code> not <code>A x</code>:
 <pre class="Agda"><a id="not-exists-implies-forall-not"></a><a id="4483" href="negation.html#4483" data-type="¬ Sigma X A → (x : X) → ¬ A x" class="Function">not-exists-implies-forall-not</a> <a id="4513" class="Symbol">:</a> <a id="4515" class="Symbol">{</a><a id="4516" href="negation.html#4516" class="Bound">X</a> <a id="4518" class="Symbol">:</a> <a id="4520" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="4524" class="Symbol">}</a> <a id="4526" class="Symbol">{</a><a id="4527" href="negation.html#4527" class="Bound">A</a> <a id="4529" class="Symbol">:</a> <a id="4531" href="negation.html#4516" class="Bound">X</a> <a id="4533" class="Symbol">→</a> <a id="4535" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="4539" class="Symbol">}</a>
@@ -165,7 +155,7 @@ The converse also holds:
 <p>Notice how these are particular cases of <a
 href="https://en.wikipedia.org/wiki/Currying"><code>curry</code> and
 <code>uncurry</code></a>.</p>
-<h2 id="implication-truth-table">Implication truth table</h2>
+<h3 id="implication-truth-table">Implication truth table</h3>
 Here is a proof of the implication truth-table:
 <pre class="Agda"><a id="5125" class="Keyword">open</a> <a id="5130" class="Keyword">import</a> <a id="5137" href="empty-type.html" class="Module">empty-type</a>
 <a id="5148" class="Keyword">open</a> <a id="5153" class="Keyword">import</a> <a id="5160" href="unit-type.html" class="Module">unit-type</a>
@@ -254,14 +244,29 @@ table {
   table td, table th {
     text-align: center;
     padding: 0px 1em 0px 1em; }
+  table td {
+    white-space: nowrap; }
+
+html { max-width: 100%; }
 
 body {
   font-family: "Inria Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   width: 100%;
   font-size: var(--font-size);
-  overflow-x: clip; }
+  overflow-x: clip;
+  background-color: var(--text-bg);
+  color: var(--text-fg);
+}
 
 div#post-toc-container { max-width: 120ch; margin: auto; }
+
+article a[href], div#return > a[href], div#top > a[href], aside#toc > div#toc-container ul a[href] {
+  color: var(--primary);
+  text-decoration: none; }
+  article a[href]:hover, div#return > a[href]:hover, div#top > a[href]:hover, aside#toc > div#toc-container ul a[href]:hover {
+    text-decoration: 2px currentColor underline !important; }
+  article a[href]:visited, div#return > a[href]:visited, div#top > a[href]:visited, aside#toc > div#toc-container ul a[href]:visited {
+    color: var(--secondary); }
 
 /* Aspects. */
 .Agda {
@@ -353,7 +358,10 @@ pre.Agda, div.sourceCode, pre {
   padding-top: 0.25em;
   padding-bottom: 0.25em;
   background-color: var(--code-bg);
-  color: var(--code-fg); 
-  font-size: var(--code-font-size); }
+  color: var(--code-fg);
+  font-size: var(--code-font-size);
+  max-width: 100%;
+  overflow-x: auto;
+}
 
 </html>

@@ -17,17 +17,8 @@
 
   <article>
 
-<p>Martin Escardo. Notes originally written for the module “Advanced
-Functional Programming” at the School of Computer Science of the
-University of Birmingham, UK.</p>
-<!--
-<pre class="Agda"><a id="178" class="Symbol">{-#</a> <a id="182" class="Keyword">OPTIONS</a> <a id="190" class="Pragma">--without-K</a> <a id="202" class="Pragma">--safe</a> <a id="209" class="Symbol">#-}</a>
-
-<a id="214" class="Keyword">module</a> <a id="221" href="empty-type.html" class="Module">empty-type</a> <a id="232" class="Keyword">where</a>
-
-<a id="239" class="Keyword">open</a> <a id="244" class="Keyword">import</a> <a id="251" href="general-notation.html" class="Module">general-notation</a>
-</pre>-->
-<h1 id="the-empty-type-𝟘">The empty type 𝟘</h1>
+<a id=modempty-type></a>
+<h2 id="the-empty-type-𝟘">The empty type 𝟘</h2>
 <p>It is convenient to have an empty type <code>𝟘</code>, with no
 elements at all. For example, this can be used in order to define <a
 href="negation.lagda.md">negation</a>, among other things.</p>
@@ -40,8 +31,8 @@ define the type <code>𝟘</code> is empty.</p>
 function</a>. So although the type <code>𝟘</code> is empty, the type
 <code>𝟘 → 𝟘</code> is non-empty. In fact, the non-dependent elimination
 principle generalizes that.</p>
-<h2 id="proposition-as-types-interpretation">Proposition as types
-interpretation</h2>
+<h3 id="proposition-as-types-interpretation">Proposition as types
+interpretation</h3>
 <p>The empty type is used to interpret “false”. Because there is no way
 to prove the statement <code>false</code>, we use the empty type to
 represent <code>false</code> as a type.</p>
@@ -61,7 +52,7 @@ the negation of a type <code>A</code> to be the function type
 
 <a id="1671" class="Keyword">infix</a> <a id="1677" class="Number">1000</a> <a id="1682" href="empty-type.html#1641" data-type="Type → Type" class="Function Operator">¬_</a>
 </pre>
-<h2 id="elimination-principle">Elimination principle</h2>
+<h3 id="elimination-principle">Elimination principle</h3>
 <pre class="Agda"><a id="𝟘-elim"></a><a id="1725" href="empty-type.html#1725" data-type="(x : 𝟘) → A x" class="Function">𝟘-elim</a> <a id="1732" class="Symbol">:</a> <a id="1734" class="Symbol">{</a><a id="1735" href="empty-type.html#1735" class="Bound">A</a> <a id="1737" class="Symbol">:</a> <a id="1739" href="empty-type.html#479" data-type="Set" class="Datatype">𝟘</a> <a id="1741" class="Symbol">→</a> <a id="1743" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="1747" class="Symbol">}</a> <a id="1749" class="Symbol">(</a><a id="1750" href="empty-type.html#1750" class="Bound">x</a> <a id="1752" class="Symbol">:</a> <a id="1754" href="empty-type.html#479" data-type="Set" class="Datatype">𝟘</a><a id="1755" class="Symbol">)</a> <a id="1757" class="Symbol">→</a> <a id="1759" href="empty-type.html#1735" class="Bound">A</a> <a id="1761" href="empty-type.html#1750" class="Bound">x</a>
 <a id="1763" href="empty-type.html#1725" data-type="(x : 𝟘) → A x" class="Function">𝟘-elim</a> <a id="1770" class="Symbol">()</a>
 </pre>
@@ -85,7 +76,7 @@ function from the empty type to any type:
 <pre class="Agda"><a id="𝟘-nondep-elim"></a><a id="2724" href="empty-type.html#2724" data-type="𝟘 → A" class="Function">𝟘-nondep-elim</a> <a id="2738" class="Symbol">:</a> <a id="2740" class="Symbol">{</a><a id="2741" href="empty-type.html#2741" class="Bound">A</a> <a id="2743" class="Symbol">:</a> <a id="2745" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="2749" class="Symbol">}</a> <a id="2751" class="Symbol">→</a> <a id="2753" href="empty-type.html#479" data-type="Set" class="Datatype">𝟘</a> <a id="2755" class="Symbol">→</a> <a id="2757" href="empty-type.html#2741" class="Bound">A</a>
 <a id="2759" href="empty-type.html#2724" data-type="𝟘 → A" class="Function">𝟘-nondep-elim</a> <a id="2773" class="Symbol">{</a><a id="2774" href="empty-type.html#2774" class="Bound">A</a><a id="2775" class="Symbol">}</a> <a id="2777" class="Symbol">=</a> <a id="2779" href="empty-type.html#1725" data-type="(x : 𝟘) → A x" class="Function">𝟘-elim</a> <a id="2786" class="Symbol">{λ</a> <a id="2789" href="empty-type.html#2789" class="Bound">_</a> <a id="2791" class="Symbol">→</a> <a id="2793" href="empty-type.html#2774" class="Bound">A</a><a id="2794" class="Symbol">}</a>
 </pre>
-<h2 id="definition-of-emptiness">Definition of emptiness</h2>
+<h3 id="definition-of-emptiness">Definition of emptiness</h3>
 On the other hand, there is a function <code>f : A → 𝟘</code> if and
 only if <code>A</code> has no elements, that is, if <code>A</code> is
 also empty. This is because if <code>x : A</code>, there is no element
@@ -205,14 +196,29 @@ table {
   table td, table th {
     text-align: center;
     padding: 0px 1em 0px 1em; }
+  table td {
+    white-space: nowrap; }
+
+html { max-width: 100%; }
 
 body {
   font-family: "Inria Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   width: 100%;
   font-size: var(--font-size);
-  overflow-x: clip; }
+  overflow-x: clip;
+  background-color: var(--text-bg);
+  color: var(--text-fg);
+}
 
 div#post-toc-container { max-width: 120ch; margin: auto; }
+
+article a[href], div#return > a[href], div#top > a[href], aside#toc > div#toc-container ul a[href] {
+  color: var(--primary);
+  text-decoration: none; }
+  article a[href]:hover, div#return > a[href]:hover, div#top > a[href]:hover, aside#toc > div#toc-container ul a[href]:hover {
+    text-decoration: 2px currentColor underline !important; }
+  article a[href]:visited, div#return > a[href]:visited, div#top > a[href]:visited, aside#toc > div#toc-container ul a[href]:visited {
+    color: var(--secondary); }
 
 /* Aspects. */
 .Agda {
@@ -304,7 +310,10 @@ pre.Agda, div.sourceCode, pre {
   padding-top: 0.25em;
   padding-bottom: 0.25em;
   background-color: var(--code-bg);
-  color: var(--code-fg); 
-  font-size: var(--code-font-size); }
+  color: var(--code-fg);
+  font-size: var(--code-font-size);
+  max-width: 100%;
+  overflow-x: auto;
+}
 
 </html>

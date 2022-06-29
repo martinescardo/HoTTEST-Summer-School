@@ -17,23 +17,14 @@
 
   <article>
 
-<p>Martin Escardo. Notes originally written for the module “Advanced
-Functional Programming” at the School of Computer Science of the
-University of Birmingham, UK.</p>
-<!--
-<pre class="Agda"><a id="178" class="Symbol">{-#</a> <a id="182" class="Keyword">OPTIONS</a> <a id="190" class="Pragma">--without-K</a> <a id="202" class="Pragma">--safe</a> <a id="209" class="Symbol">#-}</a>
-
-<a id="214" class="Keyword">module</a> <a id="221" href="products.html" class="Module">products</a> <a id="230" class="Keyword">where</a>
-
-<a id="237" class="Keyword">open</a> <a id="242" class="Keyword">import</a> <a id="249" href="general-notation.html" class="Module">general-notation</a>
-</pre>-->
-<h1 id="products">Products</h1>
+<a id=modproducts></a>
+<h2 id="products">Products</h2>
 <p>We discuss function types of the form <code>A → B</code> (called
 non-dependent function types) and of the form <code>(x : A) → B x</code>
 (called dependent function types). The latter are also called
 <em>products</em> in type theory and this terminology comes from
 mathematics.</p>
-<h2 id="the-identity-function">The identity function</h2>
+<h3 id="the-identity-function">The identity function</h3>
 To <em>introduce</em> functions, we use <code>λ</code>-abstractions like
 in Haskell. For example, the identity function can be defined as
 follows: <!--
@@ -49,7 +40,7 @@ which we take as our official definition:
 <pre class="Agda"><a id="id"></a><a id="1013" href="products.html#1013" data-type="A → A" class="Function">id</a> <a id="1016" class="Symbol">:</a> <a id="1018" class="Symbol">{</a><a id="1019" href="products.html#1019" class="Bound">A</a> <a id="1021" class="Symbol">:</a> <a id="1023" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="1027" class="Symbol">}</a> <a id="1029" class="Symbol">→</a> <a id="1031" href="products.html#1019" class="Bound">A</a> <a id="1033" class="Symbol">→</a> <a id="1035" href="products.html#1019" class="Bound">A</a>
 <a id="1037" href="products.html#1013" data-type="A → A" class="Function">id</a> <a id="1040" href="products.html#1040" class="Bound">x</a> <a id="1042" class="Symbol">=</a> <a id="1044" href="products.html#1040" class="Bound">x</a>
 </pre>
-<h2 id="logical-implication">Logical implication</h2>
+<h3 id="logical-implication">Logical implication</h3>
 <p>A logical implication <code>A → B</code> is represented by the
 function type <code>A → B</code>, and it is a happy coincidence that
 both use the same notation.</p>
@@ -69,7 +60,7 @@ is the rule logic that says that if the proposition <code>A</code> holds
 and <code>A</code> implies <code>B</code>, then <code>B</code> also
 holds. The above definition gives a computational realization of
 this.</p>
-<h2 id="dependent-functions">Dependent functions</h2>
+<h3 id="dependent-functions">Dependent functions</h3>
 <p>As already discussed, a dependent function type
 <code>(x : A) → B x</code>, with <code>A : Type</code> and
 <code>B : A → Type</code>, is that of functions with input
@@ -77,15 +68,15 @@ this.</p>
 <code>B x</code>. It is called “dependent” because the output
 <em>type</em> <code>B x</code> depends on the input <em>element</em>
 <code>x : A</code>.</p>
-<h2 id="universal-quantification">Universal quantification</h2>
+<h3 id="universal-quantification">Universal quantification</h3>
 <p>The logical interpretation of <code>(x : A) → B x</code> is “for all
 x : A, B x”. This is because in order to show that this universal
 quantification holds, we have to show that <code>B x</code> holds for
 each given <code>x:A</code>. The input is the given <code>x : A</code>,
 and the output is a justification of <code>B x</code>. We will see some
 concrete examples shortly.</p>
-<h2 id="dependent-function-composition">Dependent function
-composition</h2>
+<h3 id="dependent-function-composition">Dependent function
+composition</h3>
 Composition can be defined for “non-dependent functions”, as in usual
 mathematics and in Haskell, and, more generally, with dependent
 functions. With non-dependent functions, it has the following type and
@@ -112,7 +103,7 @@ same definition, which is the one we adopt:</p>
 g”, but its logical understanding changes: “If it is the case that for
 all y : B we have that C y holds, and we have a function f : A → B, then
 it is also the case that for all x : A, we have that C (f x) holds”.</p>
-<h2 id="π-notation"><code>Π</code> notation</h2>
+<h3 id="π-notation"><code>Π</code> notation</h3>
 We have mentioned in the <a href="curry-howard.lagda">propositions as
 types table</a> that the official notation in MLTT for the dependent
 function type uses <code>Π</code>, the Greek letter Pi, for
@@ -209,14 +200,29 @@ table {
   table td, table th {
     text-align: center;
     padding: 0px 1em 0px 1em; }
+  table td {
+    white-space: nowrap; }
+
+html { max-width: 100%; }
 
 body {
   font-family: "Inria Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   width: 100%;
   font-size: var(--font-size);
-  overflow-x: clip; }
+  overflow-x: clip;
+  background-color: var(--text-bg);
+  color: var(--text-fg);
+}
 
 div#post-toc-container { max-width: 120ch; margin: auto; }
+
+article a[href], div#return > a[href], div#top > a[href], aside#toc > div#toc-container ul a[href] {
+  color: var(--primary);
+  text-decoration: none; }
+  article a[href]:hover, div#return > a[href]:hover, div#top > a[href]:hover, aside#toc > div#toc-container ul a[href]:hover {
+    text-decoration: 2px currentColor underline !important; }
+  article a[href]:visited, div#return > a[href]:visited, div#top > a[href]:visited, aside#toc > div#toc-container ul a[href]:visited {
+    color: var(--secondary); }
 
 /* Aspects. */
 .Agda {
@@ -308,7 +314,10 @@ pre.Agda, div.sourceCode, pre {
   padding-top: 0.25em;
   padding-bottom: 0.25em;
   background-color: var(--code-bg);
-  color: var(--code-fg); 
-  font-size: var(--code-font-size); }
+  color: var(--code-fg);
+  font-size: var(--code-font-size);
+  max-width: 100%;
+  overflow-x: auto;
+}
 
 </html>

@@ -17,18 +17,9 @@
 
   <article>
 
-<p>Martin Escardo. Notes originally written for the module “Advanced
-Functional Programming” at the School of Computer Science of the
-University of Birmingham, UK.</p>
-<!--
-<pre class="Agda"><a id="178" class="Symbol">{-#</a> <a id="182" class="Keyword">OPTIONS</a> <a id="190" class="Pragma">--without-K</a> <a id="202" class="Pragma">--safe</a> <a id="209" class="Symbol">#-}</a>
-
-<a id="214" class="Keyword">module</a> <a id="221" href="binary-sums.html" class="Module">binary-sums</a> <a id="233" class="Keyword">where</a>
-
-<a id="240" class="Keyword">open</a> <a id="245" class="Keyword">import</a> <a id="252" href="general-notation.html" class="Module">general-notation</a>
-</pre>-->
-<h1 id="the-binary-sum-type-former-__">The binary-sum type former
-<code>_∔_</code></h1>
+<a id=modbinary-sums></a>
+<h2 id="the-binary-sum-type-former-__">The binary-sum type former
+<code>_∔_</code></h2>
 This is the same as (or, more precisely, <a
 href="isomorphisms.lagda.md">isomorphic</a> to) the <code>Either</code>
 type defined earlier (you can try this as an exercise). The notation in
@@ -56,7 +47,7 @@ copies of the type <code>A</code>, so that now every element
 type</a> <code>𝟙</code> has exactly one element, namely
 <code>⋆ : 𝟙</code>, and hence the type <code>𝟙 ∔ 𝟙</code> has precisely
 two elements, namely <code>inl ⋆</code> and <code>inr ⋆</code>.</p>
-<h2 id="logical-disjunction-or">Logical disjunction (“or”)</h2>
+<h3 id="logical-disjunction-or">Logical disjunction (“or”)</h3>
 <p>In terms of logic, we use the type <code>A ∔ B</code> to express “A
 or B”. This is because in order for “A or B” to hold, at least one of A
 and B must hold. The type <code>A → A ∔ B</code> of the function
@@ -68,7 +59,7 @@ words, if <code>x : A</code> is a proof of <code>A</code>, then
 <code>y : B</code> is a proof of B, them <code>inr y : A + B</code> is a
 proof of “A or B”. Here when we said “proof” we meant “program” after
 the propositions-as-types and proofs-as-programs paradigm.</p>
-<h2 id="elimination-principle">Elimination principle</h2>
+<h3 id="elimination-principle">Elimination principle</h3>
 <p>Now suppose we want to define a dependent function
 <code>(z : A ∔ B) → C z</code>. How can we do that? If we have two
 functions <code>f : (x : A) → C (inl x)</code> and
@@ -129,8 +120,8 @@ also can be inverted:
 </pre>
 <p>In terms of logic, this means that if <code>A or B implies C</code>
 then both <code>A implies C</code> and <code>B implies C</code>.</p>
-<h2 id="alternative-definition-of-__">Alternative definition of
-<code>_∔_</code></h2>
+<h3 id="alternative-definition-of-__">Alternative definition of
+<code>_∔_</code></h3>
 <p>There is <a href="binary-sums-as-sums.lagda.md">another way to define
 binary sums</a> as a special case of <code>Σ</code>.</p>
 
@@ -207,14 +198,29 @@ table {
   table td, table th {
     text-align: center;
     padding: 0px 1em 0px 1em; }
+  table td {
+    white-space: nowrap; }
+
+html { max-width: 100%; }
 
 body {
   font-family: "Inria Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   width: 100%;
   font-size: var(--font-size);
-  overflow-x: clip; }
+  overflow-x: clip;
+  background-color: var(--text-bg);
+  color: var(--text-fg);
+}
 
 div#post-toc-container { max-width: 120ch; margin: auto; }
+
+article a[href], div#return > a[href], div#top > a[href], aside#toc > div#toc-container ul a[href] {
+  color: var(--primary);
+  text-decoration: none; }
+  article a[href]:hover, div#return > a[href]:hover, div#top > a[href]:hover, aside#toc > div#toc-container ul a[href]:hover {
+    text-decoration: 2px currentColor underline !important; }
+  article a[href]:visited, div#return > a[href]:visited, div#top > a[href]:visited, aside#toc > div#toc-container ul a[href]:visited {
+    color: var(--secondary); }
 
 /* Aspects. */
 .Agda {
@@ -306,7 +312,10 @@ pre.Agda, div.sourceCode, pre {
   padding-top: 0.25em;
   padding-bottom: 0.25em;
   background-color: var(--code-bg);
-  color: var(--code-fg); 
-  font-size: var(--code-font-size); }
+  color: var(--code-fg);
+  font-size: var(--code-font-size);
+  max-width: 100%;
+  overflow-x: auto;
+}
 
 </html>

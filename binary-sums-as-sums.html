@@ -17,18 +17,9 @@
 
   <article>
 
-<p>Martin Escardo. Notes originally written for the module “Advanced
-Functional Programming” at the School of Computer Science of the
-University of Birmingham, UK.</p>
-<!--
-<pre class="Agda"><a id="178" class="Symbol">{-#</a> <a id="182" class="Keyword">OPTIONS</a> <a id="190" class="Pragma">--without-K</a> <a id="202" class="Pragma">--safe</a> <a id="209" class="Symbol">#-}</a>
-
-<a id="214" class="Keyword">module</a> <a id="221" href="binary-sums-as-sums.html" class="Module">binary-sums-as-sums</a> <a id="241" class="Keyword">where</a>
-
-<a id="248" class="Keyword">open</a> <a id="253" class="Keyword">import</a> <a id="260" href="prelude.html" class="Module">prelude</a>
-</pre>-->
-<h2 id="binary-sums-as-a-special-case-of-arbitrary-sums">Binary sums as
-a special case of arbitrary sums</h2>
+<a id=modbinary-sums-as-sums></a>
+<h3 id="binary-sums-as-a-special-case-of-arbitrary-sums">Binary sums as
+a special case of arbitrary sums</h3>
 Using the binary type <code>𝟚</code>, binary sums can be seen as a
 special case of arbitrary sums as follows:
 <pre class="Agda"><a id="436" class="Keyword">open</a> <a id="441" class="Keyword">import</a> <a id="448" href="binary-type.html" class="Module">binary-type</a>
@@ -139,14 +130,29 @@ table {
   table td, table th {
     text-align: center;
     padding: 0px 1em 0px 1em; }
+  table td {
+    white-space: nowrap; }
+
+html { max-width: 100%; }
 
 body {
   font-family: "Inria Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   width: 100%;
   font-size: var(--font-size);
-  overflow-x: clip; }
+  overflow-x: clip;
+  background-color: var(--text-bg);
+  color: var(--text-fg);
+}
 
 div#post-toc-container { max-width: 120ch; margin: auto; }
+
+article a[href], div#return > a[href], div#top > a[href], aside#toc > div#toc-container ul a[href] {
+  color: var(--primary);
+  text-decoration: none; }
+  article a[href]:hover, div#return > a[href]:hover, div#top > a[href]:hover, aside#toc > div#toc-container ul a[href]:hover {
+    text-decoration: 2px currentColor underline !important; }
+  article a[href]:visited, div#return > a[href]:visited, div#top > a[href]:visited, aside#toc > div#toc-container ul a[href]:visited {
+    color: var(--secondary); }
 
 /* Aspects. */
 .Agda {
@@ -238,7 +244,10 @@ pre.Agda, div.sourceCode, pre {
   padding-top: 0.25em;
   padding-bottom: 0.25em;
   background-color: var(--code-bg);
-  color: var(--code-fg); 
-  font-size: var(--code-font-size); }
+  color: var(--code-fg);
+  font-size: var(--code-font-size);
+  max-width: 100%;
+  overflow-x: auto;
+}
 
 </html>

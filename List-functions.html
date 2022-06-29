@@ -17,20 +17,10 @@
 
   <article>
 
-<p>Martin Escardo. Notes originally written for the module “Advanced
-Functional Programming” at the School of Computer Science of the
-University of Birmingham, UK.</p>
-<!--
-<pre class="Agda"><a id="178" class="Symbol">{-#</a> <a id="182" class="Keyword">OPTIONS</a> <a id="190" class="Pragma">--without-K</a> <a id="202" class="Pragma">--safe</a> <a id="209" class="Symbol">#-}</a>
-
-<a id="214" class="Keyword">module</a> <a id="221" href="List-functions.html" class="Module">List-functions</a> <a id="236" class="Keyword">where</a>
-
-<a id="243" class="Keyword">open</a> <a id="248" class="Keyword">import</a> <a id="255" href="introduction.html" class="Module">introduction</a> <a id="268" class="Keyword">using</a> <a id="274" class="Symbol">(</a><a id="275" href="introduction.html#535" data-type="Set" class="Datatype">ℕ</a> <a id="277" class="Symbol">;</a> <a id="279" href="introduction.html#561" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="283" class="Symbol">;</a> <a id="285" href="introduction.html#551" data-type="ℕ" class="InductiveConstructor">zero</a><a id="289" class="Symbol">)</a>
-<a id="291" class="Keyword">open</a> <a id="296" class="Keyword">import</a> <a id="303" href="prelude.html" class="Module">prelude</a>
-</pre>-->
-<h1 id="some-functions-on-lists">Some functions on lists</h1>
-<h2 id="length-concatenation-map-and-singleton-lists">Length,
-concatenation, map and singleton lists</h2>
+<a id=modList-functions></a>
+<h2 id="some-functions-on-lists">Some functions on lists</h2>
+<h3 id="length-concatenation-map-and-singleton-lists">Length,
+concatenation, map and singleton lists</h3>
 <pre class="Agda"><a id="405" class="Keyword">open</a> <a id="410" class="Keyword">import</a> <a id="417" href="List.html" class="Module">List</a>
 <a id="422" class="Keyword">open</a> <a id="427" class="Keyword">import</a> <a id="434" href="natural-numbers-type.html" class="Module">natural-numbers-type</a>
 
@@ -51,8 +41,8 @@ concatenation, map and singleton lists</h2>
 <a id="[_]"></a><a id="764" href="List-functions.html#764" data-type="A → List A" class="Function Operator">[_]</a> <a id="768" class="Symbol">:</a> <a id="770" class="Symbol">{</a><a id="771" href="List-functions.html#771" class="Bound">A</a> <a id="773" class="Symbol">:</a> <a id="775" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="779" class="Symbol">}</a> <a id="781" class="Symbol">→</a> <a id="783" href="List-functions.html#771" class="Bound">A</a> <a id="785" class="Symbol">→</a> <a id="787" href="List.html#358" data-type="Type → Set" class="Datatype">List</a> <a id="792" href="List-functions.html#771" class="Bound">A</a>
 <a id="794" href="List-functions.html#764" data-type="A → List A" class="Function Operator">[</a> <a id="796" href="List-functions.html#796" class="Bound">x</a> <a id="798" href="List-functions.html#764" data-type="A → List A" class="Function Operator">]</a> <a id="800" class="Symbol">=</a> <a id="802" href="List-functions.html#796" class="Bound">x</a> <a id="804" href="List.html#403" data-type="A → List A → List A" class="InductiveConstructor Operator">::</a> <a id="807" href="List.html#388" data-type="List A" class="InductiveConstructor">[]</a>
 </pre>
-<h2 id="properties-of-list-concatenation">Properties of list
-concatenation</h2>
+<h3 id="properties-of-list-concatenation">Properties of list
+concatenation</h3>
 <pre class="Agda"><a id="[]-left-neutral"></a><a id="860" href="List-functions.html#860" data-type="(xs : List X) → [] ++ xs ≡ xs" class="Function">[]-left-neutral</a> <a id="876" class="Symbol">:</a> <a id="878" class="Symbol">{</a><a id="879" href="List-functions.html#879" class="Bound">X</a> <a id="881" class="Symbol">:</a> <a id="883" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="887" class="Symbol">}</a> <a id="889" class="Symbol">(</a><a id="890" href="List-functions.html#890" class="Bound">xs</a> <a id="893" class="Symbol">:</a> <a id="895" href="List.html#358" data-type="Type → Set" class="Datatype">List</a> <a id="900" href="List-functions.html#879" class="Bound">X</a><a id="901" class="Symbol">)</a> <a id="903" class="Symbol">→</a> <a id="905" class="InductiveConstructor">[]</a> <a id="908" href="List-functions.html#544" data-type="List A → List A → List A" class="Function Operator">++</a> <a id="911" href="List-functions.html#890" class="Bound">xs</a> <a id="914" href="identity-type.html#583" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="916" href="List-functions.html#890" class="Bound">xs</a>
 <a id="919" href="List-functions.html#860" data-type="(xs : List X) → [] ++ xs ≡ xs" class="Function">[]-left-neutral</a> <a id="935" class="Symbol">=</a> <a id="937" href="identity-type.html#620" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a>
 
@@ -80,7 +70,7 @@ Short proofs:
 <a id="1771" href="List-functions.html#1690" data-type="(xs ys zs : List A) → (xs ++ ys) ++ zs ≡ xs ++ ys ++ zs" class="Function">++-assoc&#39;</a> <a id="1781" href="List.html#388" data-type="List A" class="InductiveConstructor">[]</a>        <a id="1791" href="List-functions.html#1791" class="Bound">ys</a> <a id="1794" href="List-functions.html#1794" class="Bound">zs</a> <a id="1797" class="Symbol">=</a> <a id="1799" href="identity-type.html#620" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="1804" class="Symbol">(</a><a id="1805" href="List-functions.html#1791" class="Bound">ys</a> <a id="1808" href="List-functions.html#544" data-type="List A → List A → List A" class="Function Operator">++</a> <a id="1811" href="List-functions.html#1794" class="Bound">zs</a><a id="1813" class="Symbol">)</a>
 <a id="1815" href="List-functions.html#1690" data-type="(xs ys zs : List A) → (xs ++ ys) ++ zs ≡ xs ++ ys ++ zs" class="Function">++-assoc&#39;</a> <a id="1825" class="Symbol">(</a><a id="1826" href="List-functions.html#1826" class="Bound">x</a> <a id="1828" href="List.html#403" data-type="A → List A → List A" class="InductiveConstructor Operator">::</a> <a id="1831" href="List-functions.html#1831" class="Bound">xs</a><a id="1833" class="Symbol">)</a> <a id="1835" href="List-functions.html#1835" class="Bound">ys</a> <a id="1838" href="List-functions.html#1838" class="Bound">zs</a> <a id="1841" class="Symbol">=</a> <a id="1843" href="identity-type.html#2263" data-type="(f : A → B) → x ≡ y → f x ≡ f y" class="Function">ap</a> <a id="1846" class="Symbol">(</a><a id="1847" href="List-functions.html#1826" class="Bound">x</a> <a id="1849" href="List.html#403" data-type="A → List A → List A" class="InductiveConstructor Operator">::_</a><a id="1852" class="Symbol">)</a> <a id="1854" class="Symbol">(</a><a id="1855" href="List-functions.html#1690" data-type="(xs ys zs : List A) → (xs ++ ys) ++ zs ≡ xs ++ ys ++ zs" class="Function">++-assoc&#39;</a> <a id="1865" href="List-functions.html#1831" class="Bound">xs</a> <a id="1868" href="List-functions.html#1835" class="Bound">ys</a> <a id="1871" href="List-functions.html#1838" class="Bound">zs</a><a id="1873" class="Symbol">)</a>
 </pre>
-<h2 id="list-reversal">List reversal</h2>
+<h3 id="list-reversal">List reversal</h3>
 First an obvious, but slow reversal algorithm:
 <pre class="Agda"><a id="reverse"></a><a id="1953" href="List-functions.html#1953" data-type="List A → List A" class="Function">reverse</a> <a id="1961" class="Symbol">:</a> <a id="1963" class="Symbol">{</a><a id="1964" href="List-functions.html#1964" class="Bound">A</a> <a id="1966" class="Symbol">:</a> <a id="1968" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="1972" class="Symbol">}</a> <a id="1974" class="Symbol">→</a> <a id="1976" href="List.html#358" data-type="Type → Set" class="Datatype">List</a> <a id="1981" href="List-functions.html#1964" class="Bound">A</a> <a id="1983" class="Symbol">→</a> <a id="1985" href="List.html#358" data-type="Type → Set" class="Datatype">List</a> <a id="1990" href="List-functions.html#1964" class="Bound">A</a>
 <a id="1992" href="List-functions.html#1953" data-type="List A → List A" class="Function">reverse</a> <a id="2000" href="List.html#388" data-type="List A" class="InductiveConstructor">[]</a>        <a id="2010" class="Symbol">=</a> <a id="2012" href="List.html#388" data-type="List A" class="InductiveConstructor">[]</a>
@@ -194,14 +184,29 @@ table {
   table td, table th {
     text-align: center;
     padding: 0px 1em 0px 1em; }
+  table td {
+    white-space: nowrap; }
+
+html { max-width: 100%; }
 
 body {
   font-family: "Inria Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   width: 100%;
   font-size: var(--font-size);
-  overflow-x: clip; }
+  overflow-x: clip;
+  background-color: var(--text-bg);
+  color: var(--text-fg);
+}
 
 div#post-toc-container { max-width: 120ch; margin: auto; }
+
+article a[href], div#return > a[href], div#top > a[href], aside#toc > div#toc-container ul a[href] {
+  color: var(--primary);
+  text-decoration: none; }
+  article a[href]:hover, div#return > a[href]:hover, div#top > a[href]:hover, aside#toc > div#toc-container ul a[href]:hover {
+    text-decoration: 2px currentColor underline !important; }
+  article a[href]:visited, div#return > a[href]:visited, div#top > a[href]:visited, aside#toc > div#toc-container ul a[href]:visited {
+    color: var(--secondary); }
 
 /* Aspects. */
 .Agda {
@@ -293,7 +298,10 @@ pre.Agda, div.sourceCode, pre {
   padding-top: 0.25em;
   padding-bottom: 0.25em;
   background-color: var(--code-bg);
-  color: var(--code-fg); 
-  font-size: var(--code-font-size); }
+  color: var(--code-fg);
+  font-size: var(--code-font-size);
+  max-width: 100%;
+  overflow-x: auto;
+}
 
 </html>

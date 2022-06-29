@@ -17,18 +17,8 @@
 
   <article>
 
-<p>Martin Escardo. Notes originally written for the module “Advanced
-Functional Programming” at the School of Computer Science of the
-University of Birmingham, UK.</p>
-<!--
-<pre class="Agda"><a id="178" class="Symbol">{-#</a> <a id="182" class="Keyword">OPTIONS</a> <a id="190" class="Pragma">--without-K</a> <a id="202" class="Pragma">--safe</a> <a id="209" class="Symbol">#-}</a>
-
-<a id="214" class="Keyword">module</a> <a id="221" href="Fin.html" class="Module">Fin</a> <a id="225" class="Keyword">where</a>
-
-<a id="232" class="Keyword">open</a> <a id="237" class="Keyword">import</a> <a id="244" href="general-notation.html" class="Module">general-notation</a>
-<a id="261" class="Keyword">open</a> <a id="266" class="Keyword">import</a> <a id="273" href="introduction.html" class="Module">introduction</a> <a id="286" class="Keyword">using</a> <a id="292" class="Symbol">(</a><a id="293" href="introduction.html#535" data-type="Set" class="Datatype">ℕ</a> <a id="295" class="Symbol">;</a> <a id="297" href="introduction.html#561" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="301" class="Symbol">;</a> <a id="303" href="introduction.html#551" data-type="ℕ" class="InductiveConstructor">zero</a><a id="307" class="Symbol">)</a>
-</pre>-->
-<h1 id="finite-types">Finite types</h1>
+<a id=modFin></a>
+<h3 id="finite-types">Finite types</h3>
 <p>We now define a type <code>Fin n</code> which has exactly
 <code>n</code> elements, where <code>n : ℕ</code> is a natural
 number.</p>
@@ -63,7 +53,7 @@ constructor for the type.
 <pre class="Agda"><a id="Fin-suc-is-nonempty"></a><a id="1027" href="Fin.html#1027" data-type="¬ is-empty (Fin (suc n))" class="Function">Fin-suc-is-nonempty</a> <a id="1047" class="Symbol">:</a> <a id="1049" class="Symbol">{</a><a id="1050" href="Fin.html#1050" class="Bound">n</a> <a id="1052" class="Symbol">:</a> <a id="1054" href="introduction.html#535" data-type="Set" class="Datatype">ℕ</a><a id="1055" class="Symbol">}</a> <a id="1057" class="Symbol">→</a> <a id="1059" href="empty-type.html#1641" data-type="Type → Type" class="Function Operator">¬</a> <a id="1061" href="empty-type.html#3129" data-type="Type → Type" class="Function">is-empty</a> <a id="1070" class="Symbol">(</a><a id="1071" href="Fin.html#484" data-type="ℕ → Set" class="Datatype">Fin</a> <a id="1075" class="Symbol">(</a><a id="1076" class="InductiveConstructor">suc</a> <a id="1080" href="Fin.html#1050" class="Bound">n</a><a id="1081" class="Symbol">))</a>
 <a id="1084" href="Fin.html#1027" data-type="¬ is-empty (Fin (suc n))" class="Function">Fin-suc-is-nonempty</a> <a id="1104" href="Fin.html#1104" class="Bound">f</a> <a id="1106" class="Symbol">=</a> <a id="1108" href="Fin.html#1104" class="Bound">f</a> <a id="1110" href="Fin.html#506" data-type="Fin (suc n)" class="InductiveConstructor">zero</a>
 </pre>
-<h2 id="elimination-principle">Elimination principle</h2>
+<h4 id="elimination-principle">Elimination principle</h4>
 <pre class="Agda"><a id="Fin-elim"></a><a id="1154" href="Fin.html#1154" data-type="(A : Fin n → Type) →
 A zero → ((k : Fin n) → A k → A (suc k)) → (k : Fin n) → A k" class="Function">Fin-elim</a> <a id="1163" class="Symbol">:</a> <a id="1165" class="Symbol">(</a><a id="1166" href="Fin.html#1166" class="Bound">A</a> <a id="1168" class="Symbol">:</a> <a id="1170" class="Symbol">{</a><a id="1171" href="Fin.html#1171" class="Bound">n</a> <a id="1173" class="Symbol">:</a> <a id="1175" href="introduction.html#535" data-type="Set" class="Datatype">ℕ</a><a id="1176" class="Symbol">}</a> <a id="1178" class="Symbol">→</a> <a id="1180" href="Fin.html#484" data-type="ℕ → Set" class="Datatype">Fin</a> <a id="1184" href="Fin.html#1171" class="Bound">n</a> <a id="1186" class="Symbol">→</a> <a id="1188" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="1192" class="Symbol">)</a>
          <a id="1203" class="Symbol">→</a> <a id="1205" class="Symbol">({</a><a id="1207" href="Fin.html#1207" class="Bound">n</a> <a id="1209" class="Symbol">:</a> <a id="1211" href="introduction.html#535" data-type="Set" class="Datatype">ℕ</a><a id="1212" class="Symbol">}</a> <a id="1214" class="Symbol">→</a> <a id="1216" href="Fin.html#1166" class="Bound">A</a> <a id="1218" class="Symbol">{</a><a id="1219" class="InductiveConstructor">suc</a> <a id="1223" href="Fin.html#1207" class="Bound">n</a><a id="1224" class="Symbol">}</a> <a id="1226" class="InductiveConstructor">zero</a><a id="1230" class="Symbol">)</a>
@@ -84,9 +74,9 @@ A zero → ((k : Fin n) → A k → A (suc k)) → (k : Fin n) → A k" class="F
 <p>So this again looks like <a
 href="natural-numbers-type.lagda.md">primitive recursion</a>. And it
 gives an induction principle for <code>Fin</code>.</p>
-<h2 id="every-element-of-fin-n-can-be-regarded-as-an-element-of-ℕ">Every
+<h4 id="every-element-of-fin-n-can-be-regarded-as-an-element-of-ℕ">Every
 element of <code>Fin n</code> can be regarded as an element of
-<code>ℕ</code></h2>
+<code>ℕ</code></h4>
 <pre class="Agda"><a id="ι"></a><a id="1623" href="Fin.html#1623" data-type="Fin n → ℕ" class="Function">ι</a> <a id="1625" class="Symbol">:</a> <a id="1627" class="Symbol">{</a><a id="1628" href="Fin.html#1628" class="Bound">n</a> <a id="1630" class="Symbol">:</a> <a id="1632" href="introduction.html#535" data-type="Set" class="Datatype">ℕ</a><a id="1633" class="Symbol">}</a> <a id="1635" class="Symbol">→</a> <a id="1637" href="Fin.html#484" data-type="ℕ → Set" class="Datatype">Fin</a> <a id="1641" href="Fin.html#1628" class="Bound">n</a> <a id="1643" class="Symbol">→</a> <a id="1645" href="introduction.html#535" data-type="Set" class="Datatype">ℕ</a>
 <a id="1647" href="Fin.html#1623" data-type="Fin n → ℕ" class="Function">ι</a> <a id="1649" href="Fin.html#506" data-type="Fin (suc n)" class="InductiveConstructor">zero</a>    <a id="1657" class="Symbol">=</a> <a id="1659" href="introduction.html#551" data-type="ℕ" class="InductiveConstructor">zero</a>
 <a id="1664" href="Fin.html#1623" data-type="Fin n → ℕ" class="Function">ι</a> <a id="1666" class="Symbol">(</a><a id="1667" href="Fin.html#536" data-type="Fin n → Fin (suc n)" class="InductiveConstructor">suc</a> <a id="1671" href="Fin.html#1671" class="Bound">x</a><a id="1672" class="Symbol">)</a> <a id="1674" class="Symbol">=</a> <a id="1676" href="introduction.html#561" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="1680" class="Symbol">(</a><a id="1681" href="Fin.html#1623" data-type="Fin n → ℕ" class="Function">ι</a> <a id="1683" href="Fin.html#1671" class="Bound">x</a><a id="1684" class="Symbol">)</a>
@@ -165,14 +155,29 @@ table {
   table td, table th {
     text-align: center;
     padding: 0px 1em 0px 1em; }
+  table td {
+    white-space: nowrap; }
+
+html { max-width: 100%; }
 
 body {
   font-family: "Inria Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   width: 100%;
   font-size: var(--font-size);
-  overflow-x: clip; }
+  overflow-x: clip;
+  background-color: var(--text-bg);
+  color: var(--text-fg);
+}
 
 div#post-toc-container { max-width: 120ch; margin: auto; }
+
+article a[href], div#return > a[href], div#top > a[href], aside#toc > div#toc-container ul a[href] {
+  color: var(--primary);
+  text-decoration: none; }
+  article a[href]:hover, div#return > a[href]:hover, div#top > a[href]:hover, aside#toc > div#toc-container ul a[href]:hover {
+    text-decoration: 2px currentColor underline !important; }
+  article a[href]:visited, div#return > a[href]:visited, div#top > a[href]:visited, aside#toc > div#toc-container ul a[href]:visited {
+    color: var(--secondary); }
 
 /* Aspects. */
 .Agda {
@@ -264,7 +269,10 @@ pre.Agda, div.sourceCode, pre {
   padding-top: 0.25em;
   padding-bottom: 0.25em;
   background-color: var(--code-bg);
-  color: var(--code-fg); 
-  font-size: var(--code-font-size); }
+  color: var(--code-fg);
+  font-size: var(--code-font-size);
+  max-width: 100%;
+  overflow-x: auto;
+}
 
 </html>
