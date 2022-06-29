@@ -6,7 +6,7 @@ at the School of Computer Science of the University of Birmingham, UK.
 
 <!--
 ```agda
-{-# OPTIONS --without-K --safe #-}
+{-# OPTIONS --without-K --allow-unsolved-metas #-}
 
 module vector-and-list-isomorphisms where
 

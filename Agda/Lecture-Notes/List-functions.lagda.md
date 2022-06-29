@@ -10,6 +10,7 @@ at the School of Computer Science of the University of Birmingham, UK.
 
 module List-functions where
 
+open import introduction using (ℕ ; suc ; zero)
 open import prelude
 ```
 -->

@@ -13,7 +13,7 @@ module unit-type where
 open import general-notation
 ```
 -->
-## The unit type 𝟙
+# The unit type 𝟙
 
 We now redefine the unit type as a record:
 ```agda

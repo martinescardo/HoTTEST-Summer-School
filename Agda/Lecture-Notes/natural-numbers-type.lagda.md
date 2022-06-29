@@ -11,18 +11,20 @@ at the School of Computer Science of the University of Birmingham, UK.
 module natural-numbers-type where
 
 open import general-notation
+open import introduction hiding (Type ; _+_ ; _*_)
 ```
 -->
 # The type `ℕ` of natural numbers
 
-We repeat the definition given [earlier](introduction.lagda.md):
-```agda
+To jog your memory we repeat the definition of the natural numbers given [earlier](introduction.lagda.md#ℕ):
+
+~~~~
 data ℕ : Type where
  zero : ℕ
  suc  : ℕ → ℕ
 
 {-# BUILTIN NATURAL ℕ #-}
-```
+~~~~
 
 ## Elimination principle
 

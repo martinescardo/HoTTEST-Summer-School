@@ -30,10 +30,10 @@ Martin Escardo. Notes originally written for the module "Advanced Functional Pro
     1. [Vectors](Lecture-Notes/Vector.lagda.md)
     1. [List and vector isomorphisms](Lecture-Notes/vector-and-list-isomorphisms.lagda.md)
  1. More constructions and proofs with the above types:
-    1. [Natural numbers](Lecture-Notes//LectureNotes/natural-numbers-functions.lagda.md)
-    1. [Booleans](Lecture-Notes//LectureNotes/Bool-functions.lagda.md)
-    1. [Finite types](Lecture-Notes//LectureNotes/Fin-functions.lagda.md)
-    1. [Lists](Lecture-Notes//LectureNotes/List-functions.lagda.md)
-    1. [Vectors](Lecture-Notes//LectureNotes/Vector-functions.lagda.md)
+    1. [Natural numbers](Lecture-Notes/natural-numbers-functions.lagda.md)
+    1. [Booleans](Lecture-Notes/Bool-functions.lagda.md)
+    1. [Finite types](Lecture-Notes/Fin-functions.lagda.md)
+    1. [Lists](Lecture-Notes/List-functions.lagda.md)
+    1. [Vectors](Lecture-Notes/Vector-functions.lagda.md)
 
 ## [All agda files](Lecture-Notes/index.lagda.md)

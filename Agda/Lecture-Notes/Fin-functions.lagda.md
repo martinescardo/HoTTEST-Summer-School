@@ -11,6 +11,7 @@ at the School of Computer Science of the University of Birmingham, UK.
 module Fin-functions where
 
 open import prelude
+open import introduction using (ℕ ; suc ; zero)
 ```
 -->
 

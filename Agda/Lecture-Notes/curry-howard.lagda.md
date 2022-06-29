@@ -8,16 +8,16 @@ at the School of Computer Science of the University of Birmingham, UK.
 
 We now complete the proposition-as-types interpretation of logic.
 
-| Logic           | English                    | Type theory   | Agda          | Handouts                                            | Alternative terminology               |
-| -             | ---                        | ---           | ---           | ---                                                 | ---                                   |
-| ⊥               | false                      | ℕ₀            | 𝟘             | [empty type](empty-type.lagda.md)                   |                                       |
-| ⊤               | true (*)                   | ℕ₁            | 𝟙             | [unit type](unit-type.lagda.md)                     |                                       |
-| A ∧ B           | A and B                    | A × B         | A × B         | [binary product](binary-products.lagda.md) | cartesian product                        |
-| A ∨ B           | A or B                     | A + B         | A ∔ B         | [binary sum](binary-sums.lagda.md)                   | coproduct, <br> binary disjoint union      |
-| A → B           | A implies B                | A → B         | A → B         | [function type](products.lagda.md)                   | non-dependent function type           |
-| ¬ A             | not A                      | A → ℕ₀        | A → 𝟘         | [negation](negation.lagda.md)                       |                                       |
-| ∀ x : A, B x    | for all x:A, B x           | Π x : A , B x | (x : A) → B x | [product](products.lagda.md)                         | dependent function type               |
-| ∃ x : A, B x    | there is x:A such that B x | Σ x ꞉ A , B x | Σ x ꞉ A , B x | [sum](sums.lagda.md)                                 | disjoint union, <br> dependent pair type   |
+| Logic           | English                    | Type theory   | Agda          | Handouts                                            | Alternative terminology                    |
+|-----------------|----------------------------|---------------|---------------|-----------------------------------------------------|--------------------------------------------|
+| ⊥               | false                      | ℕ₀            | 𝟘             | [empty type](empty-type.lagda.md)                   |                                            |
+| ⊤               | true (*)                   | ℕ₁            | 𝟙             | [unit type](unit-type.lagda.md)                     |                                            |
+| A ∧ B           | A and B                    | A × B         | A × B         | [binary product](binary-products.lagda.md)          | cartesian product                          |
+| A ∨ B           | A or B                     | A + B         | A ∔ B         | [binary sum](binary-sums.lagda.md)                  | coproduct, <br> binary disjoint union      |
+| A → B           | A implies B                | A → B         | A → B         | [function type](products.lagda.md)                  | non-dependent function type                |
+| ¬ A             | not A                      | A → ℕ₀        | A → 𝟘         | [negation](negation.lagda.md)                       |                                            |
+| ∀ x : A, B x    | for all x:A, B x           | Π x : A , B x | (x : A) → B x | [product](products.lagda.md)                        | dependent function type                    |
+| ∃ x : A, B x    | there is x:A such that B x | Σ x ꞉ A , B x | Σ x ꞉ A , B x | [sum](sums.lagda.md)                                | disjoint union, <br> dependent pair type   |
 | x = y           | x equals y                 | Id x y        | x ≡ y         | [identity type](identity-type.lagda.md)             | equality type, <br> propositional equality |
 
 ## Remarks

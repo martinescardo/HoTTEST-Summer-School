@@ -13,7 +13,7 @@ module binary-type where
 open import general-notation
 ```
 -->
-## The binary type 𝟚
+# The binary type 𝟚
 
 This type can be defined to be `𝟙 ∔ 𝟙` using [binary sums](binary-sums.lagda.md), but we give a direct definition which will allow us to discuss some relationships between the various type formers of Basic MLTT.
 
