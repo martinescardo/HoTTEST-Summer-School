@@ -23,15 +23,17 @@ jobs:
 
       - name: Build 🛠️
         run: |
+          git config --global --add safe.directory /__w/HoTTEST-Summer-School/HoTTEST-Summer-School
           cd Agda/
           build-agda-index README.md
           mkdir -p _build/site
           cp -v _build/html0/*.html _build/site/
           cp -v README.html _build/site/index.html
+          cd ..
 
       - name: Deploy 🚀
         if: ${{ github.ref_name == 'main' }}
         uses: JamesIves/github-pages-deploy-action@4.1.7
         with:
           branch: gh-pages
-          folder: Agda/_build/site
+          folder: /__w/HoTTEST-Summer-School/HoTTEST-Summer-School/Agda/_build/site
