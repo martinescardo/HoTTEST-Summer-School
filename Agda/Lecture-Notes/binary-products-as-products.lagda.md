@@ -31,7 +31,7 @@ infixr 2 _×'_
 ```
 We could have written the type `Π n ꞉ 𝟚 , A n` as simply `(n : 𝟚) → A n`, but we wanted to emphasize that binary products `_×_` are special cases of arbitrary products `Π`.
 
-To justify this claim, we establish an [isomorphism](isomorphism.lagda.md). But we need to assume [function extensionality](function-extensionality.lagda.md) for this purpose.
+To justify this claim, we establish an [isomorphism](isomorphisms.lagda.md). But we need to assume [function extensionality](function-extensionality.lagda.md) for this purpose.
 ```agda
 open import isomorphisms
 open import function-extensionality

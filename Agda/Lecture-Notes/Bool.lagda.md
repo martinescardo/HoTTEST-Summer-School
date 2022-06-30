@@ -11,6 +11,7 @@ at the School of Computer Science of the University of Birmingham, UK.
 module Bool where
 
 open import general-notation
+open import introduction using (ℕ)
 ```
 -->
 # The booleans

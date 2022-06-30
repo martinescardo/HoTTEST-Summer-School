@@ -21,4 +21,5 @@ open import natural-numbers-type public
 open import Bool public
 open import List public
 open import Vector public
+open import introduction using (ℕ ; suc ; zero) public
 ```
