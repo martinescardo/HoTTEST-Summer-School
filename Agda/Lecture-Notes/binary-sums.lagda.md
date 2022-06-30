@@ -33,6 +33,10 @@ In terms of computation, we use the type `A ∔ B` when we want to put the two t
 
 In terms of logic, we use the type `A ∔ B` to express "A or B". This is because in order for "A or B" to hold, at least one of A and B must hold. The type `A → A ∔ B` of the function `inl` is interpreted as saying that if A holds then so does "A or B", and similarly, the type of B → A ∔ B of the function `inr` says that if B holds then so does "A or B". In other words, if `x : A` is a proof of `A`, then `inl x : A + B` is a proof of `A or B`, and if `y : B` is a proof of B, them `inr y : A + B` is a proof of "A or B". Here when we said "proof" we meant "program" after the propositions-as-types and proofs-as-programs paradigm.
 
+## Logical disjunction in HoTT/UF
+
+In HoTT/UF it useful to have an alternative disjunction operation `A ∨ B` defined to be `∥ A ∔ B ∥` where `∥_∥` is a certain *propositional truncation* operation.
+
 ## Elimination principle
 
 Now suppose we want to define a dependent function `(z : A ∔ B) → C z`. How can we do that? If we have two functions `f : (x : A) → C (inl x)` and `g : (y : B) → C (inr y)`, then, given `z : A ∔ B`, we can inspect whether `z` is of the form `inl x` with `x : A` or of the form `inr y` with `y : B`, and the respectively apply `f` or `g` to get an element of `C z`. This procedure is called the *elimination* principle for the type former `_∔_` and can be written in Agda as follows:
