@@ -16,7 +16,7 @@ open import prelude
 -->
 # Reasoning with negation
 
-[Recall that](empty-type.lagda.md) we defined the negation `¬ A` of a type `A` to be the function type `A → 0`,
+[Recall that](empty-type.lagda.md) we defined the negation `¬ A` of a type `A` to be the function type `A → 𝟘`,
 and that we also wrote `is-empty A` as a synonym of `¬ A`.
 
 ## Emptiness of the empty type
@@ -178,4 +178,3 @@ implication-truth-table = ((λ _ → ⋆)   , (λ _ → id)) ,
                           ((λ f → f ⋆) , (λ ⋆ _ → ⋆)) ,
                           ((λ _ → ⋆)   , (λ _ _ → ⋆))
 ```
-TODO. Find a better home for the above truth table.

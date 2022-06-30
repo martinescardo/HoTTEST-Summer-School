@@ -82,7 +82,7 @@ decidability-with-booleans A = f , g
 Consider the logical statement "x is even". This is decidable, because
 there is an easy algorithm that tells whether a natural number `x` is
 even or not. In programming languages we write this algorithm as a
-procedure that returns a boolean. But an equally valid definition is to say that `x` is even if there is a natural number `y` such that `x = 2 * y`. This definition doesn't automatically give an algorithm to check whether or not `x` is odd.
+procedure that returns a boolean. But an equally valid definition is to say that `x` is even if there is a natural number `y` such that `x = 2 * y`. This definition doesn't automatically give an algorithm to check whether or not `x` is even.
 <!--
 ```agda
 module _ where
@@ -336,17 +336,17 @@ private
 
  f-equals-g : f ∼ g
  f-equals-g 0       = refl (f 0)
- f-equals-g (suc x) = goal
+ f-equals-g (suc x) = γ
   where
    IH : f x ≡ g x
    IH = f-equals-g x
 
-   goal : f (suc x) ≡ g (suc x)
-   goal = f (suc x) ≡⟨ refl _ ⟩
-          suc x     ≡⟨ refl _ ⟩
-          suc (f x) ≡⟨ ap suc IH ⟩
-          suc (g x) ≡⟨ refl _ ⟩
-          g (suc x) ∎
+   γ : f (suc x) ≡ g (suc x)
+   γ = f (suc x) ≡⟨ refl _ ⟩
+       suc x     ≡⟨ refl _ ⟩
+       suc (f x) ≡⟨ ap suc IH ⟩
+       suc (g x) ≡⟨ refl _ ⟩
+       g (suc x) ∎
 
  f-not-equals-h : ¬ (f ∼ h)
  f-not-equals-h e = contradiction d

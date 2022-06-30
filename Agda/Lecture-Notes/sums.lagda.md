@@ -96,7 +96,7 @@ Regarding logic, the `Σ` type is used to interpret the existential quantifier `
 
 For example, the type `Σ x : ℕ , Σ y : ℕ , Σ z : ℕ , x ≡ y * z` can be interpreted as saying that "there are natural numbers x, y, and z such that x = y * z", which is true as witnessed by the element `(6,2,3,refl 6)` of that type. But there are many other witnesses of this type, of course, such as `(10,5,2,refl 10)`.
 
-It is important to notice that it is possible to write types that correspond to false logical statements, and hence are empty. For example, consider `Σ x : ℕ , x ≡ x + 1`. There is no natural number that is its own successor, of course, and so this type is empty. While this type is empty, the type `¬ (Σ x : ℕ , x ≡ x + 1)` has an element, as we will see, which witnesses the fact that "there doesn't exist a natural number `x` such that `x = x + 1`.
+It is important to notice that it is possible to write types that correspond to false logical statements, and hence are empty. For example, consider `Σ x : ℕ , x ≡ x + 1`. There is no natural number that is its own successor, of course, and so this type is empty. While this type is empty, the type `¬ (Σ x : ℕ , x ≡ x + 1)` has an element, as we will see, which witnesses the fact that "there doesn't exist a natural number `x` such that `x = x + 1`".
 
 ## Existential quantification in HoTT/UF
 

@@ -62,7 +62,7 @@ Intuitively, `ℕ-iteration a f n = f (f (f (⋯ f a)))` where we apply `n` time
 
 ## The induction principle for ℕ
 
-In logical terms, one can see immediately what the type of `ℕ-elim` is: it is simply the [principle of induction on natural numbers](https://en.wikipedia.org/wiki/Mathematical_induction), which say that in order to show that a property `A` holds for all natural numbers, it is enough to show that `A 0` holds (this is called the base case), and that if `A k` holds then so does `A (suc k)` (this is called the induction step). In Agda, in practice, we don't explicitly use this induction principle, but instead write definition recursively, just as we defined the above function `h` recursively.
+In logical terms, one can see immediately what the type of `ℕ-elim` is: it is simply the [principle of induction on natural numbers](https://en.wikipedia.org/wiki/Mathematical_induction), which says that in order to show that a property `A` holds for all natural numbers, it is enough to show that `A 0` holds (this is called the base case), and that if `A k` holds then so does `A (suc k)` (this is called the induction step). In Agda, in practice, we don't explicitly use this induction principle, but instead write definition recursively, just as we defined the above function `h` recursively.
 
 ## Addition and multiplication
 

@@ -55,6 +55,10 @@ The definition with `Σ` is probably more intuitive, but, as discussed above, th
 
 Notice that `inverse` plays the role of `g`. The reason we use `inverse` is that then we can use the word `inverse` to extract the inverse of a bijection. Similarly we use `bijection` for `f`, as we can use the word `bijection` to extract the bijection from a record.
 
+## Equivalences in HoTT/UF
+
+In HoTT/UF one uses a refinement of the notion of isomorphism defined above, not discussed in these lecture notes.
+
 ## Some basic examples
 
 ```agda

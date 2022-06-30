@@ -51,7 +51,7 @@ _≤₁_ : ℕ → ℕ → Type
 suc x ≤₁ 0     = 𝟘
 suc x ≤₁ suc y = x ≤₁ y
 ```
-The third one, which we will as the official one, is defined *by induction* using `data`:
+The third one, which we will adopt as the official one, is defined *by induction* using `data`:
 ```agda
 data _≤_ : ℕ → ℕ → Type where
  0-smallest      : {y : ℕ} → 0 ≤ y
@@ -136,13 +136,13 @@ min (suc x) 0       = 0
 min (suc x) (suc y) = suc (min x y)
 ```
 
-## No natural number is its own successo
+## No natural number is its own successor
 
 We now show that there is no natural number `x` such that `x = suc x`.
 ```agda
 every-number-is-not-its-own-successor : (x : ℕ) → x ≢ suc x
 every-number-is-not-its-own-successor 0       e = zero-is-not-suc e
-every-number-is-not-its-own-successor (suc x) e = goal
+every-number-is-not-its-own-successor (suc x) e = γ
  where
   IH : x ≢ suc x
   IH = every-number-is-not-its-own-successor x
@@ -150,8 +150,8 @@ every-number-is-not-its-own-successor (suc x) e = goal
   e' : x ≡ suc x
   e' = suc-is-injective e
 
-  goal : 𝟘
-  goal = IH e'
+  γ : 𝟘
+  γ = IH e'
 
 there-is-no-number-which-is-its-own-successor : ¬ (Σ x ꞉ ℕ , x ≡ suc x)
 there-is-no-number-which-is-its-own-successor (x , e) = every-number-is-not-its-own-successor x e
@@ -242,21 +242,21 @@ twin-prime-conjecture = (n : ℕ) → Σ p ꞉ ℕ , (p ≥ n)
 ```agda
 *-+-distrib : (x y z : ℕ) → x * (y + z) ≡ x * y + x * z
 *-+-distrib 0       y z = refl 0
-*-+-distrib (suc x) y z = goal
+*-+-distrib (suc x) y z = γ
  where
   IH : x * (y + z) ≡ x * y + x * z
   IH = *-+-distrib x y z
 
-  goal : suc x * (y + z) ≡ suc x * y + suc x * z
-  goal = suc x * (y + z)         ≡⟨ refl _ ⟩
-         x * (y + z) + (y + z)   ≡⟨ ap (_+ y + z) IH ⟩
-         (x * y + x * z) + y + z ≡⟨ +-assoc (x * y) (x * z) (y + z) ⟩
-         x * y + x * z + y + z   ≡⟨ ap (x * y +_) (sym (+-assoc (x * z) y z)) ⟩
-         x * y + (x * z + y) + z ≡⟨ ap (λ - → x * y + - + z) (+-comm (x * z) y) ⟩
-         x * y + (y + x * z) + z ≡⟨ ap (x * y +_) (+-assoc y (x * z) z) ⟩
-         x * y + y + x * z + z   ≡⟨ sym (+-assoc (x * y) y (x * z + z)) ⟩
-         (x * y + y) + x * z + z ≡⟨ refl _ ⟩
-         suc x * y + suc x * z   ∎
+  γ : suc x * (y + z) ≡ suc x * y + suc x * z
+  γ = suc x * (y + z)         ≡⟨ refl _ ⟩
+      x * (y + z) + (y + z)   ≡⟨ ap (_+ y + z) IH ⟩
+      (x * y + x * z) + y + z ≡⟨ +-assoc (x * y) (x * z) (y + z) ⟩
+      x * y + x * z + y + z   ≡⟨ ap (x * y +_) (sym (+-assoc (x * z) y z)) ⟩
+      x * y + (x * z + y) + z ≡⟨ ap (λ - → x * y + - + z) (+-comm (x * z) y) ⟩
+      x * y + (y + x * z) + z ≡⟨ ap (x * y +_) (+-assoc y (x * z) z) ⟩
+      x * y + y + x * z + z   ≡⟨ sym (+-assoc (x * y) y (x * z + z)) ⟩
+      (x * y + y) + x * z + z ≡⟨ refl _ ⟩
+      suc x * y + suc x * z   ∎
 ```
 
 ## Commutativity of multiplication
@@ -324,19 +324,19 @@ one-is-odd : is-odd 1
 one-is-odd = 0 , refl 1
 
 even-gives-odd-suc : (x : ℕ) → is-even x → is-odd (suc x)
-even-gives-odd-suc x (y , e) = goal
+even-gives-odd-suc x (y , e) = γ
  where
   e' : suc x ≡ 1 + 2 * y
   e' = ap suc e
 
-  goal : is-odd (suc x)
-  goal = y , e'
+  γ : is-odd (suc x)
+  γ = y , e'
 
 even-gives-odd-suc' : (x : ℕ) → is-even x → is-odd (suc x)
 even-gives-odd-suc' x (y , e) = y , ap suc e
 
 odd-gives-even-suc : (x : ℕ) → is-odd x → is-even (suc x)
-odd-gives-even-suc x (y , e) = goal
+odd-gives-even-suc x (y , e) = γ
  where
   y' : ℕ
   y' = 1 + y
@@ -348,12 +348,12 @@ odd-gives-even-suc x (y , e) = goal
        2 * (1 + y)     ≡⟨ refl _ ⟩
        2 * y'          ∎
 
-  goal : is-even (suc x)
-  goal = y' , e'
+  γ : is-even (suc x)
+  γ = y' , e'
 
 even-or-odd : (x : ℕ) → is-even x ∔ is-odd x
 even-or-odd 0       = inl (0 , refl 0)
-even-or-odd (suc x) = goal
+even-or-odd (suc x) = γ
  where
   IH : is-even x ∔ is-odd x
   IH = even-or-odd x
@@ -362,8 +362,8 @@ even-or-odd (suc x) = goal
   f (inl e) = inr (even-gives-odd-suc x e)
   f (inr o) = inl (odd-gives-even-suc x o)
 
-  goal : is-even (suc x) ∔ is-odd (suc x)
-  goal = f IH
+  γ : is-even (suc x) ∔ is-odd (suc x)
+  γ = f IH
 ```
 
 ```agda
@@ -421,15 +421,15 @@ double-correct : (x : ℕ) → double x ≡ x + x
 double-correct 0       = double 0 ≡⟨ refl _ ⟩
                          0        ≡⟨ refl _ ⟩
                          0 + 0    ∎
-double-correct (suc x) = goal
+double-correct (suc x) = γ
  where
   IH : double x ≡ x + x
   IH = double-correct x
 
-  goal : double (suc x) ≡ suc x + suc x
-  goal = double (suc x)       ≡⟨ refl _ ⟩
-         suc (suc (double x)) ≡⟨ ap (suc ∘ suc) IH ⟩
-         suc (suc (x + x))    ≡⟨ ap suc (sym (+-step x x)) ⟩
-         suc (x + suc x)      ≡⟨ refl _ ⟩
-         suc x + suc x        ∎
+  γ : double (suc x) ≡ suc x + suc x
+  γ = double (suc x)       ≡⟨ refl _ ⟩
+      suc (suc (double x)) ≡⟨ ap (suc ∘ suc) IH ⟩
+      suc (suc (x + x))    ≡⟨ ap suc (sym (+-step x x)) ⟩
+      suc (x + suc x)      ≡⟨ refl _ ⟩
+      suc x + suc x        ∎
 ```
