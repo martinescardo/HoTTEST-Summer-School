@@ -113,8 +113,7 @@ data Vector (A : Type) : ℕ → Type where
 ```
 This is called a *dependent type* because it is a type that depends on *elements* `n` of another type, namely `ℕ`.
 
-In Agda, we can't define the `head` and `tail` functions on lists, because types don't have
-`undefined` elements like in Haskell, which would be needed for the head and tail of the empty list. Vectors solve this problem:
+In Agda, we can't define the `head` and `tail` functions on lists, because they are undefined for the empty list, and functions must be total in Agda. Vectors solve this problem:
 
 ```agda
 head : {A : Type} {n : ℕ} → Vector A (suc n) → A

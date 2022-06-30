@@ -34,10 +34,7 @@ domain {X} {Y} f = X
 
 codomain : {X Y : Type} → (X → Y) → Type
 codomain {X} {Y} f = Y
-```
 
-The function `$`, often used in Haskell, is an infix operator for function application. It provides syntactic sugar for people who don't like brackets:
-```agda
 _$_ : {A B : Type} → (A → B) → A → B
 f $ x = f x
 

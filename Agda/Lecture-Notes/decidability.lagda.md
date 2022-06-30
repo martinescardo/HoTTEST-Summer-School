@@ -17,7 +17,7 @@ open import introduction using (ℕ ; suc ; zero)
 -->
 # Propositions as types versus propositions as booleans
 
-When programming in conventional programming languages such as Haskell, C, Java or Python, etc., we use *booleans* rather than *types* to encode logical propositions. But this works only because we restrict ourselves to *decidable* propositions, as we'll see below.
+When programming in conventional programming languages such as Haskell, C, Java, Python, etc., we use *booleans* rather than *types* to encode logical propositions. But this works only because we restrict ourselves to *decidable* propositions, as we'll see below.
 
 We now discuss *why* we use *types* to encode logical propositions, and
 *when* we can use *booleans* instead. It is not always.

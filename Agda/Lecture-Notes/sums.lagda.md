@@ -82,7 +82,7 @@ We now define and discuss the elimination principle.
        → (z : Σ x ꞉ A , B x) → C z
 Σ-elim f (x , y) = f x y
 ```
-So the elimination principle for `Σ` is what was called `curry` in the programming language Haskell in its non-dependent form. The logical interpretation for this principle is that in order to show that "for all z : Σ x ꞉ A , B x) we have that C z holds", it is enough to show that "for all x : A and y : B x we have that C (x , y) holds". This condition is not only sufficient but also [necessary](https://en.wikipedia.org/wiki/Necessity_and_sufficiency):
+So the elimination principle for `Σ` is what was called `curry` in functional programming. The logical interpretation for this principle is that in order to show that "for all z : Σ x ꞉ A , B x) we have that C z holds", it is enough to show that "for all x : A and y : B x we have that C (x , y) holds". This condition is not only sufficient but also [necessary](https://en.wikipedia.org/wiki/Necessity_and_sufficiency):
 ```agda
 Σ-uncurry : {A : Type } {B : A → Type} {C : (Σ x ꞉ A , B x) → Type}
           → ((z : Σ x ꞉ A , B x) → C z)
