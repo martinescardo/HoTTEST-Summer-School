@@ -76,7 +76,6 @@ isomorphisms</a></li>
 <li><a href="#modVector-functions">Vectors</a></li>
 </ol></li>
 </ol>
-<h2 id="all-agda-files"><a href="#modindex">All agda files</a></h2>
 <a id=modintroduction></a>
 <h2 id="introduction-to-agda">Introduction to Agda</h2>
 <h3 id="initial-examples-of-types-in-agda">Initial examples of types in
@@ -3324,46 +3323,6 @@ a Basic MLTT type</h3>
 
  <a id="example₅"></a><a id="2582" href="Vector-functions.html#2582" class="Function">example₅</a> <a id="2591" class="Symbol">:</a> <a id="2593" href="Vector-functions.html#2497" class="Function">example₄</a> <a id="2602" href="identity-type.html#583" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="2604" class="Number">1</a> <a id="2606" class="InductiveConstructor Operator">::</a> <a id="2609" class="Number">2</a> <a id="2611" class="InductiveConstructor Operator">::</a> <a id="2614" class="Number">3</a> <a id="2616" class="InductiveConstructor Operator">::</a> <a id="2619" class="InductiveConstructor">[]</a>
  <a id="2623" href="Vector-functions.html#2582" class="Function">example₅</a> <a id="2632" class="Symbol">=</a> <a id="2634" href="identity-type.html#620" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="2639" class="Symbol">_</a>
-</pre>
-<a id=modindex></a>
-<p>Martin Escardo. Notes originally written for the module “Advanced
-Functional Programming” at the School of Computer Science of the
-University of Birmingham, UK.</p>
-<pre class="Agda"><a id="173" class="Symbol">{-#</a> <a id="177" class="Keyword">OPTIONS</a> <a id="185" class="Pragma">--without-K</a> <a id="197" class="Pragma">--safe</a> <a id="204" class="Symbol">#-}</a>
-
-<a id="209" class="Keyword">module</a> <a id="216" href="index.html" class="Module">index</a> <a id="222" class="Keyword">where</a>
-
-<a id="229" class="Keyword">import</a> <a id="236" href="Bool.html" class="Module">Bool</a>
-<a id="241" class="Keyword">import</a> <a id="248" href="Bool-functions.html" class="Module">Bool-functions</a>
-<a id="263" class="Keyword">import</a> <a id="270" href="Fin.html" class="Module">Fin</a>
-<a id="274" class="Keyword">import</a> <a id="281" href="Fin-functions.html" class="Module">Fin-functions</a>
-<a id="295" class="Keyword">import</a> <a id="302" href="Hedbergs-Theorem.html" class="Module">Hedbergs-Theorem</a>
-<a id="319" class="Keyword">import</a> <a id="326" href="List.html" class="Module">List</a>
-<a id="331" class="Keyword">import</a> <a id="338" href="List-functions.html" class="Module">List-functions</a>
-<a id="353" class="Keyword">import</a> <a id="360" href="Vector.html" class="Module">Vector</a>
-<a id="367" class="Keyword">import</a> <a id="374" href="Vector-functions.html" class="Module">Vector-functions</a>
-<a id="391" class="Keyword">import</a> <a id="398" href="binary-products.html" class="Module">binary-products</a>
-<a id="414" class="Keyword">import</a> <a id="421" href="binary-products-as-products.html" class="Module">binary-products-as-products</a>
-<a id="449" class="Keyword">import</a> <a id="456" href="binary-sums.html" class="Module">binary-sums</a>
-<a id="468" class="Keyword">import</a> <a id="475" href="binary-sums-as-sums.html" class="Module">binary-sums-as-sums</a>
-<a id="495" class="Keyword">import</a> <a id="502" href="binary-type.html" class="Module">binary-type</a>
-<a id="514" class="Keyword">import</a> <a id="521" href="decidability.html" class="Module">decidability</a>
-<a id="534" class="Keyword">import</a> <a id="541" href="empty-type.html" class="Module">empty-type</a>
-<a id="552" class="Keyword">import</a> <a id="559" href="function-extensionality.html" class="Module">function-extensionality</a>
-<a id="583" class="Keyword">import</a> <a id="590" href="general-notation.html" class="Module">general-notation</a>
-<a id="607" class="Keyword">import</a> <a id="614" href="identity-type.html" class="Module">identity-type</a>
-<a id="628" class="Keyword">import</a> <a id="635" href="isomorphism-functions.html" class="Module">isomorphism-functions</a>
-<a id="657" class="Keyword">import</a> <a id="664" href="isomorphisms.html" class="Module">isomorphisms</a>
-<a id="677" class="Keyword">import</a> <a id="684" href="natural-numbers-functions.html" class="Module">natural-numbers-functions</a>
-<a id="710" class="Keyword">import</a> <a id="717" href="natural-numbers-type.html" class="Module">natural-numbers-type</a>
-<a id="738" class="Keyword">import</a> <a id="745" href="negation.html" class="Module">negation</a>
-<a id="754" class="Keyword">import</a> <a id="761" href="prelude.html" class="Module">prelude</a>
-<a id="769" class="Keyword">import</a> <a id="776" href="products.html" class="Module">products</a>
-<a id="785" class="Keyword">import</a> <a id="792" href="searchability.html" class="Module">searchability</a>
-<a id="806" class="Keyword">import</a> <a id="813" href="sums.html" class="Module">sums</a>
-<a id="818" class="Keyword">import</a> <a id="825" href="sums-equality.html" class="Module">sums-equality</a>
-<a id="839" class="Keyword">import</a> <a id="846" href="unit-type.html" class="Module">unit-type</a>
-<a id="856" class="Comment">-- import vector-and-list-isomorphisms</a>
 </pre>
 <a id=modempty-type></a>
 <h3 id="the-empty-type-𝟘">The empty type 𝟘</h3>
