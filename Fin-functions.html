@@ -76,7 +76,7 @@ f n (suc n₁) (g n (suc n₁) (suc&#39; k)) ≡ suc&#39; k" class="Function">γ
   <a id="1620" href="Fin-functions.html#1572" data-type="(n n₁ : ℕ) → is-bijection (f n n₁)" class="Function">f-is-bijection</a> <a id="1635" href="Fin-functions.html#1635" class="Bound">n</a> <a id="1637" class="Symbol">=</a> <a id="1639" class="Keyword">record</a> <a id="1646" class="Symbol">{</a> <a id="1648" href="isomorphisms.html#1789" data-type="is-bijection f → B → A" class="Field">inverse</a> <a id="1656" class="Symbol">=</a> <a id="1658" href="Fin-functions.html#801" data-type="ℕ → (n : ℕ) → Fin&#39; n → Fin n" class="Function">g</a> <a id="1660" href="Fin-functions.html#1635" class="Bound">n</a> <a id="1662" class="Symbol">;</a> <a id="1664" href="isomorphisms.html#1807" data-type="(r : is-bijection f) → (inverse r ∘ f) ∼ id" class="Field">η</a> <a id="1666" class="Symbol">=</a> <a id="1668" href="Fin-functions.html#894" data-type="(n n₁ : ℕ) → (g n n₁ ∘ f n n₁) ∼ id" class="Function">gf</a> <a id="1671" href="Fin-functions.html#1635" class="Bound">n</a> <a id="1673" class="Symbol">;</a> <a id="1675" href="isomorphisms.html#1836" data-type="(r : is-bijection f) → (f ∘ inverse r) ∼ id" class="Field">ε</a> <a id="1677" class="Symbol">=</a> <a id="1679" href="Fin-functions.html#1229" data-type="(n n₁ : ℕ) → (f n n₁ ∘ g n n₁) ∼ id" class="Function">fg</a> <a id="1682" href="Fin-functions.html#1635" class="Bound">n</a><a id="1683" class="Symbol">}</a>
 </pre>
 <p><strong>Exercise.</strong> Show that the type <code>Fin n</code> is
-isormorphic to the type <code>Σ k : ℕ , k &lt; n</code>.</p>
+isomorphic to the type <code>Σ k : ℕ , k &lt; n</code>.</p>
 
   </article>
 </div>
