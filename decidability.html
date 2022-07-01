@@ -17,10 +17,21 @@
 
   <article>
 
-<a id=moddecidability></a>
-<h2
+<p>Martin Escardo. Notes originally written for the module “Advanced
+Functional Programming” at the School of Computer Science of the
+University of Birmingham, UK.</p>
+<!--
+<pre class="Agda"><a id="178" class="Symbol">{-#</a> <a id="182" class="Keyword">OPTIONS</a> <a id="190" class="Pragma">--without-K</a> <a id="202" class="Pragma">--safe</a> <a id="209" class="Symbol">#-}</a>
+
+<a id="214" class="Keyword">module</a> <a id="221" href="decidability.html" class="Module">decidability</a> <a id="234" class="Keyword">where</a>
+
+<a id="241" class="Keyword">open</a> <a id="246" class="Keyword">import</a> <a id="253" href="prelude.html" class="Module">prelude</a>
+<a id="261" class="Keyword">open</a> <a id="266" class="Keyword">import</a> <a id="273" href="negation.html" class="Module">negation</a>
+<a id="282" class="Keyword">open</a> <a id="287" class="Keyword">import</a> <a id="294" href="introduction.html" class="Module">introduction</a> <a id="307" class="Keyword">using</a> <a id="313" class="Symbol">(</a><a id="314" href="introduction.html#535" data-type="Set" class="Datatype">ℕ</a> <a id="316" class="Symbol">;</a> <a id="318" href="introduction.html#561" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="322" class="Symbol">;</a> <a id="324" href="introduction.html#551" data-type="ℕ" class="InductiveConstructor">zero</a><a id="328" class="Symbol">)</a>
+</pre>-->
+<h1
 id="propositions-as-types-versus-propositions-as-booleans">Propositions
-as types versus propositions as booleans</h2>
+as types versus propositions as booleans</h1>
 <p>When programming in conventional programming languages such as
 Haskell, C, Java, Python, etc., we use <em>booleans</em> rather than
 <em>types</em> to encode logical propositions. But this works only
@@ -29,7 +40,7 @@ we’ll see below.</p>
 <p>We now discuss <em>why</em> we use <em>types</em> to encode logical
 propositions, and <em>when</em> we can use <em>booleans</em> instead. It
 is not always.</p>
-<h3 id="discussion-and-motivation">Discussion and motivation</h3>
+<h2 id="discussion-and-motivation">Discussion and motivation</h2>
 <p><strong>Examples.</strong> We <em>can automatically check</em>
 equality of booleans, integers, strings and much more, using
 algorithms.</p>
@@ -58,7 +69,7 @@ the computer. It is instead about <em>stating</em> and <em>proving</em>
 or <em>disproving</em> equalities, where the proving and disproving is
 done by people (the lecturers and the students in this case), by hard,
 intelligent work.</p>
-<h3 id="decidable-propositions">Decidable propositions</h3>
+<h2 id="decidable-propositions">Decidable propositions</h2>
 Motivated by the above discussion, we define when a logical proposition
 is decidable under the understanding of propositions as types:
 <pre class="Agda"><a id="is-decidable"></a><a id="2606" href="decidability.html#2606" data-type="Type → Type" class="Function">is-decidable</a> <a id="2619" class="Symbol">:</a> <a id="2621" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a> <a id="2626" class="Symbol">→</a> <a id="2628" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a>
@@ -73,8 +84,8 @@ decidable:
 <a id="2930" href="decidability.html#2881" data-type="is-decidable A → ¬¬ A → A" class="Function">¬¬-elim</a> <a id="2938" class="Symbol">(</a><a id="2939" href="binary-sums.html#659" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="2943" href="decidability.html#2943" class="Bound">x</a><a id="2944" class="Symbol">)</a> <a id="2946" href="decidability.html#2946" class="Bound">f</a> <a id="2948" class="Symbol">=</a> <a id="2950" href="decidability.html#2943" class="Bound">x</a>
 <a id="2952" href="decidability.html#2881" data-type="is-decidable A → ¬¬ A → A" class="Function">¬¬-elim</a> <a id="2960" class="Symbol">(</a><a id="2961" href="binary-sums.html#676" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="2965" href="decidability.html#2965" class="Bound">g</a><a id="2966" class="Symbol">)</a> <a id="2968" href="decidability.html#2968" class="Bound">f</a> <a id="2970" class="Symbol">=</a> <a id="2972" href="empty-type.html#1725" data-type="(x : 𝟘) → A x" class="Function">𝟘-elim</a> <a id="2979" class="Symbol">(</a><a id="2980" href="decidability.html#2968" class="Bound">f</a> <a id="2982" href="decidability.html#2965" class="Bound">g</a><a id="2983" class="Symbol">)</a>
 </pre>
-<h3 id="decidable-propositions-as-booleans">Decidable propositions as
-booleans</h3>
+<h2 id="decidable-propositions-as-booleans">Decidable propositions as
+booleans</h2>
 <p>The following shows that a type <code>A</code> is decidable if and
 only if there is <code>b : Bool</code> such that <code>A</code> holds if
 and only if the boolean <code>b</code> is <code>true</code>.</p>
@@ -106,8 +117,8 @@ what we explained above.
   <a id="3891" href="decidability.html#3838" data-type="(A : Type) → Sigma Bool (λ b → A ⇔ b ≡ true) → is-decidable A" class="Function">g</a> <a id="3893" class="Symbol">(</a><a id="3894" href="Bool.html#469" data-type="Bool" class="InductiveConstructor">true</a> <a id="3899" href="sums.html#2478" data-type="(fst : A) (snd : B fst) → Σ B" class="InductiveConstructor Operator">,</a>  <a id="3902" href="decidability.html#3902" class="Bound">α</a> <a id="3904" href="sums.html#2478" data-type="(fst : A) (snd : B fst) → Σ B" class="InductiveConstructor Operator">,</a> <a id="3906" href="decidability.html#3906" class="Bound">β</a><a id="3907" class="Symbol">)</a> <a id="3909" class="Symbol">=</a> <a id="3911" href="binary-sums.html#659" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="3915" class="Symbol">(</a><a id="3916" href="decidability.html#3906" class="Bound">β</a> <a id="3918" class="Symbol">(</a><a id="3919" href="identity-type.html#620" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="3924" href="Bool.html#469" data-type="Bool" class="InductiveConstructor">true</a><a id="3928" class="Symbol">))</a>
   <a id="3933" href="decidability.html#3838" data-type="(A : Type) → Sigma Bool (λ b → A ⇔ b ≡ true) → is-decidable A" class="Function">g</a> <a id="3935" class="Symbol">(</a><a id="3936" href="Bool.html#474" data-type="Bool" class="InductiveConstructor">false</a> <a id="3942" href="sums.html#2478" data-type="(fst : A) (snd : B fst) → Σ B" class="InductiveConstructor Operator">,</a> <a id="3944" href="decidability.html#3944" class="Bound">α</a> <a id="3946" href="sums.html#2478" data-type="(fst : A) (snd : B fst) → Σ B" class="InductiveConstructor Operator">,</a> <a id="3948" href="decidability.html#3948" class="Bound">β</a><a id="3949" class="Symbol">)</a> <a id="3951" class="Symbol">=</a> <a id="3953" href="binary-sums.html#676" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="3957" class="Symbol">(λ</a> <a id="3960" href="decidability.html#3960" class="Bound">x</a> <a id="3962" class="Symbol">→</a> <a id="3964" href="negation.html#3298" data-type="false ≢ true" class="Function">false-is-not-true</a> <a id="3982" class="Symbol">(</a><a id="3983" href="decidability.html#3944" class="Bound">α</a> <a id="3985" href="decidability.html#3960" class="Bound">x</a><a id="3986" class="Symbol">))</a>
 </pre>
-<h3 id="decidable-predicates-as-boolean-valued-functions">Decidable
-predicates as boolean-valued functions</h3>
+<h2 id="decidable-predicates-as-boolean-valued-functions">Decidable
+predicates as boolean-valued functions</h2>
 Consider the logical statement “x is even”. This is decidable, because
 there is an easy algorithm that tells whether a natural number
 <code>x</code> is even or not. In programming languages we write this
@@ -263,7 +274,7 @@ define type valued predicates, but only on special circumstances can we
 define boolean-valued predicates. It is better to define all predicates
 in the same way, and then write Agda code for predicates that happen to
 be decidable.</p>
-<h3 id="preservation-of-decidability">Preservation of decidability</h3>
+<h2 id="preservation-of-decidability">Preservation of decidability</h2>
 If <code>A</code> and <code>B</code> are logically equivalent, then
 <code>A</code> is decidable if and only if <code>B</code> is decidable.
 We first prove one direction.
@@ -320,8 +331,8 @@ Variation:
                          <a id="9865" class="Symbol">→</a> <a id="9867" href="decidability.html#2606" data-type="Type → Type" class="Function">is-decidable</a> <a id="9880" class="Symbol">(</a><a id="9881" href="empty-type.html#1641" data-type="Type → Type" class="Function Operator">¬</a> <a id="9883" href="decidability.html#9788" class="Bound">A</a><a id="9884" class="Symbol">)</a>
 <a id="9886" href="decidability.html#9760" data-type="is-decidable A → is-decidable (¬ A)" class="Function">¬-preserves-decidability</a> <a id="9911" href="decidability.html#9911" class="Bound">d</a> <a id="9913" class="Symbol">=</a> <a id="9915" href="decidability.html#9399" data-type="is-decidable A → is-decidable B → is-decidable (A → B)" class="Function">→-preserves-decidability</a> <a id="9940" href="decidability.html#9911" class="Bound">d</a> <a id="9942" href="decidability.html#8604" data-type="is-decidable 𝟘" class="Function">𝟘-is-decidable</a>
 </pre>
-<h3 id="exhaustively-searchable-types">Exhaustively searchable
-types</h3>
+<h2 id="exhaustively-searchable-types">Exhaustively searchable
+types</h2>
 We will explain in a future lecture why we need to use
 <code>Type₁</code> rather than <code>Type</code> in the following
 definition. For the moment we just mention that because the definition
@@ -458,7 +469,7 @@ is an exhaustively searchable type and <code>A : X → Type</code> is a
 family of types, and the type <code>A x</code> is exhaustively
 searchable for each <code>x : X</code>, then the type
 <code>Σ x ꞉ X , A x</code> is exhaustively searchable.</p>
-<h3 id="decidable-equality">Decidable equality</h3>
+<h2 id="decidable-equality">Decidable equality</h2>
 <p>A particular case of interest regarding the above discussion is the
 notion of a type having decidable equality, which can be written in Agda
 as follows.</p>
@@ -496,7 +507,7 @@ Some examples:
   <a id="14472" href="decidability.html#14472" data-type="(x y : ℕ) → is-decidable (suc x ≡ suc y)" class="Function">III</a> <a id="14476" class="Symbol">:</a> <a id="14478" href="decidability.html#2606" data-type="Type → Type" class="Function">is-decidable</a> <a id="14491" class="Symbol">(</a><a id="14492" href="introduction.html#561" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="14496" href="decidability.html#14285" class="Bound">x</a> <a id="14498" href="identity-type.html#583" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="14500" href="introduction.html#561" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="14504" href="decidability.html#14293" class="Bound">y</a><a id="14505" class="Symbol">)</a>
   <a id="14509" href="decidability.html#14472" data-type="(x y : ℕ) → is-decidable (suc x ≡ suc y)" class="Function">III</a> <a id="14513" class="Symbol">=</a> <a id="14515" href="decidability.html#7803" data-type="(A → B) → (B → A) → is-decidable A → is-decidable B" class="Function">map-decidable</a> <a id="14529" href="decidability.html#14376" data-type="(x y : ℕ) → x ≡ y → suc x ≡ suc y" class="Function">I</a> <a id="14531" href="decidability.html#14418" data-type="(x y : ℕ) → suc x ≡ suc y → x ≡ y" class="Function">II</a> <a id="14534" href="decidability.html#14311" data-type="(x y : ℕ) → is-decidable (x ≡ y)" class="Function">IH</a>
 </pre>
-<h3 id="equality-of-functions">Equality of functions</h3>
+<h2 id="equality-of-functions">Equality of functions</h2>
 <p>As discussed above, it is not possible to decide whether or not we
 have <code>f ∼ g</code> for two functions <code>f</code> and
 <code>g</code>, for example of type <code>ℕ → ℕ</code>. However,

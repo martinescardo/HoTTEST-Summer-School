@@ -17,9 +17,19 @@
 
   <article>
 
-<a id=modFin-functions></a>
-<h2 id="isomorphism-of-fin-n-with-a-basic-mltt-type">Isomorphism of Fin
-n with a Basic MLTT type</h2>
+<p>Martin Escardo. Notes originally written for the module “Advanced
+Functional Programming” at the School of Computer Science of the
+University of Birmingham, UK.</p>
+<!--
+<pre class="Agda"><a id="178" class="Symbol">{-#</a> <a id="182" class="Keyword">OPTIONS</a> <a id="190" class="Pragma">--without-K</a> <a id="202" class="Pragma">--safe</a> <a id="209" class="Symbol">#-}</a>
+
+<a id="214" class="Keyword">module</a> <a id="221" href="Fin-functions.html" class="Module">Fin-functions</a> <a id="235" class="Keyword">where</a>
+
+<a id="242" class="Keyword">open</a> <a id="247" class="Keyword">import</a> <a id="254" href="prelude.html" class="Module">prelude</a>
+<a id="262" class="Keyword">open</a> <a id="267" class="Keyword">import</a> <a id="274" href="introduction.html" class="Module">introduction</a> <a id="287" class="Keyword">using</a> <a id="293" class="Symbol">(</a><a id="294" href="introduction.html#535" data-type="Set" class="Datatype">ℕ</a> <a id="296" class="Symbol">;</a> <a id="298" href="introduction.html#561" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="302" class="Symbol">;</a> <a id="304" href="introduction.html#551" data-type="ℕ" class="InductiveConstructor">zero</a><a id="308" class="Symbol">)</a>
+</pre>-->
+<h1 id="isomorphism-of-fin-n-with-a-basic-mltt-type">Isomorphism of Fin
+n with a Basic MLTT type</h1>
 <pre class="Agda"><a id="Fin&#39;"></a><a id="374" href="Fin-functions.html#374" data-type="ℕ → Type" class="Function">Fin&#39;</a> <a id="379" class="Symbol">:</a> <a id="381" href="introduction.html#535" data-type="Set" class="Datatype">ℕ</a> <a id="383" class="Symbol">→</a> <a id="385" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a>
 <a id="390" href="Fin-functions.html#374" data-type="ℕ → Type" class="Function">Fin&#39;</a> <a id="395" class="Number">0</a>       <a id="403" class="Symbol">=</a> <a id="405" href="empty-type.html#479" data-type="Set" class="Datatype">𝟘</a>
 <a id="407" href="Fin-functions.html#374" data-type="ℕ → Type" class="Function">Fin&#39;</a> <a id="412" class="Symbol">(</a><a id="413" href="introduction.html#561" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="417" href="Fin-functions.html#417" class="Bound">n</a><a id="418" class="Symbol">)</a> <a id="420" class="Symbol">=</a> <a id="422" href="unit-type.html#352" data-type="Type" class="Record">𝟙</a> <a id="424" href="binary-sums.html#628" data-type="Type → Type → Set" class="Datatype Operator">∔</a> <a id="426" href="Fin-functions.html#374" data-type="ℕ → Type" class="Function">Fin&#39;</a> <a id="431" href="Fin-functions.html#417" class="Bound">n</a>

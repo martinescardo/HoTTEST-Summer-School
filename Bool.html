@@ -17,14 +17,24 @@
 
   <article>
 
-<a id=modBool></a>
-<h2 id="the-booleans">The booleans</h2>
+<p>Martin Escardo. Notes originally written for the module “Advanced
+Functional Programming” at the School of Computer Science of the
+University of Birmingham, UK.</p>
+<!--
+<pre class="Agda"><a id="178" class="Symbol">{-#</a> <a id="182" class="Keyword">OPTIONS</a> <a id="190" class="Pragma">--without-K</a> <a id="202" class="Pragma">--safe</a> <a id="209" class="Symbol">#-}</a>
+
+<a id="214" class="Keyword">module</a> <a id="221" href="Bool.html" class="Module">Bool</a> <a id="226" class="Keyword">where</a>
+
+<a id="233" class="Keyword">open</a> <a id="238" class="Keyword">import</a> <a id="245" href="general-notation.html" class="Module">general-notation</a>
+<a id="262" class="Keyword">open</a> <a id="267" class="Keyword">import</a> <a id="274" href="introduction.html" class="Module">introduction</a> <a id="287" class="Keyword">using</a> <a id="293" class="Symbol">(</a><a id="294" href="introduction.html#535" data-type="Set" class="Datatype">ℕ</a><a id="295" class="Symbol">)</a>
+</pre>-->
+<h1 id="the-booleans">The booleans</h1>
 We discuss the elimination principle for the booleans. The booleans are
 defined by constructors <code>true</code> and <code>false</code>:
 <pre class="Agda"><a id="445" class="Keyword">data</a> <a id="Bool"></a><a id="450" href="Bool.html#450" data-type="Set" class="Datatype">Bool</a> <a id="455" class="Symbol">:</a> <a id="457" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a> <a id="462" class="Keyword">where</a>
  <a id="Bool.true"></a><a id="469" href="Bool.html#469" data-type="Bool" class="InductiveConstructor">true</a> <a id="Bool.false"></a><a id="474" href="Bool.html#474" data-type="Bool" class="InductiveConstructor">false</a> <a id="480" class="Symbol">:</a> <a id="482" href="Bool.html#450" data-type="Set" class="Datatype">Bool</a>
 </pre>
-<h3 id="if-then-else"><code>if-then-else</code></h3>
+<h2 id="if-then-else"><code>if-then-else</code></h2>
 The non-dependent eliminator of the type of booleans amounts to
 <code>if-then-else</code>
 <pre class="Agda"><a id="if_then_else_"></a><a id="597" href="Bool.html#597" data-type="Bool → A → A → A" class="Function Operator">if_then_else_</a> <a id="611" class="Symbol">:</a> <a id="613" class="Symbol">{</a><a id="614" href="Bool.html#614" class="Bound">A</a> <a id="616" class="Symbol">:</a> <a id="618" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="622" class="Symbol">}</a> <a id="624" class="Symbol">→</a> <a id="626" href="Bool.html#450" data-type="Set" class="Datatype">Bool</a> <a id="631" class="Symbol">→</a> <a id="633" href="Bool.html#614" class="Bound">A</a> <a id="635" class="Symbol">→</a> <a id="637" href="Bool.html#614" class="Bound">A</a> <a id="639" class="Symbol">→</a> <a id="641" href="Bool.html#614" class="Bound">A</a>
@@ -34,7 +44,7 @@ The non-dependent eliminator of the type of booleans amounts to
 <p>In general, the non-dependent elimination principle of a type
 explains how to “get out of the type”, whereas the constructors tell us
 how to “get into the type”.</p>
-<h3 id="dependent-if-then-else">Dependent <code>if-then-else</code></h3>
+<h2 id="dependent-if-then-else">Dependent <code>if-then-else</code></h2>
 Notice that both <code>x</code> (the <code>then</code> branch) and
 <code>y</code> (the <code>else</code> branch) have the same type, name
 <code>A</code>. Using dependent type, we can have different types in the
@@ -73,9 +83,9 @@ argument <code>b</code> of the function. Notice also that
 <code>if-then-else</code> allows the <code>then</code> and
 <code>else</code> branches have different types, which depend on the
 type of the condition.</p>
-<h3
+<h2
 id="the-official-definition-of-the-eliminator-of-the-type-of-booleans">The
-official definition of the eliminator of the type of booleans</h3>
+official definition of the eliminator of the type of booleans</h2>
 Traditionally the argument of the type we want to eliminate (the
 booleans in our case) is written last:
 <pre class="Agda"><a id="Bool-elim"></a><a id="2675" href="Bool.html#2675" data-type="(A : Bool → Type) → A true → A false → (b : Bool) → A b" class="Function">Bool-elim</a> <a id="2685" class="Symbol">:</a> <a id="2687" class="Symbol">(</a><a id="2688" href="Bool.html#2688" class="Bound">A</a> <a id="2690" class="Symbol">:</a> <a id="2692" href="Bool.html#450" data-type="Set" class="Datatype">Bool</a> <a id="2697" class="Symbol">→</a> <a id="2699" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="2703" class="Symbol">)</a>
@@ -100,8 +110,8 @@ by considering the constant type family <code>λ _ → A</code> for a given
 </pre>
 <p>This produces a function <code>Bool → A</code> from two given
 elements of the type <code>A</code>.</p>
-<h3 id="logical-reading-of-the-eliminator">Logical reading of the
-eliminator</h3>
+<h2 id="logical-reading-of-the-eliminator">Logical reading of the
+eliminator</h2>
 <p>The <em>conclusion</em> of <code>Bool-elim</code> is
 <code>(b : Bool) → A b</code>, which under <em>propositions as
 types</em> has the logical reading “for all <code>b : Bool</code>, the
@@ -119,8 +129,8 @@ proposition <code>A b</code> holds”</li>
 <li><p>the proposition <code>A false</code> holds,</p></li>
 </ul>
 <p>which should be intuitively clear.</p>
-<h3 id="examples-of-proofs-using-the-eliminator">Examples of proofs
-using the eliminator</h3>
+<h2 id="examples-of-proofs-using-the-eliminator">Examples of proofs
+using the eliminator</h2>
 First define
 <pre class="Agda"><a id="not"></a><a id="4009" href="Bool.html#4009" data-type="Bool → Bool" class="Function">not</a> <a id="4013" class="Symbol">:</a> <a id="4015" href="Bool.html#450" data-type="Set" class="Datatype">Bool</a> <a id="4020" class="Symbol">→</a> <a id="4022" href="Bool.html#450" data-type="Set" class="Datatype">Bool</a>
 <a id="4027" href="Bool.html#4009" data-type="Bool → Bool" class="Function">not</a> <a id="4031" href="Bool.html#469" data-type="Bool" class="InductiveConstructor">true</a>  <a id="4037" class="Symbol">=</a> <a id="4039" href="Bool.html#474" data-type="Bool" class="InductiveConstructor">false</a>
@@ -201,7 +211,7 @@ which it can in our situation:
 <pre class="Agda"><a id="is-involution&#39;"></a><a id="7193" href="Bool.html#7193" data-type="(X → X) → Type" class="Function">is-involution&#39;</a> <a id="7208" class="Symbol">:</a> <a id="7210" class="Symbol">{</a><a id="7211" href="Bool.html#7211" class="Bound">X</a> <a id="7213" class="Symbol">:</a> <a id="7215" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="7219" class="Symbol">}</a> <a id="7221" class="Symbol">→</a> <a id="7223" class="Symbol">(</a><a id="7224" href="Bool.html#7211" class="Bound">X</a> <a id="7226" class="Symbol">→</a> <a id="7228" href="Bool.html#7211" class="Bound">X</a><a id="7229" class="Symbol">)</a> <a id="7231" class="Symbol">→</a> <a id="7233" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a>
 <a id="7238" href="Bool.html#7193" data-type="(X → X) → Type" class="Function">is-involution&#39;</a> <a id="7253" href="Bool.html#7253" class="Bound">f</a> <a id="7255" class="Symbol">=</a> <a id="7257" class="Symbol">∀</a> <a id="7259" href="Bool.html#7259" class="Bound">x</a> <a id="7261" class="Symbol">→</a> <a id="7263" href="Bool.html#7253" class="Bound">f</a> <a id="7265" class="Symbol">(</a><a id="7266" href="Bool.html#7253" class="Bound">f</a> <a id="7268" href="Bool.html#7259" class="Bound">x</a><a id="7269" class="Symbol">)</a> <a id="7271" href="identity-type.html#583" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="7273" href="Bool.html#7259" class="Bound">x</a>
 </pre>
-<h3 id="some-useful-functions">Some useful functions</h3>
+<h2 id="some-useful-functions">Some useful functions</h2>
 <pre class="Agda"><a id="_&amp;&amp;_"></a><a id="7314" href="Bool.html#7314" data-type="Bool → Bool → Bool" class="Function Operator">_&amp;&amp;_</a> <a id="7319" class="Symbol">:</a> <a id="7321" href="Bool.html#450" data-type="Set" class="Datatype">Bool</a> <a id="7326" class="Symbol">→</a> <a id="7328" href="Bool.html#450" data-type="Set" class="Datatype">Bool</a> <a id="7333" class="Symbol">→</a> <a id="7335" href="Bool.html#450" data-type="Set" class="Datatype">Bool</a>
 <a id="7340" href="Bool.html#469" data-type="Bool" class="InductiveConstructor">true</a>  <a id="7346" href="Bool.html#7314" data-type="Bool → Bool → Bool" class="Function Operator">&amp;&amp;</a> <a id="7349" href="Bool.html#7349" class="Bound">y</a> <a id="7351" class="Symbol">=</a> <a id="7353" href="Bool.html#7349" class="Bound">y</a>
 <a id="7355" href="Bool.html#474" data-type="Bool" class="InductiveConstructor">false</a> <a id="7361" href="Bool.html#7314" data-type="Bool → Bool → Bool" class="Function Operator">&amp;&amp;</a> <a id="7364" href="Bool.html#7364" class="Bound">y</a> <a id="7366" class="Symbol">=</a> <a id="7368" href="Bool.html#474" data-type="Bool" class="InductiveConstructor">false</a>

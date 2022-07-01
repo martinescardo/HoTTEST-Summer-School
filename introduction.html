@@ -17,10 +17,17 @@
 
   <article>
 
-<a id=modintroduction></a>
-<h4 id="introduction-to-agda">Introduction to Agda</h4>
-<h5 id="initial-examples-of-types-in-agda">Initial examples of types in
-Agda</h5>
+<p>Martin Escardo. Notes originally written for the module “Advanced
+Functional Programming” at the School of Computer Science of the
+University of Birmingham, UK.</p>
+<!--
+<pre class="Agda"><a id="178" class="Symbol">{-#</a> <a id="182" class="Keyword">OPTIONS</a> <a id="190" class="Pragma">--without-K</a> <a id="202" class="Pragma">--safe</a> <a id="209" class="Symbol">#-}</a>
+
+<a id="214" class="Keyword">module</a> <a id="221" href="introduction.html" class="Module">introduction</a> <a id="234" class="Keyword">where</a>
+</pre>-->
+<h1 id="introduction-to-agda">Introduction to Agda</h1>
+<h2 id="initial-examples-of-types-in-agda">Initial examples of types in
+Agda</h2>
 <!--
 In Agda, types are called sets by default. For the purposes of HoTT/UF, we prefer to stick to "Type".
 <pre class="Agda"><a id="Type"></a><a id="425" href="introduction.html#425" data-type="Set₁" class="Function">Type</a> <a id="430" class="Symbol">=</a> <a id="432" href="Agda.Primitive.html#311" data-type="Set₁" class="Primitive">Set</a>
@@ -51,8 +58,8 @@ able to write 0,1,2,3,… rather than the more verbose</p>
 <li>⋯</li>
 </ul>
 <p>We pronounce <code>suc</code> as “successor”.</p>
-<h5 id="examples-definitions-using-the-above-types-in-agda">Examples
-definitions using the above types in Agda</h5>
+<h2 id="examples-definitions-using-the-above-types-in-agda">Examples
+definitions using the above types in Agda</h2>
 <pre class="Agda"><a id="not"></a><a id="981" href="introduction.html#981" data-type="Bool → Bool" class="Function">not</a> <a id="985" class="Symbol">:</a> <a id="987" href="introduction.html#492" data-type="Set" class="Datatype">Bool</a> <a id="992" class="Symbol">→</a> <a id="994" href="introduction.html#492" data-type="Set" class="Datatype">Bool</a>
 <a id="999" href="introduction.html#981" data-type="Bool → Bool" class="Function">not</a> <a id="1003" href="introduction.html#511" data-type="Bool" class="InductiveConstructor">true</a>  <a id="1009" class="Symbol">=</a> <a id="1011" href="introduction.html#516" data-type="Bool" class="InductiveConstructor">false</a>
 <a id="1017" href="introduction.html#981" data-type="Bool → Bool" class="Function">not</a> <a id="1021" href="introduction.html#516" data-type="Bool" class="InductiveConstructor">false</a> <a id="1027" class="Symbol">=</a> <a id="1029" href="introduction.html#511" data-type="Bool" class="InductiveConstructor">true</a>
@@ -100,8 +107,8 @@ definitions using the above types in Agda</h5>
 <a id="1764" class="Keyword">infixr</a> <a id="1771" class="Number">20</a> <a id="1774" href="introduction.html#1663" data-type="List A → List A → List A" class="Function Operator">_++_</a>
 
 </pre>
-<h5 id="more-sophisticated-examples-of-types-in-agda">More sophisticated
-examples of types in Agda</h5>
+<h2 id="more-sophisticated-examples-of-types-in-agda">More sophisticated
+examples of types in Agda</h2>
 <p>Sometimes we may wish to consider lists over a type <code>A</code> of
 a given length <code>n : ℕ</code>. The elements of this type, written
 <code>Vector A n</code>, are called <em>vectors</em>, and the type can
@@ -126,8 +133,8 @@ functions must be total in Agda. Vectors solve this problem:</p>
 vector has at least one element, and hence does have a head and a tail.
 Here is another example.</p>
 <p>Dependent types are pervasive in Agda.</p>
-<h5 id="the-empty-type-and-the-unit-type">The empty type and the unit
-type</h5>
+<h2 id="the-empty-type-and-the-unit-type">The empty type and the unit
+type</h2>
 A type with no elements can be defined as follows:
 <pre class="Agda"><a id="2908" class="Keyword">data</a> <a id="𝟘"></a><a id="2913" href="introduction.html#2913" data-type="Set" class="Datatype">𝟘</a> <a id="2915" class="Symbol">:</a> <a id="2917" href="introduction.html#425" data-type="Set₁" class="Function">Type</a> <a id="2922" class="Keyword">where</a>
 </pre>
@@ -155,8 +162,8 @@ an element of the type <code>x ≣ x</code>.
 <a id="3575" href="introduction.html#3550" data-type="(x : ℕ) → x ≣ x" class="Function">ℕ-refl</a> <a id="3582" class="Number">0</a>       <a id="3590" class="Symbol">=</a> <a id="3592" href="introduction.html#3044" data-type="𝟙" class="InductiveConstructor">⋆</a>
 <a id="3594" href="introduction.html#3550" data-type="(x : ℕ) → x ≣ x" class="Function">ℕ-refl</a> <a id="3601" class="Symbol">(</a><a id="3602" href="introduction.html#561" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="3606" href="introduction.html#3606" class="Bound">x</a><a id="3607" class="Symbol">)</a> <a id="3609" class="Symbol">=</a> <a id="3611" href="introduction.html#3550" data-type="(x : ℕ) → x ≣ x" class="Function">ℕ-refl</a> <a id="3618" href="introduction.html#3606" class="Bound">x</a>
 </pre>
-<h5 id="the-identity-type-former-__">The identity type former
-<code>_≡_</code></h5>
+<h2 id="the-identity-type-former-__">The identity type former
+<code>_≡_</code></h2>
 It is possible to generalize the above definition for any type in place
 of that of natural numbers as follows:
 <pre class="Agda"><a id="3778" class="Keyword">data</a> <a id="_≡_"></a><a id="3783" href="introduction.html#3783" data-type="A → A → Set" class="Datatype Operator">_≡_</a> <a id="3787" class="Symbol">{</a><a id="3788" href="introduction.html#3788" class="Bound">A</a> <a id="3790" class="Symbol">:</a> <a id="3792" href="introduction.html#425" data-type="Set₁" class="Function">Type</a><a id="3796" class="Symbol">}</a> <a id="3798" class="Symbol">:</a> <a id="3800" href="introduction.html#3788" class="Bound">A</a> <a id="3802" class="Symbol">→</a> <a id="3804" href="introduction.html#3788" class="Bound">A</a> <a id="3806" class="Symbol">→</a> <a id="3808" href="introduction.html#425" data-type="Set₁" class="Function">Type</a> <a id="3813" class="Keyword">where</a>
@@ -192,7 +199,7 @@ natural numbers, as follows:</p>
   <a id="4643" href="introduction.html#4643" data-type="(x y : ℕ) (p : suc x ≣ suc y) → suc x ≡ suc y" class="Function">I</a> <a id="4645" class="Symbol">:</a> <a id="4647" href="introduction.html#561" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="4651" href="introduction.html#4584" class="Bound">x</a> <a id="4653" href="introduction.html#3783" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="4655" href="introduction.html#561" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="4659" href="introduction.html#4592" class="Bound">y</a>
   <a id="4663" href="introduction.html#4643" data-type="(x y : ℕ) (p : suc x ≣ suc y) → suc x ≡ suc y" class="Function">I</a> <a id="4665" class="Symbol">=</a> <a id="4667" href="introduction.html#4085" data-type="(f : A → B) → x ≡ y → f x ≡ f y" class="Function">ap</a> <a id="4670" href="introduction.html#561" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="4674" href="introduction.html#4610" data-type="(x y : ℕ) (p : suc x ≣ suc y) → x ≡ y" class="Function">IH</a>
 </pre>
-<h5 id="propositions-as-types">Propositions as types</h5>
+<h2 id="propositions-as-types">Propositions as types</h2>
 <p>The <a
 href="https://en.wikipedia.org/wiki/Curry%E2%80%93Howard_correspondence">CurryHoward
 interpretation of logic</a>, after <a
@@ -281,7 +288,7 @@ complete the following table:</p>
 </table>
 </div>
 <p>This will be the subject of future handouts.</p>
-<h5 id="agda-manual">Agda manual</h5>
+<h2 id="agda-manual">Agda manual</h2>
 <p>Please study the <a
 href="https://agda.readthedocs.io/en/latest/">Agda manual</a> as a
 complement to these lecture notes.</p>

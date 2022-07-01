@@ -20,125 +20,24 @@
 <p>Martin Escardo. Notes originally written for the module “Advanced
 Functional Programming” at the School of Computer Science of the
 University of Birmingham, UK.</p>
-<h1
-id="propositions-as-types-and-basic-martin-löf-type-theory">Propositions
-as types and basic Martin-Löf type theory</h1>
-<p>We now complete the proposition-as-types interpretation of logic.</p>
-<div style="overflow-x: auto">
-<table>
-<colgroup>
-<col style="width: 9%" />
-<col style="width: 16%" />
-<col style="width: 8%" />
-<col style="width: 8%" />
-<col style="width: 30%" />
-<col style="width: 25%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Logic</th>
-<th>English</th>
-<th>Type theory</th>
-<th>Agda</th>
-<th>Handouts</th>
-<th>Alternative terminology</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>⊥</td>
-<td>false</td>
-<td>ℕ₀</td>
-<td>𝟘</td>
-<td><a href="empty-type.html">empty type</a></td>
-<td></td>
-</tr>
-<tr class="even">
-<td>⊤</td>
-<td>true (*)</td>
-<td>ℕ₁</td>
-<td>𝟙</td>
-<td><a href="unit-type.html">unit type</a></td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>A ∧ B</td>
-<td>A and B</td>
-<td>A × B</td>
-<td>A × B</td>
-<td><a href="binary-products.html">binary product</a></td>
-<td>cartesian product</td>
-</tr>
-<tr class="even">
-<td>A ∨ B</td>
-<td>A or B</td>
-<td>A + B</td>
-<td>A ∔ B</td>
-<td><a href="binary-sums.html">binary sum</a></td>
-<td>coproduct, <br> binary disjoint union</td>
-</tr>
-<tr class="odd">
-<td>A → B</td>
-<td>A implies B</td>
-<td>A → B</td>
-<td>A → B</td>
-<td><a href="products.html">function type</a></td>
-<td>non-dependent function type</td>
-</tr>
-<tr class="even">
-<td>¬ A</td>
-<td>not A</td>
-<td>A → ℕ₀</td>
-<td>A → 𝟘</td>
-<td><a href="negation.html">negation</a></td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>∀ x : A, B x</td>
-<td>for all x:A, B x</td>
-<td>Π x : A , B x</td>
-<td>(x : A) → B x</td>
-<td><a href="products.html">product</a></td>
-<td>dependent function type</td>
-</tr>
-<tr class="even">
-<td>∃ x : A, B x</td>
-<td>there is x:A such that B x</td>
-<td>Σ x ꞉ A , B x</td>
-<td>Σ x ꞉ A , B x</td>
-<td><a href="sums.html">sum</a></td>
-<td>disjoint union, <br> dependent pair type</td>
-</tr>
-<tr class="odd">
-<td>x = y</td>
-<td>x equals y</td>
-<td>Id x y</td>
-<td>x ≡ y</td>
-<td><a href="identity-type.html">identity type</a></td>
-<td>equality type, <br> propositional equality</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h2 id="remarks">Remarks</h2>
-<ul>
-<li><p>(*) Not only the unit type 𝟙, but also any type with at least one
-element can be regarded as “true” in the propositions-as-types
-interpretation.</p></li>
-<li><p>In Agda we can use any notation we like, of course, and people do
-use slightly different notatations for e.g. <code>𝟘</code>,
-<code>𝟏</code>, <code>+</code> and <code>Σ</code>.</p></li>
-<li><p>We will refer to the above type theory together with the type
-<code>ℕ</code> of natural numbers as <em>Basic Martin-Löf Type
-Theory</em>.</p></li>
-<li><p>As we will see, this type theory is very expressive and allows us
-to construct rather sophisticated types, including e.g. lists, vectors
-and trees.</p></li>
-<li><p>All types in MLTT (<a
-href="http://archive-pml.github.io/martin-lof/pdfs/Bibliopolis-Book-1984.pdf">Martin-Löf
-type theory</a>) come with <em>introduction</em> and
-<em>elimination</em> principles.</p></li>
-</ul>
+<pre class="Agda"><a id="173" class="Symbol">{-#</a> <a id="177" class="Keyword">OPTIONS</a> <a id="185" class="Pragma">--without-K</a> <a id="197" class="Pragma">--safe</a> <a id="204" class="Symbol">#-}</a>
+
+<a id="209" class="Keyword">module</a> <a id="216" href="prelude.html" class="Module">prelude</a> <a id="224" class="Keyword">where</a>
+
+<a id="231" class="Keyword">open</a> <a id="236" class="Keyword">import</a> <a id="243" href="general-notation.html" class="Module">general-notation</a> <a id="260" class="Keyword">public</a>
+<a id="267" class="Keyword">open</a> <a id="272" class="Keyword">import</a> <a id="279" href="empty-type.html" class="Module">empty-type</a> <a id="290" class="Keyword">public</a>
+<a id="297" class="Keyword">open</a> <a id="302" class="Keyword">import</a> <a id="309" href="unit-type.html" class="Module">unit-type</a> <a id="319" class="Keyword">public</a>
+<a id="326" class="Keyword">open</a> <a id="331" class="Keyword">import</a> <a id="338" href="binary-sums.html" class="Module">binary-sums</a> <a id="350" class="Keyword">public</a>
+<a id="357" class="Keyword">open</a> <a id="362" class="Keyword">import</a> <a id="369" href="binary-products.html" class="Module">binary-products</a> <a id="385" class="Keyword">public</a>
+<a id="392" class="Keyword">open</a> <a id="397" class="Keyword">import</a> <a id="404" href="sums.html" class="Module">sums</a> <a id="409" class="Keyword">public</a>
+<a id="416" class="Keyword">open</a> <a id="421" class="Keyword">import</a> <a id="428" href="products.html" class="Module">products</a> <a id="437" class="Keyword">public</a>
+<a id="444" class="Keyword">open</a> <a id="449" class="Keyword">import</a> <a id="456" href="identity-type.html" class="Module">identity-type</a> <a id="470" class="Keyword">public</a>
+<a id="477" class="Keyword">open</a> <a id="482" class="Keyword">import</a> <a id="489" href="natural-numbers-type.html" class="Module">natural-numbers-type</a> <a id="510" class="Keyword">public</a>
+<a id="517" class="Keyword">open</a> <a id="522" class="Keyword">import</a> <a id="529" href="Bool.html" class="Module">Bool</a> <a id="534" class="Keyword">public</a>
+<a id="541" class="Keyword">open</a> <a id="546" class="Keyword">import</a> <a id="553" href="List.html" class="Module">List</a> <a id="558" class="Keyword">public</a>
+<a id="565" class="Keyword">open</a> <a id="570" class="Keyword">import</a> <a id="577" href="Vector.html" class="Module">Vector</a> <a id="584" class="Keyword">public</a>
+<a id="591" class="Keyword">open</a> <a id="596" class="Keyword">import</a> <a id="603" href="introduction.html" class="Module">introduction</a> <a id="616" class="Keyword">using</a> <a id="622" class="Symbol">(</a><a id="623" href="introduction.html#535" data-type="Set" class="Datatype">ℕ</a> <a id="625" class="Symbol">;</a> <a id="627" href="introduction.html#561" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="631" class="Symbol">;</a> <a id="633" href="introduction.html#551" data-type="ℕ" class="InductiveConstructor">zero</a><a id="637" class="Symbol">)</a> <a id="639" class="Keyword">public</a>
+</pre>
 
   </article>
 </div>

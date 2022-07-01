@@ -17,9 +17,18 @@
 
   <article>
 
-<a id=modidentity-type></a>
-<h2 id="the-identity-type-former-__">The identity type former
-<code>_≡_</code></h2>
+<p>Martin Escardo. Notes originally written for the module “Advanced
+Functional Programming” at the School of Computer Science of the
+University of Birmingham, UK.</p>
+<!--
+<pre class="Agda"><a id="178" class="Symbol">{-#</a> <a id="182" class="Keyword">OPTIONS</a> <a id="190" class="Pragma">--without-K</a> <a id="202" class="Pragma">--safe</a> <a id="209" class="Symbol">#-}</a>
+
+<a id="214" class="Keyword">module</a> <a id="221" href="identity-type.html" class="Module">identity-type</a> <a id="235" class="Keyword">where</a>
+
+<a id="242" class="Keyword">open</a> <a id="247" class="Keyword">import</a> <a id="254" href="general-notation.html" class="Module">general-notation</a>
+</pre>-->
+<h1 id="the-identity-type-former-__">The identity type former
+<code>_≡_</code></h1>
 The original and main terminology for the following type is <em>identity
 type</em>, but sometimes it is also called the <em>equality type</em>.
 Sometimes this is also called <em>propositional equality</em>, but we
@@ -29,7 +38,7 @@ will avoid this terminology as it sometimes leads to confusion.
 
 <a id="644" class="Keyword">infix</a> <a id="650" class="Number">0</a> <a id="652" href="identity-type.html#583" data-type="A → A → Set" class="Datatype Operator">_≡_</a>
 </pre>
-<h3 id="elimination-principle">Elimination principle</h3>
+<h2 id="elimination-principle">Elimination principle</h2>
 The elimination principle for this type, also called <code>J</code> in
 the literature, is defined as follows:
 <pre class="Agda"><a id="≡-elim"></a><a id="794" href="identity-type.html#794" data-type="(A : (x y : X) → x ≡ y → Type) →
@@ -60,8 +69,8 @@ principle says that the reflexive relation given by the identity type
 <code>_≡_</code> can always be mapped to any reflexive relation, or we
 may say that <code>_≡_</code> is the smallest reflexive relation on the
 type <code>X</code>.</p>
-<h3 id="fundamental-constructions-with-the-identity-type">Fundamental
-constructions with the identity type</h3>
+<h2 id="fundamental-constructions-with-the-identity-type">Fundamental
+constructions with the identity type</h2>
 As an exercise, you may try to rewrite the following definitions to use
 <code>≡-nondep-elim</code> instead of pattern matching on
 <code>refl</code>:
@@ -88,7 +97,7 @@ last one, often called <code>subst</code> in the literature, says that
 if <code>x</code> is equal <code>y</code> and <code>A x</code> holds,
 then so does <code>A y</code>. That is, we can substitute equals for
 equals in logical statements.</p>
-<h3 id="hottuf-notation">HoTT/UF notation</h3>
+<h2 id="hottuf-notation">HoTT/UF notation</h2>
 <pre class="Agda"><a id="_∙_"></a><a id="2924" href="identity-type.html#2924" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function Operator">_∙_</a> <a id="2928" class="Symbol">:</a> <a id="2930" class="Symbol">{</a><a id="2931" href="identity-type.html#2931" class="Bound">A</a> <a id="2933" class="Symbol">:</a> <a id="2935" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="2939" class="Symbol">}</a> <a id="2941" class="Symbol">{</a><a id="2942" href="identity-type.html#2942" class="Bound">x</a> <a id="2944" href="identity-type.html#2944" class="Bound">y</a> <a id="2946" href="identity-type.html#2946" class="Bound">z</a> <a id="2948" class="Symbol">:</a> <a id="2950" href="identity-type.html#2931" class="Bound">A</a><a id="2951" class="Symbol">}</a> <a id="2953" class="Symbol">→</a> <a id="2955" href="identity-type.html#2942" class="Bound">x</a> <a id="2957" href="identity-type.html#583" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="2959" href="identity-type.html#2944" class="Bound">y</a> <a id="2961" class="Symbol">→</a> <a id="2963" href="identity-type.html#2944" class="Bound">y</a> <a id="2965" href="identity-type.html#583" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="2967" href="identity-type.html#2946" class="Bound">z</a> <a id="2969" class="Symbol">→</a> <a id="2971" href="identity-type.html#2942" class="Bound">x</a> <a id="2973" href="identity-type.html#583" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="2975" href="identity-type.html#2946" class="Bound">z</a>
 <a id="2977" href="identity-type.html#2924" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function Operator">_∙_</a> <a id="2981" class="Symbol">=</a> <a id="2983" href="identity-type.html#2120" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function">trans</a>
 
@@ -100,8 +109,8 @@ equals in logical statements.</p>
 <a id="3058" class="Keyword">infix</a>  <a id="3065" class="Number">40</a> <a id="3068" href="identity-type.html#3004" data-type="x ≡ y → y ≡ x" class="Function Operator">_⁻¹</a>
 
 </pre>
-<h3 id="pointwise-equality-of-functions">Pointwise equality of
-functions</h3>
+<h2 id="pointwise-equality-of-functions">Pointwise equality of
+functions</h2>
 It is often convenient to work with <em>pointwise equality</em> of
 functions, defined as follows:
 <pre class="Agda"><a id="_∼_"></a><a id="3214" href="identity-type.html#3214" data-type="((x : A) → B x) → ((x : A) → B x) → Type" class="Function Operator">_∼_</a> <a id="3218" class="Symbol">:</a> <a id="3220" class="Symbol">{</a><a id="3221" href="identity-type.html#3221" class="Bound">A</a> <a id="3223" class="Symbol">:</a> <a id="3225" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="3229" class="Symbol">}</a> <a id="3231" class="Symbol">{</a><a id="3232" href="identity-type.html#3232" class="Bound">B</a> <a id="3234" class="Symbol">:</a> <a id="3236" href="identity-type.html#3221" class="Bound">A</a> <a id="3238" class="Symbol">→</a> <a id="3240" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="3244" class="Symbol">}</a> <a id="3246" class="Symbol">→</a> <a id="3248" class="Symbol">((</a><a id="3250" href="identity-type.html#3250" class="Bound">x</a> <a id="3252" class="Symbol">:</a> <a id="3254" href="identity-type.html#3221" class="Bound">A</a><a id="3255" class="Symbol">)</a> <a id="3257" class="Symbol">→</a> <a id="3259" href="identity-type.html#3232" class="Bound">B</a> <a id="3261" href="identity-type.html#3250" class="Bound">x</a><a id="3262" class="Symbol">)</a> <a id="3264" class="Symbol">→</a> <a id="3266" class="Symbol">((</a><a id="3268" href="identity-type.html#3268" class="Bound">x</a> <a id="3270" class="Symbol">:</a> <a id="3272" href="identity-type.html#3221" class="Bound">A</a><a id="3273" class="Symbol">)</a> <a id="3275" class="Symbol">→</a> <a id="3277" href="identity-type.html#3232" class="Bound">B</a> <a id="3279" href="identity-type.html#3268" class="Bound">x</a><a id="3280" class="Symbol">)</a> <a id="3282" class="Symbol">→</a> <a id="3284" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a>
@@ -116,8 +125,8 @@ href="https://agda.readthedocs.io/en/latest/language/cubical.html">Cubical
 Agda</a>, which is outside the scope of these lecture notes). This
 principle is very useful and is called <a
 href="function-extensionality.html">function extensionality</a>.</p>
-<h3 id="notation-for-equality-reasoning">Notation for equality
-reasoning</h3>
+<h2 id="notation-for-equality-reasoning">Notation for equality
+reasoning</h2>
 <p>When writing <code>trans p q</code> we lose type information of the
 identifications <code>p : x ≡ y</code> and <code>q : y ≡ z</code>, which
 makes some definitions using <code>trans</code> hard to read. We now
