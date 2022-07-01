@@ -21,13 +21,13 @@
 <h2 id="the-empty-type-𝟘">The empty type 𝟘</h2>
 <p>It is convenient to have an empty type <code>𝟘</code>, with no
 elements at all. For example, this can be used in order to define <a
-href="negation.lagda.md">negation</a>, among other things.</p>
+href="negation.html">negation</a>, among other things.</p>
 <pre class="Agda"><a id="474" class="Keyword">data</a> <a id="𝟘"></a><a id="479" href="empty-type.html#479" data-type="Set" class="Datatype">𝟘</a> <a id="481" class="Symbol">:</a> <a id="483" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a> <a id="488" class="Keyword">where</a>
 </pre>
 <p>And that’s the complete definition. The list of constructors that
 define the type <code>𝟘</code> is empty.</p>
 <p>Perhaps counter-intuitively, there is one function
-<code>𝟘 → 𝟘</code>, namely the <a href="products.lagda.md">identity
+<code>𝟘 → 𝟘</code>, namely the <a href="products.html">identity
 function</a>. So although the type <code>𝟘</code> is empty, the type
 <code>𝟘 → 𝟘</code> is non-empty. In fact, the non-dependent elimination
 principle generalizes that.</p>
@@ -88,11 +88,11 @@ of emptiness:
 </pre>
 <p>So notice that this is the same definition as that of negation.</p>
 Here is another example of a type that is empty. In the <a
-href="introduction.lagda.md">introduction</a> we defined the identity
-type former <code>_≡_</code>, which <a href="identity-type.lagda.md">we
-will revisit</a>, and we have that, for example, the type
-<code>3 ≡ 4</code> is empty, whereas the type <code>3 ≡ 3</code> has an
-element <code>refl 3</code>. Here are some examples coded in Agda:
+href="introduction.html">introduction</a> we defined the identity type
+former <code>_≡_</code>, which <a href="identity-type.html">we will
+revisit</a>, and we have that, for example, the type <code>3 ≡ 4</code>
+is empty, whereas the type <code>3 ≡ 3</code> has an element
+<code>refl 3</code>. Here are some examples coded in Agda:
 <pre class="Agda"><a id="𝟘-is-empty"></a><a id="3580" href="empty-type.html#3580" data-type="is-empty 𝟘" class="Function">𝟘-is-empty</a> <a id="3591" class="Symbol">:</a> <a id="3593" href="empty-type.html#3129" data-type="Type → Type" class="Function">is-empty</a> <a id="3602" href="empty-type.html#479" data-type="Set" class="Datatype">𝟘</a>
 <a id="3604" href="empty-type.html#3580" data-type="is-empty 𝟘" class="Function">𝟘-is-empty</a> <a id="3615" class="Symbol">=</a> <a id="3617" href="empty-type.html#2724" data-type="𝟘 → A" class="Function">𝟘-nondep-elim</a>
 
@@ -121,7 +121,7 @@ written makes sense. In this case, Agda knows that
 <code>¬ is-empty 𝟙</code> is exactly the same thing as
 <code>(𝟙 → 𝟘) → 𝟘</code> <em>by definition</em> of <code>¬</code> and
 <code>is-empty</code>. More examples are given in the file <a
-href="negation.lagda.md">negation</a>.</p>
+href="negation.html">negation</a>.</p>
 
   </article>
 </div>

@@ -95,9 +95,9 @@ operator.</p>
 <p>Because we make <code>_,_</code> right associative, we can write
 <code>(x , y , z , p)</code> rather than
 <code>(x , (y , (z , p)))</code> as we did above.</p>
-We also use a syntax declaration, <a href="products.lagda.md">as we
-did</a> for dependent function types using Π, to get the more
-traditional type-theoretical notation.
+We also use a syntax declaration, <a href="products.html">as we did</a>
+for dependent function types using Π, to get the more traditional
+type-theoretical notation.
 <pre class="Agda"><a id="Sigma"></a><a id="3564" href="sums.html#3564" data-type="(A : Type) → (A → Type) → Type" class="Function">Sigma</a> <a id="3570" class="Symbol">:</a> <a id="3572" class="Symbol">(</a><a id="3573" href="sums.html#3573" class="Bound">A</a> <a id="3575" class="Symbol">:</a> <a id="3577" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="3581" class="Symbol">)</a> <a id="3583" class="Symbol">(</a><a id="3584" href="sums.html#3584" class="Bound">B</a> <a id="3586" class="Symbol">:</a> <a id="3588" href="sums.html#3573" class="Bound">A</a> <a id="3590" class="Symbol">→</a> <a id="3592" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="3596" class="Symbol">)</a> <a id="3598" class="Symbol">→</a> <a id="3600" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a>
 <a id="3605" href="sums.html#3564" data-type="(A : Type) → (A → Type) → Type" class="Function">Sigma</a> <a id="3611" href="sums.html#3611" class="Bound">A</a> <a id="3613" href="sums.html#3613" class="Bound">B</a> <a id="3615" class="Symbol">=</a> <a id="3617" href="sums.html#2420" data-type="(B : A → Type) → Type" class="Record">Σ</a> <a id="3619" class="Symbol">{</a><a id="3620" href="sums.html#3611" class="Bound">A</a><a id="3621" class="Symbol">}</a> <a id="3623" href="sums.html#3613" class="Bound">B</a>
 

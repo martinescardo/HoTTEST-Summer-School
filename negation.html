@@ -19,7 +19,7 @@
 
 <a id=modnegation></a>
 <h2 id="reasoning-with-negation">Reasoning with negation</h2>
-<p><a href="empty-type.lagda.md">Recall that</a> we defined the negation
+<p><a href="empty-type.html">Recall that</a> we defined the negation
 <code>¬ A</code> of a type <code>A</code> to be the function type
 <code>A → 𝟘</code>, and that we also wrote <code>is-empty A</code> as a
 synonym of <code>¬ A</code>.</p>
@@ -86,7 +86,7 @@ follows: <!--
  <a id="2612" href="negation.html#2546" class="Function">¬¬-elim</a> <a id="2620" class="Symbol">(</a><a id="2621" href="binary-sums.html#676" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="2625" href="negation.html#2625" class="Bound">g</a><a id="2626" class="Symbol">)</a> <a id="2628" href="negation.html#2628" class="Bound">f</a> <a id="2630" class="Symbol">=</a> <a id="2632" href="empty-type.html#1725" data-type="(x : 𝟘) → A x" class="Function">𝟘-elim</a> <a id="2639" class="Symbol">(</a><a id="2640" href="negation.html#2628" class="Bound">f</a> <a id="2642" href="negation.html#2625" class="Bound">g</a><a id="2643" class="Symbol">)</a>
 </pre>
 For more details, see the lecture notes on <a
-href="decidability.lagda.md">decidability</a>, where we discuss
+href="decidability.html">decidability</a>, where we discuss
 <code>¬¬-elim</code> again. But three negations always imply one, and
 conversely:
 <pre class="Agda"><a id="three-negations-imply-one"></a><a id="2827" href="negation.html#2827" data-type="¬¬¬ A → ¬ A" class="Function">three-negations-imply-one</a> <a id="2853" class="Symbol">:</a> <a id="2855" class="Symbol">{</a><a id="2856" href="negation.html#2856" class="Bound">A</a> <a id="2858" class="Symbol">:</a> <a id="2860" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="2864" class="Symbol">}</a> <a id="2866" class="Symbol">→</a> <a id="2868" href="negation.html#1955" data-type="Type → Type" class="Function Operator">¬¬¬</a> <a id="2872" href="negation.html#2856" class="Bound">A</a> <a id="2874" class="Symbol">→</a> <a id="2876" href="empty-type.html#1641" data-type="Type → Type" class="Function Operator">¬</a> <a id="2878" href="negation.html#2856" class="Bound">A</a>
@@ -98,7 +98,7 @@ conversely:
 <h3 id="negation-of-the-identity-type">Negation of the identity
 type</h3>
 It is useful to introduce a notation for the negation of the <a
-href="identity-type.lagda.md">identity type</a>:
+href="identity-type.html">identity type</a>:
 <pre class="Agda"><a id="_≢_"></a><a id="3174" href="negation.html#3174" data-type="X → X → Type" class="Function Operator">_≢_</a> <a id="3178" class="Symbol">:</a> <a id="3180" class="Symbol">{</a><a id="3181" href="negation.html#3181" class="Bound">X</a> <a id="3183" class="Symbol">:</a> <a id="3185" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="3189" class="Symbol">}</a> <a id="3191" class="Symbol">→</a> <a id="3193" href="negation.html#3181" class="Bound">X</a> <a id="3195" class="Symbol">→</a> <a id="3197" href="negation.html#3181" class="Bound">X</a> <a id="3199" class="Symbol">→</a> <a id="3201" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a>
 <a id="3206" href="negation.html#3206" class="Bound">x</a> <a id="3208" href="negation.html#3174" data-type="X → X → Type" class="Function Operator">≢</a> <a id="3210" href="negation.html#3210" class="Bound">y</a> <a id="3212" class="Symbol">=</a> <a id="3214" href="empty-type.html#1641" data-type="Type → Type" class="Function Operator">¬</a> <a id="3216" class="Symbol">(</a><a id="3217" href="negation.html#3206" class="Bound">x</a> <a id="3219" href="identity-type.html#583" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="3221" href="negation.html#3210" class="Bound">y</a><a id="3222" class="Symbol">)</a>
 

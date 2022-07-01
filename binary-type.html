@@ -20,15 +20,15 @@
 <a id=modbinary-type></a>
 <h2 id="the-binary-type-𝟚">The binary type 𝟚</h2>
 <p>This type can be defined to be <code>𝟙 ∔ 𝟙</code> using <a
-href="binary-sums.lagda.md">binary sums</a>, but we give a direct
-definition which will allow us to discuss some relationships between the
-various type formers of Basic MLTT.</p>
+href="binary-sums.html">binary sums</a>, but we give a direct definition
+which will allow us to discuss some relationships between the various
+type formers of Basic MLTT.</p>
 <pre class="Agda"><a id="519" class="Keyword">data</a> <a id="𝟚"></a><a id="524" href="binary-type.html#524" data-type="Set" class="Datatype">𝟚</a> <a id="526" class="Symbol">:</a> <a id="528" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a> <a id="533" class="Keyword">where</a>
  <a id="𝟚.𝟎"></a><a id="540" href="binary-type.html#540" data-type="𝟚" class="InductiveConstructor">𝟎</a> <a id="𝟚.𝟏"></a><a id="542" href="binary-type.html#542" data-type="𝟚" class="InductiveConstructor">𝟏</a> <a id="544" class="Symbol">:</a> <a id="546" href="binary-type.html#524" data-type="Set" class="Datatype">𝟚</a>
 </pre>
-This type is not only <a href="isomorphisms.lagda.md">isomorphic to
+This type is not only <a href="isomorphisms.html">isomorphic to
 <code>𝟙 ∔ 𝟙</code></a> but also to the type <a
-href="Bool.lagda.md"><code>Bool</code></a> of booleans. Its elimination
+href="Bool.html"><code>Bool</code></a> of booleans. Its elimination
 principle is as follows:
 <pre class="Agda"><a id="𝟚-elim"></a><a id="728" href="binary-type.html#728" data-type="A 𝟎 → A 𝟏 → (x : 𝟚) → A x" class="Function">𝟚-elim</a> <a id="735" class="Symbol">:</a> <a id="737" class="Symbol">{</a><a id="738" href="binary-type.html#738" class="Bound">A</a> <a id="740" class="Symbol">:</a> <a id="742" href="binary-type.html#524" data-type="Set" class="Datatype">𝟚</a> <a id="744" class="Symbol">→</a> <a id="746" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="750" class="Symbol">}</a>
        <a id="759" class="Symbol">→</a> <a id="761" href="binary-type.html#738" class="Bound">A</a> <a id="763" href="binary-type.html#540" data-type="𝟚" class="InductiveConstructor">𝟎</a>

@@ -19,7 +19,7 @@
 
 <a id=modVector-functions></a>
 <h2 id="some-functions-on-vectors">Some functions on vectors</h2>
-As mentioned in the <a href="introduction.lagda.md">introduction</a>,
+As mentioned in the <a href="introduction.html">introduction</a>,
 vectors allow us to have safe <code>head</code> and <code>tail</code>
 functions.
 <pre class="Agda"><a id="head"></a><a id="428" href="Vector-functions.html#428" data-type="Vector A (suc n) → A" class="Function">head</a> <a id="433" class="Symbol">:</a> <a id="435" class="Symbol">{</a><a id="436" href="Vector-functions.html#436" class="Bound">A</a> <a id="438" class="Symbol">:</a> <a id="440" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="444" class="Symbol">}</a> <a id="446" class="Symbol">{</a><a id="447" href="Vector-functions.html#447" class="Bound">n</a> <a id="449" class="Symbol">:</a> <a id="451" href="introduction.html#535" data-type="Set" class="Datatype">ℕ</a><a id="452" class="Symbol">}</a> <a id="454" class="Symbol">→</a> <a id="456" href="Vector.html#469" data-type="Type → ℕ → Set" class="Datatype">Vector</a> <a id="463" href="Vector-functions.html#436" class="Bound">A</a> <a id="465" class="Symbol">(</a><a id="466" href="introduction.html#561" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="470" href="Vector-functions.html#447" class="Bound">n</a><a id="471" class="Symbol">)</a> <a id="473" class="Symbol">→</a> <a id="475" href="Vector-functions.html#436" class="Bound">A</a>
@@ -29,7 +29,7 @@ functions.
 <a id="555" href="Vector-functions.html#497" data-type="Vector A (suc n) → Vector A n" class="Function">tail</a> <a id="560" class="Symbol">(</a><a id="561" href="Vector-functions.html#561" class="Bound">x</a> <a id="563" href="Vector.html#524" data-type="A → Vector A n → Vector A (suc n)" class="InductiveConstructor Operator">::</a> <a id="566" href="Vector-functions.html#566" class="Bound">xs</a><a id="568" class="Symbol">)</a> <a id="570" class="Symbol">=</a> <a id="572" href="Vector-functions.html#566" class="Bound">xs</a>
 </pre>
 We can also define a safe indexing function on vectors using <a
-href="Fin.lagda.md">finite types</a> as follows.
+href="Fin.html">finite types</a> as follows.
 <pre class="Agda"><a id="690" class="Keyword">open</a> <a id="695" class="Keyword">import</a> <a id="702" href="Fin.html" class="Module">Fin</a>
 
 <a id="_!!_"></a><a id="707" href="Vector-functions.html#707" data-type="Vector X n → Fin n → X" class="Function Operator">_!!_</a> <a id="712" class="Symbol">:</a> <a id="714" class="Symbol">∀</a> <a id="716" class="Symbol">{</a><a id="717" href="Vector-functions.html#717" class="Bound">X</a> <a id="719" href="Vector-functions.html#719" class="Bound">n</a><a id="720" class="Symbol">}</a> <a id="722" class="Symbol">→</a> <a id="724" href="Vector.html#469" data-type="Type → ℕ → Set" class="Datatype">Vector</a> <a id="731" href="Vector-functions.html#717" class="Bound">X</a> <a id="733" href="Vector-functions.html#719" class="Bound">n</a> <a id="735" class="Symbol">→</a> <a id="737" href="Fin.html#484" data-type="ℕ → Set" class="Datatype">Fin</a> <a id="741" href="Vector-functions.html#719" class="Bound">n</a> <a id="743" class="Symbol">→</a> <a id="745" href="Vector-functions.html#717" class="Bound">X</a>

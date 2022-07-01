@@ -21,11 +21,10 @@
 <h2 id="the-binary-sum-type-former-__">The binary-sum type former
 <code>_∔_</code></h2>
 This is the same as (or, more precisely, <a
-href="isomorphisms.lagda.md">isomorphic</a> to) the <code>Either</code>
-type defined earlier (you can try this as an exercise). The notation in
-type theory is <code>_+_</code>, but we want to reserve this for
-addition of natural numbers, and hence we use the same symbol with a dot
-on top:
+href="isomorphisms.html">isomorphic</a> to) the <code>Either</code> type
+defined earlier (you can try this as an exercise). The notation in type
+theory is <code>_+_</code>, but we want to reserve this for addition of
+natural numbers, and hence we use the same symbol with a dot on top:
 <pre class="Agda"><a id="623" class="Keyword">data</a> <a id="_∔_"></a><a id="628" href="binary-sums.html#628" data-type="Type → Type → Set" class="Datatype Operator">_∔_</a> <a id="632" class="Symbol">(</a><a id="633" href="binary-sums.html#633" class="Bound">A</a> <a id="635" href="binary-sums.html#635" class="Bound">B</a> <a id="637" class="Symbol">:</a> <a id="639" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="643" class="Symbol">)</a> <a id="645" class="Symbol">:</a> <a id="647" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a> <a id="652" class="Keyword">where</a>
  <a id="_∔_.inl"></a><a id="659" href="binary-sums.html#659" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="663" class="Symbol">:</a> <a id="665" href="binary-sums.html#633" class="Bound">A</a> <a id="667" class="Symbol">→</a> <a id="669" href="binary-sums.html#633" class="Bound">A</a> <a id="671" href="binary-sums.html#628" data-type="Type → Type → Set" class="Datatype Operator">∔</a> <a id="673" href="binary-sums.html#635" class="Bound">B</a>
  <a id="_∔_.inr"></a><a id="676" href="binary-sums.html#676" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="680" class="Symbol">:</a> <a id="682" href="binary-sums.html#635" class="Bound">B</a> <a id="684" class="Symbol">→</a> <a id="686" href="binary-sums.html#633" class="Bound">A</a> <a id="688" href="binary-sums.html#628" data-type="Type → Type → Set" class="Datatype Operator">∔</a> <a id="690" href="binary-sums.html#635" class="Bound">B</a>
@@ -43,7 +42,7 @@ possible to write <code>A ∔ A</code>, in which case we will have two
 copies of the type <code>A</code>, so that now every element
 <code>x</code> of <code>A</code> has two different incarnations
 <code>inl a</code> and <code>inr a</code> in the type
-<code>A ∔ A</code>. For example, the <a href="unit-type.lagda.md">unit
+<code>A ∔ A</code>. For example, the <a href="unit-type.html">unit
 type</a> <code>𝟙</code> has exactly one element, namely
 <code>⋆ : 𝟙</code>, and hence the type <code>𝟙 ∔ 𝟙</code> has precisely
 two elements, namely <code>inl ⋆</code> and <code>inr ⋆</code>.</p>
@@ -128,7 +127,7 @@ also can be inverted:
 then both <code>A implies C</code> and <code>B implies C</code>.</p>
 <h3 id="alternative-definition-of-__">Alternative definition of
 <code>_∔_</code></h3>
-<p>There is <a href="binary-sums-as-sums.lagda.md">another way to define
+<p>There is <a href="binary-sums-as-sums.html">another way to define
 binary sums</a> as a special case of <code>Σ</code>.</p>
 
   </article>
