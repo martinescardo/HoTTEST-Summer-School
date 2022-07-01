@@ -70,4 +70,4 @@ Fin-isomorphism n = record { bijection = f n ; bijectivity = f-is-bijection n }
   f-is-bijection n = record { inverse = g n ; η = gf n ; ε = fg n}
 ```
 
-**Exercise.** Show that the type `Fin n` is isormorphic to the type `Σ k : ℕ , k < n`.
+**Exercise.** Show that the type `Fin n` is isomorphic to the type `Σ k : ℕ , k < n`.

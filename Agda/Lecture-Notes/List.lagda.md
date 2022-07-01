@@ -37,7 +37,7 @@ List-elim {X} A a f = h
   h []        = a
   h (x :: xs) = f x xs (h xs)
 ```
-Notice that the definition of `h` is the same as that of the usual `fold` function for lists, but the type is more general. In fact, the `fold` function is just the non-dependent version of the eliminator
+Notice that the definition of `h` is the same as that of the usual `fold` function for lists, if you know this, but the type is more general. In fact, the `fold` function is just the non-dependent version of the eliminator
 ```agda
 List-nondep-elim : {X A : Type}
                  → A
