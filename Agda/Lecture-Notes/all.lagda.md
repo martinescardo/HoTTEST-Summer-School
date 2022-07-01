@@ -7,7 +7,7 @@ at the School of Computer Science of the University of Birmingham, UK.
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
-module index where
+module all where
 
 import Bool
 import Bool-functions
