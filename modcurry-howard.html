@@ -17,25 +17,126 @@
 
   <article>
 
-<a id=modfunction-extensionality></a>
-<h2 id="function-extensionality">Function extensionality</h2>
-Recall that we defined pointwise equality <code>f ∼ g</code> of
-functions in the <a href="identity-type.lagda.md">identity type
-handout</a>. The principle of function extensionality says that
-pointwise equal functions are equal and is given by the following type
-<code>FunExt</code>:
-<pre class="Agda"><a id="576" class="Keyword">open</a> <a id="581" class="Keyword">import</a> <a id="588" href="identity-type.html" class="Module">identity-type</a>
-
-<a id="FunExt"></a><a id="603" href="function-extensionality.html#603" data-type="Set₁" class="Function">FunExt</a> <a id="610" class="Symbol">=</a> <a id="612" class="Symbol">{</a><a id="613" href="function-extensionality.html#613" class="Bound">A</a> <a id="615" class="Symbol">:</a> <a id="617" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="621" class="Symbol">}</a> <a id="623" class="Symbol">{</a><a id="624" href="function-extensionality.html#624" class="Bound">B</a> <a id="626" class="Symbol">:</a> <a id="628" href="function-extensionality.html#613" class="Bound">A</a> <a id="630" class="Symbol">→</a> <a id="632" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="636" class="Symbol">}</a> <a id="638" class="Symbol">{</a><a id="639" href="function-extensionality.html#639" class="Bound">f</a> <a id="641" href="function-extensionality.html#641" class="Bound">g</a> <a id="643" class="Symbol">:</a> <a id="645" class="Symbol">(</a><a id="646" href="function-extensionality.html#646" class="Bound">x</a> <a id="648" class="Symbol">:</a> <a id="650" href="function-extensionality.html#613" class="Bound">A</a><a id="651" class="Symbol">)</a> <a id="653" class="Symbol">→</a> <a id="655" href="function-extensionality.html#624" class="Bound">B</a> <a id="657" href="function-extensionality.html#646" class="Bound">x</a><a id="658" class="Symbol">}</a> <a id="660" class="Symbol">→</a> <a id="662" href="function-extensionality.html#639" class="Bound">f</a> <a id="664" href="identity-type.html#3214" data-type="((x : A) → B x) → ((x : A) → B x) → Type" class="Function Operator">∼</a> <a id="666" href="function-extensionality.html#641" class="Bound">g</a> <a id="668" class="Symbol">→</a> <a id="670" href="function-extensionality.html#639" class="Bound">f</a> <a id="672" href="identity-type.html#583" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="674" href="function-extensionality.html#641" class="Bound">g</a>
-</pre>
-<p>Unfortunately, this principle is not provable or disprovable in Agda
-or MLTT (we say that it is <a
-href="https://en.wikipedia.org/wiki/Independence_(mathematical_logic)">independent</a>).
-But it is provable in <a
-href="https://agda.readthedocs.io/en/latest/language/cubical.html">Cubical
-Agda</a>, which is based on Cubical Type Theory and is outside the scope
-of these lecture notes. Sometimes we will use function extensionality as
-an explicit assumption.</p>
+<a id=modcurry-howard></a>
+<h2
+id="propositions-as-types-and-basic-martin-löf-type-theory">Propositions
+as types and basic Martin-Löf type theory</h2>
+<p>We now complete the proposition-as-types interpretation of logic.</p>
+<div style="overflow-x: auto">
+<table>
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 16%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 30%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Logic</th>
+<th>English</th>
+<th>Type theory</th>
+<th>Agda</th>
+<th>Handouts</th>
+<th>Alternative terminology</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>⊥</td>
+<td>false</td>
+<td>ℕ₀</td>
+<td>𝟘</td>
+<td><a href="empty-type.lagda.md">empty type</a></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>⊤</td>
+<td>true (*)</td>
+<td>ℕ₁</td>
+<td>𝟙</td>
+<td><a href="unit-type.lagda.md">unit type</a></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>A ∧ B</td>
+<td>A and B</td>
+<td>A × B</td>
+<td>A × B</td>
+<td><a href="binary-products.lagda.md">binary product</a></td>
+<td>cartesian product</td>
+</tr>
+<tr class="even">
+<td>A ∨ B</td>
+<td>A or B</td>
+<td>A + B</td>
+<td>A ∔ B</td>
+<td><a href="binary-sums.lagda.md">binary sum</a></td>
+<td>coproduct, <br> binary disjoint union</td>
+</tr>
+<tr class="odd">
+<td>A → B</td>
+<td>A implies B</td>
+<td>A → B</td>
+<td>A → B</td>
+<td><a href="products.lagda.md">function type</a></td>
+<td>non-dependent function type</td>
+</tr>
+<tr class="even">
+<td>¬ A</td>
+<td>not A</td>
+<td>A → ℕ₀</td>
+<td>A → 𝟘</td>
+<td><a href="negation.lagda.md">negation</a></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>∀ x : A, B x</td>
+<td>for all x:A, B x</td>
+<td>Π x : A , B x</td>
+<td>(x : A) → B x</td>
+<td><a href="products.lagda.md">product</a></td>
+<td>dependent function type</td>
+</tr>
+<tr class="even">
+<td>∃ x : A, B x</td>
+<td>there is x:A such that B x</td>
+<td>Σ x ꞉ A , B x</td>
+<td>Σ x ꞉ A , B x</td>
+<td><a href="sums.lagda.md">sum</a></td>
+<td>disjoint union, <br> dependent pair type</td>
+</tr>
+<tr class="odd">
+<td>x = y</td>
+<td>x equals y</td>
+<td>Id x y</td>
+<td>x ≡ y</td>
+<td><a href="identity-type.lagda.md">identity type</a></td>
+<td>equality type, <br> propositional equality</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="remarks">Remarks</h3>
+<ul>
+<li><p>(*) Not only the unit type 𝟙, but also any type with at least one
+element can be regarded as “true” in the propositions-as-types
+interpretation.</p></li>
+<li><p>In Agda we can use any notation we like, of course, and people do
+use slightly different notatations for e.g. <code>𝟘</code>,
+<code>𝟏</code>, <code>+</code> and <code>Σ</code>.</p></li>
+<li><p>We will refer to the above type theory together with the type
+<code>ℕ</code> of natural numbers as <em>Basic Martin-Löf Type
+Theory</em>.</p></li>
+<li><p>As we will see, this type theory is very expressive and allows us
+to construct rather sophisticated types, including e.g. lists, vectors
+and trees.</p></li>
+<li><p>All types in MLTT (<a
+href="http://archive-pml.github.io/martin-lof/pdfs/Bibliopolis-Book-1984.pdf">Martin-Löf
+type theory</a>) come with <em>introduction</em> and
+<em>elimination</em> principles.</p></li>
+</ul>
 
   </article>
 </div>
@@ -229,5 +330,5 @@ pre.Agda, div.sourceCode, pre {
   max-width: 100%;
   overflow-x: auto;
 }
-
+</style>
 </html>

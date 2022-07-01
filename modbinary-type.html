@@ -17,126 +17,42 @@
 
   <article>
 
-<a id=modcurry-howard></a>
-<h2
-id="propositions-as-types-and-basic-martin-löf-type-theory">Propositions
-as types and basic Martin-Löf type theory</h2>
-<p>We now complete the proposition-as-types interpretation of logic.</p>
-<div style="overflow-x: auto">
-<table>
-<colgroup>
-<col style="width: 9%" />
-<col style="width: 16%" />
-<col style="width: 8%" />
-<col style="width: 8%" />
-<col style="width: 30%" />
-<col style="width: 25%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Logic</th>
-<th>English</th>
-<th>Type theory</th>
-<th>Agda</th>
-<th>Handouts</th>
-<th>Alternative terminology</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>⊥</td>
-<td>false</td>
-<td>ℕ₀</td>
-<td>𝟘</td>
-<td><a href="empty-type.lagda.md">empty type</a></td>
-<td></td>
-</tr>
-<tr class="even">
-<td>⊤</td>
-<td>true (*)</td>
-<td>ℕ₁</td>
-<td>𝟙</td>
-<td><a href="unit-type.lagda.md">unit type</a></td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>A ∧ B</td>
-<td>A and B</td>
-<td>A × B</td>
-<td>A × B</td>
-<td><a href="binary-products.lagda.md">binary product</a></td>
-<td>cartesian product</td>
-</tr>
-<tr class="even">
-<td>A ∨ B</td>
-<td>A or B</td>
-<td>A + B</td>
-<td>A ∔ B</td>
-<td><a href="binary-sums.lagda.md">binary sum</a></td>
-<td>coproduct, <br> binary disjoint union</td>
-</tr>
-<tr class="odd">
-<td>A → B</td>
-<td>A implies B</td>
-<td>A → B</td>
-<td>A → B</td>
-<td><a href="products.lagda.md">function type</a></td>
-<td>non-dependent function type</td>
-</tr>
-<tr class="even">
-<td>¬ A</td>
-<td>not A</td>
-<td>A → ℕ₀</td>
-<td>A → 𝟘</td>
-<td><a href="negation.lagda.md">negation</a></td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>∀ x : A, B x</td>
-<td>for all x:A, B x</td>
-<td>Π x : A , B x</td>
-<td>(x : A) → B x</td>
-<td><a href="products.lagda.md">product</a></td>
-<td>dependent function type</td>
-</tr>
-<tr class="even">
-<td>∃ x : A, B x</td>
-<td>there is x:A such that B x</td>
-<td>Σ x ꞉ A , B x</td>
-<td>Σ x ꞉ A , B x</td>
-<td><a href="sums.lagda.md">sum</a></td>
-<td>disjoint union, <br> dependent pair type</td>
-</tr>
-<tr class="odd">
-<td>x = y</td>
-<td>x equals y</td>
-<td>Id x y</td>
-<td>x ≡ y</td>
-<td><a href="identity-type.lagda.md">identity type</a></td>
-<td>equality type, <br> propositional equality</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="remarks">Remarks</h3>
-<ul>
-<li><p>(*) Not only the unit type 𝟙, but also any type with at least one
-element can be regarded as “true” in the propositions-as-types
-interpretation.</p></li>
-<li><p>In Agda we can use any notation we like, of course, and people do
-use slightly different notatations for e.g. <code>𝟘</code>,
-<code>𝟏</code>, <code>+</code> and <code>Σ</code>.</p></li>
-<li><p>We will refer to the above type theory together with the type
-<code>ℕ</code> of natural numbers as <em>Basic Martin-Löf Type
-Theory</em>.</p></li>
-<li><p>As we will see, this type theory is very expressive and allows us
-to construct rather sophisticated types, including e.g. lists, vectors
-and trees.</p></li>
-<li><p>All types in MLTT (<a
-href="http://archive-pml.github.io/martin-lof/pdfs/Bibliopolis-Book-1984.pdf">Martin-Löf
-type theory</a>) come with <em>introduction</em> and
-<em>elimination</em> principles.</p></li>
-</ul>
+<a id=modbinary-type></a>
+<h2 id="the-binary-type-𝟚">The binary type 𝟚</h2>
+<p>This type can be defined to be <code>𝟙 ∔ 𝟙</code> using <a
+href="binary-sums.lagda.md">binary sums</a>, but we give a direct
+definition which will allow us to discuss some relationships between the
+various type formers of Basic MLTT.</p>
+<pre class="Agda"><a id="519" class="Keyword">data</a> <a id="𝟚"></a><a id="524" href="binary-type.html#524" data-type="Set" class="Datatype">𝟚</a> <a id="526" class="Symbol">:</a> <a id="528" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a> <a id="533" class="Keyword">where</a>
+ <a id="𝟚.𝟎"></a><a id="540" href="binary-type.html#540" data-type="𝟚" class="InductiveConstructor">𝟎</a> <a id="𝟚.𝟏"></a><a id="542" href="binary-type.html#542" data-type="𝟚" class="InductiveConstructor">𝟏</a> <a id="544" class="Symbol">:</a> <a id="546" href="binary-type.html#524" data-type="Set" class="Datatype">𝟚</a>
+</pre>
+This type is not only <a href="isomorphisms.lagda.md">isomorphic to
+<code>𝟙 ∔ 𝟙</code></a> but also to the type <a
+href="Bool.lagda.md"><code>Bool</code></a> of booleans. Its elimination
+principle is as follows:
+<pre class="Agda"><a id="𝟚-elim"></a><a id="728" href="binary-type.html#728" data-type="A 𝟎 → A 𝟏 → (x : 𝟚) → A x" class="Function">𝟚-elim</a> <a id="735" class="Symbol">:</a> <a id="737" class="Symbol">{</a><a id="738" href="binary-type.html#738" class="Bound">A</a> <a id="740" class="Symbol">:</a> <a id="742" href="binary-type.html#524" data-type="Set" class="Datatype">𝟚</a> <a id="744" class="Symbol">→</a> <a id="746" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="750" class="Symbol">}</a>
+       <a id="759" class="Symbol">→</a> <a id="761" href="binary-type.html#738" class="Bound">A</a> <a id="763" href="binary-type.html#540" data-type="𝟚" class="InductiveConstructor">𝟎</a>
+       <a id="772" class="Symbol">→</a> <a id="774" href="binary-type.html#738" class="Bound">A</a> <a id="776" href="binary-type.html#542" data-type="𝟚" class="InductiveConstructor">𝟏</a>
+       <a id="785" class="Symbol">→</a> <a id="787" class="Symbol">(</a><a id="788" href="binary-type.html#788" class="Bound">x</a> <a id="790" class="Symbol">:</a> <a id="792" href="binary-type.html#524" data-type="Set" class="Datatype">𝟚</a><a id="793" class="Symbol">)</a> <a id="795" class="Symbol">→</a> <a id="797" href="binary-type.html#738" class="Bound">A</a> <a id="799" href="binary-type.html#788" class="Bound">x</a>
+<a id="801" href="binary-type.html#728" data-type="A 𝟎 → A 𝟏 → (x : 𝟚) → A x" class="Function">𝟚-elim</a> <a id="808" href="binary-type.html#808" class="Bound">x₀</a> <a id="811" href="binary-type.html#811" class="Bound">x₁</a> <a id="814" href="binary-type.html#540" data-type="𝟚" class="InductiveConstructor">𝟎</a> <a id="816" class="Symbol">=</a> <a id="818" href="binary-type.html#808" class="Bound">x₀</a>
+<a id="821" href="binary-type.html#728" data-type="A 𝟎 → A 𝟏 → (x : 𝟚) → A x" class="Function">𝟚-elim</a> <a id="828" href="binary-type.html#828" class="Bound">x₀</a> <a id="831" href="binary-type.html#831" class="Bound">x₁</a> <a id="834" href="binary-type.html#542" data-type="𝟚" class="InductiveConstructor">𝟏</a> <a id="836" class="Symbol">=</a> <a id="838" href="binary-type.html#831" class="Bound">x₁</a>
+</pre>
+In logical terms, this says that it order to show that a property
+<code>A</code> of elements of the binary type <code>𝟚</code> holds for
+all elements of the type <code>𝟚</code>, it is enough to show that it
+holds for <code>𝟎</code> and for <code>𝟏</code>. The non-dependent
+version of the eliminator is the following:
+<pre class="Agda"><a id="𝟚-nondep-elim"></a><a id="1116" href="binary-type.html#1116" data-type="A → A → 𝟚 → A" class="Function">𝟚-nondep-elim</a> <a id="1130" class="Symbol">:</a> <a id="1132" class="Symbol">{</a><a id="1133" href="binary-type.html#1133" class="Bound">A</a> <a id="1135" class="Symbol">:</a> <a id="1137" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="1141" class="Symbol">}</a>
+              <a id="1157" class="Symbol">→</a> <a id="1159" href="binary-type.html#1133" class="Bound">A</a>
+              <a id="1175" class="Symbol">→</a> <a id="1177" href="binary-type.html#1133" class="Bound">A</a>
+              <a id="1193" class="Symbol">→</a> <a id="1195" href="binary-type.html#524" data-type="Set" class="Datatype">𝟚</a> <a id="1197" class="Symbol">→</a> <a id="1199" href="binary-type.html#1133" class="Bound">A</a>
+<a id="1201" href="binary-type.html#1116" data-type="A → A → 𝟚 → A" class="Function">𝟚-nondep-elim</a> <a id="1215" class="Symbol">{</a><a id="1216" href="binary-type.html#1216" class="Bound">A</a><a id="1217" class="Symbol">}</a> <a id="1219" class="Symbol">=</a> <a id="1221" href="binary-type.html#728" data-type="A 𝟎 → A 𝟏 → (x : 𝟚) → A x" class="Function">𝟚-elim</a> <a id="1228" class="Symbol">{λ</a> <a id="1231" href="binary-type.html#1231" class="Bound">_</a> <a id="1233" class="Symbol">→</a> <a id="1235" href="binary-type.html#1216" class="Bound">A</a><a id="1236" class="Symbol">}</a>
+</pre>
+<p>Notice that the non-dependent version is like
+<code>if-then-else</code>, if we think of one of the elements of
+<code>A</code> as <code>true</code> and the other as `false.</p>
+<p>The dependent version generalizes the <em>type</em> of the
+non-dependent version, with the same definition of the function.</p>
 
   </article>
 </div>
@@ -330,5 +246,5 @@ pre.Agda, div.sourceCode, pre {
   max-width: 100%;
   overflow-x: auto;
 }
-
+</style>
 </html>

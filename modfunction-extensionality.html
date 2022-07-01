@@ -17,33 +17,25 @@
 
   <article>
 
-<a id=modunit-type></a>
-<h2 id="the-unit-type-𝟙">The unit type 𝟙</h2>
-We now redefine the unit type as a record:
-<pre class="Agda"><a id="345" class="Keyword">record</a> <a id="𝟙"></a><a id="352" href="unit-type.html#352" data-type="Type" class="Record">𝟙</a> <a id="354" class="Symbol">:</a> <a id="356" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a> <a id="361" class="Keyword">where</a>
- <a id="368" class="Keyword">constructor</a>
-  <a id="⋆"></a><a id="382" href="unit-type.html#382" data-type="𝟙" class="InductiveConstructor">⋆</a>
+<a id=modfunction-extensionality></a>
+<h2 id="function-extensionality">Function extensionality</h2>
+Recall that we defined pointwise equality <code>f ∼ g</code> of
+functions in the <a href="identity-type.lagda.md">identity type
+handout</a>. The principle of function extensionality says that
+pointwise equal functions are equal and is given by the following type
+<code>FunExt</code>:
+<pre class="Agda"><a id="576" class="Keyword">open</a> <a id="581" class="Keyword">import</a> <a id="588" href="identity-type.html" class="Module">identity-type</a>
 
-<a id="385" class="Keyword">open</a> <a id="390" href="unit-type.html#352" data-type="Type" class="Module">𝟙</a> <a id="392" class="Keyword">public</a>
+<a id="FunExt"></a><a id="603" href="function-extensionality.html#603" data-type="Set₁" class="Function">FunExt</a> <a id="610" class="Symbol">=</a> <a id="612" class="Symbol">{</a><a id="613" href="function-extensionality.html#613" class="Bound">A</a> <a id="615" class="Symbol">:</a> <a id="617" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="621" class="Symbol">}</a> <a id="623" class="Symbol">{</a><a id="624" href="function-extensionality.html#624" class="Bound">B</a> <a id="626" class="Symbol">:</a> <a id="628" href="function-extensionality.html#613" class="Bound">A</a> <a id="630" class="Symbol">→</a> <a id="632" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="636" class="Symbol">}</a> <a id="638" class="Symbol">{</a><a id="639" href="function-extensionality.html#639" class="Bound">f</a> <a id="641" href="function-extensionality.html#641" class="Bound">g</a> <a id="643" class="Symbol">:</a> <a id="645" class="Symbol">(</a><a id="646" href="function-extensionality.html#646" class="Bound">x</a> <a id="648" class="Symbol">:</a> <a id="650" href="function-extensionality.html#613" class="Bound">A</a><a id="651" class="Symbol">)</a> <a id="653" class="Symbol">→</a> <a id="655" href="function-extensionality.html#624" class="Bound">B</a> <a id="657" href="function-extensionality.html#646" class="Bound">x</a><a id="658" class="Symbol">}</a> <a id="660" class="Symbol">→</a> <a id="662" href="function-extensionality.html#639" class="Bound">f</a> <a id="664" href="identity-type.html#3214" data-type="((x : A) → B x) → ((x : A) → B x) → Type" class="Function Operator">∼</a> <a id="666" href="function-extensionality.html#641" class="Bound">g</a> <a id="668" class="Symbol">→</a> <a id="670" href="function-extensionality.html#639" class="Bound">f</a> <a id="672" href="identity-type.html#583" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="674" href="function-extensionality.html#641" class="Bound">g</a>
 </pre>
-In logical terms, we can interpret <code>𝟙</code> as “true”, because we
-can always exhibit an element of it, namely <code>⋆</code>. Its
-elimination principle is as follows:
-<pre class="Agda"><a id="𝟙-elim"></a><a id="562" href="unit-type.html#562" data-type="A ⋆ → (x : 𝟙) → A x" class="Function">𝟙-elim</a> <a id="569" class="Symbol">:</a> <a id="571" class="Symbol">{</a><a id="572" href="unit-type.html#572" class="Bound">A</a> <a id="574" class="Symbol">:</a> <a id="576" href="unit-type.html#352" data-type="Type" class="Record">𝟙</a> <a id="578" class="Symbol">→</a> <a id="580" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="584" class="Symbol">}</a>
-       <a id="593" class="Symbol">→</a> <a id="595" href="unit-type.html#572" class="Bound">A</a> <a id="597" href="unit-type.html#382" data-type="𝟙" class="InductiveConstructor">⋆</a>
-       <a id="606" class="Symbol">→</a> <a id="608" class="Symbol">(</a><a id="609" href="unit-type.html#609" class="Bound">x</a> <a id="611" class="Symbol">:</a> <a id="613" href="unit-type.html#352" data-type="Type" class="Record">𝟙</a><a id="614" class="Symbol">)</a> <a id="616" class="Symbol">→</a> <a id="618" href="unit-type.html#572" class="Bound">A</a> <a id="620" href="unit-type.html#609" class="Bound">x</a>
-<a id="622" href="unit-type.html#562" data-type="A ⋆ → (x : 𝟙) → A x" class="Function">𝟙-elim</a> <a id="629" href="unit-type.html#629" class="Bound">a</a> <a id="631" href="unit-type.html#382" data-type="𝟙" class="InductiveConstructor">⋆</a> <a id="633" class="Symbol">=</a> <a id="635" href="unit-type.html#629" class="Bound">a</a>
-</pre>
-In logical terms, this says that it order to prove that a property
-<code>A</code> of elements of the unit type <code>𝟙</code> holds for all
-elements of the type <code>𝟙</code>, it is enough to prove that it holds
-for the element <code>⋆</code>. The non-dependent version says that if A
-holds, then “true implies A”.
-<pre class="Agda"><a id="𝟙-nondep-elim"></a><a id="921" href="unit-type.html#921" data-type="A → 𝟙 → A" class="Function">𝟙-nondep-elim</a> <a id="935" class="Symbol">:</a> <a id="937" class="Symbol">{</a><a id="938" href="unit-type.html#938" class="Bound">A</a> <a id="940" class="Symbol">:</a> <a id="942" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="946" class="Symbol">}</a>
-              <a id="962" class="Symbol">→</a> <a id="964" href="unit-type.html#938" class="Bound">A</a>
-              <a id="980" class="Symbol">→</a> <a id="982" href="unit-type.html#352" data-type="Type" class="Record">𝟙</a> <a id="984" class="Symbol">→</a> <a id="986" href="unit-type.html#938" class="Bound">A</a>
-<a id="988" href="unit-type.html#921" data-type="A → 𝟙 → A" class="Function">𝟙-nondep-elim</a> <a id="1002" class="Symbol">{</a><a id="1003" href="unit-type.html#1003" class="Bound">A</a><a id="1004" class="Symbol">}</a> <a id="1006" class="Symbol">=</a> <a id="1008" href="unit-type.html#562" data-type="A ⋆ → (x : 𝟙) → A x" class="Function">𝟙-elim</a> <a id="1015" class="Symbol">{λ</a> <a id="1018" href="unit-type.html#1018" class="Bound">_</a> <a id="1020" class="Symbol">→</a> <a id="1022" href="unit-type.html#1003" class="Bound">A</a><a id="1023" class="Symbol">}</a>
-</pre>
+<p>Unfortunately, this principle is not provable or disprovable in Agda
+or MLTT (we say that it is <a
+href="https://en.wikipedia.org/wiki/Independence_(mathematical_logic)">independent</a>).
+But it is provable in <a
+href="https://agda.readthedocs.io/en/latest/language/cubical.html">Cubical
+Agda</a>, which is based on Cubical Type Theory and is outside the scope
+of these lecture notes. Sometimes we will use function extensionality as
+an explicit assumption.</p>
 
   </article>
 </div>
@@ -237,5 +229,5 @@ pre.Agda, div.sourceCode, pre {
   max-width: 100%;
   overflow-x: auto;
 }
-
+</style>
 </html>
