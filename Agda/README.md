@@ -36,4 +36,6 @@ Martin Escardo. Notes originally written for the module "Advanced Functional Pro
     1. [Lists](Lecture-Notes/List-functions.lagda.md)
     1. [Vectors](Lecture-Notes/Vector-functions.lagda.md)
 
+## [All Agda files](Lectures-Notes/index.lagda.md)
+
 Each of the links above will take you to a different Agda module. You can use this to interactively explore the lecture notes: the Agda code is all type-checked (with the exception of some exercises which are left as holes, `{! !}`), and presented as hypertext. Click on an identifier to be taken to its definition.
