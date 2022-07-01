@@ -17,77 +17,46 @@
 
   <article>
 
+<a id=modall></a>
 <p>Martin Escardo. Notes originally written for the module “Advanced
 Functional Programming” at the School of Computer Science of the
 University of Birmingham, UK.</p>
-<h2 id="download-the-agda-files-as-a-zip-file"><a
-href="https://github.com/martinescardo/HoTTEST-Summer-School/archive/refs/heads/main.zip">Download
-the Agda files as a zip file</a></h2>
-<h2 id="agda-manual"><a
-href="https://agda.readthedocs.io/en/latest/">Agda manual</a></h2>
-<h2 id="lecture-notes"><a href="./">Lecture Notes</a></h2>
-<ol type="1">
-<li><a href="introduction.html">Introduction</a></li>
-<li>Propositions as types and basic Martin-Löf type theory
-<ol type="1">
-<li><a href="curry-howard.html">Basic Martin-Löf Type Theory</a></li>
-<li><a href="empty-type.html">Empty type</a> <code>𝟘</code></li>
-<li><a href="unit-type.html">Unit type</a> <code>𝟙</code></li>
-<li><a href="binary-type.html">Binary type</a> <code>𝟚</code></li>
-<li><a href="products.html">Product types</a> <code>Π</code></li>
-<li><a href="sums.html">Sum types</a> <code>Σ</code></li>
-<li><a href="binary-products.html">Binary products</a>
-<code>_×_</code></li>
-<li><a href="binary-sums.html">Binary sums</a> <code>_∔_</code></li>
-<li><a href="identity-type.html">Identity types</a>
-<code>_≡_</code></li>
-<li><a href="natural-numbers-type.html">Natural numbers</a>
-<code>ℕ</code></li>
-<li><a href="negation.html">Negation</a> <code>¬</code></li>
-<li><a href="function-extensionality.html">Function
-extensionality</a></li>
-</ol></li>
-<li><a href="decidability.html">Propositions as types versus
-propositions as booleans</a></li>
-<li>Isomorphisms <code>≅</code>
-<ol type="1">
-<li><a href="isomorphisms.html">Definition and basic examples</a></li>
-<li><a href="binary-sums-as-sums.html">Binary sums as a special case of
-sums</a></li>
-<li><a href="binary-products-as-products.html">Binary products as a
-special case of products</a></li>
-</ol></li>
-<li>More types, their elimination principles, and their isomorphism with
-Basic MLTT types
-<ol type="1">
-<li><a href="Bool.html">Booleans</a> and <a
-href="Bool-functions.html">their manifestation as a Basic MLTT
-type</a></li>
-<li><a href="Fin.html">Finite types</a> and <a
-href="Fin-functions.html">their manifestation as a Basic MLTT
-type</a></li>
-<li><a href="List.html">Lists</a></li>
-<li><a href="Vector.html">Vectors</a></li>
-<li><a href="vector-and-list-isomorphisms.html">List and vector
-isomorphisms</a></li>
-</ol></li>
-<li>More constructions and proofs with the above types:
-<ol type="1">
-<li><a href="natural-numbers-functions.html">Natural numbers</a></li>
-<li><a href="Bool-functions.html">Booleans</a></li>
-<li><a href="Fin-functions.html">Finite types</a></li>
-<li><a href="List-functions.html">Lists</a></li>
-<li><a href="Vector-functions.html">Vectors</a></li>
-</ol></li>
-<li><a href="Hedbergs-Theorem.html">Hedberg’s Theorem</a></li>
-</ol>
-<h2 id="index-of-all-agda-files"><a href="all.html">Index of all Agda
-files</a></h2>
-<p>Each of the links above will take you to a different Agda module. You
-can use this to interactively explore the lecture notes: the Agda code
-is all type-checked (with the exception of some exercises which are left
-as holes, <code>{! !}</code>), and presented as hypertext. Click on an
-identifier to be taken to its definition.</p>
+<pre class="Agda"><a id="173" class="Symbol">{-#</a> <a id="177" class="Keyword">OPTIONS</a> <a id="185" class="Pragma">--without-K</a> <a id="197" class="Pragma">--safe</a> <a id="204" class="Symbol">#-}</a>
+
+<a id="209" class="Keyword">module</a> <a id="216" href="all.html" class="Module">all</a> <a id="220" class="Keyword">where</a>
+
+<a id="227" class="Keyword">import</a> <a id="234" href="Bool.html" class="Module">Bool</a>
+<a id="239" class="Keyword">import</a> <a id="246" href="Bool-functions.html" class="Module">Bool-functions</a>
+<a id="261" class="Keyword">import</a> <a id="268" href="Fin.html" class="Module">Fin</a>
+<a id="272" class="Keyword">import</a> <a id="279" href="Fin-functions.html" class="Module">Fin-functions</a>
+<a id="293" class="Keyword">import</a> <a id="300" href="Hedbergs-Theorem.html" class="Module">Hedbergs-Theorem</a>
+<a id="317" class="Keyword">import</a> <a id="324" href="List.html" class="Module">List</a>
+<a id="329" class="Keyword">import</a> <a id="336" href="List-functions.html" class="Module">List-functions</a>
+<a id="351" class="Keyword">import</a> <a id="358" href="Vector.html" class="Module">Vector</a>
+<a id="365" class="Keyword">import</a> <a id="372" href="Vector-functions.html" class="Module">Vector-functions</a>
+<a id="389" class="Keyword">import</a> <a id="396" href="binary-products.html" class="Module">binary-products</a>
+<a id="412" class="Keyword">import</a> <a id="419" href="binary-products-as-products.html" class="Module">binary-products-as-products</a>
+<a id="447" class="Keyword">import</a> <a id="454" href="binary-sums.html" class="Module">binary-sums</a>
+<a id="466" class="Keyword">import</a> <a id="473" href="binary-sums-as-sums.html" class="Module">binary-sums-as-sums</a>
+<a id="493" class="Keyword">import</a> <a id="500" href="binary-type.html" class="Module">binary-type</a>
+<a id="512" class="Keyword">import</a> <a id="519" href="decidability.html" class="Module">decidability</a>
+<a id="532" class="Keyword">import</a> <a id="539" href="empty-type.html" class="Module">empty-type</a>
+<a id="550" class="Keyword">import</a> <a id="557" href="function-extensionality.html" class="Module">function-extensionality</a>
+<a id="581" class="Keyword">import</a> <a id="588" href="general-notation.html" class="Module">general-notation</a>
+<a id="605" class="Keyword">import</a> <a id="612" href="identity-type.html" class="Module">identity-type</a>
+<a id="626" class="Keyword">import</a> <a id="633" href="isomorphism-functions.html" class="Module">isomorphism-functions</a>
+<a id="655" class="Keyword">import</a> <a id="662" href="isomorphisms.html" class="Module">isomorphisms</a>
+<a id="675" class="Keyword">import</a> <a id="682" href="natural-numbers-functions.html" class="Module">natural-numbers-functions</a>
+<a id="708" class="Keyword">import</a> <a id="715" href="natural-numbers-type.html" class="Module">natural-numbers-type</a>
+<a id="736" class="Keyword">import</a> <a id="743" href="negation.html" class="Module">negation</a>
+<a id="752" class="Keyword">import</a> <a id="759" href="prelude.html" class="Module">prelude</a>
+<a id="767" class="Keyword">import</a> <a id="774" href="products.html" class="Module">products</a>
+<a id="783" class="Keyword">import</a> <a id="790" href="searchability.html" class="Module">searchability</a>
+<a id="804" class="Keyword">import</a> <a id="811" href="sums.html" class="Module">sums</a>
+<a id="816" class="Keyword">import</a> <a id="823" href="sums-equality.html" class="Module">sums-equality</a>
+<a id="837" class="Keyword">import</a> <a id="844" href="unit-type.html" class="Module">unit-type</a>
+<a id="854" class="Comment">-- import vector-and-list-isomorphisms</a>
+</pre>
 
   </article>
 </div>
