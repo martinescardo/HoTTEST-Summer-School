@@ -1,5 +1,7 @@
 Martin Escardo. Notes originally written for the module "Advanced Functional Programming" at the School of Computer Science of the University of Birmingham, UK.
 
+## [Download the Agda files as a zip file](https://github.com/martinescardo/HoTTEST-Summer-School/archive/refs/heads/main.zip)
+
 ## [Agda manual](https://agda.readthedocs.io/en/latest/)
 
 ## [Lecture Notes](./)
@@ -36,7 +38,6 @@ Martin Escardo. Notes originally written for the module "Advanced Functional Pro
     1. [Lists](Lecture-Notes/List-functions.lagda.md)
     1. [Vectors](Lecture-Notes/Vector-functions.lagda.md)
  1. [Hedberg's Theorem](Lecture-Notes/Hedbergs-Theorem.lagda.md)
-
 
 ## [All Agda files](Lecture-Notes/index.lagda.md)
 
