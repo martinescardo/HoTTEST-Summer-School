@@ -35,6 +35,8 @@ Martin Escardo. Notes originally written for the module "Advanced Functional Pro
     1. [Finite types](Lecture-Notes/Fin-functions.lagda.md)
     1. [Lists](Lecture-Notes/List-functions.lagda.md)
     1. [Vectors](Lecture-Notes/Vector-functions.lagda.md)
+ 1. [Hedberg's Theorem](Lecture-Notes/Hedbergs-Theorem.lagda.md)
+
 
 ## [All Agda files](Lecture-Notes/index.lagda.md)
 
