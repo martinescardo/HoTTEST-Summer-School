@@ -56,7 +56,7 @@ The pragma `BUILTIN NATURAL` is to get syntax sugar to be able to write 0,1,2,3,
 
 We pronounce `suc` as "successor".
 
-## Examples definitions using the above types in Agda
+## Examples of definitions using the above types
 
 ```agda
 not : Bool → Bool
