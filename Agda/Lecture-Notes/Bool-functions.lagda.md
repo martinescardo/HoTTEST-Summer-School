@@ -43,4 +43,4 @@ Bool-isomorphism = record { bijection = f ; bijectivity = f-is-bijection }
   f-is-bijection = record { inverse = g ; η = gf ; ε = fg }
 ```
 
-[Go back to the table of contents](../README.md)
+[Go back to the table of contents](https://martinescardo.github.io/HoTTEST-Summer-School/)

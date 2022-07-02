@@ -75,4 +75,4 @@ So this again looks like [primitive recursion](natural-numbers-type.lagda.md). A
 ι (suc x) = suc (ι x)
 ```
 
-[Go back to the table of contents](../README.md)
+[Go back to the table of contents](https://martinescardo.github.io/HoTTEST-Summer-School/)

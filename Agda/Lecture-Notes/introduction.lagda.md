@@ -231,4 +231,4 @@ This will be the subject of future handouts.
 
 Please study the [Agda manual](https://agda.readthedocs.io/en/latest/) as a complement to these lecture notes.
 
-[Go back to the table of contents](../README.md)
+[Go back to the table of contents](https://martinescardo.github.io/HoTTEST-Summer-School/)

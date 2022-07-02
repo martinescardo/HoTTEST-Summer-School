@@ -90,4 +90,4 @@ The last function works as follows. First we unfold the definition of `¬ is-emp
 ```
 Agda accepts this second version because it automatically unfolds definitions, just as we have done above, to check whether what we have written makes sense. In this case, Agda knows that `¬ is-empty 𝟙` is exactly the same thing as `(𝟙 → 𝟘) → 𝟘` *by definition* of `¬` and `is-empty`. More examples are given in the file [negation](negation.lagda.md).
 
-[Go back to the table of contents](../README.md)
+[Go back to the table of contents](https://martinescardo.github.io/HoTTEST-Summer-School/)

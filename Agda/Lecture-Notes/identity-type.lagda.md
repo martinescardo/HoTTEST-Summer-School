@@ -123,4 +123,4 @@ infix   1 _∎
 ```
 We'll see examples of uses of this in other handouts.
 
-[Go back to the table of contents](../README.md)
+[Go back to the table of contents](https://martinescardo.github.io/HoTTEST-Summer-School/)

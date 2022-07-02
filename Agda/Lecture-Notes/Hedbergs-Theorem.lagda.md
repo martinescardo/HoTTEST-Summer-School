@@ -114,4 +114,4 @@ Bool-is-set : is-set Bool
 Bool-is-set = Hedbergs-Theorem Bool-has-decidable-equality
 ```
 
-[Go back to the table of contents](../README.md)
+[Go back to the table of contents](https://martinescardo.github.io/HoTTEST-Summer-School/)

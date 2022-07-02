@@ -102,4 +102,4 @@ syntax Pi A (λ x → b) = Π x ꞉ A , b
 
 Notice that, for some reason, Agda has this kind of definition backwards. The end result of this is that now `(x : A) → B x` can be written as `Π x ꞉ A , B x` in Agda as in type theory. (If you happen to know a bit of maths, you may be familiar with the [cartesian product of a family of sets](https://en.wikipedia.org/wiki/Cartesian_product#Infinite_Cartesian_products), and this is the reason the letter `Π` is used.)
 
-[Go back to the table of contents](../README.md)
+[Go back to the table of contents](https://martinescardo.github.io/HoTTEST-Summer-School/)

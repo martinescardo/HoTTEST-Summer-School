@@ -23,4 +23,4 @@ open import List public
 open import Vector public
 ```
 
-[Go back to the table of contents](../README.md)
+[Go back to the table of contents](https://martinescardo.github.io/HoTTEST-Summer-School/)

@@ -132,4 +132,4 @@ apd : {X : Type} {A : X → Type} (f : (x : X) → A x) {x y : X}
 apd f (refl x) = refl (f x)
 ```
 
-[Go back to the table of contents](../README.md)
+[Go back to the table of contents](https://martinescardo.github.io/HoTTEST-Summer-School/)

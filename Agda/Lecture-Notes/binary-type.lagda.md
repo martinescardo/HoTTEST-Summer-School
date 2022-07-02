@@ -44,4 +44,4 @@ Notice that the non-dependent version is like `if-then-else`, if we think of one
 The dependent version generalizes the *type* of the non-dependent
 version, with the same definition of the function.
 
-[Go back to the table of contents](../README.md)
+[Go back to the table of contents](https://martinescardo.github.io/HoTTEST-Summer-School/)

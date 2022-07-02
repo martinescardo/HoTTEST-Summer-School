@@ -32,4 +32,4 @@ We now complete the proposition-as-types interpretation of logic.
 
  * All types in MLTT ([Martin-Löf type theory](http://archive-pml.github.io/martin-lof/pdfs/Bibliopolis-Book-1984.pdf)) come with *introduction* and *elimination* principles.
 
-[Go back to the table of contents](../README.md)
+[Go back to the table of contents](https://martinescardo.github.io/HoTTEST-Summer-School/)

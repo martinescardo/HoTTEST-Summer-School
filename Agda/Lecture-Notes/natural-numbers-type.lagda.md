@@ -81,4 +81,4 @@ infixr 20 _+_
 infixr 30 _*_
 ```
 
-[Go back to the table of contents](../README.md)
+[Go back to the table of contents](https://martinescardo.github.io/HoTTEST-Summer-School/)

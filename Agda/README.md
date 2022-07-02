@@ -4,6 +4,8 @@ Martin Escardo. Notes originally written for the module "Advanced Functional Pro
 
 ## [Agda manual](https://agda.readthedocs.io/en/latest/)
 
+## [Preferred link to see these lecture notes](https://martinescardo.github.io/HoTTEST-Summer-School/)
+
 ## [Lecture Notes](./)
 
  1. [Introduction](Lecture-Notes/introduction.lagda.md)

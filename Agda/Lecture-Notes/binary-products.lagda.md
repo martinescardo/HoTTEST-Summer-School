@@ -54,4 +54,4 @@ rl-implication = snd
 
 There is [another way to define binary products](binary-products-as-products.lagda.md) as a special case of `Π` rather than `Σ`.
 
-[Go back to the table of contents](../README.md)
+[Go back to the table of contents](https://martinescardo.github.io/HoTTEST-Summer-School/)

@@ -39,4 +39,4 @@ In logical terms, this says that it order to prove that a property `A` of elemen
 𝟙-nondep-elim {A} = 𝟙-elim {λ _ → A}
 ```
 
-[Go back to the table of contents](../README.md)
+[Go back to the table of contents](https://martinescardo.github.io/HoTTEST-Summer-School/)

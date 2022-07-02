@@ -42,4 +42,4 @@ import unit-type
 -- import vector-and-list-isomorphisms
 ```
 
-[Go back to the table of contents](../README.md)
+[Go back to the table of contents](https://martinescardo.github.io/HoTTEST-Summer-School/)
