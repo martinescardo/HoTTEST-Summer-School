@@ -36,13 +36,13 @@ module _ where
   data Σ {A : Type } (B : A → Type) : Type  where
    _,_ : (x : A) (y : B x) → Σ {A} B
 
-  fst : {A : Type} {B : A → Type} → Σ B → A
-  fst (x , y) = x
+  pr₁ : {A : Type} {B : A → Type} → Σ B → A
+  pr₁ (x , y) = x
 
-  snd : {A : Type} {B : A → Type} → (z : Σ B) → B (fst z)
-  snd (x , y) = y
+  pr₂ : {A : Type} {B : A → Type} → (z : Σ B) → B (pr₁ z)
+  pr₂ (x , y) = y
   ```
-Notice that the type of `snd` is dependent and uses `fst` to express the dependency.
+Notice that the type of `pr₂` is dependent and uses `pr₁` to express the dependency.
 
 However, for a number of reasons to be explained later, we prefer to define it using a [record](https://agda.readthedocs.io/en/latest/language/record-types.html) definition:
 
@@ -51,11 +51,11 @@ record Σ {A : Type } (B : A → Type) : Type  where
  constructor
   _,_
  field
-  fst : A
-  snd : B fst
+  pr₁ : A
+  pr₂ : B pr₁
 ```
 
-Here we automatically get the projections with the same types and definitions as above and hence we don't need to provide them. In order for the projections `fst` and `snd` to be visible outside the scope of the record, we `open` the record. Moreover, we open it `public` so that when other files import this one, these two projections will be visible in the other files. The "constructor" allows to form an element of this type. Because "," is not a reserved symbol in Agda, we can use it as a binary operator to write `x , y`. However, following mathematical tradition, we will write brackets around that, to get `(x , y)`, even if this is not necessary. We also declare a fixity and precedence for this operator.
+Here we automatically get the projections with the same types and definitions as above and hence we don't need to provide them. In order for the projections `pr₁` and `pr₂` to be visible outside the scope of the record, we `open` the record. Moreover, we open it `public` so that when other files import this one, these two projections will be visible in the other files. The "constructor" allows to form an element of this type. Because "," is not a reserved symbol in Agda, we can use it as a binary operator to write `x , y`. However, following mathematical tradition, we will write brackets around that, to get `(x , y)`, even if this is not necessary. We also declare a fixity and precedence for this operator.
 
 ```agda
 open Σ public

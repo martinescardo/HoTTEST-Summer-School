@@ -44,10 +44,10 @@ The symbol `⇔` is often pronounced "if and only if".
 We use the first and second projections to extract the left-to-right implication and the right-to-left implication:
 ```agda
 lr-implication : {A B : Type} → (A ⇔ B) → (A → B)
-lr-implication = fst
+lr-implication = pr₁
 
 rl-implication : {A B : Type} → (A ⇔ B) → (B → A)
-rl-implication = snd
+rl-implication = pr₂
 ```
 
 ## Alternative definition of `_×_`

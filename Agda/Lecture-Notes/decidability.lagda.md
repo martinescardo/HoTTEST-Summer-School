@@ -134,7 +134,7 @@ predicate-decidability-with-booleans {X} A = f , g
   f d = α , β
    where
     α : X → Bool
-    α x = fst (lr-implication I (d x))
+    α x = pr₁ (lr-implication I (d x))
      where
       I : is-decidable (A x) ⇔ Σ b ꞉ Bool , (A x ⇔ b ≡ true)
       I = decidability-with-booleans (A x)
@@ -149,10 +149,10 @@ predicate-decidability-with-booleans {X} A = f , g
       II = I (d x)
 
       ϕ : A x → α x ≡ true
-      ϕ = lr-implication (snd II)
+      ϕ = lr-implication (pr₂ II)
 
       γ : α x ≡ true → A x
-      γ = rl-implication (snd II)
+      γ = rl-implication (pr₂ II)
 
   g : (Σ α ꞉ (X → Bool) , ((x : X) → A x ⇔ α x ≡ true)) → is-decidable-predicate A
   g (α , ϕ) = d

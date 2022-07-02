@@ -51,10 +51,10 @@ Hedbergs-Lemma : {X : Type} (x : X)
 Hedbergs-Lemma {X} x c y p q = II
  where
   f : (y : X) → x ≡ y → x ≡ y
-  f y = fst (c y)
+  f y = pr₁ (c y)
 
   κ : (y : X) (p q : x ≡ y) → f y p ≡ f y q
-  κ y = snd (c y)
+  κ y = pr₂ (c y)
 
   I : (y : X) (p : x ≡ y) → (f x (refl x))⁻¹ ∙ f y p ≡ p
   I x (refl x) = r
@@ -75,7 +75,7 @@ Hedberg-types-are-sets : (X : Type)
                        → is-Hedberg-type X
                        → is-set X
 Hedberg-types-are-sets X c x = Hedbergs-Lemma x
-                                (λ y → fst (c x y) , snd (c x y))
+                                (λ y → pr₁ (c x y) , pr₂ (c x y))
 
 pointed-types-have-constant-endofunction : {X : Type}
                                          → X
