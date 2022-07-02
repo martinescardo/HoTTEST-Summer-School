@@ -8,6 +8,8 @@ at the School of Computer Science of the University of Birmingham, UK.
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
+open import natural-numbers-type hiding (_+_ ; _*_)
+
 module introduction where
 
 private -- Everything is private in this module as things will be redefined again
@@ -34,13 +36,15 @@ Here are some examples of types:
 ```agda
  data Bool : Type where
   true false : Bool
-
+```
+~~~~~
  data ℕ : Type where
   zero : ℕ
   suc  : ℕ → ℕ
 
  {-# BUILTIN NATURAL ℕ #-}
-
+~~~~~
+```agda
  data List (A : Type) : Type where
   []   : List A
   _::_ : A → List A → List A
