@@ -17,6 +17,7 @@ open import general-notation
 # The type `ℕ` of natural numbers
 
 [Recall](introduction.lagda.md) that we defined the type of natural numbers is inductively defined as follows:
+
 ~~~~
 data ℕ : Type where
  zero : ℕ
