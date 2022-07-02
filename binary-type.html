@@ -17,45 +17,49 @@
 
   <article>
 
-<p>Martin Escardo. Notes originally written for the module “Advanced
-Functional Programming” at the School of Computer Science of the
-University of Birmingham, UK.</p>
+<p><a href="Https://www.Cs.Bham.Ac.Uk/~mhe/">Martin Escardo</a>. Notes
+originally written for the module “Advanced Functional Programming” at
+the <a
+href="https://www.birmingham.ac.uk/schools/computer-science/index.aspx">School
+of Computer Science</a> of the <a
+href="https://www.birmingham.ac.uk/index.aspx">University of
+Birmingham</a>, UK.</p>
 <!--
-<pre class="Agda"><a id="178" class="Symbol">{-#</a> <a id="182" class="Keyword">OPTIONS</a> <a id="190" class="Pragma">--without-K</a> <a id="202" class="Pragma">--safe</a> <a id="209" class="Symbol">#-}</a>
+<pre class="Agda"><a id="324" class="Symbol">{-#</a> <a id="328" class="Keyword">OPTIONS</a> <a id="336" class="Pragma">--without-K</a> <a id="348" class="Pragma">--safe</a> <a id="355" class="Symbol">#-}</a>
 
-<a id="214" class="Keyword">module</a> <a id="221" href="binary-type.html" class="Module">binary-type</a> <a id="233" class="Keyword">where</a>
+<a id="360" class="Keyword">module</a> <a id="367" href="binary-type.html" class="Module">binary-type</a> <a id="379" class="Keyword">where</a>
 
-<a id="240" class="Keyword">open</a> <a id="245" class="Keyword">import</a> <a id="252" href="general-notation.html" class="Module">general-notation</a>
+<a id="386" class="Keyword">open</a> <a id="391" class="Keyword">import</a> <a id="398" href="general-notation.html" class="Module">general-notation</a>
 </pre>-->
 <h1 id="the-binary-type-𝟚">The binary type 𝟚</h1>
 <p>This type can be defined to be <code>𝟙 ∔ 𝟙</code> using <a
 href="binary-sums.html">binary sums</a>, but we give a direct definition
 which will allow us to discuss some relationships between the various
 type formers of Basic MLTT.</p>
-<pre class="Agda"><a id="519" class="Keyword">data</a> <a id="𝟚"></a><a id="524" href="binary-type.html#524" data-type="Set" class="Datatype">𝟚</a> <a id="526" class="Symbol">:</a> <a id="528" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a> <a id="533" class="Keyword">where</a>
- <a id="𝟚.𝟎"></a><a id="540" href="binary-type.html#540" data-type="𝟚" class="InductiveConstructor">𝟎</a> <a id="𝟚.𝟏"></a><a id="542" href="binary-type.html#542" data-type="𝟚" class="InductiveConstructor">𝟏</a> <a id="544" class="Symbol">:</a> <a id="546" href="binary-type.html#524" data-type="Set" class="Datatype">𝟚</a>
+<pre class="Agda"><a id="665" class="Keyword">data</a> <a id="𝟚"></a><a id="670" href="binary-type.html#670" data-type="Set" class="Datatype">𝟚</a> <a id="672" class="Symbol">:</a> <a id="674" href="general-notation.html#817" data-type="Set₁" class="Function">Type</a> <a id="679" class="Keyword">where</a>
+ <a id="𝟚.𝟎"></a><a id="686" href="binary-type.html#686" data-type="𝟚" class="InductiveConstructor">𝟎</a> <a id="𝟚.𝟏"></a><a id="688" href="binary-type.html#688" data-type="𝟚" class="InductiveConstructor">𝟏</a> <a id="690" class="Symbol">:</a> <a id="692" href="binary-type.html#670" data-type="Set" class="Datatype">𝟚</a>
 </pre>
 This type is not only <a href="isomorphisms.html">isomorphic to
 <code>𝟙 ∔ 𝟙</code></a> but also to the type <a
 href="Bool.html"><code>Bool</code></a> of booleans. Its elimination
 principle is as follows:
-<pre class="Agda"><a id="𝟚-elim"></a><a id="728" href="binary-type.html#728" data-type="A 𝟎 → A 𝟏 → (x : 𝟚) → A x" class="Function">𝟚-elim</a> <a id="735" class="Symbol">:</a> <a id="737" class="Symbol">{</a><a id="738" href="binary-type.html#738" class="Bound">A</a> <a id="740" class="Symbol">:</a> <a id="742" href="binary-type.html#524" data-type="Set" class="Datatype">𝟚</a> <a id="744" class="Symbol">→</a> <a id="746" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="750" class="Symbol">}</a>
-       <a id="759" class="Symbol">→</a> <a id="761" href="binary-type.html#738" class="Bound">A</a> <a id="763" href="binary-type.html#540" data-type="𝟚" class="InductiveConstructor">𝟎</a>
-       <a id="772" class="Symbol">→</a> <a id="774" href="binary-type.html#738" class="Bound">A</a> <a id="776" href="binary-type.html#542" data-type="𝟚" class="InductiveConstructor">𝟏</a>
-       <a id="785" class="Symbol">→</a> <a id="787" class="Symbol">(</a><a id="788" href="binary-type.html#788" class="Bound">x</a> <a id="790" class="Symbol">:</a> <a id="792" href="binary-type.html#524" data-type="Set" class="Datatype">𝟚</a><a id="793" class="Symbol">)</a> <a id="795" class="Symbol">→</a> <a id="797" href="binary-type.html#738" class="Bound">A</a> <a id="799" href="binary-type.html#788" class="Bound">x</a>
-<a id="801" href="binary-type.html#728" data-type="A 𝟎 → A 𝟏 → (x : 𝟚) → A x" class="Function">𝟚-elim</a> <a id="808" href="binary-type.html#808" class="Bound">x₀</a> <a id="811" href="binary-type.html#811" class="Bound">x₁</a> <a id="814" href="binary-type.html#540" data-type="𝟚" class="InductiveConstructor">𝟎</a> <a id="816" class="Symbol">=</a> <a id="818" href="binary-type.html#808" class="Bound">x₀</a>
-<a id="821" href="binary-type.html#728" data-type="A 𝟎 → A 𝟏 → (x : 𝟚) → A x" class="Function">𝟚-elim</a> <a id="828" href="binary-type.html#828" class="Bound">x₀</a> <a id="831" href="binary-type.html#831" class="Bound">x₁</a> <a id="834" href="binary-type.html#542" data-type="𝟚" class="InductiveConstructor">𝟏</a> <a id="836" class="Symbol">=</a> <a id="838" href="binary-type.html#831" class="Bound">x₁</a>
+<pre class="Agda"><a id="𝟚-elim"></a><a id="874" href="binary-type.html#874" data-type="A 𝟎 → A 𝟏 → (x : 𝟚) → A x" class="Function">𝟚-elim</a> <a id="881" class="Symbol">:</a> <a id="883" class="Symbol">{</a><a id="884" href="binary-type.html#884" class="Bound">A</a> <a id="886" class="Symbol">:</a> <a id="888" href="binary-type.html#670" data-type="Set" class="Datatype">𝟚</a> <a id="890" class="Symbol">→</a> <a id="892" href="general-notation.html#817" data-type="Set₁" class="Function">Type</a><a id="896" class="Symbol">}</a>
+       <a id="905" class="Symbol">→</a> <a id="907" href="binary-type.html#884" class="Bound">A</a> <a id="909" href="binary-type.html#686" data-type="𝟚" class="InductiveConstructor">𝟎</a>
+       <a id="918" class="Symbol">→</a> <a id="920" href="binary-type.html#884" class="Bound">A</a> <a id="922" href="binary-type.html#688" data-type="𝟚" class="InductiveConstructor">𝟏</a>
+       <a id="931" class="Symbol">→</a> <a id="933" class="Symbol">(</a><a id="934" href="binary-type.html#934" class="Bound">x</a> <a id="936" class="Symbol">:</a> <a id="938" href="binary-type.html#670" data-type="Set" class="Datatype">𝟚</a><a id="939" class="Symbol">)</a> <a id="941" class="Symbol">→</a> <a id="943" href="binary-type.html#884" class="Bound">A</a> <a id="945" href="binary-type.html#934" class="Bound">x</a>
+<a id="947" href="binary-type.html#874" data-type="A 𝟎 → A 𝟏 → (x : 𝟚) → A x" class="Function">𝟚-elim</a> <a id="954" href="binary-type.html#954" class="Bound">x₀</a> <a id="957" href="binary-type.html#957" class="Bound">x₁</a> <a id="960" href="binary-type.html#686" data-type="𝟚" class="InductiveConstructor">𝟎</a> <a id="962" class="Symbol">=</a> <a id="964" href="binary-type.html#954" class="Bound">x₀</a>
+<a id="967" href="binary-type.html#874" data-type="A 𝟎 → A 𝟏 → (x : 𝟚) → A x" class="Function">𝟚-elim</a> <a id="974" href="binary-type.html#974" class="Bound">x₀</a> <a id="977" href="binary-type.html#977" class="Bound">x₁</a> <a id="980" href="binary-type.html#688" data-type="𝟚" class="InductiveConstructor">𝟏</a> <a id="982" class="Symbol">=</a> <a id="984" href="binary-type.html#977" class="Bound">x₁</a>
 </pre>
 In logical terms, this says that it order to show that a property
 <code>A</code> of elements of the binary type <code>𝟚</code> holds for
 all elements of the type <code>𝟚</code>, it is enough to show that it
 holds for <code>𝟎</code> and for <code>𝟏</code>. The non-dependent
 version of the eliminator is the following:
-<pre class="Agda"><a id="𝟚-nondep-elim"></a><a id="1116" href="binary-type.html#1116" data-type="A → A → 𝟚 → A" class="Function">𝟚-nondep-elim</a> <a id="1130" class="Symbol">:</a> <a id="1132" class="Symbol">{</a><a id="1133" href="binary-type.html#1133" class="Bound">A</a> <a id="1135" class="Symbol">:</a> <a id="1137" href="general-notation.html#671" data-type="Set₁" class="Function">Type</a><a id="1141" class="Symbol">}</a>
-              <a id="1157" class="Symbol">→</a> <a id="1159" href="binary-type.html#1133" class="Bound">A</a>
-              <a id="1175" class="Symbol">→</a> <a id="1177" href="binary-type.html#1133" class="Bound">A</a>
-              <a id="1193" class="Symbol">→</a> <a id="1195" href="binary-type.html#524" data-type="Set" class="Datatype">𝟚</a> <a id="1197" class="Symbol">→</a> <a id="1199" href="binary-type.html#1133" class="Bound">A</a>
-<a id="1201" href="binary-type.html#1116" data-type="A → A → 𝟚 → A" class="Function">𝟚-nondep-elim</a> <a id="1215" class="Symbol">{</a><a id="1216" href="binary-type.html#1216" class="Bound">A</a><a id="1217" class="Symbol">}</a> <a id="1219" class="Symbol">=</a> <a id="1221" href="binary-type.html#728" data-type="A 𝟎 → A 𝟏 → (x : 𝟚) → A x" class="Function">𝟚-elim</a> <a id="1228" class="Symbol">{λ</a> <a id="1231" href="binary-type.html#1231" class="Bound">_</a> <a id="1233" class="Symbol">→</a> <a id="1235" href="binary-type.html#1216" class="Bound">A</a><a id="1236" class="Symbol">}</a>
+<pre class="Agda"><a id="𝟚-nondep-elim"></a><a id="1262" href="binary-type.html#1262" data-type="A → A → 𝟚 → A" class="Function">𝟚-nondep-elim</a> <a id="1276" class="Symbol">:</a> <a id="1278" class="Symbol">{</a><a id="1279" href="binary-type.html#1279" class="Bound">A</a> <a id="1281" class="Symbol">:</a> <a id="1283" href="general-notation.html#817" data-type="Set₁" class="Function">Type</a><a id="1287" class="Symbol">}</a>
+              <a id="1303" class="Symbol">→</a> <a id="1305" href="binary-type.html#1279" class="Bound">A</a>
+              <a id="1321" class="Symbol">→</a> <a id="1323" href="binary-type.html#1279" class="Bound">A</a>
+              <a id="1339" class="Symbol">→</a> <a id="1341" href="binary-type.html#670" data-type="Set" class="Datatype">𝟚</a> <a id="1343" class="Symbol">→</a> <a id="1345" href="binary-type.html#1279" class="Bound">A</a>
+<a id="1347" href="binary-type.html#1262" data-type="A → A → 𝟚 → A" class="Function">𝟚-nondep-elim</a> <a id="1361" class="Symbol">{</a><a id="1362" href="binary-type.html#1362" class="Bound">A</a><a id="1363" class="Symbol">}</a> <a id="1365" class="Symbol">=</a> <a id="1367" href="binary-type.html#874" data-type="A 𝟎 → A 𝟏 → (x : 𝟚) → A x" class="Function">𝟚-elim</a> <a id="1374" class="Symbol">{λ</a> <a id="1377" href="binary-type.html#1377" class="Bound">_</a> <a id="1379" class="Symbol">→</a> <a id="1381" href="binary-type.html#1362" class="Bound">A</a><a id="1382" class="Symbol">}</a>
 </pre>
 <p>Notice that the non-dependent version is like
 <code>if-then-else</code>, if we think of one of the elements of

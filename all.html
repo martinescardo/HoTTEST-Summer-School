@@ -17,44 +17,48 @@
 
   <article>
 
-<p>Martin Escardo. Notes originally written for the module “Advanced
-Functional Programming” at the School of Computer Science of the
-University of Birmingham, UK.</p>
-<pre class="Agda"><a id="173" class="Symbol">{-#</a> <a id="177" class="Keyword">OPTIONS</a> <a id="185" class="Pragma">--without-K</a> <a id="197" class="Pragma">--safe</a> <a id="204" class="Symbol">#-}</a>
+<p><a href="Https://www.Cs.Bham.Ac.Uk/~mhe/">Martin Escardo</a>. Notes
+originally written for the module “Advanced Functional Programming” at
+the <a
+href="https://www.birmingham.ac.uk/schools/computer-science/index.aspx">School
+of Computer Science</a> of the <a
+href="https://www.birmingham.ac.uk/index.aspx">University of
+Birmingham</a>, UK.</p>
+<pre class="Agda"><a id="319" class="Symbol">{-#</a> <a id="323" class="Keyword">OPTIONS</a> <a id="331" class="Pragma">--without-K</a> <a id="343" class="Pragma">--safe</a> <a id="350" class="Symbol">#-}</a>
 
-<a id="209" class="Keyword">module</a> <a id="216" href="all.html" class="Module">all</a> <a id="220" class="Keyword">where</a>
+<a id="355" class="Keyword">module</a> <a id="362" href="all.html" class="Module">all</a> <a id="366" class="Keyword">where</a>
 
-<a id="227" class="Keyword">import</a> <a id="234" href="Bool.html" class="Module">Bool</a>
-<a id="239" class="Keyword">import</a> <a id="246" href="Bool-functions.html" class="Module">Bool-functions</a>
-<a id="261" class="Keyword">import</a> <a id="268" href="Fin.html" class="Module">Fin</a>
-<a id="272" class="Keyword">import</a> <a id="279" href="Fin-functions.html" class="Module">Fin-functions</a>
-<a id="293" class="Keyword">import</a> <a id="300" href="Hedbergs-Theorem.html" class="Module">Hedbergs-Theorem</a>
-<a id="317" class="Keyword">import</a> <a id="324" href="List.html" class="Module">List</a>
-<a id="329" class="Keyword">import</a> <a id="336" href="List-functions.html" class="Module">List-functions</a>
-<a id="351" class="Keyword">import</a> <a id="358" href="Vector.html" class="Module">Vector</a>
-<a id="365" class="Keyword">import</a> <a id="372" href="Vector-functions.html" class="Module">Vector-functions</a>
-<a id="389" class="Keyword">import</a> <a id="396" href="binary-products.html" class="Module">binary-products</a>
-<a id="412" class="Keyword">import</a> <a id="419" href="binary-products-as-products.html" class="Module">binary-products-as-products</a>
-<a id="447" class="Keyword">import</a> <a id="454" href="binary-sums.html" class="Module">binary-sums</a>
-<a id="466" class="Keyword">import</a> <a id="473" href="binary-sums-as-sums.html" class="Module">binary-sums-as-sums</a>
-<a id="493" class="Keyword">import</a> <a id="500" href="binary-type.html" class="Module">binary-type</a>
-<a id="512" class="Keyword">import</a> <a id="519" href="decidability.html" class="Module">decidability</a>
-<a id="532" class="Keyword">import</a> <a id="539" href="empty-type.html" class="Module">empty-type</a>
-<a id="550" class="Keyword">import</a> <a id="557" href="function-extensionality.html" class="Module">function-extensionality</a>
-<a id="581" class="Keyword">import</a> <a id="588" href="general-notation.html" class="Module">general-notation</a>
-<a id="605" class="Keyword">import</a> <a id="612" href="identity-type.html" class="Module">identity-type</a>
-<a id="626" class="Keyword">import</a> <a id="633" href="isomorphism-functions.html" class="Module">isomorphism-functions</a>
-<a id="655" class="Keyword">import</a> <a id="662" href="isomorphisms.html" class="Module">isomorphisms</a>
-<a id="675" class="Keyword">import</a> <a id="682" href="natural-numbers-functions.html" class="Module">natural-numbers-functions</a>
-<a id="708" class="Keyword">import</a> <a id="715" href="natural-numbers-type.html" class="Module">natural-numbers-type</a>
-<a id="736" class="Keyword">import</a> <a id="743" href="negation.html" class="Module">negation</a>
-<a id="752" class="Keyword">import</a> <a id="759" href="prelude.html" class="Module">prelude</a>
-<a id="767" class="Keyword">import</a> <a id="774" href="products.html" class="Module">products</a>
-<a id="783" class="Keyword">import</a> <a id="790" href="searchability.html" class="Module">searchability</a>
-<a id="804" class="Keyword">import</a> <a id="811" href="sums.html" class="Module">sums</a>
-<a id="816" class="Keyword">import</a> <a id="823" href="sums-equality.html" class="Module">sums-equality</a>
-<a id="837" class="Keyword">import</a> <a id="844" href="unit-type.html" class="Module">unit-type</a>
-<a id="854" class="Comment">-- import vector-and-list-isomorphisms</a>
+<a id="373" class="Keyword">import</a> <a id="380" href="Bool.html" class="Module">Bool</a>
+<a id="385" class="Keyword">import</a> <a id="392" href="Bool-functions.html" class="Module">Bool-functions</a>
+<a id="407" class="Keyword">import</a> <a id="414" href="Fin.html" class="Module">Fin</a>
+<a id="418" class="Keyword">import</a> <a id="425" href="Fin-functions.html" class="Module">Fin-functions</a>
+<a id="439" class="Keyword">import</a> <a id="446" href="Hedbergs-Theorem.html" class="Module">Hedbergs-Theorem</a>
+<a id="463" class="Keyword">import</a> <a id="470" href="List.html" class="Module">List</a>
+<a id="475" class="Keyword">import</a> <a id="482" href="List-functions.html" class="Module">List-functions</a>
+<a id="497" class="Keyword">import</a> <a id="504" href="Vector.html" class="Module">Vector</a>
+<a id="511" class="Keyword">import</a> <a id="518" href="Vector-functions.html" class="Module">Vector-functions</a>
+<a id="535" class="Keyword">import</a> <a id="542" href="binary-products.html" class="Module">binary-products</a>
+<a id="558" class="Keyword">import</a> <a id="565" href="binary-products-as-products.html" class="Module">binary-products-as-products</a>
+<a id="593" class="Keyword">import</a> <a id="600" href="binary-sums.html" class="Module">binary-sums</a>
+<a id="612" class="Keyword">import</a> <a id="619" href="binary-sums-as-sums.html" class="Module">binary-sums-as-sums</a>
+<a id="639" class="Keyword">import</a> <a id="646" href="binary-type.html" class="Module">binary-type</a>
+<a id="658" class="Keyword">import</a> <a id="665" href="decidability.html" class="Module">decidability</a>
+<a id="678" class="Keyword">import</a> <a id="685" href="empty-type.html" class="Module">empty-type</a>
+<a id="696" class="Keyword">import</a> <a id="703" href="function-extensionality.html" class="Module">function-extensionality</a>
+<a id="727" class="Keyword">import</a> <a id="734" href="general-notation.html" class="Module">general-notation</a>
+<a id="751" class="Keyword">import</a> <a id="758" href="identity-type.html" class="Module">identity-type</a>
+<a id="772" class="Keyword">import</a> <a id="779" href="isomorphism-functions.html" class="Module">isomorphism-functions</a>
+<a id="801" class="Keyword">import</a> <a id="808" href="isomorphisms.html" class="Module">isomorphisms</a>
+<a id="821" class="Keyword">import</a> <a id="828" href="natural-numbers-functions.html" class="Module">natural-numbers-functions</a>
+<a id="854" class="Keyword">import</a> <a id="861" href="natural-numbers-type.html" class="Module">natural-numbers-type</a>
+<a id="882" class="Keyword">import</a> <a id="889" href="negation.html" class="Module">negation</a>
+<a id="898" class="Keyword">import</a> <a id="905" href="prelude.html" class="Module">prelude</a>
+<a id="913" class="Keyword">import</a> <a id="920" href="products.html" class="Module">products</a>
+<a id="929" class="Keyword">import</a> <a id="936" href="searchability.html" class="Module">searchability</a>
+<a id="950" class="Keyword">import</a> <a id="957" href="sums.html" class="Module">sums</a>
+<a id="962" class="Keyword">import</a> <a id="969" href="sums-equality.html" class="Module">sums-equality</a>
+<a id="983" class="Keyword">import</a> <a id="990" href="unit-type.html" class="Module">unit-type</a>
+<a id="1000" class="Comment">-- import vector-and-list-isomorphisms</a>
 </pre>
 <p><a href="https://martinescardo.github.io/HoTTEST-Summer-School/">Go
 back to the table of contents</a></p>
