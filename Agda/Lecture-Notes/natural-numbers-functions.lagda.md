@@ -1,9 +1,7 @@
 
-Martin Escardo.
+[Martin Escardo](Https://www.Cs.Bham.Ac.Uk/~mhe/).
 Notes originally written for the module "Advanced Functional Programming"
-at the School of Computer Science of the University of Birmingham, UK.
-
-
+at the [School of Computer Science](https://www.birmingham.ac.uk/schools/computer-science/index.aspx) of the [University of Birmingham](https://www.birmingham.ac.uk/index.aspx), UK.
 <!--
 ```agda
 {-# OPTIONS --without-K --safe #-}

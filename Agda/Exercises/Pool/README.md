@@ -1,8 +1,8 @@
 Tom de Jong.
 
 A pool of Agda exercises originally intended for lab sessions and homework in
-the module "Advanced Functional Programming" at the School of Computer Science
-of the University of Birmingham, UK.
+the module "Advanced Functional Programming" at the [School of Computer Science](https://www.birmingham.ac.uk/schools/computer-science/index.aspx)
+of the [University of Birmingham](https://www.birmingham.ac.uk/index.aspx), UK.
 
 These exercises were created together with
 [Ayberk Tosun](https://www.cs.bham.ac.uk/~axt978/) and
