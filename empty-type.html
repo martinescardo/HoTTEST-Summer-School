@@ -18,24 +18,25 @@
   <article>
 
 <p><a href="Https://www.Cs.Bham.Ac.Uk/~mhe/">Martin Escardo</a>. Notes
-originally written for the module “Advanced Functional Programming” at
-the <a
+originally written for the module <a
+href="https://program-and-modules-handbook.bham.ac.uk/webhandbooks/WebHandbooks-control-servlet?Action=getModuleDetailsList%22Advanced%20Functional%20Programming%22pgSubj=06%22Advanced%20Functional%20Programming%22pgCrse=35309%22Advanced%20Functional%20Programming%22searchTerm=002024">Advanced
+Functional Programmin</a> at the <a
 href="https://www.birmingham.ac.uk/schools/computer-science/index.aspx">School
 of Computer Science</a> of the <a
 href="https://www.birmingham.ac.uk/index.aspx">University of
 Birmingham</a>, UK.</p>
 <!--
-<pre class="Agda"><a id="324" class="Symbol">{-#</a> <a id="328" class="Keyword">OPTIONS</a> <a id="336" class="Pragma">--without-K</a> <a id="348" class="Pragma">--safe</a> <a id="355" class="Symbol">#-}</a>
+<pre class="Agda"><a id="579" class="Symbol">{-#</a> <a id="583" class="Keyword">OPTIONS</a> <a id="591" class="Pragma">--without-K</a> <a id="603" class="Pragma">--safe</a> <a id="610" class="Symbol">#-}</a>
 
-<a id="360" class="Keyword">module</a> <a id="367" href="empty-type.html" class="Module">empty-type</a> <a id="378" class="Keyword">where</a>
+<a id="615" class="Keyword">module</a> <a id="622" href="empty-type.html" class="Module">empty-type</a> <a id="633" class="Keyword">where</a>
 
-<a id="385" class="Keyword">open</a> <a id="390" class="Keyword">import</a> <a id="397" href="general-notation.html" class="Module">general-notation</a>
+<a id="640" class="Keyword">open</a> <a id="645" class="Keyword">import</a> <a id="652" href="general-notation.html" class="Module">general-notation</a>
 </pre>-->
 <h1 id="the-empty-type-𝟘">The empty type 𝟘</h1>
 <p>It is convenient to have an empty type <code>𝟘</code>, with no
 elements at all. For example, this can be used in order to define <a
 href="negation.html">negation</a>, among other things.</p>
-<pre class="Agda"><a id="620" class="Keyword">data</a> <a id="𝟘"></a><a id="625" href="empty-type.html#625" data-type="Set" class="Datatype">𝟘</a> <a id="627" class="Symbol">:</a> <a id="629" href="general-notation.html#817" data-type="Set₁" class="Function">Type</a> <a id="634" class="Keyword">where</a>
+<pre class="Agda"><a id="875" class="Keyword">data</a> <a id="𝟘"></a><a id="880" href="empty-type.html#880" data-type="Set" class="Datatype">𝟘</a> <a id="882" class="Symbol">:</a> <a id="884" href="general-notation.html#1072" data-type="Set₁" class="Function">Type</a> <a id="889" class="Keyword">where</a>
 </pre>
 <p>And that’s the complete definition. The list of constructors that
 define the type <code>𝟘</code> is empty.</p>
@@ -60,14 +61,14 @@ the desired contradiction. Because of this, in logic the negation of
 <code>A implies a contradiction</code>. Hence in type theory we define
 the negation of a type <code>A</code> to be the function type
 <code>A → 𝟘</code>:
-<pre class="Agda"><a id="¬_"></a><a id="1787" href="empty-type.html#1787" data-type="Type → Type" class="Function Operator">¬_</a> <a id="1790" class="Symbol">:</a> <a id="1792" href="general-notation.html#817" data-type="Set₁" class="Function">Type</a> <a id="1797" class="Symbol">→</a> <a id="1799" href="general-notation.html#817" data-type="Set₁" class="Function">Type</a>
-<a id="1804" href="empty-type.html#1787" data-type="Type → Type" class="Function Operator">¬</a> <a id="1806" href="empty-type.html#1806" class="Bound">A</a> <a id="1808" class="Symbol">=</a> <a id="1810" href="empty-type.html#1806" class="Bound">A</a> <a id="1812" class="Symbol">→</a> <a id="1814" href="empty-type.html#625" data-type="Set" class="Datatype">𝟘</a>
+<pre class="Agda"><a id="¬_"></a><a id="2042" href="empty-type.html#2042" data-type="Type → Type" class="Function Operator">¬_</a> <a id="2045" class="Symbol">:</a> <a id="2047" href="general-notation.html#1072" data-type="Set₁" class="Function">Type</a> <a id="2052" class="Symbol">→</a> <a id="2054" href="general-notation.html#1072" data-type="Set₁" class="Function">Type</a>
+<a id="2059" href="empty-type.html#2042" data-type="Type → Type" class="Function Operator">¬</a> <a id="2061" href="empty-type.html#2061" class="Bound">A</a> <a id="2063" class="Symbol">=</a> <a id="2065" href="empty-type.html#2061" class="Bound">A</a> <a id="2067" class="Symbol">→</a> <a id="2069" href="empty-type.html#880" data-type="Set" class="Datatype">𝟘</a>
 
-<a id="1817" class="Keyword">infix</a> <a id="1823" class="Number">1000</a> <a id="1828" href="empty-type.html#1787" data-type="Type → Type" class="Function Operator">¬_</a>
+<a id="2072" class="Keyword">infix</a> <a id="2078" class="Number">1000</a> <a id="2083" href="empty-type.html#2042" data-type="Type → Type" class="Function Operator">¬_</a>
 </pre>
 <h2 id="elimination-principle">Elimination principle</h2>
-<pre class="Agda"><a id="𝟘-elim"></a><a id="1871" href="empty-type.html#1871" data-type="(x : 𝟘) → A x" class="Function">𝟘-elim</a> <a id="1878" class="Symbol">:</a> <a id="1880" class="Symbol">{</a><a id="1881" href="empty-type.html#1881" class="Bound">A</a> <a id="1883" class="Symbol">:</a> <a id="1885" href="empty-type.html#625" data-type="Set" class="Datatype">𝟘</a> <a id="1887" class="Symbol">→</a> <a id="1889" href="general-notation.html#817" data-type="Set₁" class="Function">Type</a><a id="1893" class="Symbol">}</a> <a id="1895" class="Symbol">(</a><a id="1896" href="empty-type.html#1896" class="Bound">x</a> <a id="1898" class="Symbol">:</a> <a id="1900" href="empty-type.html#625" data-type="Set" class="Datatype">𝟘</a><a id="1901" class="Symbol">)</a> <a id="1903" class="Symbol">→</a> <a id="1905" href="empty-type.html#1881" class="Bound">A</a> <a id="1907" href="empty-type.html#1896" class="Bound">x</a>
-<a id="1909" href="empty-type.html#1871" data-type="(x : 𝟘) → A x" class="Function">𝟘-elim</a> <a id="1916" class="Symbol">()</a>
+<pre class="Agda"><a id="𝟘-elim"></a><a id="2126" href="empty-type.html#2126" data-type="(x : 𝟘) → A x" class="Function">𝟘-elim</a> <a id="2133" class="Symbol">:</a> <a id="2135" class="Symbol">{</a><a id="2136" href="empty-type.html#2136" class="Bound">A</a> <a id="2138" class="Symbol">:</a> <a id="2140" href="empty-type.html#880" data-type="Set" class="Datatype">𝟘</a> <a id="2142" class="Symbol">→</a> <a id="2144" href="general-notation.html#1072" data-type="Set₁" class="Function">Type</a><a id="2148" class="Symbol">}</a> <a id="2150" class="Symbol">(</a><a id="2151" href="empty-type.html#2151" class="Bound">x</a> <a id="2153" class="Symbol">:</a> <a id="2155" href="empty-type.html#880" data-type="Set" class="Datatype">𝟘</a><a id="2156" class="Symbol">)</a> <a id="2158" class="Symbol">→</a> <a id="2160" href="empty-type.html#2136" class="Bound">A</a> <a id="2162" href="empty-type.html#2151" class="Bound">x</a>
+<a id="2164" href="empty-type.html#2126" data-type="(x : 𝟘) → A x" class="Function">𝟘-elim</a> <a id="2171" class="Symbol">()</a>
 </pre>
 <p>The <a
 href="https://agda.readthedocs.io/en/latest/language/function-definitions.html#absurd-patterns">absurd
@@ -86,8 +87,8 @@ truth</a>.</p>
 see practical examples in due course.</p>
 The non-dependent version of the eliminator says that there is a
 function from the empty type to any type:
-<pre class="Agda"><a id="𝟘-nondep-elim"></a><a id="2870" href="empty-type.html#2870" data-type="𝟘 → A" class="Function">𝟘-nondep-elim</a> <a id="2884" class="Symbol">:</a> <a id="2886" class="Symbol">{</a><a id="2887" href="empty-type.html#2887" class="Bound">A</a> <a id="2889" class="Symbol">:</a> <a id="2891" href="general-notation.html#817" data-type="Set₁" class="Function">Type</a><a id="2895" class="Symbol">}</a> <a id="2897" class="Symbol">→</a> <a id="2899" href="empty-type.html#625" data-type="Set" class="Datatype">𝟘</a> <a id="2901" class="Symbol">→</a> <a id="2903" href="empty-type.html#2887" class="Bound">A</a>
-<a id="2905" href="empty-type.html#2870" data-type="𝟘 → A" class="Function">𝟘-nondep-elim</a> <a id="2919" class="Symbol">{</a><a id="2920" href="empty-type.html#2920" class="Bound">A</a><a id="2921" class="Symbol">}</a> <a id="2923" class="Symbol">=</a> <a id="2925" href="empty-type.html#1871" data-type="(x : 𝟘) → A x" class="Function">𝟘-elim</a> <a id="2932" class="Symbol">{λ</a> <a id="2935" href="empty-type.html#2935" class="Bound">_</a> <a id="2937" class="Symbol">→</a> <a id="2939" href="empty-type.html#2920" class="Bound">A</a><a id="2940" class="Symbol">}</a>
+<pre class="Agda"><a id="𝟘-nondep-elim"></a><a id="3125" href="empty-type.html#3125" data-type="𝟘 → A" class="Function">𝟘-nondep-elim</a> <a id="3139" class="Symbol">:</a> <a id="3141" class="Symbol">{</a><a id="3142" href="empty-type.html#3142" class="Bound">A</a> <a id="3144" class="Symbol">:</a> <a id="3146" href="general-notation.html#1072" data-type="Set₁" class="Function">Type</a><a id="3150" class="Symbol">}</a> <a id="3152" class="Symbol">→</a> <a id="3154" href="empty-type.html#880" data-type="Set" class="Datatype">𝟘</a> <a id="3156" class="Symbol">→</a> <a id="3158" href="empty-type.html#3142" class="Bound">A</a>
+<a id="3160" href="empty-type.html#3125" data-type="𝟘 → A" class="Function">𝟘-nondep-elim</a> <a id="3174" class="Symbol">{</a><a id="3175" href="empty-type.html#3175" class="Bound">A</a><a id="3176" class="Symbol">}</a> <a id="3178" class="Symbol">=</a> <a id="3180" href="empty-type.html#2126" data-type="(x : 𝟘) → A x" class="Function">𝟘-elim</a> <a id="3187" class="Symbol">{λ</a> <a id="3190" href="empty-type.html#3190" class="Bound">_</a> <a id="3192" class="Symbol">→</a> <a id="3194" href="empty-type.html#3175" class="Bound">A</a><a id="3195" class="Symbol">}</a>
 </pre>
 <h2 id="definition-of-emptiness">Definition of emptiness</h2>
 On the other hand, there is a function <code>f : A → 𝟘</code> if and
@@ -96,8 +97,8 @@ also empty. This is because if <code>x : A</code>, there is no element
 <code>y : 𝟘</code> we can choose in order to define <code>f x</code> to
 be <code>y</code>. In fact, we make this observation into our definition
 of emptiness:
-<pre class="Agda"><a id="is-empty"></a><a id="3275" href="empty-type.html#3275" data-type="Type → Type" class="Function">is-empty</a> <a id="3284" class="Symbol">:</a> <a id="3286" href="general-notation.html#817" data-type="Set₁" class="Function">Type</a> <a id="3291" class="Symbol">→</a> <a id="3293" href="general-notation.html#817" data-type="Set₁" class="Function">Type</a>
-<a id="3298" href="empty-type.html#3275" data-type="Type → Type" class="Function">is-empty</a> <a id="3307" href="empty-type.html#3307" class="Bound">A</a> <a id="3309" class="Symbol">=</a> <a id="3311" href="empty-type.html#3307" class="Bound">A</a> <a id="3313" class="Symbol">→</a> <a id="3315" href="empty-type.html#625" data-type="Set" class="Datatype">𝟘</a>
+<pre class="Agda"><a id="is-empty"></a><a id="3530" href="empty-type.html#3530" data-type="Type → Type" class="Function">is-empty</a> <a id="3539" class="Symbol">:</a> <a id="3541" href="general-notation.html#1072" data-type="Set₁" class="Function">Type</a> <a id="3546" class="Symbol">→</a> <a id="3548" href="general-notation.html#1072" data-type="Set₁" class="Function">Type</a>
+<a id="3553" href="empty-type.html#3530" data-type="Type → Type" class="Function">is-empty</a> <a id="3562" href="empty-type.html#3562" class="Bound">A</a> <a id="3564" class="Symbol">=</a> <a id="3566" href="empty-type.html#3562" class="Bound">A</a> <a id="3568" class="Symbol">→</a> <a id="3570" href="empty-type.html#880" data-type="Set" class="Datatype">𝟘</a>
 </pre>
 <p>So notice that this is the same definition as that of negation.</p>
 Here is another example of a type that is empty. In the <a
@@ -106,13 +107,13 @@ former <code>_≡_</code>, which <a href="identity-type.html">we will
 revisit</a>, and we have that, for example, the type <code>3 ≡ 4</code>
 is empty, whereas the type <code>3 ≡ 3</code> has an element
 <code>refl 3</code>. Here are some examples coded in Agda:
-<pre class="Agda"><a id="𝟘-is-empty"></a><a id="3726" href="empty-type.html#3726" data-type="is-empty 𝟘" class="Function">𝟘-is-empty</a> <a id="3737" class="Symbol">:</a> <a id="3739" href="empty-type.html#3275" data-type="Type → Type" class="Function">is-empty</a> <a id="3748" href="empty-type.html#625" data-type="Set" class="Datatype">𝟘</a>
-<a id="3750" href="empty-type.html#3726" data-type="is-empty 𝟘" class="Function">𝟘-is-empty</a> <a id="3761" class="Symbol">=</a> <a id="3763" href="empty-type.html#2870" data-type="𝟘 → A" class="Function">𝟘-nondep-elim</a>
+<pre class="Agda"><a id="𝟘-is-empty"></a><a id="3981" href="empty-type.html#3981" data-type="is-empty 𝟘" class="Function">𝟘-is-empty</a> <a id="3992" class="Symbol">:</a> <a id="3994" href="empty-type.html#3530" data-type="Type → Type" class="Function">is-empty</a> <a id="4003" href="empty-type.html#880" data-type="Set" class="Datatype">𝟘</a>
+<a id="4005" href="empty-type.html#3981" data-type="is-empty 𝟘" class="Function">𝟘-is-empty</a> <a id="4016" class="Symbol">=</a> <a id="4018" href="empty-type.html#3125" data-type="𝟘 → A" class="Function">𝟘-nondep-elim</a>
 
-<a id="3778" class="Keyword">open</a> <a id="3783" class="Keyword">import</a> <a id="3790" href="unit-type.html" class="Module">unit-type</a>
+<a id="4033" class="Keyword">open</a> <a id="4038" class="Keyword">import</a> <a id="4045" href="unit-type.html" class="Module">unit-type</a>
 
-<a id="𝟙-is-nonempty"></a><a id="3801" href="empty-type.html#3801" data-type="¬ is-empty 𝟙" class="Function">𝟙-is-nonempty</a> <a id="3815" class="Symbol">:</a> <a id="3817" href="empty-type.html#1787" data-type="Type → Type" class="Function Operator">¬</a> <a id="3819" href="empty-type.html#3275" data-type="Type → Type" class="Function">is-empty</a> <a id="3828" href="unit-type.html#498" data-type="Type" class="Record">𝟙</a>
-<a id="3830" href="empty-type.html#3801" data-type="¬ is-empty 𝟙" class="Function">𝟙-is-nonempty</a> <a id="3844" href="empty-type.html#3844" class="Bound">f</a> <a id="3846" class="Symbol">=</a> <a id="3848" href="empty-type.html#3844" class="Bound">f</a> <a id="3850" href="unit-type.html#528" data-type="𝟙" class="InductiveConstructor">⋆</a>
+<a id="𝟙-is-nonempty"></a><a id="4056" href="empty-type.html#4056" data-type="¬ is-empty 𝟙" class="Function">𝟙-is-nonempty</a> <a id="4070" class="Symbol">:</a> <a id="4072" href="empty-type.html#2042" data-type="Type → Type" class="Function Operator">¬</a> <a id="4074" href="empty-type.html#3530" data-type="Type → Type" class="Function">is-empty</a> <a id="4083" href="unit-type.html#753" data-type="Type" class="Record">𝟙</a>
+<a id="4085" href="empty-type.html#4056" data-type="¬ is-empty 𝟙" class="Function">𝟙-is-nonempty</a> <a id="4099" href="empty-type.html#4099" class="Bound">f</a> <a id="4101" class="Symbol">=</a> <a id="4103" href="empty-type.html#4099" class="Bound">f</a> <a id="4105" href="unit-type.html#783" data-type="𝟙" class="InductiveConstructor">⋆</a>
 </pre>
 The last function works as follows. First we unfold the definition of
 <code>¬ is-empty 𝟙</code> to get <code>is-empty 𝟙 → 𝟘</code>. Unfolding
@@ -122,11 +123,11 @@ exist (and this what we are trying to conclude), we need to produce an
 element of <code>𝟘</code>. We do this by simply applying the mythical
 <code>f</code> to <code>⋆ : 𝟙</code>. We can actually incorporate this
 discussion in the Agda code, if we want:
-<pre class="Agda"><a id="𝟙-is-nonempty&#39;"></a><a id="4313" href="empty-type.html#4313" data-type="¬ is-empty 𝟙" class="Function">𝟙-is-nonempty&#39;</a> <a id="4328" class="Symbol">:</a> <a id="4330" href="empty-type.html#1787" data-type="Type → Type" class="Function Operator">¬</a> <a id="4332" href="empty-type.html#3275" data-type="Type → Type" class="Function">is-empty</a> <a id="4341" href="unit-type.html#498" data-type="Type" class="Record">𝟙</a>
-<a id="4343" href="empty-type.html#4313" data-type="¬ is-empty 𝟙" class="Function">𝟙-is-nonempty&#39;</a> <a id="4358" class="Symbol">=</a> <a id="4360" href="empty-type.html#4371" data-type="(𝟙 → 𝟘) → 𝟘" class="Function">γ</a>
- <a id="4363" class="Keyword">where</a>
-  <a id="4371" href="empty-type.html#4371" data-type="(𝟙 → 𝟘) → 𝟘" class="Function">γ</a> <a id="4373" class="Symbol">:</a> <a id="4375" class="Symbol">(</a><a id="4376" href="unit-type.html#498" data-type="Type" class="Record">𝟙</a> <a id="4378" class="Symbol">→</a> <a id="4380" href="empty-type.html#625" data-type="Set" class="Datatype">𝟘</a><a id="4381" class="Symbol">)</a> <a id="4383" class="Symbol">→</a> <a id="4385" href="empty-type.html#625" data-type="Set" class="Datatype">𝟘</a>
-  <a id="4389" href="empty-type.html#4371" data-type="(𝟙 → 𝟘) → 𝟘" class="Function">γ</a> <a id="4391" href="empty-type.html#4391" class="Bound">f</a> <a id="4393" class="Symbol">=</a> <a id="4395" href="empty-type.html#4391" class="Bound">f</a> <a id="4397" href="unit-type.html#528" data-type="𝟙" class="InductiveConstructor">⋆</a>
+<pre class="Agda"><a id="𝟙-is-nonempty&#39;"></a><a id="4568" href="empty-type.html#4568" data-type="¬ is-empty 𝟙" class="Function">𝟙-is-nonempty&#39;</a> <a id="4583" class="Symbol">:</a> <a id="4585" href="empty-type.html#2042" data-type="Type → Type" class="Function Operator">¬</a> <a id="4587" href="empty-type.html#3530" data-type="Type → Type" class="Function">is-empty</a> <a id="4596" href="unit-type.html#753" data-type="Type" class="Record">𝟙</a>
+<a id="4598" href="empty-type.html#4568" data-type="¬ is-empty 𝟙" class="Function">𝟙-is-nonempty&#39;</a> <a id="4613" class="Symbol">=</a> <a id="4615" href="empty-type.html#4626" data-type="(𝟙 → 𝟘) → 𝟘" class="Function">γ</a>
+ <a id="4618" class="Keyword">where</a>
+  <a id="4626" href="empty-type.html#4626" data-type="(𝟙 → 𝟘) → 𝟘" class="Function">γ</a> <a id="4628" class="Symbol">:</a> <a id="4630" class="Symbol">(</a><a id="4631" href="unit-type.html#753" data-type="Type" class="Record">𝟙</a> <a id="4633" class="Symbol">→</a> <a id="4635" href="empty-type.html#880" data-type="Set" class="Datatype">𝟘</a><a id="4636" class="Symbol">)</a> <a id="4638" class="Symbol">→</a> <a id="4640" href="empty-type.html#880" data-type="Set" class="Datatype">𝟘</a>
+  <a id="4644" href="empty-type.html#4626" data-type="(𝟙 → 𝟘) → 𝟘" class="Function">γ</a> <a id="4646" href="empty-type.html#4646" class="Bound">f</a> <a id="4648" class="Symbol">=</a> <a id="4650" href="empty-type.html#4646" class="Bound">f</a> <a id="4652" href="unit-type.html#783" data-type="𝟙" class="InductiveConstructor">⋆</a>
 </pre>
 <p>Agda accepts this second version because it automatically unfolds
 definitions, just as we have done above, to check whether what we have
