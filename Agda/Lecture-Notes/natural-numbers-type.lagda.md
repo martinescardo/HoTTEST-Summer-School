@@ -18,13 +18,13 @@ open import general-notation
 
 [Recall](introduction.lagda.md) that we defined the type of natural numbers is inductively defined as follows:
 
-~~~~
+```notagda
 data ℕ : Type where
  zero : ℕ
  suc  : ℕ → ℕ
 
 {-# BUILTIN NATURAL ℕ #-}
-~~~~
+```
 
 ## Elimination principle
 

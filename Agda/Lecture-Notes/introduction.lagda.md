@@ -10,7 +10,7 @@ at the School of Computer Science of the University of Birmingham, UK.
 module introduction where
 ```
 
-**Warning**. This module should not be imported from any module other than natural-numbers-type.lagda.md. The reason the import is needed there is that the pragma {-# BUILTIN NATURAL ℕ #-} cannot be used in two modules, but the build of these lecture notes requires importing all files.
+**Warning for maintainers of the lecture notes**. This module should not be imported from any module other than natural-numbers-type.lagda.md. The reason the import is needed there is that the pragma {-# BUILTIN NATURAL ℕ #-} cannot be used in two modules, but the build of these lecture notes requires importing all files.
 
 -->
 # Introduction to Agda
