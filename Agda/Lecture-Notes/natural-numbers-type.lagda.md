@@ -10,29 +10,20 @@ at the School of Computer Science of the University of Birmingham, UK.
 
 module natural-numbers-type where
 
+open import introduction using (ℕ ; zero ; suc) public
 open import general-notation
 ```
 -->
 # The type `ℕ` of natural numbers
 
-The type of natural numbers is inductively defined as follows:
-```agda
+[Recall](introduction.lagda.md) that we defined the type of natural numbers is inductively defined as follows:
+~~~~
 data ℕ : Type where
  zero : ℕ
  suc  : ℕ → ℕ
 
 {-# BUILTIN NATURAL ℕ #-}
-```
-
-The pragma `BUILTIN NATURAL` is to get syntax sugar to be able to write 0,1,2,3,... rather than the more verbose
-
- * zero
- * suc zero
- * suc (suc zero)
- * suc (suc (suc zero))
- * ⋯
-
-We pronounce `suc` as "successor".
+~~~~
 
 ## Elimination principle
 
