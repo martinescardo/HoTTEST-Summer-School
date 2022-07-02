@@ -1,6 +1,6 @@
 
 [Martin Escardo](Https://www.Cs.Bham.Ac.Uk/~mhe/).
-Notes originally written for the module "Advanced Functional Programming"
+Notes originally written for the module [Advanced Functional Programmin](https://program-and-modules-handbook.bham.ac.uk/webhandbooks/WebHandbooks-control-servlet?Action=getModuleDetailsList"Advanced Functional Programming"pgSubj=06"Advanced Functional Programming"pgCrse=35309"Advanced Functional Programming"searchTerm=002024)
 at the [School of Computer Science](https://www.birmingham.ac.uk/schools/computer-science/index.aspx) of the [University of Birmingham](https://www.birmingham.ac.uk/index.aspx), UK.
 
 
