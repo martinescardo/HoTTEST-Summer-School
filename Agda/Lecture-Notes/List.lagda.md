@@ -49,3 +49,5 @@ List-nondep-elim {X} {A} a f = List-elim {X} (λ _ → A) a f
 ## Induction on lists
 
 In terms of logic, the elimination principle gives an induction principle for proving properties of lists.
+
+[Go back to the table of contents](../README.md)

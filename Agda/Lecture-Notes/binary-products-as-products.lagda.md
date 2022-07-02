@@ -63,3 +63,5 @@ binary-product-isomorphism funext A₀ A₁ = record { bijection = f ; bijectivi
   f-is-bijection = record { inverse = g ; η = gf ; ε = fg }
 ```
 Notice that the above argument, in Agda, not only *shows* that the types are indeed isomorphic, but also explains *how* and *why* they are isomorphic. Thus, logical arguments coded in Agda are useful not only to get confidence in correctness, but also to gain understanding.
+
+[Go back to the table of contents](../README.md)

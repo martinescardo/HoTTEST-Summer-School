@@ -40,3 +40,5 @@ f $ x = f x
 
 infixr 0 _$_
 ```
+
+[Go back to the table of contents](../README.md)

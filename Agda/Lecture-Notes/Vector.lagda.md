@@ -64,3 +64,5 @@ Vector-nondep-elim' {X} {A} = Vector-elim' {X} (λ {_} _ → A)
 ## Induction on vectors
 
 As for lists, it is given by the proposition-as-types reading of the type of `Vector-elim`.
+
+[Go back to the table of contents](../README.md)

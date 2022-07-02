@@ -74,3 +74,5 @@ So this again looks like [primitive recursion](natural-numbers-type.lagda.md). A
 ι zero    = zero
 ι (suc x) = suc (ι x)
 ```
+
+[Go back to the table of contents](../README.md)

@@ -54,3 +54,5 @@ binary-sum-isomorphism A₀ A₁ = record { bijection = f ; bijectivity = f-is-b
   f-is-bijection : is-bijection f
   f-is-bijection = record { inverse = g ; η = gf ; ε = fg }
 ```
+
+[Go back to the table of contents](../README.md)

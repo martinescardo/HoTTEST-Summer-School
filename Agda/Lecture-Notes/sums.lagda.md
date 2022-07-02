@@ -101,3 +101,5 @@ It is important to notice that it is possible to write types that correspond to 
 ## Existential quantification in HoTT/UF
 
 In HoTT/UF it useful to have an alternative existential quantifier `∃ x : X , A x` defined to be `∥ Σ x : X , A x ∥` where `∥_∥` is a certain *propositional truncation* operation.
+
+[Go back to the table of contents](../README.md)

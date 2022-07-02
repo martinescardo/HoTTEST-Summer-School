@@ -433,3 +433,5 @@ double-correct (suc x) = γ
       suc (x + suc x)      ≡⟨ refl _ ⟩
       suc x + suc x        ∎
 ```
+
+[Go back to the table of contents](../README.md)

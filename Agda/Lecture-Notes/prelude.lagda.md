@@ -22,3 +22,5 @@ open import Bool public
 open import List public
 open import Vector public
 ```
+
+[Go back to the table of contents](../README.md)

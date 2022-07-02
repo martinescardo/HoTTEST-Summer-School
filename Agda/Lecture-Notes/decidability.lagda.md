@@ -357,3 +357,5 @@ private
    contradiction : ¬ (0 ≡ 1)
    contradiction ()
 ```
+
+[Go back to the table of contents](../README.md)

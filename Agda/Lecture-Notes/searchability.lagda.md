@@ -148,3 +148,5 @@ Fin-is-searchable n = ≅-is-searchable
                        (Fin'-is-searchable n)
                        (≅-sym (Fin-isomorphism n))
 ```
+
+[Go back to the table of contents](../README.md)

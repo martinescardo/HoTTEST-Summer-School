@@ -80,3 +80,5 @@ suc x * y = x * y + y
 infixr 20 _+_
 infixr 30 _*_
 ```
+
+[Go back to the table of contents](../README.md)

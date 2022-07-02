@@ -25,3 +25,5 @@ FunExt = {A : Type} {B : A → Type} {f g : (x : A) → B x} → f ∼ g → f �
 ```
 Unfortunately, this principle is not provable or disprovable in Agda or MLTT (we say that it is [independent](https://en.wikipedia.org/wiki/Independence_(mathematical_logic))).
 But it is provable in [Cubical Agda](https://agda.readthedocs.io/en/latest/language/cubical.html), which is based on Cubical Type Theory and is outside the scope of these lecture notes. Sometimes we will use function extensionality as an explicit assumption.
+
+[Go back to the table of contents](../README.md)

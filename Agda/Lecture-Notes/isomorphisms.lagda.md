@@ -112,3 +112,5 @@ Bool-𝟚-isomorphism' = record { bijection = f ; bijectivity = f-is-bijection }
   f-is-bijection = record { inverse = g ; η = gf ; ε = fg }
 ```
 And these are the only two isomorphisms (you could try to prove this in Agda as a rather advanced exercise). More advanced examples are in other files.
+
+[Go back to the table of contents](../README.md)

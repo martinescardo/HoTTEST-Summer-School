@@ -46,3 +46,5 @@ _■ : (X : Type) → X ≅ X
 _■ = ≃-refl
 
 ```
+
+[Go back to the table of contents](../README.md)

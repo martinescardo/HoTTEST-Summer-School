@@ -111,3 +111,5 @@ private
  example₅ : example₄ ≡ 1 :: 2 :: 3 :: []
  example₅ = refl _
 ```
+
+[Go back to the table of contents](../README.md)

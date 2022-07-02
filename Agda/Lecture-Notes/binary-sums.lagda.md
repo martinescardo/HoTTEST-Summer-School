@@ -85,3 +85,5 @@ In terms of logic, this means that if `A or B implies C` then both `A implies C`
 ## Alternative definition of `_∔_`
 
 There is [another way to define binary sums](binary-sums-as-sums.lagda.md) as a special case of `Σ`.
+
+[Go back to the table of contents](../README.md)

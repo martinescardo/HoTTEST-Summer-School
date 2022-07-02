@@ -71,3 +71,5 @@ Fin-isomorphism n = record { bijection = f n ; bijectivity = f-is-bijection n }
 ```
 
 **Exercise.** Show that the type `Fin n` is isomorphic to the type `Σ k : ℕ , k < n`.
+
+[Go back to the table of contents](../README.md)

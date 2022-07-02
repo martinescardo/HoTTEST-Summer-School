@@ -122,3 +122,5 @@ infixr  0 _≡⟨_⟩_
 infix   1 _∎
 ```
 We'll see examples of uses of this in other handouts.
+
+[Go back to the table of contents](../README.md)

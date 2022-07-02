@@ -178,3 +178,5 @@ implication-truth-table = ((λ _ → ⋆)   , (λ _ → id)) ,
                           ((λ f → f ⋆) , (λ ⋆ _ → ⋆)) ,
                           ((λ _ → ⋆)   , (λ _ _ → ⋆))
 ```
+
+[Go back to the table of contents](../README.md)

@@ -114,3 +114,5 @@ rev-correct xs =
    reverse xs ++ [] ≡⟨ []-right-neutral (reverse xs) ⟩
    reverse xs       ∎
 ```
+
+[Go back to the table of contents](../README.md)
