@@ -18,19 +18,16 @@
   <article>
 
 <p><a href="Https://www.Cs.Bham.Ac.Uk/~mhe/">Martin Escardo</a>. Notes
-originally written for the module <a
-href="https://program-and-modules-handbook.bham.ac.uk/webhandbooks/WebHandbooks-control-servlet?Action=getModuleDetailsList%22Advanced%20Functional%20Programming%22pgSubj=06%22Advanced%20Functional%20Programming%22pgCrse=35309%22Advanced%20Functional%20Programming%22searchTerm=002022">Advanced
-Functional Programmin</a> at the <a
-href="https://www.birmingham.ac.uk/schools/computer-science/index.aspx">School
-of Computer Science</a> of the <a
+originally written for the module <em>Advanced Functional
+Programming</em> of the <a
 href="https://www.birmingham.ac.uk/index.aspx">University of
 Birmingham</a>, UK.</p>
 <!--
-<pre class="Agda"><a id="579" class="Symbol">{-#</a> <a id="583" class="Keyword">OPTIONS</a> <a id="591" class="Pragma">--without-K</a> <a id="603" class="Pragma">--safe</a> <a id="610" class="Symbol">#-}</a>
+<pre class="Agda"><a id="222" class="Symbol">{-#</a> <a id="226" class="Keyword">OPTIONS</a> <a id="234" class="Pragma">--without-K</a> <a id="246" class="Pragma">--safe</a> <a id="253" class="Symbol">#-}</a>
 
-<a id="615" class="Keyword">module</a> <a id="622" href="function-extensionality.html" class="Module">function-extensionality</a> <a id="646" class="Keyword">where</a>
+<a id="258" class="Keyword">module</a> <a id="265" href="function-extensionality.html" class="Module">function-extensionality</a> <a id="289" class="Keyword">where</a>
 
-<a id="653" class="Keyword">open</a> <a id="658" class="Keyword">import</a> <a id="665" href="general-notation.html" class="Module">general-notation</a>
+<a id="296" class="Keyword">open</a> <a id="301" class="Keyword">import</a> <a id="308" href="general-notation.html" class="Module">general-notation</a>
 </pre>-->
 <h1 id="function-extensionality">Function extensionality</h1>
 Recall that we defined pointwise equality <code>f ∼ g</code> of
@@ -38,9 +35,9 @@ functions in the <a href="identity-type.html">identity type handout</a>.
 The principle of function extensionality says that pointwise equal
 functions are equal and is given by the following type
 <code>FunExt</code>:
-<pre class="Agda"><a id="977" class="Keyword">open</a> <a id="982" class="Keyword">import</a> <a id="989" href="identity-type.html" class="Module">identity-type</a>
+<pre class="Agda"><a id="620" class="Keyword">open</a> <a id="625" class="Keyword">import</a> <a id="632" href="identity-type.html" class="Module">identity-type</a>
 
-<a id="FunExt"></a><a id="1004" href="function-extensionality.html#1004" data-type="Set₁" class="Function">FunExt</a> <a id="1011" class="Symbol">=</a> <a id="1013" class="Symbol">{</a><a id="1014" href="function-extensionality.html#1014" class="Bound">A</a> <a id="1016" class="Symbol">:</a> <a id="1018" href="general-notation.html#1072" data-type="Set₁" class="Function">Type</a><a id="1022" class="Symbol">}</a> <a id="1024" class="Symbol">{</a><a id="1025" href="function-extensionality.html#1025" class="Bound">B</a> <a id="1027" class="Symbol">:</a> <a id="1029" href="function-extensionality.html#1014" class="Bound">A</a> <a id="1031" class="Symbol">→</a> <a id="1033" href="general-notation.html#1072" data-type="Set₁" class="Function">Type</a><a id="1037" class="Symbol">}</a> <a id="1039" class="Symbol">{</a><a id="1040" href="function-extensionality.html#1040" class="Bound">f</a> <a id="1042" href="function-extensionality.html#1042" class="Bound">g</a> <a id="1044" class="Symbol">:</a> <a id="1046" class="Symbol">(</a><a id="1047" href="function-extensionality.html#1047" class="Bound">x</a> <a id="1049" class="Symbol">:</a> <a id="1051" href="function-extensionality.html#1014" class="Bound">A</a><a id="1052" class="Symbol">)</a> <a id="1054" class="Symbol">→</a> <a id="1056" href="function-extensionality.html#1025" class="Bound">B</a> <a id="1058" href="function-extensionality.html#1047" class="Bound">x</a><a id="1059" class="Symbol">}</a> <a id="1061" class="Symbol">→</a> <a id="1063" href="function-extensionality.html#1040" class="Bound">f</a> <a id="1065" href="identity-type.html#3615" data-type="((x : A) → B x) → ((x : A) → B x) → Type" class="Function Operator">∼</a> <a id="1067" href="function-extensionality.html#1042" class="Bound">g</a> <a id="1069" class="Symbol">→</a> <a id="1071" href="function-extensionality.html#1040" class="Bound">f</a> <a id="1073" href="identity-type.html#984" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="1075" href="function-extensionality.html#1042" class="Bound">g</a>
+<a id="FunExt"></a><a id="647" href="function-extensionality.html#647" data-type="Set₁" class="Function">FunExt</a> <a id="654" class="Symbol">=</a> <a id="656" class="Symbol">{</a><a id="657" href="function-extensionality.html#657" class="Bound">A</a> <a id="659" class="Symbol">:</a> <a id="661" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="665" class="Symbol">}</a> <a id="667" class="Symbol">{</a><a id="668" href="function-extensionality.html#668" class="Bound">B</a> <a id="670" class="Symbol">:</a> <a id="672" href="function-extensionality.html#657" class="Bound">A</a> <a id="674" class="Symbol">→</a> <a id="676" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="680" class="Symbol">}</a> <a id="682" class="Symbol">{</a><a id="683" href="function-extensionality.html#683" class="Bound">f</a> <a id="685" href="function-extensionality.html#685" class="Bound">g</a> <a id="687" class="Symbol">:</a> <a id="689" class="Symbol">(</a><a id="690" href="function-extensionality.html#690" class="Bound">x</a> <a id="692" class="Symbol">:</a> <a id="694" href="function-extensionality.html#657" class="Bound">A</a><a id="695" class="Symbol">)</a> <a id="697" class="Symbol">→</a> <a id="699" href="function-extensionality.html#668" class="Bound">B</a> <a id="701" href="function-extensionality.html#690" class="Bound">x</a><a id="702" class="Symbol">}</a> <a id="704" class="Symbol">→</a> <a id="706" href="function-extensionality.html#683" class="Bound">f</a> <a id="708" href="identity-type.html#3258" data-type="((x : A) → B x) → ((x : A) → B x) → Type" class="Function Operator">∼</a> <a id="710" href="function-extensionality.html#685" class="Bound">g</a> <a id="712" class="Symbol">→</a> <a id="714" href="function-extensionality.html#683" class="Bound">f</a> <a id="716" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="718" href="function-extensionality.html#685" class="Bound">g</a>
 </pre>
 <p>Unfortunately, this principle is not provable or disprovable in Agda
 or MLTT (we say that it is <a
