@@ -13,7 +13,7 @@ module natural-numbers-functions where
 
 open import prelude
 open import negation
-open import introduction using (ℕ ; suc ; zero)
+open import natural-numbers-type
 ```
 -->
 # Natural numbers functions, relations and properties

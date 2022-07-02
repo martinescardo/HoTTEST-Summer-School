@@ -12,7 +12,7 @@ module decidability where
 
 open import prelude
 open import negation
-open import introduction using (ℕ ; suc ; zero)
+open import natural-numbers-type
 ```
 -->
 # Propositions as types versus propositions as booleans

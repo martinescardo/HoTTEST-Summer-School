@@ -11,7 +11,7 @@ at the School of Computer Science of the University of Birmingham, UK.
 module Vector where
 
 open import general-notation
-open import introduction hiding (Type ; Vector)
+open import natural-numbers-type
 ```
 -->
 # Vectors

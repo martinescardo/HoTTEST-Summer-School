@@ -11,7 +11,7 @@ at the School of Computer Science of the University of Birmingham, UK.
 module Fin where
 
 open import general-notation
-open import introduction using (ℕ ; suc ; zero)
+open import natural-numbers-type
 ```
 -->
 # Finite types
