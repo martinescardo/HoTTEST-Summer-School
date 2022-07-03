@@ -1,7 +1,6 @@
 
-Martin Escardo.
-Notes originally written for the module "Advanced Functional Programming"
-at the School of Computer Science of the University of Birmingham, UK.
+[Martin Escardo](Https://www.Cs.Bham.Ac.Uk/~mhe/).
+Notes originally written for the module *Advanced Functional Programming* of the [University of Birmingham](https://www.birmingham.ac.uk/index.aspx), UK.
 
 
 <!--
@@ -11,7 +10,7 @@ at the School of Computer Science of the University of Birmingham, UK.
 module Fin where
 
 open import general-notation
-open import introduction using (ℕ ; suc ; zero)
+open import natural-numbers-type
 ```
 -->
 # Finite types
@@ -74,3 +73,5 @@ So this again looks like [primitive recursion](natural-numbers-type.lagda.md). A
 ι zero    = zero
 ι (suc x) = suc (ι x)
 ```
+
+[Go back to the table of contents](https://martinescardo.github.io/HoTTEST-Summer-School/)

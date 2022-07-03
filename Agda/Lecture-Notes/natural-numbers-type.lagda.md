@@ -1,7 +1,6 @@
 
-Martin Escardo.
-Notes originally written for the module "Advanced Functional Programming"
-at the School of Computer Science of the University of Birmingham, UK.
+[Martin Escardo](Https://www.Cs.Bham.Ac.Uk/~mhe/).
+Notes originally written for the module *Advanced Functional Programming* of the [University of Birmingham](https://www.birmingham.ac.uk/index.aspx), UK.
 
 
 <!--
@@ -10,21 +9,21 @@ at the School of Computer Science of the University of Birmingham, UK.
 
 module natural-numbers-type where
 
+open import introduction using (ℕ ; zero ; suc) public
 open import general-notation
-open import introduction hiding (Type ; _+_ ; _*_)
 ```
 -->
 # The type `ℕ` of natural numbers
 
-To jog your memory we repeat the definition of the natural numbers given [earlier](introduction.lagda.md#ℕ):
+[Recall](introduction.lagda.md) that we defined the type of natural numbers inductively as follows:
 
-~~~~
+```notagda
 data ℕ : Type where
  zero : ℕ
  suc  : ℕ → ℕ
 
 {-# BUILTIN NATURAL ℕ #-}
-~~~~
+```
 
 ## Elimination principle
 
@@ -80,3 +79,5 @@ suc x * y = x * y + y
 infixr 20 _+_
 infixr 30 _*_
 ```
+
+[Go back to the table of contents](https://martinescardo.github.io/HoTTEST-Summer-School/)

@@ -1,7 +1,6 @@
 
-Martin Escardo.
-Notes originally written for the module "Advanced Functional Programming"
-at the School of Computer Science of the University of Birmingham, UK.
+[Martin Escardo](Https://www.Cs.Bham.Ac.Uk/~mhe/).
+Notes originally written for the module *Advanced Functional Programming* of the [University of Birmingham](https://www.birmingham.ac.uk/index.aspx), UK.
 
 
 # Propositions as types and basic Martin-Löf type theory
@@ -31,3 +30,5 @@ We now complete the proposition-as-types interpretation of logic.
  * As we will see, this type theory is very expressive and allows us to construct rather sophisticated types, including e.g. lists, vectors and trees.
 
  * All types in MLTT ([Martin-Löf type theory](http://archive-pml.github.io/martin-lof/pdfs/Bibliopolis-Book-1984.pdf)) come with *introduction* and *elimination* principles.
+
+[Go back to the table of contents](https://martinescardo.github.io/HoTTEST-Summer-School/)

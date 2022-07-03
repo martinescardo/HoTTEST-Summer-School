@@ -6,7 +6,7 @@ Notes originally written for the module *Advanced Functional Programming* of the
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
-module index where
+module all where
 
 import Bool
 import Bool-functions
@@ -40,3 +40,5 @@ import sums-equality
 import unit-type
 -- import vector-and-list-isomorphisms
 ```
+
+[Go back to the table of contents](https://martinescardo.github.io/HoTTEST-Summer-School/)

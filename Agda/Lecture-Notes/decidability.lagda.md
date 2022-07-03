@@ -1,7 +1,6 @@
 
-Martin Escardo.
-Notes originally written for the module "Advanced Functional Programming"
-at the School of Computer Science of the University of Birmingham, UK.
+[Martin Escardo](Https://www.Cs.Bham.Ac.Uk/~mhe/).
+Notes originally written for the module *Advanced Functional Programming* of the [University of Birmingham](https://www.birmingham.ac.uk/index.aspx), UK.
 
 
 <!--
@@ -12,7 +11,7 @@ module decidability where
 
 open import prelude
 open import negation
-open import introduction using (ℕ ; suc ; zero)
+open import natural-numbers-type
 ```
 -->
 # Propositions as types versus propositions as booleans
@@ -134,7 +133,7 @@ predicate-decidability-with-booleans {X} A = f , g
   f d = α , β
    where
     α : X → Bool
-    α x = fst (lr-implication I (d x))
+    α x = pr₁ (lr-implication I (d x))
      where
       I : is-decidable (A x) ⇔ Σ b ꞉ Bool , (A x ⇔ b ≡ true)
       I = decidability-with-booleans (A x)
@@ -149,10 +148,10 @@ predicate-decidability-with-booleans {X} A = f , g
       II = I (d x)
 
       ϕ : A x → α x ≡ true
-      ϕ = lr-implication (snd II)
+      ϕ = lr-implication (pr₂ II)
 
       γ : α x ≡ true → A x
-      γ = rl-implication (snd II)
+      γ = rl-implication (pr₂ II)
 
   g : (Σ α ꞉ (X → Bool) , ((x : X) → A x ⇔ α x ≡ true)) → is-decidable-predicate A
   g (α , ϕ) = d
@@ -357,3 +356,5 @@ private
    contradiction : ¬ (0 ≡ 1)
    contradiction ()
 ```
+
+[Go back to the table of contents](https://martinescardo.github.io/HoTTEST-Summer-School/)

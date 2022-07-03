@@ -1,7 +1,6 @@
 
-Martin Escardo.
-Notes originally written for the module "Advanced Functional Programming"
-at the School of Computer Science of the University of Birmingham, UK.
+[Martin Escardo](Https://www.Cs.Bham.Ac.Uk/~mhe/).
+Notes originally written for the module *Advanced Functional Programming* of the [University of Birmingham](https://www.birmingham.ac.uk/index.aspx), UK.
 
 
 <!--
@@ -54,3 +53,5 @@ binary-sum-isomorphism A₀ A₁ = record { bijection = f ; bijectivity = f-is-b
   f-is-bijection : is-bijection f
   f-is-bijection = record { inverse = g ; η = gf ; ε = fg }
 ```
+
+[Go back to the table of contents](https://martinescardo.github.io/HoTTEST-Summer-School/)

@@ -1,7 +1,6 @@
 
-Martin Escardo.
-Notes originally written for the module "Advanced Functional Programming"
-at the School of Computer Science of the University of Birmingham, UK.
+[Martin Escardo](Https://www.Cs.Bham.Ac.Uk/~mhe/).
+Notes originally written for the module *Advanced Functional Programming* of the [University of Birmingham](https://www.birmingham.ac.uk/index.aspx), UK.
 
 
 <!--
@@ -11,7 +10,7 @@ at the School of Computer Science of the University of Birmingham, UK.
 module Fin-functions where
 
 open import prelude
-open import introduction using (ℕ ; suc ; zero)
+open import natural-numbers-type
 ```
 -->
 
@@ -71,3 +70,5 @@ Fin-isomorphism n = record { bijection = f n ; bijectivity = f-is-bijection n }
 ```
 
 **Exercise.** Show that the type `Fin n` is isomorphic to the type `Σ k : ℕ , k < n`.
+
+[Go back to the table of contents](https://martinescardo.github.io/HoTTEST-Summer-School/)

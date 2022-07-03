@@ -1,8 +1,6 @@
 
-Martin Escardo.
-Notes originally written for the module "Advanced Functional Programming"
-at the School of Computer Science of the University of Birmingham, UK.
-
+[Martin Escardo](Https://www.Cs.Bham.Ac.Uk/~mhe/).
+Notes originally written for the module *Advanced Functional Programming* of the [University of Birmingham](https://www.birmingham.ac.uk/index.aspx), UK.
 
 <!--
 ```agda
@@ -10,8 +8,13 @@ at the School of Computer Science of the University of Birmingham, UK.
 
 module introduction where
 ```
+
+**Warning for maintainers of the lecture notes**. This module should not be imported from any module other than natural-numbers-type.lagda.md. The reason the import is needed there is that the pragma {-# BUILTIN NATURAL ℕ #-} cannot be used in two modules, but the build of these lecture notes requires importing all files.
+
 -->
 # Introduction to Agda
+
+Everything defined and briefly discussed in this introduction will be redefined and discussed in more detail in other handouts.
 
 ## Initial examples of types in Agda
 
@@ -23,6 +26,7 @@ Type = Set
 -->
 
 Here are some examples of types:
+
 
 ```agda
 data Bool : Type where
@@ -51,7 +55,7 @@ The pragma `BUILTIN NATURAL` is to get syntax sugar to be able to write 0,1,2,3,
 
 We pronounce `suc` as "successor".
 
-## Examples definitions using the above types in Agda
+## Examples of definitions using the above types
 
 ```agda
 not : Bool → Bool
@@ -99,7 +103,6 @@ _++_ : {A : Type} → List A → List A → List A
 (x :: xs) ++ ys = x :: (xs ++ ys)
 
 infixr 20 _++_
-
 ```
 
 ## More sophisticated examples of types in Agda
@@ -226,3 +229,5 @@ This will be the subject of future handouts.
 ## Agda manual
 
 Please study the [Agda manual](https://agda.readthedocs.io/en/latest/) as a complement to these lecture notes.
+
+[Go back to the table of contents](https://martinescardo.github.io/HoTTEST-Summer-School/)

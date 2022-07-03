@@ -1,7 +1,6 @@
 
-Martin Escardo.
-Notes originally written for the module "Advanced Functional Programming"
-at the School of Computer Science of the University of Birmingham, UK.
+[Martin Escardo](Https://www.Cs.Bham.Ac.Uk/~mhe/).
+Notes originally written for the module *Advanced Functional Programming* of the [University of Birmingham](https://www.birmingham.ac.uk/index.aspx), UK.
 
 
 <!--
@@ -89,3 +88,5 @@ The last function works as follows. First we unfold the definition of `¬ is-emp
   γ f = f ⋆
 ```
 Agda accepts this second version because it automatically unfolds definitions, just as we have done above, to check whether what we have written makes sense. In this case, Agda knows that `¬ is-empty 𝟙` is exactly the same thing as `(𝟙 → 𝟘) → 𝟘` *by definition* of `¬` and `is-empty`. More examples are given in the file [negation](negation.lagda.md).
+
+[Go back to the table of contents](https://martinescardo.github.io/HoTTEST-Summer-School/)

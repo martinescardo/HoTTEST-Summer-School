@@ -1,6 +1,12 @@
-Martin Escardo. Notes originally written for the module "Advanced Functional Programming" at the School of Computer Science of the University of Birmingham, UK.
+[Martin Escardo](Https://www.Cs.Bham.Ac.Uk/~mhe/).
+Notes originally written for the module *Advanced Functional Programming*
+at the [School of Computer Science](https://www.birmingham.ac.uk/schools/computer-science/index.aspx) of the [University of Birmingham](https://www.birmingham.ac.uk/index.aspx), UK.
+
+## [Download the Agda files as a zip file](https://github.com/martinescardo/HoTTEST-Summer-School/archive/refs/heads/main.zip)
 
 ## [Agda manual](https://agda.readthedocs.io/en/latest/)
+
+## [Preferred link to see these lecture notes](https://martinescardo.github.io/HoTTEST-Summer-School/)
 
 ## [Lecture Notes](./)
 
@@ -35,5 +41,10 @@ Martin Escardo. Notes originally written for the module "Advanced Functional Pro
     1. [Finite types](Lecture-Notes/Fin-functions.lagda.md)
     1. [Lists](Lecture-Notes/List-functions.lagda.md)
     1. [Vectors](Lecture-Notes/Vector-functions.lagda.md)
+ 1. [Hedberg's Theorem](Lecture-Notes/Hedbergs-Theorem.lagda.md)
 
-## [Exercises](Exercises/README.md)
+## [Index of all Agda files](Lecture-Notes/all.lagda.md)
+
+Each of the links above will take you to a different Agda module. You can use this to interactively explore the lecture notes: the Agda code is all type-checked (with the exception of some exercises which are left as holes, `{! !}`), and presented as hypertext. Click on an identifier to be taken to its definition.
+
+## [Exercise Sheets](Exercises/README.md)

@@ -1,7 +1,6 @@
 
-Martin Escardo.
-Notes originally written for the module "Advanced Functional Programming"
-at the School of Computer Science of the University of Birmingham, UK.
+[Martin Escardo](Https://www.Cs.Bham.Ac.Uk/~mhe/).
+Notes originally written for the module *Advanced Functional Programming* of the [University of Birmingham](https://www.birmingham.ac.uk/index.aspx), UK.
 
 
 <!--
@@ -101,3 +100,5 @@ syntax Pi A (λ x → b) = Π x ꞉ A , b
 **Important.** We are using the alternative symbol `꞉` (typed "`\:4`" in the emacs mode for Agda), which is different from the reserved symbol "`:`". We will use the same alternative symbol when we define syntax for the sum type `Σ`.
 
 Notice that, for some reason, Agda has this kind of definition backwards. The end result of this is that now `(x : A) → B x` can be written as `Π x ꞉ A , B x` in Agda as in type theory. (If you happen to know a bit of maths, you may be familiar with the [cartesian product of a family of sets](https://en.wikipedia.org/wiki/Cartesian_product#Infinite_Cartesian_products), and this is the reason the letter `Π` is used.)
+
+[Go back to the table of contents](https://martinescardo.github.io/HoTTEST-Summer-School/)

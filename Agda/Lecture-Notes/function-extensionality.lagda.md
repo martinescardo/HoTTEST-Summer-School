@@ -1,7 +1,6 @@
 
-Martin Escardo.
-Notes originally written for the module "Advanced Functional Programming"
-at the School of Computer Science of the University of Birmingham, UK.
+[Martin Escardo](Https://www.Cs.Bham.Ac.Uk/~mhe/).
+Notes originally written for the module *Advanced Functional Programming* of the [University of Birmingham](https://www.birmingham.ac.uk/index.aspx), UK.
 
 
 <!--
@@ -25,3 +24,5 @@ FunExt = {A : Type} {B : A → Type} {f g : (x : A) → B x} → f ∼ g → f �
 ```
 Unfortunately, this principle is not provable or disprovable in Agda or MLTT (we say that it is [independent](https://en.wikipedia.org/wiki/Independence_(mathematical_logic))).
 But it is provable in [Cubical Agda](https://agda.readthedocs.io/en/latest/language/cubical.html), which is based on Cubical Type Theory and is outside the scope of these lecture notes. Sometimes we will use function extensionality as an explicit assumption.
+
+[Go back to the table of contents](https://martinescardo.github.io/HoTTEST-Summer-School/)

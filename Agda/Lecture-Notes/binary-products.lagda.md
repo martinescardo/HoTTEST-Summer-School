@@ -1,7 +1,6 @@
 
-Martin Escardo.
-Notes originally written for the module "Advanced Functional Programming"
-at the School of Computer Science of the University of Birmingham, UK.
+[Martin Escardo](Https://www.Cs.Bham.Ac.Uk/~mhe/).
+Notes originally written for the module *Advanced Functional Programming* of the [University of Birmingham](https://www.birmingham.ac.uk/index.aspx), UK.
 
 
 <!--
@@ -44,12 +43,14 @@ The symbol `⇔` is often pronounced "if and only if".
 We use the first and second projections to extract the left-to-right implication and the right-to-left implication:
 ```agda
 lr-implication : {A B : Type} → (A ⇔ B) → (A → B)
-lr-implication = fst
+lr-implication = pr₁
 
 rl-implication : {A B : Type} → (A ⇔ B) → (B → A)
-rl-implication = snd
+rl-implication = pr₂
 ```
 
 ## Alternative definition of `_×_`
 
 There is [another way to define binary products](binary-products-as-products.lagda.md) as a special case of `Π` rather than `Σ`.
+
+[Go back to the table of contents](https://martinescardo.github.io/HoTTEST-Summer-School/)

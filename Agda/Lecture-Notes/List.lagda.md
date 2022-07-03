@@ -1,7 +1,6 @@
 
-Martin Escardo.
-Notes originally written for the module "Advanced Functional Programming"
-at the School of Computer Science of the University of Birmingham, UK.
+[Martin Escardo](Https://www.Cs.Bham.Ac.Uk/~mhe/).
+Notes originally written for the module *Advanced Functional Programming* of the [University of Birmingham](https://www.birmingham.ac.uk/index.aspx), UK.
 
 
 <!--
@@ -49,3 +48,5 @@ List-nondep-elim {X} {A} a f = List-elim {X} (λ _ → A) a f
 ## Induction on lists
 
 In terms of logic, the elimination principle gives an induction principle for proving properties of lists.
+
+[Go back to the table of contents](https://martinescardo.github.io/HoTTEST-Summer-School/)

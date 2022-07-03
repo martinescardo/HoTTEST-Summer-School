@@ -1,7 +1,6 @@
 
-Martin Escardo.
-Notes originally written for the module "Advanced Functional Programming"
-at the School of Computer Science of the University of Birmingham, UK.
+[Martin Escardo](Https://www.Cs.Bham.Ac.Uk/~mhe/).
+Notes originally written for the module *Advanced Functional Programming* of the [University of Birmingham](https://www.birmingham.ac.uk/index.aspx), UK.
 
 
 <!--
@@ -43,3 +42,5 @@ Notice that the non-dependent version is like `if-then-else`, if we think of one
 
 The dependent version generalizes the *type* of the non-dependent
 version, with the same definition of the function.
+
+[Go back to the table of contents](https://martinescardo.github.io/HoTTEST-Summer-School/)

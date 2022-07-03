@@ -1,7 +1,6 @@
 
-Martin Escardo.
-Notes originally written for the module "Advanced Functional Programming"
-at the School of Computer Science of the University of Birmingham, UK.
+[Martin Escardo](Https://www.Cs.Bham.Ac.Uk/~mhe/).
+Notes originally written for the module *Advanced Functional Programming* of the [University of Birmingham](https://www.birmingham.ac.uk/index.aspx), UK.
 
 
 <!--
@@ -11,7 +10,7 @@ at the School of Computer Science of the University of Birmingham, UK.
 module Vector where
 
 open import general-notation
-open import introduction hiding (Type ; Vector)
+open import natural-numbers-type
 ```
 -->
 # Vectors
@@ -64,3 +63,5 @@ Vector-nondep-elim' {X} {A} = Vector-elim' {X} (λ {_} _ → A)
 ## Induction on vectors
 
 As for lists, it is given by the proposition-as-types reading of the type of `Vector-elim`.
+
+[Go back to the table of contents](https://martinescardo.github.io/HoTTEST-Summer-School/)
