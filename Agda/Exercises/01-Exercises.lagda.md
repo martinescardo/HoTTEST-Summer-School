@@ -24,9 +24,9 @@ module 01-Exercises where
 open import prelude hiding (not-is-involution)
 ```
 
-## Part I: Writing functions on Booleans, natural numbers and lists
+## Part I: Writing functions on Booleans, natural numbers and lists (★/★★)
 
-### Exercise 1
+### Exercise 1 (★)
 
 In the lectures we defined `&&` (logical and) on `Bool` by pattern matching on
 the leftmost argument only.
@@ -43,7 +43,7 @@ One advantage of this definition is that it reads just like a Boolean truth
 table. Later on in this exercise sheet, we will see a disadvantange of this more
 verbose definition.
 
-### Exercise 2
+### Exercise 2 (★)
 
 **Define** `xor` (excluse or) on `Bool`. Exclusive or is true if and only if
 *exactly one* of its arguments is true.
@@ -53,7 +53,7 @@ _xor_ : Bool → Bool → Bool
 a xor b = {!!}
 ```
 
-### Exercise 3
+### Exercise 3 (★)
 
 **Define** the exponential and factorial functions on natural numbers.
 
@@ -75,7 +75,7 @@ n ! = {!!}
 !-example = {!!} -- refl 24 should fill the hole here
 ```
 
-### Exercise 4
+### Exercise 4 (★)
 
 We can recursively compute the maximum of two natural numbers as follows.
 ```agda
@@ -95,7 +95,7 @@ min-example : min 5 3 ≡ 3
 min-example = {!!} -- refl 3 should fill the hole here
 ```
 
-### Exercise 5
+### Exercise 5 (★)
 
 Use pattern matching on lists to **define** `map`.
 
@@ -116,7 +116,7 @@ map-example = {!!} -- refl _ should fill the hole here
                    -- figure out what is supposed to go there.
 ```
 
-### Exercise 6
+### Exercise 6 (★★)
 
 **Define** a function `filter` that takes predicate `p : X → Bool` and a list
   `xs` that returns the list of elements of `xs` for which `p` is true.
@@ -136,13 +136,13 @@ filter-example : filter is-non-zero (4 :: 3 :: 0 :: 1 :: 0 :: []) ≡ 4 :: 3 :: 
 filter-example = {!!} -- refl _ should fill the hole here
 ```
 
-## Part II: The identity type of the Booleans
+## Part II: The identity type of the Booleans (★/★★)
 
 In the lectures we saw a definition of `≣` on natural numbers where the idea was
 that `x ≣ y` is a type which either has precisely one element, if `x` and `y`
 are the same natural number, or else is empty, if `x` and `y` are different.
 
-### Exercise 1
+### Exercise 1 (★)
 
 **Define** `≣` for Booleans this time.
 
@@ -151,7 +151,7 @@ _≣_ : Bool → Bool → Type
 a ≣ b = {!!}
 ```
 
-### Exercise 2
+### Exercise 2 (★)
 
 **Show** that for every Boolean `b` we can find an element of the type `b ≣ b`.
 
@@ -160,7 +160,7 @@ Bool-refl : (b : Bool) → b ≣ b
 Bool-refl = {!!}
 ```
 
-### Exercise 3
+### Exercise 3 (★★)
 
 Just like we did in the lectures for natural numbers, **show** that we can go
 back and forth between `a ≣ b` and `a ≡ b`.
@@ -173,7 +173,7 @@ back and forth between `a ≣ b` and `a ≡ b`.
 ≣-to-≡ = {!!}
 ```
 
-## Part III: Proving in Agda
+## Part III: Proving in Agda (★★/★★★)
 
 We now turn to *proving* things in Agda: one of its key features.
 
@@ -185,7 +185,7 @@ not-is-involution true  = refl true
 not-is-involution false = refl false
 ```
 
-### Exercise 1
+### Exercise 1 (★★)
 
 Use pattern matching to **prove** that `||` is commutative.
 
@@ -194,7 +194,7 @@ Use pattern matching to **prove** that `||` is commutative.
 ||-is-commutative a b = {!!}
 ```
 
-### Exercise 2
+### Exercise 2 (★★)
 
 Taking inspiration from the above, try to **state** and **prove** that `&&` is
 commutative.
@@ -204,7 +204,7 @@ commutative.
 &&-is-commutative = {!!}
 ```
 
-### Exercise 3
+### Exercise 3 (★★)
 
 **Prove** that `&&` and `&&'` are both associative.
 
@@ -219,7 +219,7 @@ commutative.
 **Question**: Can you spot a downside of the more verbose definition of `&&'`
   now?
 
-### Exercise 4
+### Exercise 4 (★★★)
 
 Another key feature of Agda is its ability to carry out inductive proofs. For
 example, here is a commented inductive proof that `max` is commutative.
@@ -244,7 +244,7 @@ min-is-commutative : (n m : ℕ) → min n m ≡ min m n
 min-is-commutative = {!!}
 ```
 
-### Exercise 5
+### Exercise 5 (★★★)
 
 Using another inductive proof, **show** that `n ≡ n + 0` for every natural
 number `n`.
@@ -254,12 +254,12 @@ number `n`.
 0-right-neutral = {!!}
 ```
 
-### Exercise 6
+### Exercise 6 (★★★)
 
 The function `map` on lists is a so-called *functor*, which means that it
 respects the identity and composition, as formally expressed below.
 
-Try to **prove** these equations using pattern matching and an inductive proof.
+Try to **prove** these equations using pattern matching and inductive proofs.
 
 ```agda
 map-id : {X : Type} (xs : List X) → map id xs ≡ xs
