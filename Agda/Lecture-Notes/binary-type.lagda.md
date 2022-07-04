@@ -38,7 +38,7 @@ In logical terms, this says that it order to show that a property `A` of element
               → 𝟚 → A
 𝟚-nondep-elim {A} = 𝟚-elim {λ _ → A}
 ```
-Notice that the non-dependent version is like `if-then-else`, if we think of one of the elements of `A` as `true` and the other as `false.
+Notice that the non-dependent version is like `if-then-else`, if we think of one of the elements of `A` as `true` and the other as `false`.
 
 The dependent version generalizes the *type* of the non-dependent
 version, with the same definition of the function.
