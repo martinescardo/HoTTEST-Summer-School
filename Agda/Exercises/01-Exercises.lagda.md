@@ -2,10 +2,11 @@
 
 ## Please read before starting the exercises
 
-**The exercises are designed to increase in difficulty so that we can cater to our
-large and diverse audience. This also means that it is *perfectly fine* if you
-don't manage to do all exercises: some of them are definitely a bit hard for
-beginners! You may wish to come back to them later when you have learned more.**
+**The exercises are designed to increase in difficulty so that we can cater to
+our large and diverse audience. This also means that it is *perfectly fine* if
+you don't manage to do all exercises: some of them are definitely a bit hard for
+beginners and there are likely too many exercises! You *may* wish to come back
+to them later when you have learned more.**
 
 Having said that, here we go!
 
