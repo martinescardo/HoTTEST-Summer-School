@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>HoTTEST Summer School 2022 Lecture Notes</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+</head>
+
+<body class="text-page">
+<main>
+<div id="post-toc-container" style="padding-left: 1em; padding-right: 1em;">
+
+  <article>
+
+<h1 id="week-01---agda-exercises">Week 01 - Agda Exercises</h1>
+<h2 id="please-read-before-starting-the-exercises">Please read before
+starting the exercises</h2>
+<p><strong>The exercises are designed to increase in difficulty so that
+we can cater to our large and diverse audience. This also means that it
+is <em>perfectly fine</em> if you don’t manage to do all exercises: some
+of them are definitely a bit hard for beginners and there are likely too
+many exercises! You <em>may</em> wish to come back to them later when
+you have learned more.</strong></p>
+<p>Having said that, here we go!</p>
+<p>This is a markdown file with Agda code, which means that it displays
+nicely on GitHub, but at the same time you can load this file in Agda
+and fill the holes to solve exercises.</p>
+<p><strong>Please make a copy of this file to work in, so that it
+doesn’t get overwritten (in case we update the exercises through
+<code>git</code>)!</strong></p>
+<pre class="Agda"><a id="791" class="Symbol">{-#</a> <a id="795" class="Keyword">OPTIONS</a> <a id="803" class="Pragma">--without-K</a> <a id="815" class="Pragma">--allow-unsolved-metas</a> <a id="838" class="Symbol">#-}</a>
+
+<a id="843" class="Keyword">module</a> <a id="850" href="01-Exercises.html" class="Module">01-Exercises</a> <a id="863" class="Keyword">where</a>
+
+<a id="870" class="Keyword">open</a> <a id="875" class="Keyword">import</a> <a id="882" href="prelude.html" class="Module">prelude</a> <a id="890" class="Keyword">hiding</a> <a id="897" class="Symbol">(</a><a id="898" href="Bool.html#5962" data-type="is-involution not" class="Function">not-is-involution</a><a id="915" class="Symbol">)</a>
+</pre>
+<h2
+id="part-i-writing-functions-on-booleans-natural-numbers-and-lists">Part
+I: Writing functions on Booleans, natural numbers and lists (★/★★)</h2>
+<h3 id="exercise-1">Exercise 1 (★)</h3>
+<p>In the lectures we defined <code>&amp;&amp;</code> (logical and) on
+<code>Bool</code> by pattern matching on the leftmost argument only.</p>
+<p><strong>Define</strong> the same operation but this time by pattern
+matching (case splitting) on both arguments.</p>
+<pre class="Agda"><a id="_&amp;&amp;&#39;_"></a><a id="1237" href="01-Exercises.html#1237" data-type="Bool → Bool → Bool" class="Function Operator">_&amp;&amp;&#39;_</a> <a id="1243" class="Symbol">:</a> <a id="1245" href="Bool.html#492" data-type="Set" class="Datatype">Bool</a> <a id="1250" class="Symbol">→</a> <a id="1252" href="Bool.html#492" data-type="Set" class="Datatype">Bool</a> <a id="1257" class="Symbol">→</a> <a id="1259" href="Bool.html#492" data-type="Set" class="Datatype">Bool</a>
+<a id="1264" href="01-Exercises.html#1264" class="Bound">a</a> <a id="1266" href="01-Exercises.html#1237" data-type="Bool → Bool → Bool" class="Function Operator">&amp;&amp;&#39;</a> <a id="1270" href="01-Exercises.html#1270" class="Bound">b</a> <a id="1272" class="Symbol">=</a> <a id="1274" class="Hole">{!!}</a>
+</pre>
+<p>One advantage of this definition is that it reads just like a Boolean
+truth table. Later on in this exercise sheet, we will see a
+disadvantange of this more verbose definition.</p>
+<h3 id="exercise-2">Exercise 2 (★)</h3>
+<p><strong>Define</strong> <code>xor</code> (excluse or) on
+<code>Bool</code>. Exclusive or is true if and only if <em>exactly
+one</em> of its arguments is true.</p>
+<pre class="Agda"><a id="_xor_"></a><a id="1608" href="01-Exercises.html#1608" data-type="Bool → Bool → Bool" class="Function Operator">_xor_</a> <a id="1614" class="Symbol">:</a> <a id="1616" href="Bool.html#492" data-type="Set" class="Datatype">Bool</a> <a id="1621" class="Symbol">→</a> <a id="1623" href="Bool.html#492" data-type="Set" class="Datatype">Bool</a> <a id="1628" class="Symbol">→</a> <a id="1630" href="Bool.html#492" data-type="Set" class="Datatype">Bool</a>
+<a id="1635" href="01-Exercises.html#1635" class="Bound">a</a> <a id="1637" href="01-Exercises.html#1608" data-type="Bool → Bool → Bool" class="Function Operator">xor</a> <a id="1641" href="01-Exercises.html#1641" class="Bound">b</a> <a id="1643" class="Symbol">=</a> <a id="1645" class="Hole">{!!}</a>
+</pre>
+<h3 id="exercise-3">Exercise 3 (★)</h3>
+<p><strong>Define</strong> the exponential and factorial functions on
+natural numbers.</p>
+<p>If you do things correctly, then the examples should compute
+correctly, i.e. the proof that 3 ^ 4 ≡ 81 should simply be given by
+<code>refl _</code> which says that the left hand side and the right
+hand side compute to the same value.</p>
+<pre class="Agda"><a id="_^_"></a><a id="1980" href="01-Exercises.html#1980" data-type="ℕ → ℕ → ℕ" class="Function Operator">_^_</a> <a id="1984" class="Symbol">:</a> <a id="1986" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a> <a id="1988" class="Symbol">→</a> <a id="1990" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a> <a id="1992" class="Symbol">→</a> <a id="1994" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a>
+<a id="1996" href="01-Exercises.html#1996" class="Bound">n</a> <a id="1998" href="01-Exercises.html#1980" data-type="ℕ → ℕ → ℕ" class="Function Operator">^</a> <a id="2000" href="01-Exercises.html#2000" class="Bound">m</a> <a id="2002" class="Symbol">=</a> <a id="2004" class="Hole">{!!}</a>
+
+<a id="^-example"></a><a id="2010" href="01-Exercises.html#2010" data-type="(3 ^ 4) ≡ 81" class="Function">^-example</a> <a id="2020" class="Symbol">:</a> <a id="2022" class="Number">3</a> <a id="2024" href="01-Exercises.html#1980" data-type="ℕ → ℕ → ℕ" class="Function Operator">^</a> <a id="2026" class="Number">4</a> <a id="2028" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="2030" class="Number">81</a>
+<a id="2033" href="01-Exercises.html#2010" data-type="(3 ^ 4) ≡ 81" class="Function">^-example</a> <a id="2043" class="Symbol">=</a> <a id="2045" class="Hole">{!!}</a> <a id="2050" class="Comment">-- refl 81 should fill the hole here</a>
+
+<a id="_!"></a><a id="2088" href="01-Exercises.html#2088" data-type="ℕ → ℕ" class="Function Operator">_!</a> <a id="2091" class="Symbol">:</a> <a id="2093" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a> <a id="2095" class="Symbol">→</a> <a id="2097" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a>
+<a id="2099" href="01-Exercises.html#2099" class="Bound">n</a> <a id="2101" href="01-Exercises.html#2088" data-type="ℕ → ℕ" class="Function Operator">!</a> <a id="2103" class="Symbol">=</a> <a id="2105" class="Hole">{!!}</a>
+
+<a id="!-example"></a><a id="2111" href="01-Exercises.html#2111" data-type="(4 !) ≡ 24" class="Function">!-example</a> <a id="2121" class="Symbol">:</a> <a id="2123" class="Number">4</a> <a id="2125" href="01-Exercises.html#2088" data-type="ℕ → ℕ" class="Function Operator">!</a> <a id="2127" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="2129" class="Number">24</a>
+<a id="2132" href="01-Exercises.html#2111" data-type="(4 !) ≡ 24" class="Function">!-example</a> <a id="2142" class="Symbol">=</a> <a id="2144" class="Hole">{!!}</a> <a id="2149" class="Comment">-- refl 24 should fill the hole here</a>
+</pre>
+<h3 id="exercise-4">Exercise 4 (★)</h3>
+We can recursively compute the maximum of two natural numbers as
+follows.
+<pre class="Agda"><a id="max"></a><a id="2293" href="01-Exercises.html#2293" data-type="ℕ → ℕ → ℕ" class="Function">max</a> <a id="2297" class="Symbol">:</a> <a id="2299" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a> <a id="2301" class="Symbol">→</a> <a id="2303" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a> <a id="2305" class="Symbol">→</a> <a id="2307" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a>
+<a id="2309" href="01-Exercises.html#2293" data-type="ℕ → ℕ → ℕ" class="Function">max</a> <a id="2313" href="introduction.html#1050" data-type="ℕ" class="InductiveConstructor">zero</a>    <a id="2321" href="01-Exercises.html#2321" class="Bound">m</a>       <a id="2329" class="Symbol">=</a> <a id="2331" href="01-Exercises.html#2321" class="Bound">m</a>
+<a id="2333" href="01-Exercises.html#2293" data-type="ℕ → ℕ → ℕ" class="Function">max</a> <a id="2337" class="Symbol">(</a><a id="2338" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="2342" href="01-Exercises.html#2342" class="Bound">n</a><a id="2343" class="Symbol">)</a> <a id="2345" href="introduction.html#1050" data-type="ℕ" class="InductiveConstructor">zero</a>    <a id="2353" class="Symbol">=</a> <a id="2355" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="2359" href="01-Exercises.html#2342" class="Bound">n</a>
+<a id="2361" href="01-Exercises.html#2293" data-type="ℕ → ℕ → ℕ" class="Function">max</a> <a id="2365" class="Symbol">(</a><a id="2366" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="2370" href="01-Exercises.html#2370" class="Bound">n</a><a id="2371" class="Symbol">)</a> <a id="2373" class="Symbol">(</a><a id="2374" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="2378" href="01-Exercises.html#2378" class="Bound">m</a><a id="2379" class="Symbol">)</a> <a id="2381" class="Symbol">=</a> <a id="2383" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="2387" class="Symbol">(</a><a id="2388" href="01-Exercises.html#2293" data-type="ℕ → ℕ → ℕ" class="Function">max</a> <a id="2392" href="01-Exercises.html#2370" class="Bound">n</a> <a id="2394" href="01-Exercises.html#2378" class="Bound">m</a><a id="2395" class="Symbol">)</a>
+</pre>
+<p><strong>Define</strong> the minimum of two natural numbers
+analogously.</p>
+<pre class="Agda"><a id="min"></a><a id="2470" href="01-Exercises.html#2470" data-type="ℕ → ℕ → ℕ" class="Function">min</a> <a id="2474" class="Symbol">:</a> <a id="2476" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a> <a id="2478" class="Symbol">→</a> <a id="2480" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a> <a id="2482" class="Symbol">→</a> <a id="2484" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a>
+<a id="2486" href="01-Exercises.html#2470" data-type="ℕ → ℕ → ℕ" class="Function">min</a> <a id="2490" class="Symbol">=</a> <a id="2492" class="Hole">{!!}</a>
+
+<a id="min-example"></a><a id="2498" href="01-Exercises.html#2498" data-type="min 5 3 ≡ 3" class="Function">min-example</a> <a id="2510" class="Symbol">:</a> <a id="2512" href="01-Exercises.html#2470" data-type="ℕ → ℕ → ℕ" class="Function">min</a> <a id="2516" class="Number">5</a> <a id="2518" class="Number">3</a> <a id="2520" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="2522" class="Number">3</a>
+<a id="2524" href="01-Exercises.html#2498" data-type="min 5 3 ≡ 3" class="Function">min-example</a> <a id="2536" class="Symbol">=</a> <a id="2538" class="Hole">{!!}</a> <a id="2543" class="Comment">-- refl 3 should fill the hole here</a>
+</pre>
+<h3 id="exercise-5">Exercise 5 (★)</h3>
+<p>Use pattern matching on lists to <strong>define</strong>
+<code>map</code>.</p>
+<p>This function should behave as follows:
+<code>map f [x₁ , x₂ , ... , xₙ] = [f x₁ , f x₂ , ... , f xₙ]</code>.
+That is, <code>map f xs</code> applies the given function <code>f</code>
+to every element of the list <code>xs</code> and returns the resulting
+list.</p>
+<pre class="Agda"><a id="map"></a><a id="2881" href="01-Exercises.html#2881" data-type="(X → Y) → List X → List Y" class="Function">map</a> <a id="2885" class="Symbol">:</a> <a id="2887" class="Symbol">{</a><a id="2888" href="01-Exercises.html#2888" class="Bound">X</a> <a id="2890" href="01-Exercises.html#2890" class="Bound">Y</a> <a id="2892" class="Symbol">:</a> <a id="2894" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="2898" class="Symbol">}</a> <a id="2900" class="Symbol">→</a> <a id="2902" class="Symbol">(</a><a id="2903" href="01-Exercises.html#2888" class="Bound">X</a> <a id="2905" class="Symbol">→</a> <a id="2907" href="01-Exercises.html#2890" class="Bound">Y</a><a id="2908" class="Symbol">)</a> <a id="2910" class="Symbol">→</a> <a id="2912" href="List.html#402" data-type="Type → Set" class="Datatype">List</a> <a id="2917" href="01-Exercises.html#2888" class="Bound">X</a> <a id="2919" class="Symbol">→</a> <a id="2921" href="List.html#402" data-type="Type → Set" class="Datatype">List</a> <a id="2926" href="01-Exercises.html#2890" class="Bound">Y</a>
+<a id="2928" href="01-Exercises.html#2881" data-type="(X → Y) → List X → List Y" class="Function">map</a> <a id="2932" href="01-Exercises.html#2932" class="Bound">f</a> <a id="2934" href="01-Exercises.html#2934" class="Bound">xs</a> <a id="2937" class="Symbol">=</a> <a id="2939" class="Hole">{!!}</a>
+
+<a id="map-example"></a><a id="2945" href="01-Exercises.html#2945" data-type="map (_+ 3) (1 :: 2 :: 3 :: []) ≡ 4 :: 5 :: 6 :: []" class="Function">map-example</a> <a id="2957" class="Symbol">:</a> <a id="2959" href="01-Exercises.html#2881" data-type="(X → Y) → List X → List Y" class="Function">map</a> <a id="2963" class="Symbol">(</a><a id="2964" href="natural-numbers-type.html#2879" data-type="ℕ → ℕ → ℕ" class="Function Operator">_+</a> <a id="2967" class="Number">3</a><a id="2968" class="Symbol">)</a> <a id="2970" class="Symbol">(</a><a id="2971" class="Number">1</a> <a id="2973" class="InductiveConstructor Operator">::</a> <a id="2976" class="Number">2</a> <a id="2978" class="InductiveConstructor Operator">::</a> <a id="2981" class="Number">3</a> <a id="2983" class="InductiveConstructor Operator">::</a> <a id="2986" class="InductiveConstructor">[]</a><a id="2988" class="Symbol">)</a> <a id="2990" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="2992" class="Number">4</a> <a id="2994" class="InductiveConstructor Operator">::</a> <a id="2997" class="Number">5</a> <a id="2999" class="InductiveConstructor Operator">::</a> <a id="3002" class="Number">6</a> <a id="3004" class="InductiveConstructor Operator">::</a> <a id="3007" class="InductiveConstructor">[]</a>
+<a id="3010" href="01-Exercises.html#2945" data-type="map (_+ 3) (1 :: 2 :: 3 :: []) ≡ 4 :: 5 :: 6 :: []" class="Function">map-example</a> <a id="3022" class="Symbol">=</a> <a id="3024" class="Hole">{!!}</a> <a id="3029" class="Comment">-- refl _ should fill the hole here</a>
+
+                   <a id="3085" class="Comment">-- We write the underscore, because we don&#39;t wish to repeat</a>
+                   <a id="3164" class="Comment">-- the relatively long &quot;4 :: 5 :: 6 :: []&quot; and Agda can</a>
+                   <a id="3239" class="Comment">-- figure out what is supposed to go there.</a>
+</pre>
+<h3 id="exercise-6">Exercise 6 (★★)</h3>
+<p><strong>Define</strong> a function <code>filter</code> that takes
+predicate <code>p : X → Bool</code> and a list <code>xs</code> that
+returns the list of elements of <code>xs</code> for which <code>p</code>
+is true.</p>
+<p>For example, filtering the non-zero elements of the list [4 , 3 , 0 ,
+1 , 0] should return [4 , 3 , 1], see the code below.</p>
+<pre class="Agda"><a id="filter"></a><a id="3593" href="01-Exercises.html#3593" data-type="(X → Bool) → List X → List X" class="Function">filter</a> <a id="3600" class="Symbol">:</a> <a id="3602" class="Symbol">{</a><a id="3603" href="01-Exercises.html#3603" class="Bound">X</a> <a id="3605" class="Symbol">:</a> <a id="3607" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="3611" class="Symbol">}</a> <a id="3613" class="Symbol">(</a><a id="3614" href="01-Exercises.html#3614" class="Bound">p</a> <a id="3616" class="Symbol">:</a> <a id="3618" href="01-Exercises.html#3603" class="Bound">X</a> <a id="3620" class="Symbol">→</a> <a id="3622" href="Bool.html#492" data-type="Set" class="Datatype">Bool</a><a id="3626" class="Symbol">)</a> <a id="3628" class="Symbol">→</a> <a id="3630" href="List.html#402" data-type="Type → Set" class="Datatype">List</a> <a id="3635" href="01-Exercises.html#3603" class="Bound">X</a> <a id="3637" class="Symbol">→</a> <a id="3639" href="List.html#402" data-type="Type → Set" class="Datatype">List</a> <a id="3644" href="01-Exercises.html#3603" class="Bound">X</a>
+<a id="3646" href="01-Exercises.html#3593" data-type="(X → Bool) → List X → List X" class="Function">filter</a> <a id="3653" class="Symbol">=</a> <a id="3655" class="Hole">{!!}</a>
+
+<a id="is-non-zero"></a><a id="3661" href="01-Exercises.html#3661" data-type="ℕ → Bool" class="Function">is-non-zero</a> <a id="3673" class="Symbol">:</a> <a id="3675" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a> <a id="3677" class="Symbol">→</a> <a id="3679" href="Bool.html#492" data-type="Set" class="Datatype">Bool</a>
+<a id="3684" href="01-Exercises.html#3661" data-type="ℕ → Bool" class="Function">is-non-zero</a> <a id="3696" href="introduction.html#1050" data-type="ℕ" class="InductiveConstructor">zero</a>    <a id="3704" class="Symbol">=</a> <a id="3706" href="Bool.html#516" data-type="Bool" class="InductiveConstructor">false</a>
+<a id="3712" href="01-Exercises.html#3661" data-type="ℕ → Bool" class="Function">is-non-zero</a> <a id="3724" class="Symbol">(</a><a id="3725" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="3729" class="Symbol">_)</a> <a id="3732" class="Symbol">=</a> <a id="3734" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a>
+
+<a id="filter-example"></a><a id="3740" href="01-Exercises.html#3740" data-type="filter is-non-zero (4 :: 3 :: 0 :: 1 :: 0 :: []) ≡
+4 :: 3 :: 1 :: []" class="Function">filter-example</a> <a id="3755" class="Symbol">:</a> <a id="3757" href="01-Exercises.html#3593" data-type="(X → Bool) → List X → List X" class="Function">filter</a> <a id="3764" href="01-Exercises.html#3661" data-type="ℕ → Bool" class="Function">is-non-zero</a> <a id="3776" class="Symbol">(</a><a id="3777" class="Number">4</a> <a id="3779" class="InductiveConstructor Operator">::</a> <a id="3782" class="Number">3</a> <a id="3784" class="InductiveConstructor Operator">::</a> <a id="3787" class="Number">0</a> <a id="3789" class="InductiveConstructor Operator">::</a> <a id="3792" class="Number">1</a> <a id="3794" class="InductiveConstructor Operator">::</a> <a id="3797" class="Number">0</a> <a id="3799" class="InductiveConstructor Operator">::</a> <a id="3802" class="InductiveConstructor">[]</a><a id="3804" class="Symbol">)</a> <a id="3806" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="3808" class="Number">4</a> <a id="3810" class="InductiveConstructor Operator">::</a> <a id="3813" class="Number">3</a> <a id="3815" class="InductiveConstructor Operator">::</a> <a id="3818" class="Number">1</a> <a id="3820" class="InductiveConstructor Operator">::</a> <a id="3823" class="InductiveConstructor">[]</a>
+<a id="3826" href="01-Exercises.html#3740" data-type="filter is-non-zero (4 :: 3 :: 0 :: 1 :: 0 :: []) ≡
+4 :: 3 :: 1 :: []" class="Function">filter-example</a> <a id="3841" class="Symbol">=</a> <a id="3843" class="Hole">{!!}</a> <a id="3848" class="Comment">-- refl _ should fill the hole here</a>
+</pre>
+<h2 id="part-ii-the-identity-type-of-the-booleans">Part II: The identity
+type of the Booleans (★/★★)</h2>
+<p>In the lectures we saw a definition of <code>≣</code> on natural
+numbers where the idea was that <code>x ≣ y</code> is a type which
+either has precisely one element, if <code>x</code> and <code>y</code>
+are the same natural number, or else is empty, if <code>x</code> and
+<code>y</code> are different.</p>
+<h3 id="exercise-1-1">Exercise 1 (★)</h3>
+<p><strong>Define</strong> <code>≣</code> for Booleans this time.</p>
+<pre class="Agda"><a id="_≣_"></a><a id="4248" href="01-Exercises.html#4248" data-type="Bool → Bool → Type" class="Function Operator">_≣_</a> <a id="4252" class="Symbol">:</a> <a id="4254" href="Bool.html#492" data-type="Set" class="Datatype">Bool</a> <a id="4259" class="Symbol">→</a> <a id="4261" href="Bool.html#492" data-type="Set" class="Datatype">Bool</a> <a id="4266" class="Symbol">→</a> <a id="4268" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a>
+<a id="4273" href="01-Exercises.html#4273" class="Bound">a</a> <a id="4275" href="01-Exercises.html#4248" data-type="Bool → Bool → Type" class="Function Operator">≣</a> <a id="4277" href="01-Exercises.html#4277" class="Bound">b</a> <a id="4279" class="Symbol">=</a> <a id="4281" class="Hole">{!!}</a>
+</pre>
+<h3 id="exercise-2-1">Exercise 2 (★)</h3>
+<p><strong>Show</strong> that for every Boolean <code>b</code> we can
+find an element of the type <code>b ≣ b</code>.</p>
+<pre class="Agda"><a id="Bool-refl"></a><a id="4400" href="01-Exercises.html#4400" data-type="(b : Bool) → b ≣ b" class="Function">Bool-refl</a> <a id="4410" class="Symbol">:</a> <a id="4412" class="Symbol">(</a><a id="4413" href="01-Exercises.html#4413" class="Bound">b</a> <a id="4415" class="Symbol">:</a> <a id="4417" href="Bool.html#492" data-type="Set" class="Datatype">Bool</a><a id="4421" class="Symbol">)</a> <a id="4423" class="Symbol">→</a> <a id="4425" href="01-Exercises.html#4413" class="Bound">b</a> <a id="4427" href="01-Exercises.html#4248" data-type="Bool → Bool → Type" class="Function Operator">≣</a> <a id="4429" href="01-Exercises.html#4413" class="Bound">b</a>
+<a id="4431" href="01-Exercises.html#4400" data-type="(b : Bool) → b ≣ b" class="Function">Bool-refl</a> <a id="4441" class="Symbol">=</a> <a id="4443" class="Hole">{!!}</a>
+</pre>
+<h3 id="exercise-3-1">Exercise 3 (★★)</h3>
+<p>Just like we did in the lectures for natural numbers,
+<strong>show</strong> that we can go back and forth between
+<code>a ≣ b</code> and <code>a ≡ b</code>.</p>
+<pre class="Agda"><a id="≡-to-≣"></a><a id="4605" href="01-Exercises.html#4605" data-type="(a b : Bool) → a ≡ b → a ≣ b" class="Function">≡-to-≣</a> <a id="4612" class="Symbol">:</a> <a id="4614" class="Symbol">(</a><a id="4615" href="01-Exercises.html#4615" class="Bound">a</a> <a id="4617" href="01-Exercises.html#4617" class="Bound">b</a> <a id="4619" class="Symbol">:</a> <a id="4621" href="Bool.html#492" data-type="Set" class="Datatype">Bool</a><a id="4625" class="Symbol">)</a> <a id="4627" class="Symbol">→</a> <a id="4629" href="01-Exercises.html#4615" class="Bound">a</a> <a id="4631" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="4633" href="01-Exercises.html#4617" class="Bound">b</a> <a id="4635" class="Symbol">→</a> <a id="4637" href="01-Exercises.html#4615" class="Bound">a</a> <a id="4639" href="01-Exercises.html#4248" data-type="Bool → Bool → Type" class="Function Operator">≣</a> <a id="4641" href="01-Exercises.html#4617" class="Bound">b</a>
+<a id="4643" href="01-Exercises.html#4605" data-type="(a b : Bool) → a ≡ b → a ≣ b" class="Function">≡-to-≣</a> <a id="4650" class="Symbol">=</a> <a id="4652" class="Hole">{!!}</a>
+
+<a id="≣-to-≡"></a><a id="4658" href="01-Exercises.html#4658" data-type="(a b : Bool) → a ≣ b → a ≡ b" class="Function">≣-to-≡</a> <a id="4665" class="Symbol">:</a> <a id="4667" class="Symbol">(</a><a id="4668" href="01-Exercises.html#4668" class="Bound">a</a> <a id="4670" href="01-Exercises.html#4670" class="Bound">b</a> <a id="4672" class="Symbol">:</a> <a id="4674" href="Bool.html#492" data-type="Set" class="Datatype">Bool</a><a id="4678" class="Symbol">)</a> <a id="4680" class="Symbol">→</a> <a id="4682" href="01-Exercises.html#4668" class="Bound">a</a> <a id="4684" href="01-Exercises.html#4248" data-type="Bool → Bool → Type" class="Function Operator">≣</a> <a id="4686" href="01-Exercises.html#4670" class="Bound">b</a> <a id="4688" class="Symbol">→</a> <a id="4690" href="01-Exercises.html#4668" class="Bound">a</a> <a id="4692" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="4694" href="01-Exercises.html#4670" class="Bound">b</a>
+<a id="4696" href="01-Exercises.html#4658" data-type="(a b : Bool) → a ≣ b → a ≡ b" class="Function">≣-to-≡</a> <a id="4703" class="Symbol">=</a> <a id="4705" class="Hole">{!!}</a>
+</pre>
+<h2 id="part-iii-proving-in-agda">Part III: Proving in Agda
+(★★/★★★)</h2>
+<p>We now turn to <em>proving</em> things in Agda: one of its key
+features.</p>
+<p>For example, here is a proof that <code>not (not b) ≡ b</code> for
+every Boolean <code>b</code>.</p>
+<pre class="Agda"><a id="not-is-involution"></a><a id="4905" href="01-Exercises.html#4905" data-type="(b : Bool) → not (not b) ≡ b" class="Function">not-is-involution</a> <a id="4923" class="Symbol">:</a> <a id="4925" class="Symbol">(</a><a id="4926" href="01-Exercises.html#4926" class="Bound">b</a> <a id="4928" class="Symbol">:</a> <a id="4930" href="Bool.html#492" data-type="Set" class="Datatype">Bool</a><a id="4934" class="Symbol">)</a> <a id="4936" class="Symbol">→</a> <a id="4938" href="Bool.html#4051" data-type="Bool → Bool" class="Function">not</a> <a id="4942" class="Symbol">(</a><a id="4943" href="Bool.html#4051" data-type="Bool → Bool" class="Function">not</a> <a id="4947" href="01-Exercises.html#4926" class="Bound">b</a><a id="4948" class="Symbol">)</a> <a id="4950" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="4952" href="01-Exercises.html#4926" class="Bound">b</a>
+<a id="4954" href="01-Exercises.html#4905" data-type="(b : Bool) → not (not b) ≡ b" class="Function">not-is-involution</a> <a id="4972" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a>  <a id="4978" class="Symbol">=</a> <a id="4980" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="4985" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a>
+<a id="4990" href="01-Exercises.html#4905" data-type="(b : Bool) → not (not b) ≡ b" class="Function">not-is-involution</a> <a id="5008" href="Bool.html#516" data-type="Bool" class="InductiveConstructor">false</a> <a id="5014" class="Symbol">=</a> <a id="5016" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="5021" href="Bool.html#516" data-type="Bool" class="InductiveConstructor">false</a>
+</pre>
+<h3 id="exercise-1-2">Exercise 1 (★★)</h3>
+<p>Use pattern matching to <strong>prove</strong> that <code>||</code>
+is commutative.</p>
+<pre class="Agda"><a id="||-is-commutative"></a><a id="5122" href="01-Exercises.html#5122" data-type="(a b : Bool) → a || b ≡ b || a" class="Function">||-is-commutative</a> <a id="5140" class="Symbol">:</a> <a id="5142" class="Symbol">(</a><a id="5143" href="01-Exercises.html#5143" class="Bound">a</a> <a id="5145" href="01-Exercises.html#5145" class="Bound">b</a> <a id="5147" class="Symbol">:</a> <a id="5149" href="Bool.html#492" data-type="Set" class="Datatype">Bool</a><a id="5153" class="Symbol">)</a> <a id="5155" class="Symbol">→</a> <a id="5157" href="01-Exercises.html#5143" class="Bound">a</a> <a id="5159" href="Bool.html#7417" data-type="Bool → Bool → Bool" class="Function Operator">||</a> <a id="5162" href="01-Exercises.html#5145" class="Bound">b</a> <a id="5164" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="5166" href="01-Exercises.html#5145" class="Bound">b</a> <a id="5168" href="Bool.html#7417" data-type="Bool → Bool → Bool" class="Function Operator">||</a> <a id="5171" href="01-Exercises.html#5143" class="Bound">a</a>
+<a id="5173" href="01-Exercises.html#5122" data-type="(a b : Bool) → a || b ≡ b || a" class="Function">||-is-commutative</a> <a id="5191" href="01-Exercises.html#5191" class="Bound">a</a> <a id="5193" href="01-Exercises.html#5193" class="Bound">b</a> <a id="5195" class="Symbol">=</a> <a id="5197" class="Hole">{!!}</a>
+</pre>
+<h3 id="exercise-2-2">Exercise 2 (★★)</h3>
+<p>Taking inspiration from the above, try to <strong>state</strong> and
+<strong>prove</strong> that <code>&amp;&amp;</code> is commutative.</p>
+<pre class="Agda"><a id="&amp;&amp;-is-commutative"></a><a id="5329" href="01-Exercises.html#5329" data-type="unsolved#meta.79" class="Function">&amp;&amp;-is-commutative</a> <a id="5347" class="Symbol">:</a> <a id="5349" class="UnsolvedMeta Hole">{!!}</a>
+<a id="5354" href="01-Exercises.html#5329" data-type="unsolved#meta.79" class="Function">&amp;&amp;-is-commutative</a> <a id="5372" class="Symbol">=</a> <a id="5374" class="Hole">{!!}</a>
+</pre>
+<h3 id="exercise-3-2">Exercise 3 (★★)</h3>
+<p><strong>Prove</strong> that <code>&amp;&amp;</code> and
+<code>&amp;&amp;'</code> are both associative.</p>
+<pre class="Agda"><a id="&amp;&amp;-is-associative"></a><a id="5466" href="01-Exercises.html#5466" data-type="(a b c : Bool) → a &amp;&amp; b &amp;&amp; c ≡ (a &amp;&amp; b) &amp;&amp; c" class="Function">&amp;&amp;-is-associative</a> <a id="5484" class="Symbol">:</a> <a id="5486" class="Symbol">(</a><a id="5487" href="01-Exercises.html#5487" class="Bound">a</a> <a id="5489" href="01-Exercises.html#5489" class="Bound">b</a> <a id="5491" href="01-Exercises.html#5491" class="Bound">c</a> <a id="5493" class="Symbol">:</a> <a id="5495" href="Bool.html#492" data-type="Set" class="Datatype">Bool</a><a id="5499" class="Symbol">)</a> <a id="5501" class="Symbol">→</a> <a id="5503" href="01-Exercises.html#5487" class="Bound">a</a> <a id="5505" href="Bool.html#7356" data-type="Bool → Bool → Bool" class="Function Operator">&amp;&amp;</a> <a id="5508" class="Symbol">(</a><a id="5509" href="01-Exercises.html#5489" class="Bound">b</a> <a id="5511" href="Bool.html#7356" data-type="Bool → Bool → Bool" class="Function Operator">&amp;&amp;</a> <a id="5514" href="01-Exercises.html#5491" class="Bound">c</a><a id="5515" class="Symbol">)</a> <a id="5517" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="5519" class="Symbol">(</a><a id="5520" href="01-Exercises.html#5487" class="Bound">a</a> <a id="5522" href="Bool.html#7356" data-type="Bool → Bool → Bool" class="Function Operator">&amp;&amp;</a> <a id="5525" href="01-Exercises.html#5489" class="Bound">b</a><a id="5526" class="Symbol">)</a> <a id="5528" href="Bool.html#7356" data-type="Bool → Bool → Bool" class="Function Operator">&amp;&amp;</a> <a id="5531" href="01-Exercises.html#5491" class="Bound">c</a>
+<a id="5533" href="01-Exercises.html#5466" data-type="(a b c : Bool) → a &amp;&amp; b &amp;&amp; c ≡ (a &amp;&amp; b) &amp;&amp; c" class="Function">&amp;&amp;-is-associative</a> <a id="5551" class="Symbol">=</a> <a id="5553" class="Hole">{!!}</a>
+
+<a id="&amp;&amp;&#39;-is-associative"></a><a id="5559" href="01-Exercises.html#5559" data-type="(a b c : Bool) → (a &amp;&amp;&#39; (b &amp;&amp;&#39; c)) ≡ ((a &amp;&amp;&#39; b) &amp;&amp;&#39; c)" class="Function">&amp;&amp;&#39;-is-associative</a> <a id="5578" class="Symbol">:</a> <a id="5580" class="Symbol">(</a><a id="5581" href="01-Exercises.html#5581" class="Bound">a</a> <a id="5583" href="01-Exercises.html#5583" class="Bound">b</a> <a id="5585" href="01-Exercises.html#5585" class="Bound">c</a> <a id="5587" class="Symbol">:</a> <a id="5589" href="Bool.html#492" data-type="Set" class="Datatype">Bool</a><a id="5593" class="Symbol">)</a> <a id="5595" class="Symbol">→</a> <a id="5597" href="01-Exercises.html#5581" class="Bound">a</a> <a id="5599" href="01-Exercises.html#1237" data-type="Bool → Bool → Bool" class="Function Operator">&amp;&amp;&#39;</a> <a id="5603" class="Symbol">(</a><a id="5604" href="01-Exercises.html#5583" class="Bound">b</a> <a id="5606" href="01-Exercises.html#1237" data-type="Bool → Bool → Bool" class="Function Operator">&amp;&amp;&#39;</a> <a id="5610" href="01-Exercises.html#5585" class="Bound">c</a><a id="5611" class="Symbol">)</a> <a id="5613" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="5615" class="Symbol">(</a><a id="5616" href="01-Exercises.html#5581" class="Bound">a</a> <a id="5618" href="01-Exercises.html#1237" data-type="Bool → Bool → Bool" class="Function Operator">&amp;&amp;&#39;</a> <a id="5622" href="01-Exercises.html#5583" class="Bound">b</a><a id="5623" class="Symbol">)</a> <a id="5625" href="01-Exercises.html#1237" data-type="Bool → Bool → Bool" class="Function Operator">&amp;&amp;&#39;</a> <a id="5629" href="01-Exercises.html#5585" class="Bound">c</a>
+<a id="5631" href="01-Exercises.html#5559" data-type="(a b c : Bool) → (a &amp;&amp;&#39; (b &amp;&amp;&#39; c)) ≡ ((a &amp;&amp;&#39; b) &amp;&amp;&#39; c)" class="Function">&amp;&amp;&#39;-is-associative</a> <a id="5650" class="Symbol">=</a> <a id="5652" class="Hole">{!!}</a>
+</pre>
+<p><strong>Question</strong>: Can you spot a downside of the more
+verbose definition of <code>&amp;&amp;'</code> now?</p>
+<h3 id="exercise-4-1">Exercise 4 (★★★)</h3>
+<p>Another key feature of Agda is its ability to carry out inductive
+proofs. For example, here is a commented inductive proof that
+<code>max</code> is commutative.</p>
+<pre class="Agda"><a id="max-is-commutative"></a><a id="5929" href="01-Exercises.html#5929" data-type="(n m : ℕ) → max n m ≡ max m n" class="Function">max-is-commutative</a> <a id="5948" class="Symbol">:</a> <a id="5950" class="Symbol">(</a><a id="5951" href="01-Exercises.html#5951" class="Bound">n</a> <a id="5953" href="01-Exercises.html#5953" class="Bound">m</a> <a id="5955" class="Symbol">:</a> <a id="5957" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a><a id="5958" class="Symbol">)</a> <a id="5960" class="Symbol">→</a> <a id="5962" href="01-Exercises.html#2293" data-type="ℕ → ℕ → ℕ" class="Function">max</a> <a id="5966" href="01-Exercises.html#5951" class="Bound">n</a> <a id="5968" href="01-Exercises.html#5953" class="Bound">m</a> <a id="5970" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="5972" href="01-Exercises.html#2293" data-type="ℕ → ℕ → ℕ" class="Function">max</a> <a id="5976" href="01-Exercises.html#5953" class="Bound">m</a> <a id="5978" href="01-Exercises.html#5951" class="Bound">n</a>
+<a id="5980" href="01-Exercises.html#5929" data-type="(n m : ℕ) → max n m ≡ max m n" class="Function">max-is-commutative</a> <a id="5999" href="introduction.html#1050" data-type="ℕ" class="InductiveConstructor">zero</a>    <a id="6007" href="introduction.html#1050" data-type="ℕ" class="InductiveConstructor">zero</a>    <a id="6015" class="Symbol">=</a> <a id="6017" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="6022" href="introduction.html#1050" data-type="ℕ" class="InductiveConstructor">zero</a>
+<a id="6027" href="01-Exercises.html#5929" data-type="(n m : ℕ) → max n m ≡ max m n" class="Function">max-is-commutative</a> <a id="6046" href="introduction.html#1050" data-type="ℕ" class="InductiveConstructor">zero</a>    <a id="6054" class="Symbol">(</a><a id="6055" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="6059" href="01-Exercises.html#6059" class="Bound">m</a><a id="6060" class="Symbol">)</a> <a id="6062" class="Symbol">=</a> <a id="6064" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="6069" class="Symbol">(</a><a id="6070" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="6074" href="01-Exercises.html#6059" class="Bound">m</a><a id="6075" class="Symbol">)</a>
+<a id="6077" href="01-Exercises.html#5929" data-type="(n m : ℕ) → max n m ≡ max m n" class="Function">max-is-commutative</a> <a id="6096" class="Symbol">(</a><a id="6097" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="6101" href="01-Exercises.html#6101" class="Bound">n</a><a id="6102" class="Symbol">)</a> <a id="6104" href="introduction.html#1050" data-type="ℕ" class="InductiveConstructor">zero</a>    <a id="6112" class="Symbol">=</a> <a id="6114" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="6119" class="Symbol">(</a><a id="6120" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="6124" href="01-Exercises.html#6101" class="Bound">n</a><a id="6125" class="Symbol">)</a>
+<a id="6127" href="01-Exercises.html#5929" data-type="(n m : ℕ) → max n m ≡ max m n" class="Function">max-is-commutative</a> <a id="6146" class="Symbol">(</a><a id="6147" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="6151" href="01-Exercises.html#6151" class="Bound">n</a><a id="6152" class="Symbol">)</a> <a id="6154" class="Symbol">(</a><a id="6155" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="6159" href="01-Exercises.html#6159" class="Bound">m</a><a id="6160" class="Symbol">)</a> <a id="6162" class="Symbol">=</a> <a id="6164" href="01-Exercises.html#6304" data-type="(n m : ℕ) → suc (max n m) ≡ suc (max m n)" class="Function">to-show</a>
+ <a id="6173" class="Keyword">where</a>
+  <a id="6181" href="01-Exercises.html#6181" data-type="(n m : ℕ) → max n m ≡ max m n" class="Function">IH</a> <a id="6184" class="Symbol">:</a> <a id="6186" href="01-Exercises.html#2293" data-type="ℕ → ℕ → ℕ" class="Function">max</a> <a id="6190" href="01-Exercises.html#6151" class="Bound">n</a> <a id="6192" href="01-Exercises.html#6159" class="Bound">m</a> <a id="6194" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="6196" href="01-Exercises.html#2293" data-type="ℕ → ℕ → ℕ" class="Function">max</a> <a id="6200" href="01-Exercises.html#6159" class="Bound">m</a> <a id="6202" href="01-Exercises.html#6151" class="Bound">n</a>      <a id="6209" class="Comment">-- induction hypothesis</a>
+  <a id="6235" href="01-Exercises.html#6181" data-type="(n m : ℕ) → max n m ≡ max m n" class="Function">IH</a> <a id="6238" class="Symbol">=</a> <a id="6240" href="01-Exercises.html#5929" data-type="(n m : ℕ) → max n m ≡ max m n" class="Function">max-is-commutative</a> <a id="6259" href="01-Exercises.html#6151" class="Bound">n</a> <a id="6261" href="01-Exercises.html#6159" class="Bound">m</a> <a id="6263" class="Comment">-- recursive call on smaller arguments</a>
+  <a id="6304" href="01-Exercises.html#6304" data-type="(n m : ℕ) → suc (max n m) ≡ suc (max m n)" class="Function">to-show</a> <a id="6312" class="Symbol">:</a> <a id="6314" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="6318" class="Symbol">(</a><a id="6319" href="01-Exercises.html#2293" data-type="ℕ → ℕ → ℕ" class="Function">max</a> <a id="6323" href="01-Exercises.html#6151" class="Bound">n</a> <a id="6325" href="01-Exercises.html#6159" class="Bound">m</a><a id="6326" class="Symbol">)</a> <a id="6328" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="6330" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="6334" class="Symbol">(</a><a id="6335" href="01-Exercises.html#2293" data-type="ℕ → ℕ → ℕ" class="Function">max</a> <a id="6339" href="01-Exercises.html#6159" class="Bound">m</a> <a id="6341" href="01-Exercises.html#6151" class="Bound">n</a><a id="6342" class="Symbol">)</a>
+  <a id="6346" href="01-Exercises.html#6304" data-type="(n m : ℕ) → suc (max n m) ≡ suc (max m n)" class="Function">to-show</a> <a id="6354" class="Symbol">=</a> <a id="6356" href="identity-type.html#2307" data-type="(f : A → B) → x ≡ y → f x ≡ f y" class="Function">ap</a> <a id="6359" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="6363" href="01-Exercises.html#6181" data-type="(n m : ℕ) → max n m ≡ max m n" class="Function">IH</a>         <a id="6374" class="Comment">-- ap(ply) suc on both sides of the equation</a>
+</pre>
+<p><strong>Prove</strong> analogously that <code>min</code> is
+commutative.</p>
+<pre class="Agda"><a id="min-is-commutative"></a><a id="6482" href="01-Exercises.html#6482" data-type="(n m : ℕ) → min n m ≡ min m n" class="Function">min-is-commutative</a> <a id="6501" class="Symbol">:</a> <a id="6503" class="Symbol">(</a><a id="6504" href="01-Exercises.html#6504" class="Bound">n</a> <a id="6506" href="01-Exercises.html#6506" class="Bound">m</a> <a id="6508" class="Symbol">:</a> <a id="6510" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a><a id="6511" class="Symbol">)</a> <a id="6513" class="Symbol">→</a> <a id="6515" href="01-Exercises.html#2470" data-type="ℕ → ℕ → ℕ" class="Function">min</a> <a id="6519" href="01-Exercises.html#6504" class="Bound">n</a> <a id="6521" href="01-Exercises.html#6506" class="Bound">m</a> <a id="6523" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="6525" href="01-Exercises.html#2470" data-type="ℕ → ℕ → ℕ" class="Function">min</a> <a id="6529" href="01-Exercises.html#6506" class="Bound">m</a> <a id="6531" href="01-Exercises.html#6504" class="Bound">n</a>
+<a id="6533" href="01-Exercises.html#6482" data-type="(n m : ℕ) → min n m ≡ min m n" class="Function">min-is-commutative</a> <a id="6552" class="Symbol">=</a> <a id="6554" class="Hole">{!!}</a>
+</pre>
+<h3 id="exercise-5-1">Exercise 5 (★★★)</h3>
+<p>Using another inductive proof, <strong>show</strong> that
+<code>n ≡ n + 0</code> for every natural number <code>n</code>.</p>
+<pre class="Agda"><a id="0-right-neutral"></a><a id="6682" href="01-Exercises.html#6682" data-type="(n : ℕ) → n ≡ n + 0" class="Function">0-right-neutral</a> <a id="6698" class="Symbol">:</a> <a id="6700" class="Symbol">(</a><a id="6701" href="01-Exercises.html#6701" class="Bound">n</a> <a id="6703" class="Symbol">:</a> <a id="6705" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a><a id="6706" class="Symbol">)</a> <a id="6708" class="Symbol">→</a> <a id="6710" href="01-Exercises.html#6701" class="Bound">n</a> <a id="6712" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="6714" href="01-Exercises.html#6701" class="Bound">n</a> <a id="6716" href="natural-numbers-type.html#2879" data-type="ℕ → ℕ → ℕ" class="Function Operator">+</a> <a id="6718" class="Number">0</a>
+<a id="6720" href="01-Exercises.html#6682" data-type="(n : ℕ) → n ≡ n + 0" class="Function">0-right-neutral</a> <a id="6736" class="Symbol">=</a> <a id="6738" class="Hole">{!!}</a>
+</pre>
+<h3 id="exercise-6-1">Exercise 6 (★★★)</h3>
+<p>The function <code>map</code> on lists is a so-called
+<em>functor</em>, which means that it respects the identity and
+composition, as formally expressed below.</p>
+<p>Try to <strong>prove</strong> these equations using pattern matching
+and inductive proofs.</p>
+<pre class="Agda"><a id="map-id"></a><a id="7000" href="01-Exercises.html#7000" data-type="(xs : List X) → map id xs ≡ xs" class="Function">map-id</a> <a id="7007" class="Symbol">:</a> <a id="7009" class="Symbol">{</a><a id="7010" href="01-Exercises.html#7010" class="Bound">X</a> <a id="7012" class="Symbol">:</a> <a id="7014" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="7018" class="Symbol">}</a> <a id="7020" class="Symbol">(</a><a id="7021" href="01-Exercises.html#7021" class="Bound">xs</a> <a id="7024" class="Symbol">:</a> <a id="7026" href="List.html#402" data-type="Type → Set" class="Datatype">List</a> <a id="7031" href="01-Exercises.html#7010" class="Bound">X</a><a id="7032" class="Symbol">)</a> <a id="7034" class="Symbol">→</a> <a id="7036" href="01-Exercises.html#2881" data-type="(X → Y) → List X → List Y" class="Function">map</a> <a id="7040" href="products.html#1041" data-type="A → A" class="Function">id</a> <a id="7043" href="01-Exercises.html#7021" class="Bound">xs</a> <a id="7046" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="7048" href="01-Exercises.html#7021" class="Bound">xs</a>
+<a id="7051" href="01-Exercises.html#7000" data-type="(xs : List X) → map id xs ≡ xs" class="Function">map-id</a> <a id="7058" href="01-Exercises.html#7058" class="Bound">xs</a> <a id="7061" class="Symbol">=</a> <a id="7063" class="Hole">{!!}</a>
+
+<a id="map-comp"></a><a id="7069" href="01-Exercises.html#7069" data-type="(f : X → Y) (g : Y → Z) (xs : List X) →
+map (g ∘ f) xs ≡ map g (map f xs)" class="Function">map-comp</a> <a id="7078" class="Symbol">:</a> <a id="7080" class="Symbol">{</a><a id="7081" href="01-Exercises.html#7081" class="Bound">X</a> <a id="7083" href="01-Exercises.html#7083" class="Bound">Y</a> <a id="7085" href="01-Exercises.html#7085" class="Bound">Z</a> <a id="7087" class="Symbol">:</a> <a id="7089" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="7093" class="Symbol">}</a> <a id="7095" class="Symbol">(</a><a id="7096" href="01-Exercises.html#7096" class="Bound">f</a> <a id="7098" class="Symbol">:</a> <a id="7100" href="01-Exercises.html#7081" class="Bound">X</a> <a id="7102" class="Symbol">→</a> <a id="7104" href="01-Exercises.html#7083" class="Bound">Y</a><a id="7105" class="Symbol">)</a> <a id="7107" class="Symbol">(</a><a id="7108" href="01-Exercises.html#7108" class="Bound">g</a> <a id="7110" class="Symbol">:</a> <a id="7112" href="01-Exercises.html#7083" class="Bound">Y</a> <a id="7114" class="Symbol">→</a> <a id="7116" href="01-Exercises.html#7085" class="Bound">Z</a><a id="7117" class="Symbol">)</a>
+           <a id="7130" class="Symbol">(</a><a id="7131" href="01-Exercises.html#7131" class="Bound">xs</a> <a id="7134" class="Symbol">:</a> <a id="7136" href="List.html#402" data-type="Type → Set" class="Datatype">List</a> <a id="7141" href="01-Exercises.html#7081" class="Bound">X</a><a id="7142" class="Symbol">)</a> <a id="7144" class="Symbol">→</a> <a id="7146" href="01-Exercises.html#2881" data-type="(X → Y) → List X → List Y" class="Function">map</a> <a id="7150" class="Symbol">(</a><a id="7151" href="01-Exercises.html#7108" class="Bound">g</a> <a id="7153" href="products.html#3388" data-type="((y : B) → C y) → (f : A → B) (x : A) → C (f x)" class="Function Operator">∘</a> <a id="7155" href="01-Exercises.html#7096" class="Bound">f</a><a id="7156" class="Symbol">)</a> <a id="7158" href="01-Exercises.html#7131" class="Bound">xs</a> <a id="7161" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="7163" href="01-Exercises.html#2881" data-type="(X → Y) → List X → List Y" class="Function">map</a> <a id="7167" href="01-Exercises.html#7108" class="Bound">g</a> <a id="7169" class="Symbol">(</a><a id="7170" href="01-Exercises.html#2881" data-type="(X → Y) → List X → List Y" class="Function">map</a> <a id="7174" href="01-Exercises.html#7096" class="Bound">f</a> <a id="7176" href="01-Exercises.html#7131" class="Bound">xs</a><a id="7178" class="Symbol">)</a>
+<a id="7180" href="01-Exercises.html#7069" data-type="(f : X → Y) (g : Y → Z) (xs : List X) →
+map (g ∘ f) xs ≡ map g (map f xs)" class="Function">map-comp</a> <a id="7189" href="01-Exercises.html#7189" class="Bound">f</a> <a id="7191" href="01-Exercises.html#7191" class="Bound">g</a> <a id="7193" href="01-Exercises.html#7193" class="Bound">xs</a> <a id="7196" class="Symbol">=</a> <a id="7198" class="Hole">{!!}</a>
+</pre>
+
+  </article>
+</div>
+</main>
+</body>
+<style>
+
+:root {
+  --text-bg: #fff;
+  --text-fg: #222;
+  --shadow: #000;
+  --primary: #0054F4;
+  --secondary: #9C1BD6;
+  --modal-bg: #ccccccaa;
+  --warning-bg: #fef08a;
+  --code-bg: var(--text-bg);
+  --code-fg: var(--text-fg);
+  --code-keyword: #BB3B13;
+  --code-string:  #d52753;
+  --code-number:  #8A1060;
+  --code-module:  #8A1060;
+  --code-field:   #9C1BD6;
+  --code-constructor: #207B1D;
+  --code-highlight: #F5DEB3;
+  --search-selected: #e2e8f0;
+  --details-summary: #b2ebf2;
+  --details-open:    #80deea;
+  --depgraph-edge: #eee;
+  --blockquote-bg: #d8b4fe; }
+
+.diagram-dark {
+  display: none !important; }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-bg: #282C34;
+    --text-fg: #bfbfbf;
+    --shadow: #475569;
+    --primary: #61AFEF;
+    --secondary: #C878DD;
+    --modal-bg: #282C34aa;
+    --warning-bg: #991b1b;
+    --code-keyword:     #E5C07B;
+    --code-string:      #E06C75;
+    --code-number:      #98C379;
+    --code-module:      #56B6C2;
+    --code-field:       #C878DD;
+    --code-constructor: #98C379;
+    --code-highlight: #ef444499;
+    --search-selected: #474e5e;
+    --details-summary: #5b21b6;
+    --details-open:    #4c1d95;
+    --depgraph-edge: #474e5e;
+    --blockquote-bg: #475569; }
+  div.warning {
+    --shadow: #7f1d1d
+  ; }
+  input {
+    background-color: #334155;
+    border: 1px solid #475569;
+    color: var(--text-fg); }
+  body {
+    scrollbar-color: #3b4454 #2b2e33; }
+  .diagram-dark {
+    display: block !important; }
+  .diagram-light {
+    display: none !important; } }
+
+table {
+  margin: auto;
+  border-collapse: collapse; }
+  table td, table th {
+    text-align: center;
+    padding: 0px 1em 0px 1em;
+    border: 1px solid black; }
+  table th {
+    border-bottom: 2px solid black; }
+  table td {
+    white-space: nowrap; }
+
+html { max-width: 100%; }
+
+body {
+  font-family: "Inria Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  width: 100%;
+  font-size: var(--font-size);
+  overflow-x: clip;
+  background-color: var(--text-bg);
+  color: var(--text-fg);
+}
+
+div#post-toc-container { max-width: 120ch; margin: auto; }
+
+article a[href], div#return > a[href], div#top > a[href], aside#toc > div#toc-container ul a[href] {
+  color: var(--primary);
+  text-decoration: none; }
+  article a[href]:hover, div#return > a[href]:hover, div#top > a[href]:hover, aside#toc > div#toc-container ul a[href]:hover {
+    text-decoration: 2px currentColor underline !important; }
+  article a[href]:visited, div#return > a[href]:visited, div#top > a[href]:visited, aside#toc > div#toc-container ul a[href]:visited {
+    color: var(--secondary); }
+
+/* Aspects. */
+.Agda {
+  /* NameKinds. */
+  /* OtherAspects. */
+  /* Standard attributes. */
+  font-family: 'iosevka', 'Iosevka', 'Fantasque Sans Mono', 'Roboto Mono', monospace;
+  font-weight: 400; }
+  .Agda .Comment {
+    color: var(--code-fg);
+    font-style: italic; }
+  .Agda .Background {
+    background-color: var(--code-bg); }
+  .Agda .Markup {
+    color: var(--code-fg); }
+  .Agda .Keyword {
+    color: var(--code-keyword); }
+  .Agda .String {
+    color: var(--code-string); }
+  .Agda .Number {
+    color: var(--code-number); }
+  .Agda .Symbol {
+    color: var(--code-fg); }
+  .Agda .PrimitiveType {
+    color: var(--primary); }
+  .Agda .Pragma {
+    color: var(--code-fg); }
+  .Agda .Bound {
+    color: var(--code-fg) !important; }
+  .Agda .Generalizable {
+    color: var(--code-fg) !important; }
+  .Agda .InductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .CoinductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .Datatype {
+    color: var(--primary) !important; }
+  .Agda .Field {
+    color: var(--code-field) !important; }
+  .Agda .Function {
+    color: var(--primary) !important; }
+  .Agda .Module {
+    color: var(--code-module) !important; }
+  .Agda .Postulate {
+    color: var(--primary) !important; }
+  .Agda .Primitive {
+    color: var(--primary) !important; }
+  .Agda .Record {
+    color: var(--primary) !important; }
+  .Agda .UnsolvedMeta {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .UnsolvedConstraint {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .TerminationProblem {
+    color: var(--code-fg);
+    background: #FFA07A; }
+  .Agda .IncompletePattern {
+    color: var(--code-fg);
+    background: #F5DEB3; }
+  .Agda .Error {
+    color: red;
+    text-decoration: underline; }
+  .Agda .TypeChecks {
+    color: var(--code-fg);
+    background: #ADD8E6; }
+  .Agda .ShadowingInTelescope {
+    color: var(--code-fg);
+    background: #808080; }
+  .Agda .Deadcode {
+    color: var(--code-keyword);
+    font-weight: bold; }
+  .Agda a {
+    text-decoration: none; }
+  .Agda a[href]:hover {
+    text-decoration: 2px var(--primary) underline; }
+  .Agda a[href]:target {
+    animation: highlight 2.5s; }
+  body.text-page .Agda {
+    font-size: var(--code-font-size); }
+
+pre.Agda, div.sourceCode, pre {
+  border-radius: 0;
+  box-shadow: none;
+  overflow-y: clip;
+  margin: 0;
+  padding: 1em;
+  padding-top: 0.25em;
+  padding-bottom: 0.25em;
+  background-color: var(--code-bg);
+  color: var(--code-fg);
+  font-size: var(--code-font-size);
+  max-width: 100%;
+  overflow-x: auto;
+}
+</style>
+</html>
