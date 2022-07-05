@@ -1,6 +1,6 @@
 ## [HoTTEST Summer School 2022](https://www.uwo.ca/math/faculty/kapulkin/seminars/hottest_summer_school_2022.html)
 
- * [School webpage ar UWO](https://www.uwo.ca/math/faculty/kapulkin/seminars/hottest_summer_school_2022.html)
+ * [School webpage at UWO](https://www.uwo.ca/math/faculty/kapulkin/seminars/hottest_summer_school_2022.html)
  * [Agda materials and exercises](https://martinescardo.github.io/HoTTEST-Summer-School/)
  * [HoTT materials and exercises](HoTT/)
 
