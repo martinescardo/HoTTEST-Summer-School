@@ -3,6 +3,7 @@
  * [School webpage at UWO](https://www.uwo.ca/math/faculty/kapulkin/seminars/hottest_summer_school_2022.html), including instructors, colloquium speakers, teaching assistants and organizers, and more.
  * [Agda materials and exercises.](https://martinescardo.github.io/HoTTEST-Summer-School/)
  * [HoTT materials and exercises.](HoTT/)
+ * [HoTTEST YouTube](https://www.youtube.com/user/jdchristensen123)
 
 # Additional resources
 
