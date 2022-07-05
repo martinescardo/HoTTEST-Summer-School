@@ -37,8 +37,15 @@ If `¬ A` or `B`, then `A implies B`:
 implication-from-disjunction-and-negation : {A B : Type} → ¬ A ∔ B → (A → B)
 implication-from-disjunction-and-negation (inl f) a = 𝟘-elim (f a)
 implication-from-disjunction-and-negation (inr b) a = b
-```
 
+implication-from-disjunction-and-negation-converse : {A B : Type}
+                                                   → A ∔ ¬ A
+                                                   → (A → B) → ¬ A ∔ B
+implication-from-disjunction-and-negation-converse (inl x) f = inr (f x)
+implication-from-disjunction-and-negation-converse (inr ν) f = inl ν
+```
+In the handout on [decidability](decidability.lagda.md) we call *decidable* a type `A` such that `A ∔ ¬ A`. So the above two theorems together say that if `A` is decidable then `A → B` is logically equivalent to `¬ A ∔ B`. In classical mathematics, propositions are decidable, as this is what the principle of excluded middle says.
+In MLTT the principle of excluded middle `(A : Type) → A ∔ ¬ A` is not provable or disprovable. In HoTT/UF, the principle of excluded middle is taken to be `(A : Type) → is-prop A → A ∔ ¬ A` and is also not provable or disprovable, but is validated in Voedvodsky's model of simplicial sets (assuming classical logic in the definition of this model) and hence can be consistently assumed for the purposes of doing classical mathematics in HoTT. And so is the axiom of choice - we refer the interested reader to [Introduction to Homotopy Type Theory and Univalent Foundations (HoTT/UF) with Agda](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#contents).
 
 ## Contrapositives
 
@@ -145,7 +152,7 @@ left-fails-gives-right-holds (inr b) f = b
 
 ## Negation of the existential quantifier:
 
-If there is no `x : X` with `A x`, then for all `x : X` not `A x`:
+If there is no `x : X` with `A x`, then for all `x : X` we have that not `A x`:
 ```agda
 not-exists-implies-forall-not : {X : Type} {A : X → Type}
                               → ¬ (Σ x ꞉ X , A x)
