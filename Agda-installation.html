@@ -17,98 +17,46 @@
 
   <article>
 
-<p><a href="Https://www.Cs.Bham.Ac.Uk/~mhe/">Martin Escardo</a>. Notes
-originally written for the module <em>Advanced Functional
-Programming</em> at the <a
-href="https://www.birmingham.ac.uk/schools/computer-science/index.aspx">School
-of Computer Science</a> of the <a
-href="https://www.birmingham.ac.uk/index.aspx">University of
-Birmingham</a>, UK.</p>
-<h2 id="preferred-link-to-see-these-lecture-notes"><a
-href="https://martinescardo.github.io/HoTTEST-Summer-School/">Preferred
-link to see these lecture notes</a></h2>
-<h2 id="download-the-agda-files-as-a-zip-file"><a
-href="https://github.com/martinescardo/HoTTEST-Summer-School/archive/refs/heads/main.zip">Download
-the Agda files as a zip file</a></h2>
-<h2 id="how-to-install-agda-2.6.2.2"><a
-href="Agda-installation.html">How to install Agda 2.6.2.2</a></h2>
-<h2 id="agda-manual"><a
-href="https://agda.readthedocs.io/en/latest/">Agda manual</a></h2>
-<h2 id="lecture-notes"><a href="./">Lecture Notes</a></h2>
-<ol type="1">
-<li><a href="introduction.html">Introduction</a></li>
-<li>Propositions as types and basic Martin-Löf type theory
-<ol type="1">
-<li><a href="curry-howard.html">Basic Martin-Löf Type Theory</a></li>
-<li><a href="empty-type.html">Empty type</a> <code>𝟘</code></li>
-<li><a href="unit-type.html">Unit type</a> <code>𝟙</code></li>
-<li><a href="binary-type.html">Binary type</a> <code>𝟚</code></li>
-<li><a href="products.html">Product types</a> <code>Π</code></li>
-<li><a href="sums.html">Sum types</a> <code>Σ</code></li>
-<li><a href="binary-products.html">Binary products</a>
-<code>_×_</code></li>
-<li><a href="binary-sums.html">Binary sums</a> <code>_∔_</code></li>
-<li><a href="identity-type.html">Identity types</a>
-<code>_≡_</code></li>
-<li><a href="natural-numbers-type.html">Natural numbers</a>
-<code>ℕ</code></li>
-<li><a href="negation.html">Negation</a> <code>¬</code></li>
-<li><a href="function-extensionality.html">Function
-extensionality</a></li>
-</ol></li>
-<li><a href="decidability.html">Propositions as types versus
-propositions as booleans</a></li>
-<li>Isomorphisms <code>≅</code>
-<ol type="1">
-<li><a href="isomorphisms.html">Definition and basic examples</a></li>
-<li><a href="binary-sums-as-sums.html">Binary sums as a special case of
-sums</a></li>
-<li><a href="binary-products-as-products.html">Binary products as a
-special case of products</a></li>
-</ol></li>
-<li>More types, their elimination principles, and their isomorphism with
-Basic MLTT types
-<ol type="1">
-<li><a href="Bool.html">Booleans</a> and <a
-href="Bool-functions.html">their manifestation as a Basic MLTT
-type</a></li>
-<li><a href="Fin.html">Finite types</a> and <a
-href="Fin-functions.html">their manifestation as a Basic MLTT
-type</a></li>
-<li><a href="List.html">Lists</a></li>
-<li><a href="Vector.html">Vectors</a></li>
-<li><a href="vector-and-list-isomorphisms.html">List and vector
-isomorphisms</a></li>
-</ol></li>
-<li>More constructions and proofs with the above types:
-<ol type="1">
-<li><a href="natural-numbers-functions.html">Natural numbers</a></li>
-<li><a href="Bool-functions.html">Booleans</a></li>
-<li><a href="Fin-functions.html">Finite types</a></li>
-<li><a href="List-functions.html">Lists</a></li>
-<li><a href="Vector-functions.html">Vectors</a></li>
-</ol></li>
-<li><a href="Hedbergs-Theorem.html">Hedberg’s Theorem</a></li>
-</ol>
-<h2 id="index-of-all-agda-files"><a href="all.html">Index of all Agda
-files</a></h2>
-<h2 id="exercise-sheets"><a href="README.html">Exercise Sheets</a></h2>
-<h2 id="advanced-further-reading">Advanced further reading</h2>
-<ol type="1">
-<li><a
-href="https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#contents">Introduction
-to Homotopy Type Theory and Univalent Foundations (HoTT/UF) with
-Agda</a>.</li>
-</ol>
-<h2 id="follow-the-links">Follow the links</h2>
-<p>Each of the links above will take you to a different Agda module. You
-can use this to interactively explore the lecture notes: the Agda code
-is all type-checked (with the exception of some exercises which are left
-as holes, <code>{! !}</code>), and presented as hypertext. Click on an
-identifier to be taken to its definition.</p>
-<h2 id="hottest-school-github-repository"><a
-href="https://github.com/martinescardo/HoTTEST-Summer-School">HoTTEST
-School github repository</a></h2>
+<h1 id="instructions-on-how-to-get-agda-2.6.2.2">Instructions on how to
+get Agda 2.6.2.2</h1>
+<h2 id="online">Online</h2>
+<p>Thanks to Amélia Liao, there’s an online version available at
+https://hcomp.io/, which means you won’t have to install anything. But
+if you would like to install Agda locally, please see below.</p>
+<h2 id="mac">Mac</h2>
+<p>If you’re a Mac user who already uses homebrew, the process is
+painless: just run <code>brew install</code> agda and get ready to wait
+a while.</p>
+<p>If you’re a Mac user who doesn’t already use homebrew, follow the
+instructions here to get it working: https://brew.sh/</p>
+<h2 id="linux">Linux</h2>
+<p>If you’re an Arch or Fedora user, then <code>pacman -S agda</code> or
+<code>yum install agda</code> should work. See also
+https://pastebin.com/jj2c2dqR for Arch instructions.</p>
+<p>If you’re Debian/Ubuntu, then you should install Agda through
+<code>cabal</code>, because the Agda in the repositories of the
+operating system is outdated. See
+https://agda.readthedocs.io/en/v2.6.2.2/getting-started/installation.html
+for instructions.</p>
+<h2 id="windows">Windows</h2>
+<p>For Windows, see https://pastebin.com/Zguv4743. (Thanks Todd Waugh
+Ambridge!)</p>
+<h2 id="editing-agda-code">Editing Agda code</h2>
+<p>Most people use emacs with agda-mode to edit, but you can also use
+neovim with cornelis or vscode with the agda-mode port.</p>
+<p>To get emacs with agda-mode set up, there’s a tutorial here:
+https://agda.readthedocs.io/en/v2.6.2.2/getting-started/installation.html#running-the-agda-mode-program</p>
+<p>To get neovim with corenlis setup, there’s installation instructions
+on their github: https://github.com/isovector/cornelis</p>
+<p>To get the vscode plugin setup, see here:
+https://marketplace.visualstudio.com/items?itemName=banacorn.agda-mode</p>
+<p>After installing Agda, you should check that it’s installed correctly
+by writing the Hello, Agda! program. See here:
+https://agda.readthedocs.io/en/v2.6.2.2/getting-started/hello-world.html#hello-agda</p>
+<h2 id="getting-help">Getting help</h2>
+<p>If you’re having trouble installing Agda, please ask for help in the
+<code>#agda-installation</code> channel on the summer school’s Discord
+server.</p>
 
   </article>
 </div>
