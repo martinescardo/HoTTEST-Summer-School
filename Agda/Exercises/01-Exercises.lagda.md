@@ -32,6 +32,9 @@ open import prelude hiding (not-is-involution)
 In the lectures we defined `&&` (logical and) on `Bool` by pattern matching on
 the leftmost argument only.
 
+*NB*: We didn't get round to doing this in the lecture, but see `_&&_` in
+      [introduction.lagda.md](../Lecture-Notes/introduction.lagda.md).
+
 **Define** the same operation but this time by pattern matching (case splitting)
   on both arguments.
 
@@ -165,6 +168,10 @@ Bool-refl = {!!}
 
 Just like we did in the lectures for natural numbers, **show** that we can go
 back and forth between `a ≣ b` and `a ≡ b`.
+
+*NB*: Again, we didn't have time to do this in the lectures, but see
+      [introduction.lagda.md](../Lecture-Notes/introduction.lagda.md),
+      specifically the functions `back` and `forth` there.
 
 ```agda
 ≡-to-≣ : (a b : Bool) → a ≡ b → a ≣ b
