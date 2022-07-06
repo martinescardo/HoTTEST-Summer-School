@@ -6,6 +6,8 @@ at the [School of Computer Science](https://www.birmingham.ac.uk/schools/compute
 
 ## [Download the Agda files as a zip file](https://github.com/martinescardo/HoTTEST-Summer-School/archive/refs/heads/main.zip)
 
+## [How to install Agda 2.6.2.2](./Agda-installation.md)
+
 ## [Agda manual](https://agda.readthedocs.io/en/latest/)
 
 ## [Lecture Notes](./)
