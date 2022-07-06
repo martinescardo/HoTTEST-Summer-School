@@ -50,6 +50,12 @@ https://agda.readthedocs.io/en/v2.6.2.2/getting-started/installation.html#runnin
 on their github: https://github.com/isovector/cornelis</p>
 <p>To get the vscode plugin setup, see here:
 https://marketplace.visualstudio.com/items?itemName=banacorn.agda-mode</p>
+<h2 id="agda-in-markdown-files">Agda in Markdown files</h2>
+<p>If you’re using emacs, then add the following at the very end of your
+<code>.emacs</code> file (in your home directory)</p>
+<pre><code>(add-to-list &#39;auto-mode-alist &#39;(&quot;\\.lagda.md\\&#39;&quot; . agda2-mode))</code></pre>
+<p>to enable agda-mode for Markdown files with Agda code, like the
+lecture notes and exercises.</p>
 <h2 id="checking-that-everything-works">Checking that everything
 works</h2>
 <p>After installing Agda, you should check that it’s installed correctly
