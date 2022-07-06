@@ -42,6 +42,18 @@ github: https://github.com/isovector/cornelis
 To get the vscode plugin setup, see here:
 https://marketplace.visualstudio.com/items?itemName=banacorn.agda-mode
 
+## Agda in Markdown files
+
+If you're using emacs, then add the following at the very end of your `.emacs`
+file (in your home directory)
+
+```
+(add-to-list 'auto-mode-alist '("\\.lagda.md\\'" . agda2-mode))
+```
+
+to enable agda-mode for Markdown files with Agda code, like the lecture notes
+and exercises.
+
 ## Checking that everything works
 
 After installing Agda, you should check that it's installed correctly by
