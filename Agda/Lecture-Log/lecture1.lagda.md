@@ -1,6 +1,8 @@
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
+module lecture1 where
+
 Type = Set
 
 data Bool : Type where
