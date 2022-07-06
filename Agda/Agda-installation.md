@@ -42,8 +42,10 @@ github: https://github.com/isovector/cornelis
 To get the vscode plugin setup, see here:
 https://marketplace.visualstudio.com/items?itemName=banacorn.agda-mode
 
-After installing Agda, you should check that it's installed correctly by writing
-the Hello, Agda! program. See here:
+## Checking that everything works
+
+After installing Agda, you should check that it's installed correctly by
+type-checking the Hello, Agda! program. See here:
 https://agda.readthedocs.io/en/v2.6.2.2/getting-started/hello-world.html#hello-agda
 
 ## Getting help
