@@ -60,6 +60,18 @@ After installing Agda, you should check that it's installed correctly by
 type-checking the [Hello, Agda!
 program](https://agda.readthedocs.io/en/v2.6.2.2/getting-started/hello-world.html#hello-agda)
 
+## Working outside the repository
+
+If you would like to work on the exercises and have the lecture notes available
+outside (for `open import`) the repository, then you should register the
+repository as a library:
+
+In `~/.agda/libraries` add the line
+```
+~/HoTTEST-Summer-School/Agda/agda-lectures.agda-lib
+```
+and then add the line `agda-lectures` to `~/.agda/defaults`.
+
 ## Getting help
 
 If you're having trouble installing Agda, please ask for help in the
