@@ -21,10 +21,65 @@ uncurry f (a , b) = f a b
 curry : {A B X : Type} → (A × B → X) → (A → B → X)
 curry f a b = f (a , b)
 ```
-Under the propositions-as-types interpretation curry and unccurry
+Under the propositions-as-types interpretation curry and uncurry
 tell us that "if A then if B then X"  is (logically) equivalent
 to "if A and B then X"
 
+### Exercise 2
+```agda
+[i] : {A B C : Type} → (A × B) ∔ C → (A ∔ C) × (B ∔ C)
+[i] (inl (a , b)) = inl a , inl b
+[i] (inr c) = inr c , inr c
+
+[ii] : {A B C : Type} → (A ∔ B) × C → (A × C) ∔ (B × C)
+[ii] (inl a , c) = inl (a , c)
+[ii] (inr b , c) = inr (b , c)
+
+[iii] : {A B : Type} → ¬ (A ∔ B) → ¬ A × ¬ B
+pr₁ ([iii] f) a = f (inl a)
+pr₂ ([iii] f) b = f (inr b)
+```
+
+The next goal `[iv] : {A B : Type} → ¬ (A × B) → ¬ A ∔ ¬ B`
+is not provable. Under propositions-as-types it says that
+"not (A and B) implies not A or not B", which is not true
+in constructive logic. At the end we have to give a term of
+the form `inl ...` or `inr ...` but for abstract `A B` we
+can not say of which form it should be.
+```agda
+[v] : {A B : Type} → (A → B) → ¬ B → ¬ A -- also known as contraposition
+[v] f g a = g (f a)
+```
+
+Neither of `[vi] : {A B : Type} → (¬ A → ¬ B) → B → A`
+and `[vii] : {A B : Type} → ((A → B) → A) → A` are provable
+Under propositions-as-types `[vi]` is known as *inverse contraposition*
+and `[vii]` is known as *Peirce's law*. At the end we have to construct
+something of type `A` but this is not possible with all the assumptions
+being functions.
+```agda
+[viii] : {A : Type} {B : A → Type}
+    → ¬ (Σ a ꞉ A , B a) → (a : A) → ¬ B a
+[viii] f a bₐ = f (a , bₐ)
+```
+The next goal
+`[ix] : {A : Type} {B : A → Type} → ¬ ((a : A) → B a) → (Σ a ꞉ A , ¬ B a)`
+reads as: "If not for all a, B(a), then there is an a such that not B(a)"
+This is not true in constructive logic. Again, we have to construct
+an `a : A` as the first projection of the Sigma-type in the conclusion,
+which is not possible from our assumptions.
+
+```agda
+[x] : {A B : Type} {C : A → B → Type}
+      → ((a : A) → (Σ b ꞉ B , C a b))
+      → Σ f ꞉ (A → B) , ((a : A) → C a (f a))
+pr₁ ([x] g) a = g a .pr₁
+pr₂ ([x] g) a = g a .pr₂
+```
+Note that under propositions-as-types `[x]` reads somewhat like the
+*axiom of choice*. Yet it is still provable. This result is often
+referred to as the *distributivity of Π over Σ* and shows that
+propositions-as-types should be taken with a grain of salt sometimes.
 
 ### Exercise 3
 ```agda
@@ -40,11 +95,8 @@ tne f a = f (λ g → g a)
 
 ### Exercise 4
 ```agda
-contraposition : {A B : Type} → (A → B) → ¬ B → ¬ A
-contraposition f g a = g (f a)
-
 ¬¬-functor : {A B : Type} → (A → B) → ¬¬ A → ¬¬ B
-¬¬-functor f = contraposition (contraposition f)
+¬¬-functor f = [v] ([v] f)
 
 ¬¬-kleisli : {A B : Type} → (A → ¬¬ B) → ¬¬ A → ¬¬ B
 ¬¬-kleisli f g = tne (¬¬-functor f g)
@@ -88,7 +140,7 @@ case_of_ : {A B : Type} → A → (A → B) → B
 case x of f = f x
 
 has-bool-dec-fct : Type → Type
-has-bool-dec-fct A = Σ {A → A → Bool} (λ f → ∀ x y → x ≡ y ⇔ (f x y) ≡ true)
+has-bool-dec-fct A = Σ f ꞉ (A → A → Bool) , (∀ x y → x ≡ y ⇔ (f x y) ≡ true)
 
 decidable-equality-char : (A : Type) → has-decidable-equality A ⇔ has-bool-dec-fct A
 pr₁ (decidable-equality-char A) discA = f , f-dec -- left to right implication
