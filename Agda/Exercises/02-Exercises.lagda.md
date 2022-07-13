@@ -171,7 +171,7 @@ A type `A` is called *discrete* if it has decidable equality.
 Consider the following predicate on types:
 ```agda
 has-bool-dec-fct : Type → Type
-has-bool-dec-fct A = Σ {A → A → Bool} (λ f → ∀ x y → x ≡ y ⇔ (f x y) ≡ true)
+has-bool-dec-fct A = Σ f ꞉ (A → A → Bool) , (∀ x y → x ≡ y ⇔ (f x y) ≡ true)
 ```
 Prove that
 ```agda
