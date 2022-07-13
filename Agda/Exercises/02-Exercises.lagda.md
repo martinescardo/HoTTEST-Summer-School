@@ -84,7 +84,7 @@ Consider the following goals:
 ```
 For each goal determine whether it is provable or not.
 If it is, fill it. If not, explain why it shouldn't be possible.
-Propositions-as-types and Curry-Howard might help.
+Propositions-as-types might help.
 
 
 ### Exercise 3 (★★)
