@@ -40,7 +40,7 @@ uncurry = {!!}
 curry : {A B X : Type} → (A × B → X) → (A → B → X)
 curry = {!!}
 ```
-You might know these from functions from programming e.g. in Haskell.
+You might know these functions from programming e.g. in Haskell.
 But what do they say under the propositions-as-types interpretation?
 
 
@@ -104,7 +104,7 @@ Prove
 ¬¬-kleisli : {A B : Type} → (A → ¬¬ B) → ¬¬ A → ¬¬ B
 ¬¬-kleisli = {!!}
 ```
-Hint: For the second goal use `dne` from the previous exercise
+Hint: For the second goal use `tne` from the previous exercise
 
 
 
@@ -158,7 +158,7 @@ bool-≡-char₂ = {!!}
 
 
 ## Part III (🌶)
-A type `X` is called *discrete* if it has decidable equality.
+A type `A` is called *discrete* if it has decidable equality.
 Consider the following predicate on types:
 ```agda
 has-bool-dec-fct : Type → Type
