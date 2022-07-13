@@ -151,6 +151,8 @@ _+_ : ℕ → ℕ → ℕ
 zero  + y = y
 suc x + y = suc (x + y)
 
+infixr 20 _+_
+
 _++_ : {A : Type} → List A → List A → List A
 []        ++ ys = ys
 (x :: xs) ++ ys = x :: (xs ++ ys)
