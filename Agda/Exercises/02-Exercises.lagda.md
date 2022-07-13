@@ -48,10 +48,10 @@ But what do they say under the propositions-as-types interpretation?
 
 Consider the following goals:
 ```agda
-[i] : {A B X : Type} → (A → X) → (B → X) → (A ∔ B → X)
+[i] : {A B C : Type} → (A × B) ∔ C → (A ∔ C) × (B ∔ C)
 [i] = {!!}
 
-[ii] : {A B X : Type} → (X → A) → (X → B) → (X → A × B)
+[ii] : {A B C : Type} → (A × B) ∔ C → (A ∔ C) × (B ∔ C)
 [ii] = {!!}
 
 [iii] : {A B : Type} → ¬ (A ∔ B) → ¬ A × ¬ B
@@ -60,22 +60,31 @@ Consider the following goals:
 [iv] : {A B : Type} → ¬ (A × B) → ¬ A ∔ ¬ B
 [iv] = {!!}
 
-[v] : {A : Type} {B : A → Type}
-    → ¬ (Σ a ꞉ A , B a) → (a : A) → ¬ B a
+[v] : {A B : Type} → (A → B) → ¬ B → ¬ A
 [v] = {!!}
 
-[vi] : {A : Type} {B : A → Type}
-    → ¬ ((a : A) → B a) → (Σ a ꞉ A , ¬ B a)
+[vi] : {A B : Type} → (¬ A → ¬ B) → B → A
 [vi] = {!!}
 
-[vii] : {A B : Type} {C : A → B → Type}
+[vii] : {A B : Type} → ((A → B) → A) → A
+[vii] = {!!}
+
+[viii] : {A : Type} {B : A → Type}
+    → ¬ (Σ a ꞉ A , B a) → (a : A) → ¬ B a
+[viii] = {!!}
+
+[ix] : {A : Type} {B : A → Type}
+    → ¬ ((a : A) → B a) → (Σ a ꞉ A , ¬ B a)
+[ix] = {!!}
+
+[x] : {A B : Type} {C : A → B → Type}
       → ((a : A) → (Σ b ꞉ B , C a b))
       → Σ f ꞉ (A → B) , ((a : A) → C a (f a))
-[vii] = {!!}
+[x] = {!!}
 ```
 For each goal determine whether it is provable or not.
 If it is, fill it. If not, explain why it shouldn't be possible.
-Propositions-as-types might help.
+Propositions-as-types and Curry-Howard might help.
 
 
 ### Exercise 3 (★★)
