@@ -136,9 +136,6 @@ bool-≡-char₂ false false (b→b' , b'→b) = refl false
 ## Part III
 
 ```agda
-case_of_ : {A B : Type} → A → (A → B) → B
-case x of f = f x
-
 has-bool-dec-fct : Type → Type
 has-bool-dec-fct A = Σ f ꞉ (A → A → Bool) , (∀ x y → x ≡ y ⇔ (f x y) ≡ true)
 
