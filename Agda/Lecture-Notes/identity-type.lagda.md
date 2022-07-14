@@ -20,6 +20,8 @@ data _≡_ {A : Type} : A → A → Type where
  refl : (x : A) → x ≡ x
 
 infix 0 _≡_
+
+{-# BUILTIN EQUALITY _≡_ #-}
 ```
 
 ## Elimination principle
