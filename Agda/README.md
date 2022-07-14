@@ -49,7 +49,7 @@ at the [School of Computer Science](https://www.birmingham.ac.uk/schools/compute
 
 ## [Exercise Sheets](Exercises/README.md)
 
-## [Auxiliary files](Aux/README.md)
+## [Auxiliary files](Auxiliary/README.md)
 
 ## Advanced further reading
 
