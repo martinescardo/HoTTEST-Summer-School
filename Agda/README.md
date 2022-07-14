@@ -49,6 +49,8 @@ at the [School of Computer Science](https://www.birmingham.ac.uk/schools/compute
 
 ## [Exercise Sheets](Exercises/README.md)
 
+## [Auxiliary files](Aux/README.md)
+
 ## Advanced further reading
 
  1. [Introduction to Homotopy Type Theory and Univalent Foundations (HoTT/UF) with Agda](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#contents).
