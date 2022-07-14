@@ -51,7 +51,7 @@ Consider the following goals:
 [i] : {A B C : Type} → (A × B) ∔ C → (A ∔ C) × (B ∔ C)
 [i] = {!!}
 
-[ii] : {A B C : Type} → (A × B) ∔ C → (A ∔ C) × (B ∔ C)
+[ii] : {A B C : Type} → (A ∔ B) × C → (A × C) ∔ (B × C)
 [ii] = {!!}
 
 [iii] : {A B : Type} → ¬ (A ∔ B) → ¬ A × ¬ B
