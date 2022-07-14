@@ -5,7 +5,14 @@ Here we derive a contradiction from “type in type”,
 a universe that contains itself, assuming that
 this is additionally closed under generalized
 inductive types.
-Here we can directly encode Russell's paradox.
+Then we can directly encode Russell's paradox.
+
+This development is inspired by Aczel's
+[“sets as trees” interpretation of constructive set
+theory](https://doi.org/10.1016/S0049-237X(08)71989-X),
+from which this very simple paradox was
+[deduced by Thierry Coquand](https://doi.org/10.1007/BF01995104).
+N.G. de Bruijn also noticed a similar paradox.
 
 ```agda
 {-#  OPTIONS --without-K --type-in-type #-}
