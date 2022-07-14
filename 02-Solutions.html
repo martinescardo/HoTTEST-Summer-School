@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>HoTTEST Summer School 2022 Lecture Notes</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+</head>
+
+<body class="text-page">
+<main>
+<div id="post-toc-container" style="padding-left: 1em; padding-right: 1em;">
+
+  <article>
+
+<h1 id="week-02---agda-exercises---solutions">Week 02 - Agda Exercises -
+Solutions</h1>
+<pre class="Agda"><a id="49" class="Symbol">{-#</a> <a id="53" class="Keyword">OPTIONS</a> <a id="61" class="Pragma">--without-K</a> <a id="73" class="Pragma">--safe</a> <a id="80" class="Symbol">#-}</a>
+
+<a id="85" class="Keyword">module</a> <a id="92" href="02-Solutions.html" class="Module">02-Solutions</a> <a id="105" class="Keyword">where</a>
+
+<a id="112" class="Keyword">open</a> <a id="117" class="Keyword">import</a> <a id="124" href="prelude.html" class="Module">prelude</a>
+<a id="132" class="Keyword">open</a> <a id="137" class="Keyword">import</a> <a id="144" href="decidability.html" class="Module">decidability</a>
+<a id="157" class="Keyword">open</a> <a id="162" class="Keyword">import</a> <a id="169" href="sums.html" class="Module">sums</a>
+
+</pre>
+<h2 id="part-i">Part I</h2>
+<h3 id="exercise-1">Exercise 1</h3>
+<pre class="Agda"><a id="uncurry"></a><a id="214" href="02-Solutions.html#214" data-type="(A → B → X) → A × B → X" class="Function">uncurry</a> <a id="222" class="Symbol">:</a> <a id="224" class="Symbol">{</a><a id="225" href="02-Solutions.html#225" class="Bound">A</a> <a id="227" href="02-Solutions.html#227" class="Bound">B</a> <a id="229" href="02-Solutions.html#229" class="Bound">X</a> <a id="231" class="Symbol">:</a> <a id="233" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="237" class="Symbol">}</a> <a id="239" class="Symbol">→</a> <a id="241" class="Symbol">(</a><a id="242" href="02-Solutions.html#225" class="Bound">A</a> <a id="244" class="Symbol">→</a> <a id="246" href="02-Solutions.html#227" class="Bound">B</a> <a id="248" class="Symbol">→</a> <a id="250" href="02-Solutions.html#229" class="Bound">X</a><a id="251" class="Symbol">)</a> <a id="253" class="Symbol">→</a> <a id="255" class="Symbol">(</a><a id="256" href="02-Solutions.html#225" class="Bound">A</a> <a id="258" href="binary-products.html#670" data-type="Type → Type → Type" class="Function Operator">×</a> <a id="260" href="02-Solutions.html#227" class="Bound">B</a> <a id="262" class="Symbol">→</a> <a id="264" href="02-Solutions.html#229" class="Bound">X</a><a id="265" class="Symbol">)</a>
+<a id="267" href="02-Solutions.html#214" data-type="(A → B → X) → A × B → X" class="Function">uncurry</a> <a id="275" href="02-Solutions.html#275" class="Bound">f</a> <a id="277" class="Symbol">(</a><a id="278" href="02-Solutions.html#278" class="Bound">a</a> <a id="280" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="282" href="02-Solutions.html#282" class="Bound">b</a><a id="283" class="Symbol">)</a> <a id="285" class="Symbol">=</a> <a id="287" href="02-Solutions.html#275" class="Bound">f</a> <a id="289" href="02-Solutions.html#278" class="Bound">a</a> <a id="291" href="02-Solutions.html#282" class="Bound">b</a>
+
+<a id="curry"></a><a id="294" href="02-Solutions.html#294" data-type="(A × B → X) → A → B → X" class="Function">curry</a> <a id="300" class="Symbol">:</a> <a id="302" class="Symbol">{</a><a id="303" href="02-Solutions.html#303" class="Bound">A</a> <a id="305" href="02-Solutions.html#305" class="Bound">B</a> <a id="307" href="02-Solutions.html#307" class="Bound">X</a> <a id="309" class="Symbol">:</a> <a id="311" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="315" class="Symbol">}</a> <a id="317" class="Symbol">→</a> <a id="319" class="Symbol">(</a><a id="320" href="02-Solutions.html#303" class="Bound">A</a> <a id="322" href="binary-products.html#670" data-type="Type → Type → Type" class="Function Operator">×</a> <a id="324" href="02-Solutions.html#305" class="Bound">B</a> <a id="326" class="Symbol">→</a> <a id="328" href="02-Solutions.html#307" class="Bound">X</a><a id="329" class="Symbol">)</a> <a id="331" class="Symbol">→</a> <a id="333" class="Symbol">(</a><a id="334" href="02-Solutions.html#303" class="Bound">A</a> <a id="336" class="Symbol">→</a> <a id="338" href="02-Solutions.html#305" class="Bound">B</a> <a id="340" class="Symbol">→</a> <a id="342" href="02-Solutions.html#307" class="Bound">X</a><a id="343" class="Symbol">)</a>
+<a id="345" href="02-Solutions.html#294" data-type="(A × B → X) → A → B → X" class="Function">curry</a> <a id="351" href="02-Solutions.html#351" class="Bound">f</a> <a id="353" href="02-Solutions.html#353" class="Bound">a</a> <a id="355" href="02-Solutions.html#355" class="Bound">b</a> <a id="357" class="Symbol">=</a> <a id="359" href="02-Solutions.html#351" class="Bound">f</a> <a id="361" class="Symbol">(</a><a id="362" href="02-Solutions.html#353" class="Bound">a</a> <a id="364" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="366" href="02-Solutions.html#355" class="Bound">b</a><a id="367" class="Symbol">)</a>
+</pre>
+<p>Under the propositions-as-types interpretation curry and uncurry tell
+us that “if A then if B then X” is (logically) equivalent to “if A and B
+then X”</p>
+<h3 id="exercise-2">Exercise 2</h3>
+<pre class="Agda"><a id="[i]"></a><a id="549" href="02-Solutions.html#549" data-type="(A × B) ∔ C → A ∔ C × B ∔ C" class="Function">[i]</a> <a id="553" class="Symbol">:</a> <a id="555" class="Symbol">{</a><a id="556" href="02-Solutions.html#556" class="Bound">A</a> <a id="558" href="02-Solutions.html#558" class="Bound">B</a> <a id="560" href="02-Solutions.html#560" class="Bound">C</a> <a id="562" class="Symbol">:</a> <a id="564" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="568" class="Symbol">}</a> <a id="570" class="Symbol">→</a> <a id="572" class="Symbol">(</a><a id="573" href="02-Solutions.html#556" class="Bound">A</a> <a id="575" href="binary-products.html#670" data-type="Type → Type → Type" class="Function Operator">×</a> <a id="577" href="02-Solutions.html#558" class="Bound">B</a><a id="578" class="Symbol">)</a> <a id="580" href="binary-sums.html#672" data-type="Type → Type → Set" class="Datatype Operator">∔</a> <a id="582" href="02-Solutions.html#560" class="Bound">C</a> <a id="584" class="Symbol">→</a> <a id="586" class="Symbol">(</a><a id="587" href="02-Solutions.html#556" class="Bound">A</a> <a id="589" href="binary-sums.html#672" data-type="Type → Type → Set" class="Datatype Operator">∔</a> <a id="591" href="02-Solutions.html#560" class="Bound">C</a><a id="592" class="Symbol">)</a> <a id="594" href="binary-products.html#670" data-type="Type → Type → Type" class="Function Operator">×</a> <a id="596" class="Symbol">(</a><a id="597" href="02-Solutions.html#558" class="Bound">B</a> <a id="599" href="binary-sums.html#672" data-type="Type → Type → Set" class="Datatype Operator">∔</a> <a id="601" href="02-Solutions.html#560" class="Bound">C</a><a id="602" class="Symbol">)</a>
+<a id="604" href="02-Solutions.html#549" data-type="(A × B) ∔ C → A ∔ C × B ∔ C" class="Function">[i]</a> <a id="608" class="Symbol">(</a><a id="609" href="binary-sums.html#703" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="613" class="Symbol">(</a><a id="614" href="02-Solutions.html#614" class="Bound">a</a> <a id="616" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="618" href="02-Solutions.html#618" class="Bound">b</a><a id="619" class="Symbol">))</a> <a id="622" class="Symbol">=</a> <a id="624" href="binary-sums.html#703" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="628" href="02-Solutions.html#614" class="Bound">a</a> <a id="630" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="632" href="binary-sums.html#703" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="636" href="02-Solutions.html#618" class="Bound">b</a>
+<a id="638" href="02-Solutions.html#549" data-type="(A × B) ∔ C → A ∔ C × B ∔ C" class="Function">[i]</a> <a id="642" class="Symbol">(</a><a id="643" href="binary-sums.html#720" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="647" href="02-Solutions.html#647" class="Bound">c</a><a id="648" class="Symbol">)</a> <a id="650" class="Symbol">=</a> <a id="652" href="binary-sums.html#720" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="656" href="02-Solutions.html#647" class="Bound">c</a> <a id="658" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="660" href="binary-sums.html#720" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="664" href="02-Solutions.html#647" class="Bound">c</a>
+
+<a id="[ii]"></a><a id="667" href="02-Solutions.html#667" data-type="A ∔ B × C → (A × C) ∔ (B × C)" class="Function">[ii]</a> <a id="672" class="Symbol">:</a> <a id="674" class="Symbol">{</a><a id="675" href="02-Solutions.html#675" class="Bound">A</a> <a id="677" href="02-Solutions.html#677" class="Bound">B</a> <a id="679" href="02-Solutions.html#679" class="Bound">C</a> <a id="681" class="Symbol">:</a> <a id="683" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="687" class="Symbol">}</a> <a id="689" class="Symbol">→</a> <a id="691" class="Symbol">(</a><a id="692" href="02-Solutions.html#675" class="Bound">A</a> <a id="694" href="binary-sums.html#672" data-type="Type → Type → Set" class="Datatype Operator">∔</a> <a id="696" href="02-Solutions.html#677" class="Bound">B</a><a id="697" class="Symbol">)</a> <a id="699" href="binary-products.html#670" data-type="Type → Type → Type" class="Function Operator">×</a> <a id="701" href="02-Solutions.html#679" class="Bound">C</a> <a id="703" class="Symbol">→</a> <a id="705" class="Symbol">(</a><a id="706" href="02-Solutions.html#675" class="Bound">A</a> <a id="708" href="binary-products.html#670" data-type="Type → Type → Type" class="Function Operator">×</a> <a id="710" href="02-Solutions.html#679" class="Bound">C</a><a id="711" class="Symbol">)</a> <a id="713" href="binary-sums.html#672" data-type="Type → Type → Set" class="Datatype Operator">∔</a> <a id="715" class="Symbol">(</a><a id="716" href="02-Solutions.html#677" class="Bound">B</a> <a id="718" href="binary-products.html#670" data-type="Type → Type → Type" class="Function Operator">×</a> <a id="720" href="02-Solutions.html#679" class="Bound">C</a><a id="721" class="Symbol">)</a>
+<a id="723" href="02-Solutions.html#667" data-type="A ∔ B × C → (A × C) ∔ (B × C)" class="Function">[ii]</a> <a id="728" class="Symbol">(</a><a id="729" href="binary-sums.html#703" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="733" href="02-Solutions.html#733" class="Bound">a</a> <a id="735" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="737" href="02-Solutions.html#737" class="Bound">c</a><a id="738" class="Symbol">)</a> <a id="740" class="Symbol">=</a> <a id="742" href="binary-sums.html#703" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="746" class="Symbol">(</a><a id="747" href="02-Solutions.html#733" class="Bound">a</a> <a id="749" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="751" href="02-Solutions.html#737" class="Bound">c</a><a id="752" class="Symbol">)</a>
+<a id="754" href="02-Solutions.html#667" data-type="A ∔ B × C → (A × C) ∔ (B × C)" class="Function">[ii]</a> <a id="759" class="Symbol">(</a><a id="760" href="binary-sums.html#720" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="764" href="02-Solutions.html#764" class="Bound">b</a> <a id="766" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="768" href="02-Solutions.html#768" class="Bound">c</a><a id="769" class="Symbol">)</a> <a id="771" class="Symbol">=</a> <a id="773" href="binary-sums.html#720" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="777" class="Symbol">(</a><a id="778" href="02-Solutions.html#764" class="Bound">b</a> <a id="780" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="782" href="02-Solutions.html#768" class="Bound">c</a><a id="783" class="Symbol">)</a>
+
+<a id="[iii]"></a><a id="786" href="02-Solutions.html#786" data-type="¬ (A ∔ B) → ¬ A × ¬ B" class="Function">[iii]</a> <a id="792" class="Symbol">:</a> <a id="794" class="Symbol">{</a><a id="795" href="02-Solutions.html#795" class="Bound">A</a> <a id="797" href="02-Solutions.html#797" class="Bound">B</a> <a id="799" class="Symbol">:</a> <a id="801" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="805" class="Symbol">}</a> <a id="807" class="Symbol">→</a> <a id="809" href="empty-type.html#1685" data-type="Type → Type" class="Function Operator">¬</a> <a id="811" class="Symbol">(</a><a id="812" href="02-Solutions.html#795" class="Bound">A</a> <a id="814" href="binary-sums.html#672" data-type="Type → Type → Set" class="Datatype Operator">∔</a> <a id="816" href="02-Solutions.html#797" class="Bound">B</a><a id="817" class="Symbol">)</a> <a id="819" class="Symbol">→</a> <a id="821" href="empty-type.html#1685" data-type="Type → Type" class="Function Operator">¬</a> <a id="823" href="02-Solutions.html#795" class="Bound">A</a> <a id="825" href="binary-products.html#670" data-type="Type → Type → Type" class="Function Operator">×</a> <a id="827" href="empty-type.html#1685" data-type="Type → Type" class="Function Operator">¬</a> <a id="829" href="02-Solutions.html#797" class="Bound">B</a>
+<a id="831" href="sums.html#2535" data-type="Σ B → A" class="Field">pr₁</a> <a id="835" class="Symbol">(</a><a id="836" href="02-Solutions.html#786" data-type="¬ (A ∔ B) → ¬ A × ¬ B" class="Function">[iii]</a> <a id="842" href="02-Solutions.html#842" class="Bound">f</a><a id="843" class="Symbol">)</a> <a id="845" href="02-Solutions.html#845" class="Bound">a</a> <a id="847" class="Symbol">=</a> <a id="849" href="02-Solutions.html#842" class="Bound">f</a> <a id="851" class="Symbol">(</a><a id="852" href="binary-sums.html#703" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="856" href="02-Solutions.html#845" class="Bound">a</a><a id="857" class="Symbol">)</a>
+<a id="859" href="sums.html#2545" data-type="(r : Σ B) → B (pr₁ r)" class="Field">pr₂</a> <a id="863" class="Symbol">(</a><a id="864" href="02-Solutions.html#786" data-type="¬ (A ∔ B) → ¬ A × ¬ B" class="Function">[iii]</a> <a id="870" href="02-Solutions.html#870" class="Bound">f</a><a id="871" class="Symbol">)</a> <a id="873" href="02-Solutions.html#873" class="Bound">b</a> <a id="875" class="Symbol">=</a> <a id="877" href="02-Solutions.html#870" class="Bound">f</a> <a id="879" class="Symbol">(</a><a id="880" href="binary-sums.html#720" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="884" href="02-Solutions.html#873" class="Bound">b</a><a id="885" class="Symbol">)</a>
+</pre>
+The next goal <code>[iv] : {A B : Type} → ¬ (A × B) → ¬ A ∔ ¬ B</code>
+is not provable. Under propositions-as-types it says that “not (A and B)
+implies not A or not B”, which is not true in constructive logic. At the
+end we have to give a term of the form <code>inl ...</code> or
+<code>inr ...</code> but for abstract <code>A B</code> we can not say of
+which form it should be.
+<pre class="Agda"><a id="[v]"></a><a id="1234" href="02-Solutions.html#1234" data-type="(A → B) → ¬ B → ¬ A" class="Function">[v]</a> <a id="1238" class="Symbol">:</a> <a id="1240" class="Symbol">{</a><a id="1241" href="02-Solutions.html#1241" class="Bound">A</a> <a id="1243" href="02-Solutions.html#1243" class="Bound">B</a> <a id="1245" class="Symbol">:</a> <a id="1247" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="1251" class="Symbol">}</a> <a id="1253" class="Symbol">→</a> <a id="1255" class="Symbol">(</a><a id="1256" href="02-Solutions.html#1241" class="Bound">A</a> <a id="1258" class="Symbol">→</a> <a id="1260" href="02-Solutions.html#1243" class="Bound">B</a><a id="1261" class="Symbol">)</a> <a id="1263" class="Symbol">→</a> <a id="1265" href="empty-type.html#1685" data-type="Type → Type" class="Function Operator">¬</a> <a id="1267" href="02-Solutions.html#1243" class="Bound">B</a> <a id="1269" class="Symbol">→</a> <a id="1271" href="empty-type.html#1685" data-type="Type → Type" class="Function Operator">¬</a> <a id="1273" href="02-Solutions.html#1241" class="Bound">A</a> <a id="1275" class="Comment">-- also known as contraposition</a>
+<a id="1307" href="02-Solutions.html#1234" data-type="(A → B) → ¬ B → ¬ A" class="Function">[v]</a> <a id="1311" href="02-Solutions.html#1311" class="Bound">f</a> <a id="1313" href="02-Solutions.html#1313" class="Bound">g</a> <a id="1315" href="02-Solutions.html#1315" class="Bound">a</a> <a id="1317" class="Symbol">=</a> <a id="1319" href="02-Solutions.html#1313" class="Bound">g</a> <a id="1321" class="Symbol">(</a><a id="1322" href="02-Solutions.html#1311" class="Bound">f</a> <a id="1324" href="02-Solutions.html#1315" class="Bound">a</a><a id="1325" class="Symbol">)</a>
+</pre>
+Neither of <code>[vi] : {A B : Type} → (¬ A → ¬ B) → B → A</code> and
+<code>[vii] : {A B : Type} → ((A → B) → A) → A</code> are provable Under
+propositions-as-types <code>[vi]</code> is known as <em>inverse
+contraposition</em> and <code>[vii]</code> is known as <em>Peirce’s
+law</em>. At the end we have to construct something of type
+<code>A</code> but this is not possible with all the assumptions being
+functions.
+<pre class="Agda"><a id="[viii]"></a><a id="1688" href="02-Solutions.html#1688" data-type="¬ Sigma A B → (a : A) → ¬ B a" class="Function">[viii]</a> <a id="1695" class="Symbol">:</a> <a id="1697" class="Symbol">{</a><a id="1698" href="02-Solutions.html#1698" class="Bound">A</a> <a id="1700" class="Symbol">:</a> <a id="1702" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="1706" class="Symbol">}</a> <a id="1708" class="Symbol">{</a><a id="1709" href="02-Solutions.html#1709" class="Bound">B</a> <a id="1711" class="Symbol">:</a> <a id="1713" href="02-Solutions.html#1698" class="Bound">A</a> <a id="1715" class="Symbol">→</a> <a id="1717" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="1721" class="Symbol">}</a>
+    <a id="1727" class="Symbol">→</a> <a id="1729" href="empty-type.html#1685" data-type="Type → Type" class="Function Operator">¬</a> <a id="1731" class="Symbol">(</a><a id="1732" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">Σ</a> <a id="1734" href="02-Solutions.html#1734" class="Bound">a</a> <a id="1736" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">꞉</a> <a id="1738" href="02-Solutions.html#1698" class="Bound">A</a> <a id="1740" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">,</a> <a id="1742" href="02-Solutions.html#1709" class="Bound">B</a> <a id="1744" href="02-Solutions.html#1734" class="Bound">a</a><a id="1745" class="Symbol">)</a> <a id="1747" class="Symbol">→</a> <a id="1749" class="Symbol">(</a><a id="1750" href="02-Solutions.html#1750" class="Bound">a</a> <a id="1752" class="Symbol">:</a> <a id="1754" href="02-Solutions.html#1698" class="Bound">A</a><a id="1755" class="Symbol">)</a> <a id="1757" class="Symbol">→</a> <a id="1759" href="empty-type.html#1685" data-type="Type → Type" class="Function Operator">¬</a> <a id="1761" href="02-Solutions.html#1709" class="Bound">B</a> <a id="1763" href="02-Solutions.html#1750" class="Bound">a</a>
+<a id="1765" href="02-Solutions.html#1688" data-type="¬ Sigma A B → (a : A) → ¬ B a" class="Function">[viii]</a> <a id="1772" href="02-Solutions.html#1772" class="Bound">f</a> <a id="1774" href="02-Solutions.html#1774" class="Bound">a</a> <a id="1776" href="02-Solutions.html#1776" class="Bound">bₐ</a> <a id="1779" class="Symbol">=</a> <a id="1781" href="02-Solutions.html#1772" class="Bound">f</a> <a id="1783" class="Symbol">(</a><a id="1784" href="02-Solutions.html#1774" class="Bound">a</a> <a id="1786" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="1788" href="02-Solutions.html#1776" class="Bound">bₐ</a><a id="1790" class="Symbol">)</a>
+</pre>
+<p>The next goal
+<code>[ix] : {A : Type} {B : A → Type} → ¬ ((a : A) → B a) → (Σ a ꞉ A , ¬ B a)</code>
+reads as: “If not for all a, B(a), then there is an a such that not
+B(a)” This is not true in constructive logic. Again, we have to
+construct an <code>a : A</code> as the first projection of the
+Sigma-type in the conclusion, which is not possible from our
+assumptions.</p>
+<pre class="Agda"><a id="[x]"></a><a id="2152" href="02-Solutions.html#2152" data-type="((a : A) → Sigma B (C a)) →
+Sigma (A → B) (λ f → (a : A) → C a (f a))" class="Function">[x]</a> <a id="2156" class="Symbol">:</a> <a id="2158" class="Symbol">{</a><a id="2159" href="02-Solutions.html#2159" class="Bound">A</a> <a id="2161" href="02-Solutions.html#2161" class="Bound">B</a> <a id="2163" class="Symbol">:</a> <a id="2165" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="2169" class="Symbol">}</a> <a id="2171" class="Symbol">{</a><a id="2172" href="02-Solutions.html#2172" class="Bound">C</a> <a id="2174" class="Symbol">:</a> <a id="2176" href="02-Solutions.html#2159" class="Bound">A</a> <a id="2178" class="Symbol">→</a> <a id="2180" href="02-Solutions.html#2161" class="Bound">B</a> <a id="2182" class="Symbol">→</a> <a id="2184" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="2188" class="Symbol">}</a>
+      <a id="2196" class="Symbol">→</a> <a id="2198" class="Symbol">((</a><a id="2200" href="02-Solutions.html#2200" class="Bound">a</a> <a id="2202" class="Symbol">:</a> <a id="2204" href="02-Solutions.html#2159" class="Bound">A</a><a id="2205" class="Symbol">)</a> <a id="2207" class="Symbol">→</a> <a id="2209" class="Symbol">(</a><a id="2210" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">Σ</a> <a id="2212" href="02-Solutions.html#2212" class="Bound">b</a> <a id="2214" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">꞉</a> <a id="2216" href="02-Solutions.html#2161" class="Bound">B</a> <a id="2218" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">,</a> <a id="2220" href="02-Solutions.html#2172" class="Bound">C</a> <a id="2222" href="02-Solutions.html#2200" class="Bound">a</a> <a id="2224" href="02-Solutions.html#2212" class="Bound">b</a><a id="2225" class="Symbol">))</a>
+      <a id="2234" class="Symbol">→</a> <a id="2236" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">Σ</a> <a id="2238" href="02-Solutions.html#2238" class="Bound">f</a> <a id="2240" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">꞉</a> <a id="2242" class="Symbol">(</a><a id="2243" href="02-Solutions.html#2159" class="Bound">A</a> <a id="2245" class="Symbol">→</a> <a id="2247" href="02-Solutions.html#2161" class="Bound">B</a><a id="2248" class="Symbol">)</a> <a id="2250" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">,</a> <a id="2252" class="Symbol">((</a><a id="2254" href="02-Solutions.html#2254" class="Bound">a</a> <a id="2256" class="Symbol">:</a> <a id="2258" href="02-Solutions.html#2159" class="Bound">A</a><a id="2259" class="Symbol">)</a> <a id="2261" class="Symbol">→</a> <a id="2263" href="02-Solutions.html#2172" class="Bound">C</a> <a id="2265" href="02-Solutions.html#2254" class="Bound">a</a> <a id="2267" class="Symbol">(</a><a id="2268" href="02-Solutions.html#2238" class="Bound">f</a> <a id="2270" href="02-Solutions.html#2254" class="Bound">a</a><a id="2271" class="Symbol">))</a>
+<a id="2274" href="sums.html#2535" data-type="Σ B → A" class="Field">pr₁</a> <a id="2278" class="Symbol">(</a><a id="2279" href="02-Solutions.html#2152" data-type="((a : A) → Sigma B (C a)) →
+Sigma (A → B) (λ f → (a : A) → C a (f a))" class="Function">[x]</a> <a id="2283" href="02-Solutions.html#2283" class="Bound">g</a><a id="2284" class="Symbol">)</a> <a id="2286" href="02-Solutions.html#2286" class="Bound">a</a> <a id="2288" class="Symbol">=</a> <a id="2290" href="02-Solutions.html#2283" class="Bound">g</a> <a id="2292" href="02-Solutions.html#2286" class="Bound">a</a> <a id="2294" class="Symbol">.</a><a id="2295" href="sums.html#2535" data-type="Σ B → A" class="Field">pr₁</a>
+<a id="2299" href="sums.html#2545" data-type="(r : Σ B) → B (pr₁ r)" class="Field">pr₂</a> <a id="2303" class="Symbol">(</a><a id="2304" href="02-Solutions.html#2152" data-type="((a : A) → Sigma B (C a)) →
+Sigma (A → B) (λ f → (a : A) → C a (f a))" class="Function">[x]</a> <a id="2308" href="02-Solutions.html#2308" class="Bound">g</a><a id="2309" class="Symbol">)</a> <a id="2311" href="02-Solutions.html#2311" class="Bound">a</a> <a id="2313" class="Symbol">=</a> <a id="2315" href="02-Solutions.html#2308" class="Bound">g</a> <a id="2317" href="02-Solutions.html#2311" class="Bound">a</a> <a id="2319" class="Symbol">.</a><a id="2320" href="sums.html#2545" data-type="(r : Σ B) → B (pr₁ r)" class="Field">pr₂</a>
+</pre>
+<p>Note that under propositions-as-types <code>[x]</code> reads somewhat
+like the <em>axiom of choice</em>. Yet it is still provable. This result
+is often referred to as the <em>distributivity of Π over Σ</em> and
+shows that propositions-as-types should be taken with a grain of salt
+sometimes.</p>
+<h3 id="exercise-3">Exercise 3</h3>
+<pre class="Agda"><a id="¬¬_"></a><a id="2619" href="02-Solutions.html#2619" data-type="Type → Type" class="Function Operator">¬¬_</a> <a id="2623" class="Symbol">:</a> <a id="2625" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a> <a id="2630" class="Symbol">→</a> <a id="2632" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a>
+<a id="2637" href="02-Solutions.html#2619" data-type="Type → Type" class="Function Operator">¬¬</a> <a id="2640" href="02-Solutions.html#2640" class="Bound">A</a> <a id="2642" class="Symbol">=</a> <a id="2644" href="empty-type.html#1685" data-type="Type → Type" class="Function Operator">¬</a> <a id="2646" class="Symbol">(</a><a id="2647" href="empty-type.html#1685" data-type="Type → Type" class="Function Operator">¬</a> <a id="2649" href="02-Solutions.html#2640" class="Bound">A</a><a id="2650" class="Symbol">)</a>
+
+<a id="¬¬¬"></a><a id="2653" href="02-Solutions.html#2653" data-type="Type → Type" class="Function">¬¬¬</a> <a id="2657" class="Symbol">:</a> <a id="2659" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a> <a id="2664" class="Symbol">→</a> <a id="2666" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a>
+<a id="2671" href="02-Solutions.html#2653" data-type="Type → Type" class="Function">¬¬¬</a> <a id="2675" href="02-Solutions.html#2675" class="Bound">A</a> <a id="2677" class="Symbol">=</a> <a id="2679" href="empty-type.html#1685" data-type="Type → Type" class="Function Operator">¬</a> <a id="2681" class="Symbol">(</a><a id="2682" href="02-Solutions.html#2619" data-type="Type → Type" class="Function Operator">¬¬</a> <a id="2685" href="02-Solutions.html#2675" class="Bound">A</a><a id="2686" class="Symbol">)</a>
+
+<a id="tne"></a><a id="2689" href="02-Solutions.html#2689" data-type="¬¬¬ A → ¬ A" class="Function">tne</a> <a id="2693" class="Symbol">:</a> <a id="2695" class="Symbol">∀</a> <a id="2697" class="Symbol">{</a><a id="2698" href="02-Solutions.html#2698" class="Bound">A</a> <a id="2700" class="Symbol">:</a> <a id="2702" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="2706" class="Symbol">}</a> <a id="2708" class="Symbol">→</a> <a id="2710" href="02-Solutions.html#2653" data-type="Type → Type" class="Function">¬¬¬</a> <a id="2714" href="02-Solutions.html#2698" class="Bound">A</a> <a id="2716" class="Symbol">→</a> <a id="2718" href="empty-type.html#1685" data-type="Type → Type" class="Function Operator">¬</a> <a id="2720" href="02-Solutions.html#2698" class="Bound">A</a>
+<a id="2722" href="02-Solutions.html#2689" data-type="¬¬¬ A → ¬ A" class="Function">tne</a> <a id="2726" href="02-Solutions.html#2726" class="Bound">f</a> <a id="2728" href="02-Solutions.html#2728" class="Bound">a</a> <a id="2730" class="Symbol">=</a> <a id="2732" href="02-Solutions.html#2726" class="Bound">f</a> <a id="2734" class="Symbol">(λ</a> <a id="2737" href="02-Solutions.html#2737" class="Bound">g</a> <a id="2739" class="Symbol">→</a> <a id="2741" href="02-Solutions.html#2737" class="Bound">g</a> <a id="2743" href="02-Solutions.html#2728" class="Bound">a</a><a id="2744" class="Symbol">)</a>
+</pre>
+<h3 id="exercise-4">Exercise 4</h3>
+<pre class="Agda"><a id="¬¬-functor"></a><a id="2774" href="02-Solutions.html#2774" data-type="(A → B) → ¬¬ A → ¬¬ B" class="Function">¬¬-functor</a> <a id="2785" class="Symbol">:</a> <a id="2787" class="Symbol">{</a><a id="2788" href="02-Solutions.html#2788" class="Bound">A</a> <a id="2790" href="02-Solutions.html#2790" class="Bound">B</a> <a id="2792" class="Symbol">:</a> <a id="2794" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="2798" class="Symbol">}</a> <a id="2800" class="Symbol">→</a> <a id="2802" class="Symbol">(</a><a id="2803" href="02-Solutions.html#2788" class="Bound">A</a> <a id="2805" class="Symbol">→</a> <a id="2807" href="02-Solutions.html#2790" class="Bound">B</a><a id="2808" class="Symbol">)</a> <a id="2810" class="Symbol">→</a> <a id="2812" href="02-Solutions.html#2619" data-type="Type → Type" class="Function Operator">¬¬</a> <a id="2815" href="02-Solutions.html#2788" class="Bound">A</a> <a id="2817" class="Symbol">→</a> <a id="2819" href="02-Solutions.html#2619" data-type="Type → Type" class="Function Operator">¬¬</a> <a id="2822" href="02-Solutions.html#2790" class="Bound">B</a>
+<a id="2824" href="02-Solutions.html#2774" data-type="(A → B) → ¬¬ A → ¬¬ B" class="Function">¬¬-functor</a> <a id="2835" href="02-Solutions.html#2835" class="Bound">f</a> <a id="2837" class="Symbol">=</a> <a id="2839" href="02-Solutions.html#1234" data-type="(A → B) → ¬ B → ¬ A" class="Function">[v]</a> <a id="2843" class="Symbol">(</a><a id="2844" href="02-Solutions.html#1234" data-type="(A → B) → ¬ B → ¬ A" class="Function">[v]</a> <a id="2848" href="02-Solutions.html#2835" class="Bound">f</a><a id="2849" class="Symbol">)</a>
+
+<a id="¬¬-kleisli"></a><a id="2852" href="02-Solutions.html#2852" data-type="(A → ¬¬ B) → ¬¬ A → ¬¬ B" class="Function">¬¬-kleisli</a> <a id="2863" class="Symbol">:</a> <a id="2865" class="Symbol">{</a><a id="2866" href="02-Solutions.html#2866" class="Bound">A</a> <a id="2868" href="02-Solutions.html#2868" class="Bound">B</a> <a id="2870" class="Symbol">:</a> <a id="2872" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="2876" class="Symbol">}</a> <a id="2878" class="Symbol">→</a> <a id="2880" class="Symbol">(</a><a id="2881" href="02-Solutions.html#2866" class="Bound">A</a> <a id="2883" class="Symbol">→</a> <a id="2885" href="02-Solutions.html#2619" data-type="Type → Type" class="Function Operator">¬¬</a> <a id="2888" href="02-Solutions.html#2868" class="Bound">B</a><a id="2889" class="Symbol">)</a> <a id="2891" class="Symbol">→</a> <a id="2893" href="02-Solutions.html#2619" data-type="Type → Type" class="Function Operator">¬¬</a> <a id="2896" href="02-Solutions.html#2866" class="Bound">A</a> <a id="2898" class="Symbol">→</a> <a id="2900" href="02-Solutions.html#2619" data-type="Type → Type" class="Function Operator">¬¬</a> <a id="2903" href="02-Solutions.html#2868" class="Bound">B</a>
+<a id="2905" href="02-Solutions.html#2852" data-type="(A → ¬¬ B) → ¬¬ A → ¬¬ B" class="Function">¬¬-kleisli</a> <a id="2916" href="02-Solutions.html#2916" class="Bound">f</a> <a id="2918" href="02-Solutions.html#2918" class="Bound">g</a> <a id="2920" class="Symbol">=</a> <a id="2922" href="02-Solutions.html#2689" data-type="¬¬¬ A → ¬ A" class="Function">tne</a> <a id="2926" class="Symbol">(</a><a id="2927" href="02-Solutions.html#2774" data-type="(A → B) → ¬¬ A → ¬¬ B" class="Function">¬¬-functor</a> <a id="2938" href="02-Solutions.html#2916" class="Bound">f</a> <a id="2940" href="02-Solutions.html#2918" class="Bound">g</a><a id="2941" class="Symbol">)</a>
+</pre>
+<h2 id="part-ii">Part II</h2>
+<pre class="Agda"><a id="bool-as-type"></a><a id="2971" href="02-Solutions.html#2971" data-type="Bool → Type" class="Function">bool-as-type</a> <a id="2984" class="Symbol">:</a> <a id="2986" href="Bool.html#492" data-type="Set" class="Datatype">Bool</a> <a id="2991" class="Symbol">→</a> <a id="2993" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a>
+<a id="2998" href="02-Solutions.html#2971" data-type="Bool → Type" class="Function">bool-as-type</a> <a id="3011" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a> <a id="3016" class="Symbol">=</a> <a id="3018" href="unit-type.html#396" data-type="Type" class="Record">𝟙</a>
+<a id="3020" href="02-Solutions.html#2971" data-type="Bool → Type" class="Function">bool-as-type</a> <a id="3033" href="Bool.html#516" data-type="Bool" class="InductiveConstructor">false</a> <a id="3039" class="Symbol">=</a> <a id="3041" href="empty-type.html#523" data-type="Set" class="Datatype">𝟘</a>
+
+<a id="bool-≡-char₁"></a><a id="3044" href="02-Solutions.html#3044" data-type="(b b&#39; : Bool) → b ≡ b&#39; → bool-as-type b ⇔ bool-as-type b&#39;" class="Function">bool-≡-char₁</a> <a id="3057" class="Symbol">:</a> <a id="3059" class="Symbol">∀</a> <a id="3061" class="Symbol">(</a><a id="3062" href="02-Solutions.html#3062" class="Bound">b</a> <a id="3064" href="02-Solutions.html#3064" class="Bound">b&#39;</a> <a id="3067" class="Symbol">:</a> <a id="3069" href="Bool.html#492" data-type="Set" class="Datatype">Bool</a><a id="3073" class="Symbol">)</a> <a id="3075" class="Symbol">→</a> <a id="3077" href="02-Solutions.html#3062" class="Bound">b</a> <a id="3079" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="3081" href="02-Solutions.html#3064" class="Bound">b&#39;</a> <a id="3084" class="Symbol">→</a> <a id="3086" class="Symbol">(</a><a id="3087" href="02-Solutions.html#2971" data-type="Bool → Type" class="Function">bool-as-type</a> <a id="3100" href="02-Solutions.html#3062" class="Bound">b</a> <a id="3102" href="binary-products.html#1314" data-type="Type → Type → Type" class="Function Operator">⇔</a> <a id="3104" href="02-Solutions.html#2971" data-type="Bool → Type" class="Function">bool-as-type</a> <a id="3117" href="02-Solutions.html#3064" class="Bound">b&#39;</a><a id="3119" class="Symbol">)</a>
+<a id="3121" href="02-Solutions.html#3044" data-type="(b b&#39; : Bool) → b ≡ b&#39; → bool-as-type b ⇔ bool-as-type b&#39;" class="Function">bool-≡-char₁</a> <a id="3134" href="02-Solutions.html#3134" class="Bound">b</a> <a id="3136" class="DottedPattern Symbol">.</a><a id="3137" href="02-Solutions.html#3134" class="DottedPattern Bound">b</a> <a id="3139" class="Symbol">(</a><a id="3140" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="3145" class="DottedPattern Symbol">.</a><a id="3146" href="02-Solutions.html#3134" class="DottedPattern Bound">b</a><a id="3147" class="Symbol">)</a> <a id="3149" class="Symbol">=</a> <a id="3151" href="02-Solutions.html#3166" data-type="Bool → X ⇔ X" class="Function">⇔-refl</a>
+ <a id="3159" class="Keyword">where</a>
+ <a id="3166" href="02-Solutions.html#3166" data-type="Bool → X ⇔ X" class="Function">⇔-refl</a> <a id="3173" class="Symbol">:</a> <a id="3175" class="Symbol">{</a><a id="3176" href="02-Solutions.html#3176" class="Bound">X</a> <a id="3178" class="Symbol">:</a> <a id="3180" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="3184" class="Symbol">}</a> <a id="3186" class="Symbol">→</a> <a id="3188" href="02-Solutions.html#3176" class="Bound">X</a> <a id="3190" href="binary-products.html#1314" data-type="Type → Type → Type" class="Function Operator">⇔</a> <a id="3192" href="02-Solutions.html#3176" class="Bound">X</a>
+ <a id="3195" href="sums.html#2535" data-type="Σ B → A" class="Field">pr₁</a> <a id="3199" href="02-Solutions.html#3166" data-type="Bool → X ⇔ X" class="Function">⇔-refl</a> <a id="3206" href="02-Solutions.html#3206" class="Bound">x</a> <a id="3208" class="Symbol">=</a> <a id="3210" href="02-Solutions.html#3206" class="Bound">x</a>
+ <a id="3213" href="sums.html#2545" data-type="(r : Σ B) → B (pr₁ r)" class="Field">pr₂</a> <a id="3217" href="02-Solutions.html#3166" data-type="Bool → X ⇔ X" class="Function">⇔-refl</a> <a id="3224" href="02-Solutions.html#3224" class="Bound">x</a> <a id="3226" class="Symbol">=</a> <a id="3228" href="02-Solutions.html#3224" class="Bound">x</a>
+
+<a id="true≢false"></a><a id="3231" href="02-Solutions.html#3231" data-type="¬ (true ≡ false)" class="Function">true≢false</a> <a id="3242" class="Symbol">:</a> <a id="3244" href="empty-type.html#1685" data-type="Type → Type" class="Function Operator">¬</a> <a id="3246" class="Symbol">(</a><a id="3247" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a> <a id="3252" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="3254" href="Bool.html#516" data-type="Bool" class="InductiveConstructor">false</a><a id="3259" class="Symbol">)</a>
+<a id="3261" href="02-Solutions.html#3231" data-type="¬ (true ≡ false)" class="Function">true≢false</a> <a id="3272" href="02-Solutions.html#3272" class="Bound">p</a> <a id="3274" class="Symbol">=</a> <a id="3276" href="02-Solutions.html#3044" data-type="(b b&#39; : Bool) → b ≡ b&#39; → bool-as-type b ⇔ bool-as-type b&#39;" class="Function">bool-≡-char₁</a> <a id="3289" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a> <a id="3294" href="Bool.html#516" data-type="Bool" class="InductiveConstructor">false</a> <a id="3300" href="02-Solutions.html#3272" class="Bound">p</a> <a id="3302" class="Symbol">.</a><a id="3303" href="sums.html#2535" data-type="Σ B → A" class="Field">pr₁</a> <a id="3307" href="unit-type.html#426" data-type="𝟙" class="InductiveConstructor">⋆</a>
+<a id="3309" class="Comment">-- also true≢false ()</a>
+
+<a id="bool-≡-char₂"></a><a id="3332" href="02-Solutions.html#3332" data-type="(b b&#39; : Bool) → bool-as-type b ⇔ bool-as-type b&#39; → b ≡ b&#39;" class="Function">bool-≡-char₂</a> <a id="3345" class="Symbol">:</a> <a id="3347" class="Symbol">∀</a> <a id="3349" class="Symbol">(</a><a id="3350" href="02-Solutions.html#3350" class="Bound">b</a> <a id="3352" href="02-Solutions.html#3352" class="Bound">b&#39;</a> <a id="3355" class="Symbol">:</a> <a id="3357" href="Bool.html#492" data-type="Set" class="Datatype">Bool</a><a id="3361" class="Symbol">)</a> <a id="3363" class="Symbol">→</a> <a id="3365" class="Symbol">(</a><a id="3366" href="02-Solutions.html#2971" data-type="Bool → Type" class="Function">bool-as-type</a> <a id="3379" href="02-Solutions.html#3350" class="Bound">b</a> <a id="3381" href="binary-products.html#1314" data-type="Type → Type → Type" class="Function Operator">⇔</a> <a id="3383" href="02-Solutions.html#2971" data-type="Bool → Type" class="Function">bool-as-type</a> <a id="3396" href="02-Solutions.html#3352" class="Bound">b&#39;</a><a id="3398" class="Symbol">)</a> <a id="3400" class="Symbol">→</a> <a id="3402" href="02-Solutions.html#3350" class="Bound">b</a> <a id="3404" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="3406" href="02-Solutions.html#3352" class="Bound">b&#39;</a>
+<a id="3409" href="02-Solutions.html#3332" data-type="(b b&#39; : Bool) → bool-as-type b ⇔ bool-as-type b&#39; → b ≡ b&#39;" class="Function">bool-≡-char₂</a> <a id="3422" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a> <a id="3427" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a> <a id="3432" class="Symbol">(</a><a id="3433" href="02-Solutions.html#3433" class="Bound">b→b&#39;</a> <a id="3438" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="3440" href="02-Solutions.html#3440" class="Bound">b&#39;→b</a><a id="3444" class="Symbol">)</a> <a id="3446" class="Symbol">=</a> <a id="3448" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="3453" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a>
+<a id="3458" href="02-Solutions.html#3332" data-type="(b b&#39; : Bool) → bool-as-type b ⇔ bool-as-type b&#39; → b ≡ b&#39;" class="Function">bool-≡-char₂</a> <a id="3471" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a> <a id="3476" href="Bool.html#516" data-type="Bool" class="InductiveConstructor">false</a> <a id="3482" class="Symbol">(</a><a id="3483" href="02-Solutions.html#3483" class="Bound">b→b&#39;</a> <a id="3488" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="3490" href="02-Solutions.html#3490" class="Bound">b&#39;→b</a><a id="3494" class="Symbol">)</a> <a id="3496" class="Symbol">=</a> <a id="3498" href="empty-type.html#1769" data-type="(x : 𝟘) → A x" class="Function">𝟘-elim</a> <a id="3505" class="Symbol">(</a><a id="3506" href="02-Solutions.html#3483" class="Bound">b→b&#39;</a> <a id="3511" href="unit-type.html#426" data-type="𝟙" class="InductiveConstructor">⋆</a><a id="3512" class="Symbol">)</a>
+<a id="3514" href="02-Solutions.html#3332" data-type="(b b&#39; : Bool) → bool-as-type b ⇔ bool-as-type b&#39; → b ≡ b&#39;" class="Function">bool-≡-char₂</a> <a id="3527" href="Bool.html#516" data-type="Bool" class="InductiveConstructor">false</a> <a id="3533" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a> <a id="3538" class="Symbol">(</a><a id="3539" href="02-Solutions.html#3539" class="Bound">b→b&#39;</a> <a id="3544" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="3546" href="02-Solutions.html#3546" class="Bound">b&#39;→b</a><a id="3550" class="Symbol">)</a> <a id="3552" class="Symbol">=</a> <a id="3554" href="empty-type.html#1769" data-type="(x : 𝟘) → A x" class="Function">𝟘-elim</a> <a id="3561" class="Symbol">(</a><a id="3562" href="02-Solutions.html#3546" class="Bound">b&#39;→b</a> <a id="3567" href="unit-type.html#426" data-type="𝟙" class="InductiveConstructor">⋆</a><a id="3568" class="Symbol">)</a>
+<a id="3570" href="02-Solutions.html#3332" data-type="(b b&#39; : Bool) → bool-as-type b ⇔ bool-as-type b&#39; → b ≡ b&#39;" class="Function">bool-≡-char₂</a> <a id="3583" href="Bool.html#516" data-type="Bool" class="InductiveConstructor">false</a> <a id="3589" href="Bool.html#516" data-type="Bool" class="InductiveConstructor">false</a> <a id="3595" class="Symbol">(</a><a id="3596" href="02-Solutions.html#3596" class="Bound">b→b&#39;</a> <a id="3601" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="3603" href="02-Solutions.html#3603" class="Bound">b&#39;→b</a><a id="3607" class="Symbol">)</a> <a id="3609" class="Symbol">=</a> <a id="3611" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="3616" href="Bool.html#516" data-type="Bool" class="InductiveConstructor">false</a>
+</pre>
+<h2 id="part-iii">Part III</h2>
+<pre class="Agda"><a id="has-bool-dec-fct"></a><a id="3651" href="02-Solutions.html#3651" data-type="Type → Type" class="Function">has-bool-dec-fct</a> <a id="3668" class="Symbol">:</a> <a id="3670" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a> <a id="3675" class="Symbol">→</a> <a id="3677" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a>
+<a id="3682" href="02-Solutions.html#3651" data-type="Type → Type" class="Function">has-bool-dec-fct</a> <a id="3699" href="02-Solutions.html#3699" class="Bound">A</a> <a id="3701" class="Symbol">=</a> <a id="3703" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">Σ</a> <a id="3705" href="02-Solutions.html#3705" class="Bound">f</a> <a id="3707" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">꞉</a> <a id="3709" class="Symbol">(</a><a id="3710" href="02-Solutions.html#3699" class="Bound">A</a> <a id="3712" class="Symbol">→</a> <a id="3714" href="02-Solutions.html#3699" class="Bound">A</a> <a id="3716" class="Symbol">→</a> <a id="3718" href="Bool.html#492" data-type="Set" class="Datatype">Bool</a><a id="3722" class="Symbol">)</a> <a id="3724" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">,</a> <a id="3726" class="Symbol">(∀</a> <a id="3729" href="02-Solutions.html#3729" class="Bound">x</a> <a id="3731" href="02-Solutions.html#3731" class="Bound">y</a> <a id="3733" class="Symbol">→</a> <a id="3735" href="02-Solutions.html#3729" class="Bound">x</a> <a id="3737" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="3739" href="02-Solutions.html#3731" class="Bound">y</a> <a id="3741" href="binary-products.html#1314" data-type="Type → Type → Type" class="Function Operator">⇔</a> <a id="3743" class="Symbol">(</a><a id="3744" href="02-Solutions.html#3705" class="Bound">f</a> <a id="3746" href="02-Solutions.html#3729" class="Bound">x</a> <a id="3748" href="02-Solutions.html#3731" class="Bound">y</a><a id="3749" class="Symbol">)</a> <a id="3751" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="3753" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a><a id="3757" class="Symbol">)</a>
+
+<a id="decidable-equality-char"></a><a id="3760" href="02-Solutions.html#3760" data-type="(A : Type) → has-decidable-equality A ⇔ has-bool-dec-fct A" class="Function">decidable-equality-char</a> <a id="3784" class="Symbol">:</a> <a id="3786" class="Symbol">(</a><a id="3787" href="02-Solutions.html#3787" class="Bound">A</a> <a id="3789" class="Symbol">:</a> <a id="3791" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="3795" class="Symbol">)</a> <a id="3797" class="Symbol">→</a> <a id="3799" href="decidability.html#13403" data-type="Type → Type" class="Function">has-decidable-equality</a> <a id="3822" href="02-Solutions.html#3787" class="Bound">A</a> <a id="3824" href="binary-products.html#1314" data-type="Type → Type → Type" class="Function Operator">⇔</a> <a id="3826" href="02-Solutions.html#3651" data-type="Type → Type" class="Function">has-bool-dec-fct</a> <a id="3843" href="02-Solutions.html#3787" class="Bound">A</a>
+<a id="3845" href="sums.html#2535" data-type="Σ B → A" class="Field">pr₁</a> <a id="3849" class="Symbol">(</a><a id="3850" href="02-Solutions.html#3760" data-type="(A : Type) → has-decidable-equality A ⇔ has-bool-dec-fct A" class="Function">decidable-equality-char</a> <a id="3874" href="02-Solutions.html#3874" class="Bound">A</a><a id="3875" class="Symbol">)</a> <a id="3877" href="02-Solutions.html#3877" class="Bound">discA</a> <a id="3883" class="Symbol">=</a> <a id="3885" href="02-Solutions.html#4182" data-type="(A : Type) (discA : has-decidable-equality A) → A → A → Bool" class="Function">f</a> <a id="3887" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="3889" href="02-Solutions.html#4231" data-type="(A : Type) (discA : has-decidable-equality A) (x y : A) →
+x ≡ y ⇔ f A discA x y ≡ true" class="Function">f-dec</a> <a id="3895" class="Comment">-- left to right implication</a>
+  <a id="3926" class="Keyword">where</a>
+  <a id="3934" href="02-Solutions.html#3934" data-type="(A : Type) →
+has-decidable-equality A → (a b : A) → is-decidable (a ≡ b) → Bool" class="Function">f&#39;</a> <a id="3937" class="Symbol">:</a> <a id="3939" class="Symbol">(</a><a id="3940" href="02-Solutions.html#3940" class="Bound">a</a> <a id="3942" href="02-Solutions.html#3942" class="Bound">b</a> <a id="3944" class="Symbol">:</a> <a id="3946" href="02-Solutions.html#3874" class="Bound">A</a><a id="3947" class="Symbol">)</a> <a id="3949" class="Symbol">→</a> <a id="3951" href="decidability.html#2635" data-type="Type → Type" class="Function">is-decidable</a> <a id="3964" class="Symbol">(</a><a id="3965" href="02-Solutions.html#3940" class="Bound">a</a> <a id="3967" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="3969" href="02-Solutions.html#3942" class="Bound">b</a><a id="3970" class="Symbol">)</a> <a id="3972" class="Symbol">→</a> <a id="3974" href="Bool.html#492" data-type="Set" class="Datatype">Bool</a>
+  <a id="3981" href="02-Solutions.html#3934" data-type="(A : Type) →
+has-decidable-equality A → (a b : A) → is-decidable (a ≡ b) → Bool" class="Function">f&#39;</a> <a id="3984" href="02-Solutions.html#3984" class="Bound">a</a> <a id="3986" href="02-Solutions.html#3986" class="Bound">b</a> <a id="3988" class="Symbol">(</a><a id="3989" href="binary-sums.html#703" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="3993" class="Symbol">_)</a> <a id="3996" class="Symbol">=</a> <a id="3998" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a>
+  <a id="4005" href="02-Solutions.html#3934" data-type="(A : Type) →
+has-decidable-equality A → (a b : A) → is-decidable (a ≡ b) → Bool" class="Function">f&#39;</a> <a id="4008" href="02-Solutions.html#4008" class="Bound">a</a> <a id="4010" href="02-Solutions.html#4010" class="Bound">b</a> <a id="4012" class="Symbol">(</a><a id="4013" href="binary-sums.html#720" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="4017" class="Symbol">_)</a> <a id="4020" class="Symbol">=</a> <a id="4022" href="Bool.html#516" data-type="Bool" class="InductiveConstructor">false</a>
+
+  <a id="4031" href="02-Solutions.html#4031" data-type="(A : Type) (discA : has-decidable-equality A) (x : A)
+(d : is-decidable (x ≡ x)) →
+f&#39; A discA x x d ≡ true" class="Function">f&#39;-refl</a> <a id="4039" class="Symbol">:</a> <a id="4041" class="Symbol">(</a><a id="4042" href="02-Solutions.html#4042" class="Bound">x</a> <a id="4044" class="Symbol">:</a> <a id="4046" href="02-Solutions.html#3874" class="Bound">A</a><a id="4047" class="Symbol">)</a> <a id="4049" class="Symbol">(</a><a id="4050" href="02-Solutions.html#4050" class="Bound">d</a> <a id="4052" class="Symbol">:</a> <a id="4054" href="decidability.html#2635" data-type="Type → Type" class="Function">is-decidable</a> <a id="4067" class="Symbol">(</a><a id="4068" href="02-Solutions.html#4042" class="Bound">x</a> <a id="4070" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="4072" href="02-Solutions.html#4042" class="Bound">x</a><a id="4073" class="Symbol">))</a> <a id="4076" class="Symbol">→</a> <a id="4078" href="02-Solutions.html#3934" data-type="(A : Type) →
+has-decidable-equality A → (a b : A) → is-decidable (a ≡ b) → Bool" class="Function">f&#39;</a> <a id="4081" href="02-Solutions.html#4042" class="Bound">x</a> <a id="4083" href="02-Solutions.html#4042" class="Bound">x</a> <a id="4085" href="02-Solutions.html#4050" class="Bound">d</a> <a id="4087" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="4089" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a>
+  <a id="4096" href="02-Solutions.html#4031" data-type="(A : Type) (discA : has-decidable-equality A) (x : A)
+(d : is-decidable (x ≡ x)) →
+f&#39; A discA x x d ≡ true" class="Function">f&#39;-refl</a> <a id="4104" href="02-Solutions.html#4104" class="Bound">x</a> <a id="4106" class="Symbol">(</a><a id="4107" href="binary-sums.html#703" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="4111" class="Symbol">_)</a> <a id="4114" class="Symbol">=</a> <a id="4116" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="4121" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a>
+  <a id="4128" href="02-Solutions.html#4031" data-type="(A : Type) (discA : has-decidable-equality A) (x : A)
+(d : is-decidable (x ≡ x)) →
+f&#39; A discA x x d ≡ true" class="Function">f&#39;-refl</a> <a id="4136" href="02-Solutions.html#4136" class="Bound">x</a> <a id="4138" class="Symbol">(</a><a id="4139" href="binary-sums.html#720" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="4143" href="02-Solutions.html#4143" class="Bound">x≢x</a><a id="4146" class="Symbol">)</a> <a id="4148" class="Symbol">=</a> <a id="4150" href="empty-type.html#2768" data-type="𝟘 → A" class="Function">𝟘-nondep-elim</a> <a id="4164" class="Symbol">(</a><a id="4165" href="02-Solutions.html#4143" class="Bound">x≢x</a> <a id="4169" class="Symbol">(</a><a id="4170" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="4175" href="02-Solutions.html#4136" class="Bound">x</a><a id="4176" class="Symbol">))</a>
+
+  <a id="4182" href="02-Solutions.html#4182" data-type="(A : Type) (discA : has-decidable-equality A) → A → A → Bool" class="Function">f</a> <a id="4184" class="Symbol">:</a> <a id="4186" href="02-Solutions.html#3874" class="Bound">A</a> <a id="4188" class="Symbol">→</a> <a id="4190" href="02-Solutions.html#3874" class="Bound">A</a> <a id="4192" class="Symbol">→</a> <a id="4194" href="Bool.html#492" data-type="Set" class="Datatype">Bool</a>
+  <a id="4201" href="02-Solutions.html#4182" data-type="(A : Type) (discA : has-decidable-equality A) → A → A → Bool" class="Function">f</a> <a id="4203" href="02-Solutions.html#4203" class="Bound">a</a> <a id="4205" href="02-Solutions.html#4205" class="Bound">b</a> <a id="4207" class="Symbol">=</a> <a id="4209" href="02-Solutions.html#3934" data-type="(A : Type) →
+has-decidable-equality A → (a b : A) → is-decidable (a ≡ b) → Bool" class="Function">f&#39;</a> <a id="4212" href="02-Solutions.html#4203" class="Bound">a</a> <a id="4214" href="02-Solutions.html#4205" class="Bound">b</a> <a id="4216" class="Symbol">(</a><a id="4217" href="02-Solutions.html#3877" class="Bound">discA</a> <a id="4223" href="02-Solutions.html#4203" class="Bound">a</a> <a id="4225" href="02-Solutions.html#4205" class="Bound">b</a><a id="4226" class="Symbol">)</a>
+
+  <a id="4231" href="02-Solutions.html#4231" data-type="(A : Type) (discA : has-decidable-equality A) (x y : A) →
+x ≡ y ⇔ f A discA x y ≡ true" class="Function">f-dec</a> <a id="4237" class="Symbol">:</a> <a id="4239" class="Symbol">∀</a> <a id="4241" href="02-Solutions.html#4241" class="Bound">x</a> <a id="4243" href="02-Solutions.html#4243" class="Bound">y</a> <a id="4245" class="Symbol">→</a> <a id="4247" href="02-Solutions.html#4241" class="Bound">x</a> <a id="4249" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="4251" href="02-Solutions.html#4243" class="Bound">y</a> <a id="4253" href="binary-products.html#1314" data-type="Type → Type → Type" class="Function Operator">⇔</a> <a id="4255" class="Symbol">(</a><a id="4256" href="02-Solutions.html#4182" data-type="(A : Type) (discA : has-decidable-equality A) → A → A → Bool" class="Function">f</a> <a id="4258" href="02-Solutions.html#4241" class="Bound">x</a> <a id="4260" href="02-Solutions.html#4243" class="Bound">y</a><a id="4261" class="Symbol">)</a> <a id="4263" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="4265" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a>
+  <a id="4272" href="sums.html#2535" data-type="Σ B → A" class="Field">pr₁</a> <a id="4276" class="Symbol">(</a><a id="4277" href="02-Solutions.html#4231" data-type="(A : Type) (discA : has-decidable-equality A) (x y : A) →
+x ≡ y ⇔ f A discA x y ≡ true" class="Function">f-dec</a> <a id="4283" href="02-Solutions.html#4283" class="Bound">x</a> <a id="4285" class="DottedPattern Symbol">.</a><a id="4286" href="02-Solutions.html#4283" class="DottedPattern Bound">x</a><a id="4287" class="Symbol">)</a> <a id="4289" class="Symbol">(</a><a id="4290" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="4295" class="DottedPattern Symbol">.</a><a id="4296" href="02-Solutions.html#4283" class="DottedPattern Bound">x</a><a id="4297" class="Symbol">)</a> <a id="4299" class="Symbol">=</a> <a id="4301" href="02-Solutions.html#4031" data-type="(A : Type) (discA : has-decidable-equality A) (x : A)
+(d : is-decidable (x ≡ x)) →
+f&#39; A discA x x d ≡ true" class="Function">f&#39;-refl</a> <a id="4309" href="02-Solutions.html#4283" class="Bound">x</a> <a id="4311" class="Symbol">(</a><a id="4312" href="02-Solutions.html#3877" class="Bound">discA</a> <a id="4318" href="02-Solutions.html#4283" class="Bound">x</a> <a id="4320" href="02-Solutions.html#4283" class="Bound">x</a><a id="4321" class="Symbol">)</a>
+  <a id="4325" href="sums.html#2545" data-type="(r : Σ B) → B (pr₁ r)" class="Field">pr₂</a> <a id="4329" class="Symbol">(</a><a id="4330" href="02-Solutions.html#4231" data-type="(A : Type) (discA : has-decidable-equality A) (x y : A) →
+x ≡ y ⇔ f A discA x y ≡ true" class="Function">f-dec</a> <a id="4336" href="02-Solutions.html#4336" class="Bound">x</a> <a id="4338" href="02-Solutions.html#4338" class="Bound">y</a><a id="4339" class="Symbol">)</a> <a id="4341" class="Keyword">with</a> <a id="4346" href="02-Solutions.html#3877" class="Bound">discA</a> <a id="4352" href="02-Solutions.html#4336" class="Bound">x</a> <a id="4354" href="02-Solutions.html#4338" class="Bound">y</a>
+  <a id="4358" class="Symbol">...</a> <a id="4362" class="Symbol">|</a> <a id="4364" class="Symbol">(</a><a id="4365" href="binary-sums.html#703" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="4369" href="02-Solutions.html#4369" class="Bound">p</a><a id="4370" class="Symbol">)</a> <a id="4372" class="Symbol">=</a> <a id="4374" class="Symbol">λ</a> <a id="4376" href="02-Solutions.html#4376" class="Bound">_</a> <a id="4378" class="Symbol">→</a> <a id="4380" href="02-Solutions.html#4369" class="Bound">p</a>
+  <a id="4384" class="Symbol">...</a> <a id="4388" class="Symbol">|</a> <a id="4390" class="Symbol">(</a><a id="4391" href="binary-sums.html#720" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="4395" class="Symbol">_)</a> <a id="4398" class="Symbol">=</a> <a id="4400" class="Symbol">λ</a> <a id="4402" href="02-Solutions.html#4402" class="Bound">q</a> <a id="4404" class="Symbol">→</a> <a id="4406" href="empty-type.html#2768" data-type="𝟘 → A" class="Function">𝟘-nondep-elim</a> <a id="4420" class="Symbol">(</a><a id="4421" href="02-Solutions.html#3231" data-type="¬ (true ≡ false)" class="Function">true≢false</a> <a id="4432" class="Symbol">(</a><a id="4433" href="02-Solutions.html#4402" class="Bound">q</a> <a id="4435" href="identity-type.html#3048" data-type="x ≡ y → y ≡ x" class="Function Operator">⁻¹</a><a id="4437" class="Symbol">))</a>
+
+<a id="4441" href="sums.html#2545" data-type="(r : Σ B) → B (pr₁ r)" class="Field">pr₂</a> <a id="4445" class="Symbol">(</a><a id="4446" href="02-Solutions.html#3760" data-type="(A : Type) → has-decidable-equality A ⇔ has-bool-dec-fct A" class="Function">decidable-equality-char</a> <a id="4470" href="02-Solutions.html#4470" class="Bound">A</a><a id="4471" class="Symbol">)</a> <a id="4473" class="Symbol">(</a><a id="4474" href="02-Solutions.html#4474" class="Bound">f</a> <a id="4476" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="4478" href="02-Solutions.html#4478" class="Bound">f-dec</a><a id="4483" class="Symbol">)</a> <a id="4485" href="02-Solutions.html#4485" class="Bound">x</a> <a id="4487" href="02-Solutions.html#4487" class="Bound">y</a> <a id="4489" class="Comment">-- right to left implication</a>
+    <a id="4522" class="Keyword">with</a> <a id="4527" href="decidability.html#13704" data-type="has-decidable-equality Bool" class="Function">Bool-has-decidable-equality</a> <a id="4555" class="Symbol">(</a><a id="4556" href="02-Solutions.html#4474" class="Bound">f</a> <a id="4558" href="02-Solutions.html#4485" class="Bound">x</a> <a id="4560" href="02-Solutions.html#4487" class="Bound">y</a><a id="4561" class="Symbol">)</a> <a id="4563" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a>
+<a id="4568" class="Symbol">...</a> <a id="4572" class="Symbol">|</a> <a id="4574" class="Symbol">(</a><a id="4575" href="binary-sums.html#703" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="4579" href="02-Solutions.html#4579" class="Bound">p</a><a id="4580" class="Symbol">)</a> <a id="4582" class="Symbol">=</a> <a id="4584" href="binary-sums.html#703" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="4588" class="Symbol">(</a><a id="4589" class="Bound">f-dec</a> <a id="4595" class="Bound">x</a> <a id="4597" class="Bound">y</a> <a id="4599" class="Symbol">.</a><a id="4600" href="sums.html#2545" data-type="(r : Σ B) → B (pr₁ r)" class="Field">pr₂</a> <a id="4604" href="02-Solutions.html#4579" class="Bound">p</a><a id="4605" class="Symbol">)</a>
+<a id="4607" class="Symbol">...</a> <a id="4611" class="Symbol">|</a> <a id="4613" class="Symbol">(</a><a id="4614" href="binary-sums.html#720" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="4618" href="02-Solutions.html#4618" class="Bound">g</a><a id="4619" class="Symbol">)</a> <a id="4621" class="Symbol">=</a> <a id="4623" href="binary-sums.html#720" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="4627" class="Symbol">λ</a> <a id="4629" href="02-Solutions.html#4629" class="Bound">p</a> <a id="4631" class="Symbol">→</a> <a id="4633" href="02-Solutions.html#4618" class="Bound">g</a> <a id="4635" class="Symbol">(</a><a id="4636" class="Bound">f-dec</a> <a id="4642" class="Bound">x</a> <a id="4644" class="Bound">y</a> <a id="4646" class="Symbol">.</a><a id="4647" href="sums.html#2535" data-type="Σ B → A" class="Field">pr₁</a> <a id="4651" href="02-Solutions.html#4629" class="Bound">p</a><a id="4652" class="Symbol">)</a>
+</pre>
+
+  </article>
+</div>
+</main>
+</body>
+<style>
+
+:root {
+  --text-bg: #fff;
+  --text-fg: #222;
+  --shadow: #000;
+  --primary: #0054F4;
+  --secondary: #9C1BD6;
+  --modal-bg: #ccccccaa;
+  --warning-bg: #fef08a;
+  --code-bg: var(--text-bg);
+  --code-fg: var(--text-fg);
+  --code-keyword: #BB3B13;
+  --code-string:  #d52753;
+  --code-number:  #8A1060;
+  --code-module:  #8A1060;
+  --code-field:   #9C1BD6;
+  --code-constructor: #207B1D;
+  --code-highlight: #F5DEB3;
+  --search-selected: #e2e8f0;
+  --details-summary: #b2ebf2;
+  --details-open:    #80deea;
+  --depgraph-edge: #eee;
+  --blockquote-bg: #d8b4fe; }
+
+.diagram-dark {
+  display: none !important; }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-bg: #282C34;
+    --text-fg: #bfbfbf;
+    --shadow: #475569;
+    --primary: #61AFEF;
+    --secondary: #C878DD;
+    --modal-bg: #282C34aa;
+    --warning-bg: #991b1b;
+    --code-keyword:     #E5C07B;
+    --code-string:      #E06C75;
+    --code-number:      #98C379;
+    --code-module:      #56B6C2;
+    --code-field:       #C878DD;
+    --code-constructor: #98C379;
+    --code-highlight: #ef444499;
+    --search-selected: #474e5e;
+    --details-summary: #5b21b6;
+    --details-open:    #4c1d95;
+    --depgraph-edge: #474e5e;
+    --blockquote-bg: #475569; }
+  div.warning {
+    --shadow: #7f1d1d
+  ; }
+  input {
+    background-color: #334155;
+    border: 1px solid #475569;
+    color: var(--text-fg); }
+  body {
+    scrollbar-color: #3b4454 #2b2e33; }
+  .diagram-dark {
+    display: block !important; }
+  .diagram-light {
+    display: none !important; } }
+
+table {
+  margin: auto;
+  border-collapse: collapse; }
+  table td, table th {
+    text-align: center;
+    padding: 0px 1em 0px 1em;
+    border: 1px solid black; }
+  table th {
+    border-bottom: 2px solid black; }
+  table td {
+    white-space: nowrap; }
+
+html { max-width: 100%; }
+
+body {
+  font-family: "Inria Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  width: 100%;
+  font-size: var(--font-size);
+  overflow-x: clip;
+  background-color: var(--text-bg);
+  color: var(--text-fg);
+}
+
+div#post-toc-container { max-width: 120ch; margin: auto; }
+
+article a[href], div#return > a[href], div#top > a[href], aside#toc > div#toc-container ul a[href] {
+  color: var(--primary);
+  text-decoration: none; }
+  article a[href]:hover, div#return > a[href]:hover, div#top > a[href]:hover, aside#toc > div#toc-container ul a[href]:hover {
+    text-decoration: 2px currentColor underline !important; }
+  article a[href]:visited, div#return > a[href]:visited, div#top > a[href]:visited, aside#toc > div#toc-container ul a[href]:visited {
+    color: var(--secondary); }
+
+/* Aspects. */
+.Agda {
+  /* NameKinds. */
+  /* OtherAspects. */
+  /* Standard attributes. */
+  font-family: 'iosevka', 'Iosevka', 'Fantasque Sans Mono', 'Roboto Mono', monospace;
+  font-weight: 400; }
+  .Agda .Comment {
+    color: var(--code-fg);
+    font-style: italic; }
+  .Agda .Background {
+    background-color: var(--code-bg); }
+  .Agda .Markup {
+    color: var(--code-fg); }
+  .Agda .Keyword {
+    color: var(--code-keyword); }
+  .Agda .String {
+    color: var(--code-string); }
+  .Agda .Number {
+    color: var(--code-number); }
+  .Agda .Symbol {
+    color: var(--code-fg); }
+  .Agda .PrimitiveType {
+    color: var(--primary); }
+  .Agda .Pragma {
+    color: var(--code-fg); }
+  .Agda .Bound {
+    color: var(--code-fg) !important; }
+  .Agda .Generalizable {
+    color: var(--code-fg) !important; }
+  .Agda .InductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .CoinductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .Datatype {
+    color: var(--primary) !important; }
+  .Agda .Field {
+    color: var(--code-field) !important; }
+  .Agda .Function {
+    color: var(--primary) !important; }
+  .Agda .Module {
+    color: var(--code-module) !important; }
+  .Agda .Postulate {
+    color: var(--primary) !important; }
+  .Agda .Primitive {
+    color: var(--primary) !important; }
+  .Agda .Record {
+    color: var(--primary) !important; }
+  .Agda .UnsolvedMeta {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .UnsolvedConstraint {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .TerminationProblem {
+    color: var(--code-fg);
+    background: #FFA07A; }
+  .Agda .IncompletePattern {
+    color: var(--code-fg);
+    background: #F5DEB3; }
+  .Agda .Error {
+    color: red;
+    text-decoration: underline; }
+  .Agda .TypeChecks {
+    color: var(--code-fg);
+    background: #ADD8E6; }
+  .Agda .ShadowingInTelescope {
+    color: var(--code-fg);
+    background: #808080; }
+  .Agda .Deadcode {
+    color: var(--code-keyword);
+    font-weight: bold; }
+  .Agda a {
+    text-decoration: none; }
+  .Agda a[href]:hover {
+    text-decoration: 2px var(--primary) underline; }
+  .Agda a[href]:target {
+    animation: highlight 2.5s; }
+  body.text-page .Agda {
+    font-size: var(--code-font-size); }
+
+pre.Agda, div.sourceCode, pre {
+  border-radius: 0;
+  box-shadow: none;
+  overflow-y: clip;
+  margin: 0;
+  padding: 1em;
+  padding-top: 0.25em;
+  padding-bottom: 0.25em;
+  background-color: var(--code-bg);
+  color: var(--code-fg);
+  font-size: var(--code-font-size);
+  max-width: 100%;
+  overflow-x: auto;
+}
+</style>
+</html>
