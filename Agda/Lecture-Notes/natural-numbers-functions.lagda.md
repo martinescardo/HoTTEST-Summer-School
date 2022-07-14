@@ -31,6 +31,10 @@ pred (suc n) = n
 
 suc-is-injective : {x y : ℕ} → suc x ≡ suc y → x ≡ y
 suc-is-injective = ap pred
+
+plus-on-paths : {m n k : ℕ} → n ≡ m → n + k ≡ m + k
+plus-on-paths {_} {_} {k} = ap (_+ k)
+
 ```
 
 ## Order relation _≤_
@@ -200,6 +204,16 @@ twin-prime-conjecture = (n : ℕ) → Σ p ꞉ ℕ , (p ≥ n)
                           suc (y + x) ≡⟨ refl _ ⟩
                           suc y + x   ≡⟨ sym (+-step y x) ⟩
                           y + suc x   ∎
+
+
+plus-is-injective : {n m k : ℕ} → (n + k ≡ m + k) → n ≡ m
+plus-is-injective {n} {m} {zero} p = n ≡⟨ sym (+-base n) ⟩ n + zero ≡⟨ p ⟩ m + zero ≡⟨ +-base m ⟩ m ∎
+plus-is-injective {n} {m} {suc k} p = goal
+  where
+    IH : (n + k ≡ m + k) → n ≡ m
+    IH = plus-is-injective {n} {m} {k}
+    goal : n ≡ m
+    goal = IH (suc-is-injective (suc (n + k) ≡⟨ sym (+-step n k) ⟩ n + suc k ≡⟨ p ⟩ m + suc k ≡⟨ +-step m k ⟩ suc(m + k) ∎))
 ```
 
 ## Associativity of addition
