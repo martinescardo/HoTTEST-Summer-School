@@ -2,4 +2,4 @@ name: agda-lectures
 include: Lecture-Notes
          Lecture-Log
          Exercises
-         Aux
+         Auxiliary
