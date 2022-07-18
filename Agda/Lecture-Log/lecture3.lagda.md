@@ -295,7 +295,7 @@ module _ {X : 𝓤 i} {A : X → 𝓤 j}
  from-Σ-≢ v = ¬-Σ-gives-Π-¬ (contra-to-Σ-≡ v)
 ```
 
-We know revisit the example above. How do we prove that aa and bb are
+We now revisit the example above. How do we prove that aa and bb are
 different? It's not easy. We use the above lemmas.
 
 ```agda
