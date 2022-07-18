@@ -12,7 +12,7 @@ module lecture3 where
 
 
 open import lecture1 hiding (𝟘 ; 𝟙 ; ⋆ ; D ; _≣_)
-open import lecture2 using (is-prime ; _*_ ; 𝟘 ; 𝟙 ; ⋆)
+open import lecture2 using (is-prime ; _*_ ; 𝟘 ; 𝟙 ; ⋆ ; _≥_)
 
 -- Give Σ a universe-polymorphic type
 
@@ -108,13 +108,16 @@ infix  40 _⁻¹
 ℙ-inclusion = pr₁
 
 -- We can prove that this map is left-cancellable, i.e. it satisfies
--- primes-inclusion u ≡ primes-inclusion u → u ≡ v.
+-- ℙ-inclusion u ≡ ℙ-inclusion u → u ≡ v.
 -- Moreover, this map is an embedding (we haven't defined this concept yet).
 
 -- Not quite the type of composite numbers:
 
 CN : 𝓤
 CN = Σ x ꞉ ℕ , Σ (y , z) ꞉ ℕ × ℕ , x ≡ y * z
+
+CN' : 𝓤
+CN' = Σ x ꞉ ℕ , Σ (y , z) ꞉ ℕ × ℕ , (y ≥ 2) × (z ≥ 2) × (x ≡ y * z)
 
 CN-projection : CN → ℕ
 CN-projection = pr₁
@@ -147,20 +150,20 @@ is-set : 𝓤 i → 𝓤 i
 is-set X = (x y : X) → is-prop (x ≡ y)
 
 Mon : 𝓤 (lsuc i)
-Mon {i} = Σ X ꞉ 𝓤 i
-            , is-set X
-            × (Σ 𝟏 ꞉ X ,
-               Σ _·_ ꞉ (X → X → X)
-                  , (((x : X) → (x · 𝟏 ≡ x))
-                  ×  ((x : X) → (𝟏 · x ≡ x))
-                  ×  ((x y z : X) → (x · (y · z)) ≡ ((x · y) · z))))
+Mon {i} = Σ X ꞉ 𝓤 i  -- data
+            , is-set X  -- property (we show that)
+            × (Σ 𝟏 ꞉ X ,  -- data (but...)
+               Σ _·_ ꞉ (X → X → X) -- data
+                  , (((x : X) → (x · 𝟏 ≡ x)) -- (1) property
+                  ×  ((x : X) → (𝟏 · x ≡ x)) -- (2) property
+                  ×  ((x y z : X) → (x · (y · z)) ≡ ((x · y) · z)))) -- (3) property
 
 -- This can be defined using a record in Agda:
 
 record Mon' : 𝓤 (lsuc i) where
  constructor mon
  field
-  carrier        : 𝓤 i
+  carrier        : 𝓤 i  -- X
   carrier-is-set : is-set carrier
   𝟏              : carrier
   _·_            : carrier → carrier → carrier
@@ -207,6 +210,9 @@ false-is-not-true p = II
   II : 𝟘
   II = I
 
+false-is-not-true' : ¬ (false ≡ true)
+false-is-not-true' = ≡-gives-≣
+
 -- Notice that this proof is different from the one given by Ulrik in
 -- the HoTT track. Exercise: implement Ulrik's proof in Agda.
 
@@ -231,12 +237,40 @@ contrapositive f g a = g (f a)
 
 -- Equality in Σ types.
 
+from-Σ-≡' : {X : 𝓤 i} {A : X → 𝓤 j}
+            {(x , a) (y , b) : Σ A}
+          → (x , a) ≡ (y , b)
+          → Σ p ꞉ (x ≡ y) , (transport A p a ≡ b)
+from-Σ-≡' (refl (x , a)) = (refl x , refl a)
+
+to-Σ-≡' : {X : 𝓤 i} {A : X → 𝓤 j}
+          {(x , a) (y , b) : Σ A}
+        → (Σ p ꞉ (x ≡ y) , (transport A p a ≡ b))
+        → (x , a) ≡ (y , b)
+to-Σ-≡' (refl x , refl a) = refl (x , a)
+
+module _ {X : 𝓤 i} {A : 𝓤 j}
+         {(x , a) (y , b) : X × A} where
+
+ from-×-≡ : (x , a) ≡ (y , b)
+          → (x ≡ y) × (a ≡ b)
+ from-×-≡ (refl (x , a)) = refl x , refl a
+
+
+ to-×-≡ : (x ≡ y) × (a ≡ b)
+        → (x , a) ≡ (y , b)
+ to-×-≡ (refl x , refl a) = refl (x , a)
+
 module _ {X : 𝓤 i} {A : X → 𝓤 j}
          {(x , a) (y , b) : Σ A} where
 
+ -- x y : X
+ -- a : A x
+ -- b : A y
+
  from-Σ-≡ : (x , a) ≡ (y , b)
-          → Σ p ꞉ (x ≡ y) , (transport A p a ≡ b)
- from-Σ-≡ (refl (x , a)) = (refl x , refl a)
+          → Σ p ꞉ (x ≡ y) , transport A p a ≡ b
+ from-Σ-≡ (refl (x , a)) = refl x , refl a
 
 
  to-Σ-≡ : (Σ p ꞉ (x ≡ y) , (transport A p a ≡ b))
