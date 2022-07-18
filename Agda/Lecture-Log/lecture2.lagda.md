@@ -328,8 +328,11 @@ suc x * y = x * y + y
 
 infixr 30 _*_
 
+_divides_ : ℕ → ℕ → Type
+x divides y = Σ z ꞉ ℕ , x * z ≡ y
+
 is-prime : ℕ → Type
-is-prime p = (p ≥ 2) × ((x y : ℕ) → x * y ≡ p → (x ≡ 1) ∔ (x ≡ p))
+is-prime p = (p ≥ 2) × ((n : ℕ) → n divides p → (n ≡ 1) ∔ (n ≡ p))
 
 
 twin-prime-conjecture : Type
@@ -340,7 +343,3 @@ twin-prime-conjecture = (n : ℕ) → Σ p ꞉ ℕ , (p ≥ n)
 there-are-infinitely-many-primes : Type
 there-are-infinitely-many-primes = (n : ℕ) → Σ p ꞉ ℕ , (p ≥ n) × is-prime p
 ```
-
-(x , p) ≡ (y , refl)
-
-p : x ≡ y

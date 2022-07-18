@@ -4,6 +4,7 @@
 module lecture1 where
 
 Type = Set
+Type₁ = Set₁
 
 data Bool : Type where
  true false : Bool
