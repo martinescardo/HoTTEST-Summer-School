@@ -287,6 +287,8 @@ infix 0 _≡_
               → (x y : X) → x ≡ y → A x y
 ≡-nondep-elim A = ≡-elim (λ x y _ → A x y)
 
+-- We finished lecture 2 here. So we'll start lecture 3 here.
+
 trans : {A : Type} {x y z : A} → x ≡ y → y ≡ z → x ≡ z
 trans p (refl y) = p
 
