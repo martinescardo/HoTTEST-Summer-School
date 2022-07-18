@@ -5,34 +5,46 @@
 
 module 03-Solutions where
 
-open import prelude hiding (Type)
-
-open import Agda.Primitive
-  using (Level; lzero; lsuc; _⊔_)
-  renaming (Set to Type)
-  public
+open import prelude hiding (_∼_)
 ```
 
-# Part I
+## Part I -- Homotopies
 
-
-## Type isomorphisms
-
-A function `f : A → B` is called a *bijection* if there is a function `g : B → A` in the opposite direction such that `g ∘ f ∼ id` and `f ∘ g ∼ id`. Recall that `_∼_` is [pointwise equality](identity-type.lagda.md) and that `id` is the [identity function](products.lagda.md). This means that we can convert back and forth between the types `A` and `B` landing at the same element with started with, either from `A` or from `B`. In this case, we say that the types `A` and `B` are *isomorphic*, and we write `A ≅ B`. Bijections are also called type *isomorphisms*. We can define these concepts in Agda using [sum types](sums.lagda.md) or [records](https://agda.readthedocs.io/en/latest/language/record-types.html). We will adopt the latter, but we include both definitions for the sake of illustration. Recall that we [defined](general-notation.lagda.md) the domain of a function `f : A → B` to be `A` and its codomain to be `B`.
-
+It is often convenient to work with *pointwise equality* of functions, defined as follows.
 ```agda
-
-module _ where
-  private
-    is-bijection : {A B : Type lzero} → (A → B) → Type lzero
-    is-bijection f = Σ g ꞉ (codomain f → domain f) , ((g ∘ f ∼ id) × (f ∘ g ∼ id))
-
-    _≅_ : Type lzero → Type lzero → Type lzero
-    A ≅ B = Σ f ꞉ (A → B) , is-bijection f
+module _ {A : Type} {B : A → Type} where
+  _∼_ : ((x : A) → B x) → ((x : A) → B x) → Type
+  f ∼ g = ∀ x → f x ≡ g x
 ```
-And here we give an equivalent definition which uses records and is usually more convenient in practice and is the one we adopt:
+An element of `f ∼ g` is usually called a homotopy.
+
+### Exercise 1 (⋆⋆)
+
+Unsurprisingly, many properties of this type of pointwise equalities
+can be inferred directly from the same operations on paths.
+
+Try to prove reflexivity, symmetry and transitivity of `_∼_` by filling these holes.
 ```agda
-record is-bijection {A B : Type lzero} (f : A → B) : Type lzero where
+  ∼-refl : (f : (x : A) → B x) → f ∼ f
+  ∼-refl f = λ x → refl (f x)
+
+  ∼-inv : (f g : (x : A) → B x) → (f ∼ g) → (g ∼ f)
+  ∼-inv f g H x = sym (H x)
+
+  ∼-concat : (f g h : (x : A) → B x) → f ∼ g → g ∼ h → f ∼ h
+  ∼-concat f g h H K x = trans (H x) (K x)
+
+  infix 0 _∼_
+```
+
+## Part II -- Isomorphisms
+
+A function `f : A → B` is called a *bijection* if there is a function `g : B → A` in the opposite direction such that `g ∘ f ∼ id` and `f ∘ g ∼ id`. Recall that `_∼_` is [pointwise equality](identity-type.lagda.md) and that `id` is the [identity function](products.lagda.md). This means that we can convert back and forth between the types `A` and `B` landing at the same element with started with, either from `A` or from `B`. In this case, we say that the types `A` and `B` are *isomorphic*, and we write `A ≅ B`. Bijections are also called type *isomorphisms*. We can define these concepts in Agda using [sum types](sums.lagda.md) or [records](https://agda.readthedocs.io/en/latest/language/record-types.html). We will adopt the latter, but we include both definitions for the sake of illustration.
+Recall that we [defined](general-notation.lagda.md) the domain of a function `f : A → B` to be `A` and its codomain to be `B`.
+
+We adopt this definition of isomorphisms using records.
+```agda
+record is-bijection {A B : Type} (f : A → B) : Type where
  constructor
   Inverse
  field
@@ -40,7 +52,7 @@ record is-bijection {A B : Type lzero} (f : A → B) : Type lzero where
   η       : inverse ∘ f ∼ id
   ε       : f ∘ inverse ∼ id
 
-record _≅_ (A B : Type lzero) : Type lzero where
+record _≅_ (A B : Type) : Type where
  constructor
   Isomorphism
  field
@@ -49,17 +61,39 @@ record _≅_ (A B : Type lzero) : Type lzero where
 
 infix 0 _≅_
 ```
-The definition with `Σ` is probably more intuitive, but, as discussed above, the definition with a record is often easier to work with, because we can easily extract the components of the definitions using the names of the fields. It also often allows Agda to infer more types, and to give us more sensible goals in the interactive development of Agda programs and proofs.
 
-Notice that `inverse` plays the role of `g`. The reason we use `inverse` is that then we can use the word `inverse` to extract the inverse of a bijection. Similarly we use `bijection` for `f`, as we can use the word `bijection` to extract the bijection from a record.
-
-# The binary type 𝟚
-
-This type can be defined to be `𝟙 ∔ 𝟙` using [binary sums](binary-sums.lagda.md), but we give a direct definition which will allow us to discuss some relationships between the various type formers of Basic MLTT.
+### Exercise 2 (⋆)
+Reforumlate the same definition using Sigma-types.
 ```agda
-data 𝟚 : Type lzero where
- 𝟎 𝟏 : 𝟚
+is-bijection' : {A B : Type} → (A → B) → Type
+is-bijection' f = Σ g ꞉ (codomain f → domain f) , ((g ∘ f ∼ id) × (f ∘ g ∼ id))
 
+_≅'_ : Type → Type → Type
+A ≅' B = Σ f ꞉ (A → B) , is-bijection' f
+```
+The definition with `Σ` is probably more intuitive, but, as discussed above,
+the definition with a record is often easier to work with,
+because we can easily extract the components of the definitions using the names of the fields.
+It also often allows Agda to infer more types, and to give us more sensible goals in the
+interactive development of Agda programs and proofs.
+
+Notice that `inverse` plays the role of `g`.
+The reason we use `inverse` is that then we can use the word
+`inverse` to extract the inverse of a bijection.
+Similarly we use `bijection` for `f`, as we can use the word
+`bijection` to extract the bijection from a record.
+
+This type can be defined to be `𝟙 ∔ 𝟙` using the coproduct,
+but we give a direct definition which will allow us to discuss some relationships between the various type formers of Basic MLTT.
+```agda
+data 𝟚 : Type where
+ 𝟎 𝟏 : 𝟚
+```
+
+### Exercise 3 (⋆⋆)
+Prove that 𝟚 and Bool are isomorphic
+
+```agda
 Bool-𝟚-isomorphism : Bool ≅ 𝟚
 Bool-𝟚-isomorphism = record { bijection = f ; bijectivity = f-is-bijection }
  where
@@ -83,15 +117,23 @@ Bool-𝟚-isomorphism = record { bijection = f ; bijectivity = f-is-bijection }
   f-is-bijection = record { inverse = g ; η = gf ; ε = fg }
 ```
 
-# Part II
 
-## Finite types
+## Part III - Finite Types
+
+In the last HoTT Exercises we encountered two definitions of the finite types.
+Here we prove that they are isomorphic.
+Note that `zero` was called `pt` and suc `i` on the HoTT exercise sheet.
 
 ```agda
-data Fin : ℕ → Type lzero where
+data Fin : ℕ → Type where
  zero : {n : ℕ} → Fin (suc n)
  suc  : {n : ℕ} → Fin n → Fin (suc n)
+```
 
+### Exercise 4 (⋆)
+
+Prove the elimination principle of `Fin`.
+```agda
 Fin-elim : (A : {n : ℕ} → Fin n → Type)
          → ({n : ℕ} → A {suc n} zero)
          → ({n : ℕ} (k : Fin n) → A k → A (suc k))
@@ -101,9 +143,12 @@ Fin-elim A a f = h
   h : {n : ℕ} (k : Fin n) → A k
   h zero    = a
   h (suc k) = f k (h k)
+```
 
+We give the other definition of the finite types and introduce some notation.
 
-Fin' : ℕ → Type lzero
+```agda
+Fin' : ℕ → Type
 Fin' 0       = 𝟘
 Fin' (suc n) = 𝟙 ∔ Fin' n
 
@@ -112,7 +157,13 @@ zero' = inl ⋆
 
 suc'  : {n : ℕ} → Fin' n → Fin' (suc n)
 suc' = inr
+```
 
+### Exercise 5 (⋆⋆⋆)
+
+Prove that `Fin n` and `Fin' n` are isomorphic for every `n`.
+
+```agda
 Fin-isomorphism : (n : ℕ) → Fin n ≅ Fin' n
 Fin-isomorphism n = record { bijection = f n ; bijectivity = f-is-bijection n }
  where
@@ -152,28 +203,77 @@ Fin-isomorphism n = record { bijection = f n ; bijectivity = f-is-bijection n }
   f-is-bijection n = record { inverse = g n ; η = gf n ; ε = fg n}
 ```
 
+## Part IV -- minimal elements in the natural numbers
+
+In this section we establish some definitions which are needed to state and prove the well-ordering
+principle of the natural numbers.
+
+### Exercise 6 (⋆)
+
+Give the recursive definition of the less than or equals relation on the natural numbers.
+
 ```agda
+_≤₁_ : ℕ → ℕ → Type
+0     ≤₁ y     = 𝟙
+suc x ≤₁ 0     = 𝟘
+suc x ≤₁ suc y = x ≤₁ y
+```
 
-open import natural-numbers-functions
-  using (_≤₁_)
+### Exercise 7 (⋆)
 
-open import decidability
-  using (is-decidable; is-decidable-predicate)
+Given a type family `P` over the naturals, a lower bound `n` is a natural number such that
+for all other naturals `m`, we have that if `P(m)` holds, then`n ≤₁ m`.
+Translate this definition into HoTT.
 
-is-lower-bound : (P : ℕ → Type₀) (n : ℕ) → Type₀
+```agda
+is-lower-bound : (P : ℕ → Type) (n : ℕ) → Type
 is-lower-bound P n = (m : ℕ) → P m → n ≤₁ m
+```
 
-minimal-element :
-  (P : ℕ → Type₀) → Type₀
+We define the type of minimal elements of a type family over the naturals.
+```agda
+minimal-element : (P : ℕ → Type) → Type
 minimal-element P = Σ n ꞉ ℕ , (P n) × (is-lower-bound P n)
+```
 
+### Exercise 8 (⋆)
 
+Prove that all numbers are at least as large as zero.
+```agda
 leq-zero : (n : ℕ) → 0 ≤₁ n
 leq-zero n = ⋆
+```
 
 
+## Part V -- The well-ordering principle of ℕ
+
+Classically, the well-ordering principle states that every non-empty set
+of natural numbers has a least element.
+
+In HoTT, such subsets can be translated as decidable type family.
+Recall the definition of decidability:
+```agda
+open import decidability
+  using (is-decidable; is-decidable-predicate)
+```
+
+The well-ordering principle reads
+```agda
+Well-ordering-principle = (P : ℕ → Type) → (d : is-decidable-predicate P) → (n : ℕ) → P n → minimal-element P
+```
+
+We shall prove this statement via induction on `n`.
+In order to make the proof more readable, we first prove two lemmas.
+
+### Exercise 9 (🌶)
+
+What is the statement of `is-minimal-element-suc`
+under the Curry-Howard interpretation?
+Prove this lemma.
+
+```agda
 is-minimal-element-suc :
-  (P : ℕ → Type₀) (d : is-decidable-predicate P)
+  (P : ℕ → Type) (d : is-decidable-predicate P)
   (m : ℕ) (pm : P (suc m))
   (is-lower-bound-m : is-lower-bound (λ x → P (suc x)) m) →
   ¬ (P 0) → is-lower-bound P (suc m)
@@ -184,43 +284,58 @@ is-minimal-element-suc
 is-minimal-element-suc
   P d (suc m) pm is-lower-bound-m neg-p0 (suc n) psuccn =
   is-minimal-element-suc (λ x → P (suc x)) (λ x → d (suc x)) m pm
-    ( λ m → is-lower-bound-m (suc m))
-    ( is-lower-bound-m 0)
-    ( n)
-    ( psuccn)
+    (λ m → is-lower-bound-m (suc m))
+    (is-lower-bound-m 0)
+    (n)
+    (psuccn)
+```
 
+### Exercise 10 (🌶)
 
+What is the statement of `well-ordering-principle-suc`
+under the Curry-Howard interpretation?
+Prove this lemma.
+
+```agda
 well-ordering-principle-suc :
-  (P : ℕ → Type₀) (d : is-decidable-predicate P)
+  (P : ℕ → Type) (d : is-decidable-predicate P)
   (n : ℕ) (p : P (suc n)) →
   is-decidable (P 0) →
   minimal-element (λ m → P (suc m)) → minimal-element P
 well-ordering-principle-suc P d n p (inl p0) _  = 0 , (p0 , (λ m q → leq-zero m))
 well-ordering-principle-suc P d n p (inr neg-p0) (m , (pm , is-min-m)) = (suc m) , (pm , is-minimal-element-suc P d m pm is-min-m neg-p0)
+```
 
+### Exercise 11 (🌶)
 
-well-ordering-principle :
-  (P : ℕ → Type₀) → (d : is-decidable-predicate P) → (n : ℕ) →  P n → minimal-element P
+Use the previous two lemmas to prove the well-ordering principle
+```agda
+well-ordering-principle : (P : ℕ → Type) → (d : is-decidable-predicate P) → (n : ℕ) → P n → minimal-element P
 well-ordering-principle P d 0 p = 0 , (p , (λ m q → leq-zero m))
 well-ordering-principle P d (suc n) p = well-ordering-principle-suc P d n p (d 0) (well-ordering-principle (λ m → P (suc m)) (λ m → d (suc m)) n p)
+```
 
+### Exercise 12 (🌶)
+
+Prove that the well-ordering principle returns 0 if `P 0` holds.
+
+```agda
 is-zero-well-ordering-principle-suc :
-  (P : ℕ → Type₀) (d : is-decidable-predicate P)
+  (P : ℕ → Type) (d : is-decidable-predicate P)
   (n : ℕ) (p : P (suc n)) (d0 : is-decidable (P 0)) →
   (x : minimal-element (λ m → P (suc m))) (p0 : P 0) →
   (pr₁ (well-ordering-principle-suc P d n p d0 x)) ≡ 0
 is-zero-well-ordering-principle-suc P d n p (inl p0) x q0 = refl 0
-is-zero-well-ordering-principle-suc P d n p (inr np0) x q0 =
-  𝟘-nondep-elim (np0 q0)
+is-zero-well-ordering-principle-suc P d n p (inr np0) x q0 = 𝟘-nondep-elim (np0 q0)
 
 is-zero-well-ordering-principle :
-  (P : ℕ → Type₀) (d : is-decidable-predicate P) →
-  (n : ℕ) → (pn : P n) → P 0 → pr₁ (well-ordering-principle P d n pn)  ≡ 0
+  (P : ℕ → Type) (d : is-decidable-predicate P) →
+  (n : ℕ) → (pn : P n) → P 0 → pr₁ (well-ordering-principle P d n pn) ≡ 0
 is-zero-well-ordering-principle P d 0 p p0 = refl 0
 is-zero-well-ordering-principle P d (suc m) pm =
   is-zero-well-ordering-principle-suc P d m pm (d 0)
-    ( well-ordering-principle
-      ( λ z → P (suc z))
-      ( λ x → d (suc x))
+    (well-ordering-principle
+      (λ z → P (suc z))
+      (λ x → d (suc x))
       m pm)
 ```
