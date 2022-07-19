@@ -310,7 +310,7 @@ well-ordering-principle-suc :
   is-decidable (P 0) →
   minimal-element (λ m → P (suc m)) → minimal-element P
 well-ordering-principle-suc P d n p (inl p0) _  = 0 , (p0 , (λ m q → leq-zero m))
-well-ordering-principle-suc P d n p (inr neg-p0) (m , (pm , is-min-m)) = (suc m) , (pm , is-minimal-element-suc P d m pm is-min-m neg-p0)
+well-ordering-principle-suc P d n p (inr neg-p0) (m , (pm , is-min-m)) = (suc m) , (pm , h)
   where
     h : is-lower-bound P (suc m)
     h = is-minimal-element-suc P d m pm is-min-m neg-p0
