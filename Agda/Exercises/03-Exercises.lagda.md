@@ -253,7 +253,7 @@ is-lower-bound P n = {!!}
 We define the type of minimal elements of a type family over the naturals.
 ```agda
 minimal-element : (P : ℕ → Type) → Type
-minimal-element P = {!!}
+minimal-element P = Σ n ꞉ ℕ , (P n) × (is-lower-bound P n)
 ```
 
 ### Exercise 8 (⋆)

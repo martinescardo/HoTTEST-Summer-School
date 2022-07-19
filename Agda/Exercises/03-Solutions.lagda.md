@@ -277,18 +277,25 @@ is-minimal-element-suc :
   (m : ℕ) (pm : P (suc m))
   (is-lower-bound-m : is-lower-bound (λ x → P (suc x)) m) →
   ¬ (P 0) → is-lower-bound P (suc m)
-is-minimal-element-suc P d m pm is-lower-bound-m neg-p0 0 p0 =
-  𝟘-nondep-elim (neg-p0 p0)
-is-minimal-element-suc
-  P d 0 pm is-lower-bound-m neg-p0 (suc n) psuccn = leq-zero n
-is-minimal-element-suc
-  P d (suc m) pm is-lower-bound-m neg-p0 (suc n) psuccn =
-  is-minimal-element-suc (λ x → P (suc x)) (λ x → d (suc x)) m pm
-    (λ m → is-lower-bound-m (suc m))
-    (is-lower-bound-m 0)
-    (n)
-    (psuccn)
+is-minimal-element-suc P d m pm is-lower-bound-m neg-p0 0 p0 = 𝟘-nondep-elim (neg-p0 p0)
+-- In the previous clause, 𝟘-nondep-elim is superfluous, because neg-p0 p0 : ∅ already.
+is-minimal-element-suc P d 0 pm is-lower-bound-m neg-p0 (suc n) psuccn = ⋆
+is-minimal-element-suc P d (suc m) pm is-lower-bound-m neg-p0 (suc n) psuccn = h
+  where
+    h : suc m ≤₁ n
+    h = is-minimal-element-suc (λ x → P (suc x))
+                               (λ x → d (suc x)) m pm
+                               (λ m → is-lower-bound-m (suc m))
+                               (is-lower-bound-m 0)
+                               (n)
+                               (psuccn)
+    -- alternative solution
+    h' : suc m ≤₁ n
+    h' = is-lower-bound-m n psuccn
 ```
+The lemma states that for a decidable type family `P`, if `m` is a lower bound
+for `P ∘ suc`, and `P 0` is false, then `m + 1` is a lower bound for `P`.
+Note that the assumptions `d` and `pm` are not used.
 
 ### Exercise 10 (🌶)
 
@@ -303,8 +310,19 @@ well-ordering-principle-suc :
   is-decidable (P 0) →
   minimal-element (λ m → P (suc m)) → minimal-element P
 well-ordering-principle-suc P d n p (inl p0) _  = 0 , (p0 , (λ m q → leq-zero m))
-well-ordering-principle-suc P d n p (inr neg-p0) (m , (pm , is-min-m)) = (suc m) , (pm , is-minimal-element-suc P d m pm is-min-m neg-p0)
+well-ordering-principle-suc P d n p (inr neg-p0) (m , (pm , is-min-m)) = (suc m) , (pm , h)
+  where
+    h : is-lower-bound P (suc m)
+    h = is-minimal-element-suc P d m pm is-min-m neg-p0
+
+    -- alternative solution
+    h' : is-lower-bound P (suc m)
+    h' zero q = 𝟘-nondep-elim (neg-p0 q)
+    h' (suc k) q = is-min-m k q
 ```
+This lemma states that for a decidable type family `P`, if `P ∘ suc` is true for some `n`,
+and `P 0` is decidable, then minimal elements of `P ∘ suc` yield minimal elements of `P`.
+Note that `d` and `p` are not used.
 
 ### Exercise 11 (🌶)
 
@@ -315,7 +333,7 @@ well-ordering-principle P d 0 p = 0 , (p , (λ m q → leq-zero m))
 well-ordering-principle P d (suc n) p = well-ordering-principle-suc P d n p (d 0) (well-ordering-principle (λ m → P (suc m)) (λ m → d (suc m)) n p)
 ```
 
-### Exercise 12 (🌶)
+### Exercise 12 (⋆⋆⋆)
 
 Prove that the well-ordering principle returns 0 if `P 0` holds.
 
