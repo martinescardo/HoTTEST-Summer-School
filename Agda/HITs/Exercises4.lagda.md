@@ -13,9 +13,7 @@ Give two "different" path-between-paths/homotopies between (loop ∙ !
 loop) ∙ loop and loop.  They should be different in the sense that one
 should cancel the !loop with the first loop, and one with the second
 loop.  But these aren't really *really* different, in that there will be
-a path-between-paths-between-paths between the two!  (Harder exercise
-that we haven't really prepared for: prove this! I'd recommend saving
-this until later though.)
+a path-between-paths-between-paths between the two!  
 
 ```agda
 homotopy1 : (loop ∙ ! loop) ∙ loop ≡ loop
@@ -23,6 +21,15 @@ homotopy1 = {!!}
 
 homotopy2 : (loop ∙ ! loop) ∙ loop ≡ loop
 homotopy2 = {!!}
+```
+
+(Harder exercise: give a path between homotopy1 and homotopy2! I'd
+recommend saving this until later though, because there is a trick to it
+that we haven't covered in lecture yet.)
+
+```agda
+path-between-paths-between-paths : homotopy1 ≡ homotopy2
+path-between-paths-between-paths = {!!}
 ```
 
 # Functions are group homomorphism
@@ -45,7 +52,7 @@ on the circle, i.e. sends the n-fold loop to the -n-fold loop.
 
 ```agda
 invert : S1 → S1
-invert = ?
+invert = {!!}
 ```
 
 # Circles equivalence
@@ -101,6 +108,19 @@ c2s = {!!}
 s2c : Susp {!!} → Circle2
 s2c = {!!}
 ```
+
+Suspension is a functor from types, which means that it acts on
+functions as well as types.  Define the action of Susp on functions:
+
+```agda
+susp-func : {X Y : Type} → (f : X → Y) → Susp X → Susp Y
+susp-func f = {!!} 
+```
+
+To really prove that Susp is a functor, we should check that this action
+on functions preserves the identity function and composition of
+functions. But to do that we would need the dependent elimination rule
+for suspensions, which we haven't talked about yet.
 
 # Pushouts
 

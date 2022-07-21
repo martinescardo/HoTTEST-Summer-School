@@ -93,10 +93,10 @@ above and loop:
 example : (loop ∙ ! loop ∙ loop ∙ ! loop  ∙ loop) ≡ loop [ base ≡ base ]
 example = loop ∙ ! loop ∙ loop ∙ ! loop  ∙ loop  ≡⟨ refl _ ⟩
           (((loop ∙ ! loop) ∙ loop) ∙ ! loop)  ∙ loop  ≡⟨ ap (\ H → H ∙ loop ∙ ! loop ∙ loop) (!-inv-r loop)  ⟩
-          refl _ ∙ loop ∙ ! loop ∙ loop  ≡⟨  ap (\ H → H ∙ ! loop ∙ loop) (∙unit-l (loop))  ⟩
-          loop ∙ ! loop ∙ loop   ≡⟨  ! (∙assoc _ (! loop) loop)  ⟩
-          loop ∙ (! loop ∙ loop)  ≡⟨  ap (\ H → loop ∙ H) (!-inv-l loop)  ⟩
-          loop ∙ (refl _)  ≡⟨ refl _ ⟩ 
+          refl _ ∙ loop ∙ ! loop ∙ loop                ≡⟨  ap (\ H → H ∙ ! loop ∙ loop) (∙unit-l (loop))  ⟩
+          loop ∙ ! loop ∙ loop                         ≡⟨  ! (∙assoc _ (! loop) loop)  ⟩
+          loop ∙ (! loop ∙ loop)                       ≡⟨  ap (\ H → loop ∙ H) (!-inv-l loop)  ⟩
+          loop ∙ (refl _)                              ≡⟨ refl _ ⟩ 
           loop ∎  
 ```
 
@@ -246,14 +246,14 @@ from-to-south = west
 
 from-to-west : ap to (ap from west) ∙ from-to-south ≡ west
 from-to-west = ap to (ap from west) ∙ west ≡⟨ ap (\ H → ap to H ∙ west) (Circle2-rec-west _ _ _ _) ⟩
-               ap to (refl base) ∙ west ≡⟨ ∙unit-l west ⟩
+               ap to (refl base) ∙ west    ≡⟨ ∙unit-l west ⟩
                west ∎ 
 
 from-to-east : ap to (ap from east) ∙ from-to-south ≡ east
 from-to-east = ap to (ap from east) ∙ west ≡⟨ ap (\ H → ap to H ∙ west) (Circle2-rec-east _ _ _ _) ⟩
-               ap to loop ∙ west  ≡⟨ ap (\ H → H ∙ west) (S1-rec-loop _ _) ⟩
-               east ∙ ! west ∙ west   ≡⟨ ! (∙assoc _ (! west) west) ⟩
-               east ∙ (! west ∙ west) ≡⟨ ap (\ H → east ∙ H) (!-inv-l west) ⟩
+               ap to loop ∙ west           ≡⟨ ap (\ H → H ∙ west) (S1-rec-loop _ _) ⟩
+               east ∙ ! west ∙ west        ≡⟨ ! (∙assoc _ (! west) west) ⟩
+               east ∙ (! west ∙ west)      ≡⟨ ap (\ H → east ∙ H) (!-inv-l west) ⟩
                east ∎
 ```
 

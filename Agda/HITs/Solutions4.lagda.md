@@ -38,13 +38,13 @@ these path algebra steps.
 
 
 ```agda
-harder : homotopy1 ≡ homotopy2
-harder = gen loop where
+path-between-paths-between-paths : homotopy1 ≡ homotopy2
+path-between-paths-between-paths = gen loop where
   gen : ∀ {A : Type} {x y : A} (p : x ≡ y)
       →  (ap ( \ H → H ∙ p) (!-inv-r p) ∙ ∙unit-l p)
          ≡  
          (! (∙assoc p (! p) p) ∙  ap (\ H → p ∙ H) (!-inv-l p))
-         [ (p ∙ ! p) ∙ p ≡ p ]
+         [ ((p ∙ ! p) ∙ p) ≡ p [ x ≡ y [ A ] ] ]
   gen (refl _) = refl _
 
 ```
@@ -143,6 +143,20 @@ c2s = Circle2-rec northS southS (merid true) (merid false)
 s2c : Susp Bool → Circle2
 s2c = Susp-rec north south (\ { true → west ; false →  east })
 ```
+
+Suspension is a functor from types, which means that it acts on
+functions as well as types.  Define the action of Susp on functions:
+
+```agda
+susp-func : {X Y : Type} → (f : X → Y) → Susp X → Susp Y
+susp-func f = Susp-rec northS southS (\ x → merid (f x) )
+```
+
+To really prove that Susp is a functor, we should check that this action
+on functions preserves the identity function and composition of
+functions. But to do that we would need the dependent elimination rule
+for suspensions, which we haven't talked about yet.
+
 
 # Pushouts
 
