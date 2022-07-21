@@ -89,7 +89,7 @@ simple axiom (path induction!).
 OK, now we can use these to construct a path/homotopy between the path
 above and loop:
 
-```
+```agda
 example : (loop ∙ ! loop ∙ loop ∙ ! loop  ∙ loop) ≡ loop [ base ≡ base ]
 example = loop ∙ ! loop ∙ loop ∙ ! loop  ∙ loop  ≡⟨ refl _ ⟩
           (((loop ∙ ! loop) ∙ loop) ∙ ! loop)  ∙ loop  ≡⟨ ap (\ H → H ∙ loop ∙ ! loop ∙ loop) (!-inv-r loop)  ⟩
@@ -139,12 +139,12 @@ Note that we use ap to apply S1-rec to the loop.
 It's common to assume that at least the point reductions like
 S1-rec-base are definitional equalities.  We can do this in Agda like
 this:
-```
+```agda
 {-# BUILTIN REWRITE _≡_ #-}
 {-# REWRITE S1-rec-base #-}
 ```
 Then, for example, we don't need to explicitly mention S1-rec-base to state the loop reduction. 
-```
+```agda
 postulate
   S1-rec-loop : {l : Level} {X : Type l} (x : X) (p : x ≡ x)
               → ap (S1-rec x p) loop ≡ p
