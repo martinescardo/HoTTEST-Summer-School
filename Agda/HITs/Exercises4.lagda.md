@@ -19,9 +19,7 @@ this until later though.)
 
 ```
 homotopy1 : (loop ∙ ! loop) ∙ loop ≡ loop
-homotopy1 = (loop ∙ ! loop) ∙ loop ≡⟨ ap ( \ H → H ∙ loop) (!-inv-r loop) ⟩
-            refl _ ∙ loop ≡⟨ ∙unit-l loop ⟩
-            loop ∎ 
+homotopy1 = {!!}
 
 homotopy2 : (loop ∙ ! loop) ∙ loop ≡ loop
 homotopy2 = {!!}
