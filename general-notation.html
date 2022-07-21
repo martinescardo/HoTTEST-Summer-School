@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>HoTTEST Summer School 2022 Lecture Notes</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+</head>
+
+<body class="text-page">
+<main>
+<div id="post-toc-container" style="padding-left: 1em; padding-right: 1em;">
+
+  <article>
+
+<p><a href="Https://www.Cs.Bham.Ac.Uk/~mhe/">Martin Escardo</a>. Notes
+originally written for the module <em>Advanced Functional
+Programming</em> of the <a
+href="https://www.birmingham.ac.uk/index.aspx">University of
+Birmingham</a>, UK.</p>
+<h1 id="general-notation">General notation</h1>
+<p>The option <code>--without-K</code> will be explained later (it
+concerns the identity type). The option <code>--safe</code> disables
+experimental features of Agda that may make it <em>inconsistent</em>,
+that is, allow to prove false statements such as <code>0 = 1</code>.</p>
+<pre class="Agda"><a id="470" class="Symbol">{-#</a> <a id="474" class="Keyword">OPTIONS</a> <a id="482" class="Pragma">--without-K</a> <a id="494" class="Pragma">--safe</a> <a id="501" class="Symbol">#-}</a>
+</pre>
+<p>Any Agda file is a module with the same name as the file.</p>
+<pre class="Agda"><a id="577" class="Keyword">module</a> <a id="584" href="general-notation.html" class="Module">general-notation</a> <a id="601" class="Keyword">where</a>
+</pre>
+<p>Agda calls types <code>sets</code> by default, but we prefer to refer
+to them by their traditional name.</p>
+<pre class="Agda"><a id="Type"></a><a id="715" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a>  <a id="721" class="Symbol">=</a> <a id="723" href="Agda.Primitive.html#311" data-type="Set₁" class="Primitive">Set</a>
+<a id="Type₁"></a><a id="727" href="general-notation.html#727" data-type="Set₂" class="Function">Type₁</a> <a id="733" class="Symbol">=</a> <a id="735" href="Agda.Primitive.html#311" data-type="Set₁" class="Primitive">Set₁</a>
+</pre>
+The following functions allow us to extract the type of an element of a
+type, and the domain and codomain of a function. We don’t need them very
+often, but they are handy when Agda can’t infer types from the context,
+or simply when the names of the types in question are not available in
+the scope of a definition:
+<pre class="Agda"><a id="type-of"></a><a id="1067" href="general-notation.html#1067" data-type="X → Type" class="Function">type-of</a> <a id="1075" class="Symbol">:</a> <a id="1077" class="Symbol">{</a><a id="1078" href="general-notation.html#1078" class="Bound">X</a> <a id="1080" class="Symbol">:</a> <a id="1082" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="1086" class="Symbol">}</a> <a id="1088" class="Symbol">→</a> <a id="1090" href="general-notation.html#1078" class="Bound">X</a> <a id="1092" class="Symbol">→</a> <a id="1094" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a>
+<a id="1099" href="general-notation.html#1067" data-type="X → Type" class="Function">type-of</a> <a id="1107" class="Symbol">{</a><a id="1108" href="general-notation.html#1108" class="Bound">X</a><a id="1109" class="Symbol">}</a> <a id="1111" href="general-notation.html#1111" class="Bound">x</a> <a id="1113" class="Symbol">=</a> <a id="1115" href="general-notation.html#1108" class="Bound">X</a>
+
+<a id="domain"></a><a id="1118" href="general-notation.html#1118" data-type="(X → Y) → Type" class="Function">domain</a> <a id="1125" class="Symbol">:</a> <a id="1127" class="Symbol">{</a><a id="1128" href="general-notation.html#1128" class="Bound">X</a> <a id="1130" href="general-notation.html#1130" class="Bound">Y</a> <a id="1132" class="Symbol">:</a> <a id="1134" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="1138" class="Symbol">}</a> <a id="1140" class="Symbol">→</a> <a id="1142" class="Symbol">(</a><a id="1143" href="general-notation.html#1128" class="Bound">X</a> <a id="1145" class="Symbol">→</a> <a id="1147" href="general-notation.html#1130" class="Bound">Y</a><a id="1148" class="Symbol">)</a> <a id="1150" class="Symbol">→</a> <a id="1152" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a>
+<a id="1157" href="general-notation.html#1118" data-type="(X → Y) → Type" class="Function">domain</a> <a id="1164" class="Symbol">{</a><a id="1165" href="general-notation.html#1165" class="Bound">X</a><a id="1166" class="Symbol">}</a> <a id="1168" class="Symbol">{</a><a id="1169" href="general-notation.html#1169" class="Bound">Y</a><a id="1170" class="Symbol">}</a> <a id="1172" href="general-notation.html#1172" class="Bound">f</a> <a id="1174" class="Symbol">=</a> <a id="1176" href="general-notation.html#1165" class="Bound">X</a>
+
+<a id="codomain"></a><a id="1179" href="general-notation.html#1179" data-type="(X → Y) → Type" class="Function">codomain</a> <a id="1188" class="Symbol">:</a> <a id="1190" class="Symbol">{</a><a id="1191" href="general-notation.html#1191" class="Bound">X</a> <a id="1193" href="general-notation.html#1193" class="Bound">Y</a> <a id="1195" class="Symbol">:</a> <a id="1197" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="1201" class="Symbol">}</a> <a id="1203" class="Symbol">→</a> <a id="1205" class="Symbol">(</a><a id="1206" href="general-notation.html#1191" class="Bound">X</a> <a id="1208" class="Symbol">→</a> <a id="1210" href="general-notation.html#1193" class="Bound">Y</a><a id="1211" class="Symbol">)</a> <a id="1213" class="Symbol">→</a> <a id="1215" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a>
+<a id="1220" href="general-notation.html#1179" data-type="(X → Y) → Type" class="Function">codomain</a> <a id="1229" class="Symbol">{</a><a id="1230" href="general-notation.html#1230" class="Bound">X</a><a id="1231" class="Symbol">}</a> <a id="1233" class="Symbol">{</a><a id="1234" href="general-notation.html#1234" class="Bound">Y</a><a id="1235" class="Symbol">}</a> <a id="1237" href="general-notation.html#1237" class="Bound">f</a> <a id="1239" class="Symbol">=</a> <a id="1241" href="general-notation.html#1234" class="Bound">Y</a>
+
+<a id="_$_"></a><a id="1244" href="general-notation.html#1244" data-type="(A → B) → A → B" class="Function Operator">_$_</a> <a id="1248" class="Symbol">:</a> <a id="1250" class="Symbol">{</a><a id="1251" href="general-notation.html#1251" class="Bound">A</a> <a id="1253" href="general-notation.html#1253" class="Bound">B</a> <a id="1255" class="Symbol">:</a> <a id="1257" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="1261" class="Symbol">}</a> <a id="1263" class="Symbol">→</a> <a id="1265" class="Symbol">(</a><a id="1266" href="general-notation.html#1251" class="Bound">A</a> <a id="1268" class="Symbol">→</a> <a id="1270" href="general-notation.html#1253" class="Bound">B</a><a id="1271" class="Symbol">)</a> <a id="1273" class="Symbol">→</a> <a id="1275" href="general-notation.html#1251" class="Bound">A</a> <a id="1277" class="Symbol">→</a> <a id="1279" href="general-notation.html#1253" class="Bound">B</a>
+<a id="1281" href="general-notation.html#1281" class="Bound">f</a> <a id="1283" href="general-notation.html#1244" data-type="(A → B) → A → B" class="Function Operator">$</a> <a id="1285" href="general-notation.html#1285" class="Bound">x</a> <a id="1287" class="Symbol">=</a> <a id="1289" href="general-notation.html#1281" class="Bound">f</a> <a id="1291" href="general-notation.html#1285" class="Bound">x</a>
+
+<a id="1294" class="Keyword">infixr</a> <a id="1301" class="Number">0</a> <a id="1303" href="general-notation.html#1244" data-type="(A → B) → A → B" class="Function Operator">_$_</a>
+</pre>
+<p><a href="https://martinescardo.github.io/HoTTEST-Summer-School/">Go
+back to the table of contents</a></p>
+
+  </article>
+</div>
+</main>
+</body>
+<style>
+
+:root {
+  --text-bg: #fff;
+  --text-fg: #222;
+  --shadow: #000;
+  --primary: #0054F4;
+  --secondary: #9C1BD6;
+  --modal-bg: #ccccccaa;
+  --warning-bg: #fef08a;
+  --code-bg: var(--text-bg);
+  --code-fg: var(--text-fg);
+  --code-keyword: #BB3B13;
+  --code-string:  #d52753;
+  --code-number:  #8A1060;
+  --code-module:  #8A1060;
+  --code-field:   #9C1BD6;
+  --code-constructor: #207B1D;
+  --code-highlight: #F5DEB3;
+  --search-selected: #e2e8f0;
+  --details-summary: #b2ebf2;
+  --details-open:    #80deea;
+  --depgraph-edge: #eee;
+  --blockquote-bg: #d8b4fe; }
+
+.diagram-dark {
+  display: none !important; }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-bg: #282C34;
+    --text-fg: #bfbfbf;
+    --shadow: #475569;
+    --primary: #61AFEF;
+    --secondary: #C878DD;
+    --modal-bg: #282C34aa;
+    --warning-bg: #991b1b;
+    --code-keyword:     #E5C07B;
+    --code-string:      #E06C75;
+    --code-number:      #98C379;
+    --code-module:      #56B6C2;
+    --code-field:       #C878DD;
+    --code-constructor: #98C379;
+    --code-highlight: #ef444499;
+    --search-selected: #474e5e;
+    --details-summary: #5b21b6;
+    --details-open:    #4c1d95;
+    --depgraph-edge: #474e5e;
+    --blockquote-bg: #475569; }
+  div.warning {
+    --shadow: #7f1d1d
+  ; }
+  input {
+    background-color: #334155;
+    border: 1px solid #475569;
+    color: var(--text-fg); }
+  body {
+    scrollbar-color: #3b4454 #2b2e33; }
+  .diagram-dark {
+    display: block !important; }
+  .diagram-light {
+    display: none !important; } }
+
+table {
+  margin: auto;
+  border-collapse: collapse; }
+  table td, table th {
+    text-align: center;
+    padding: 0px 1em 0px 1em;
+    border: 1px solid black; }
+  table th {
+    border-bottom: 2px solid black; }
+  table td {
+    white-space: nowrap; }
+
+html { max-width: 100%; }
+
+body {
+  font-family: "Inria Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  width: 100%;
+  font-size: var(--font-size);
+  overflow-x: clip;
+  background-color: var(--text-bg);
+  color: var(--text-fg);
+}
+
+div#post-toc-container { max-width: 120ch; margin: auto; }
+
+article a[href], div#return > a[href], div#top > a[href], aside#toc > div#toc-container ul a[href] {
+  color: var(--primary);
+  text-decoration: none; }
+  article a[href]:hover, div#return > a[href]:hover, div#top > a[href]:hover, aside#toc > div#toc-container ul a[href]:hover {
+    text-decoration: 2px currentColor underline !important; }
+  article a[href]:visited, div#return > a[href]:visited, div#top > a[href]:visited, aside#toc > div#toc-container ul a[href]:visited {
+    color: var(--secondary); }
+
+/* Aspects. */
+.Agda {
+  /* NameKinds. */
+  /* OtherAspects. */
+  /* Standard attributes. */
+  font-family: 'iosevka', 'Iosevka', 'Fantasque Sans Mono', 'Roboto Mono', monospace;
+  font-weight: 400; }
+  .Agda .Comment {
+    color: var(--code-fg);
+    font-style: italic; }
+  .Agda .Background {
+    background-color: var(--code-bg); }
+  .Agda .Markup {
+    color: var(--code-fg); }
+  .Agda .Keyword {
+    color: var(--code-keyword); }
+  .Agda .String {
+    color: var(--code-string); }
+  .Agda .Number {
+    color: var(--code-number); }
+  .Agda .Symbol {
+    color: var(--code-fg); }
+  .Agda .PrimitiveType {
+    color: var(--primary); }
+  .Agda .Pragma {
+    color: var(--code-fg); }
+  .Agda .Bound {
+    color: var(--code-fg) !important; }
+  .Agda .Generalizable {
+    color: var(--code-fg) !important; }
+  .Agda .InductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .CoinductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .Datatype {
+    color: var(--primary) !important; }
+  .Agda .Field {
+    color: var(--code-field) !important; }
+  .Agda .Function {
+    color: var(--primary) !important; }
+  .Agda .Module {
+    color: var(--code-module) !important; }
+  .Agda .Postulate {
+    color: var(--primary) !important; }
+  .Agda .Primitive {
+    color: var(--primary) !important; }
+  .Agda .Record {
+    color: var(--primary) !important; }
+  .Agda .UnsolvedMeta {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .UnsolvedConstraint {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .TerminationProblem {
+    color: var(--code-fg);
+    background: #FFA07A; }
+  .Agda .IncompletePattern {
+    color: var(--code-fg);
+    background: #F5DEB3; }
+  .Agda .Error {
+    color: red;
+    text-decoration: underline; }
+  .Agda .TypeChecks {
+    color: var(--code-fg);
+    background: #ADD8E6; }
+  .Agda .ShadowingInTelescope {
+    color: var(--code-fg);
+    background: #808080; }
+  .Agda .Deadcode {
+    color: var(--code-keyword);
+    font-weight: bold; }
+  .Agda a {
+    text-decoration: none; }
+  .Agda a[href]:hover {
+    text-decoration: 2px var(--primary) underline; }
+  .Agda a[href]:target {
+    animation: highlight 2.5s; }
+  body.text-page .Agda {
+    font-size: var(--code-font-size); }
+
+pre.Agda, div.sourceCode, pre {
+  border-radius: 0;
+  box-shadow: none;
+  overflow-y: clip;
+  margin: 0;
+  padding: 1em;
+  padding-top: 0.25em;
+  padding-bottom: 0.25em;
+  background-color: var(--code-bg);
+  color: var(--code-fg);
+  font-size: var(--code-font-size);
+  max-width: 100%;
+  overflow-x: auto;
+}
+</style>
+</html>

@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>HoTTEST Summer School 2022 Lecture Notes</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+</head>
+
+<body class="text-page">
+<main>
+<div id="post-toc-container" style="padding-left: 1em; padding-right: 1em;">
+
+  <article>
+
+<p><a href="Https://www.Cs.Bham.Ac.Uk/~mhe/">Martin Escardo</a>. Notes
+originally written for the module <em>Advanced Functional
+Programming</em> of the <a
+href="https://www.birmingham.ac.uk/index.aspx">University of
+Birmingham</a>, UK.</p>
+<!--
+<pre class="Agda"><a id="222" class="Symbol">{-#</a> <a id="226" class="Keyword">OPTIONS</a> <a id="234" class="Pragma">--without-K</a> <a id="246" class="Pragma">--safe</a> <a id="253" class="Symbol">#-}</a>
+
+<a id="258" class="Keyword">module</a> <a id="265" href="List-functions.html" class="Module">List-functions</a> <a id="280" class="Keyword">where</a>
+
+<a id="287" class="Keyword">open</a> <a id="292" class="Keyword">import</a> <a id="299" href="prelude.html" class="Module">prelude</a>
+</pre>-->
+<h1 id="some-functions-on-lists">Some functions on lists</h1>
+<h2 id="length-concatenation-map-and-singleton-lists">Length,
+concatenation, map and singleton lists</h2>
+<pre class="Agda"><a id="401" class="Keyword">open</a> <a id="406" class="Keyword">import</a> <a id="413" href="List.html" class="Module">List</a>
+<a id="418" class="Keyword">open</a> <a id="423" class="Keyword">import</a> <a id="430" href="natural-numbers-type.html" class="Module">natural-numbers-type</a>
+
+<a id="length"></a><a id="452" href="List-functions.html#452" data-type="List A → ℕ" class="Function">length</a> <a id="459" class="Symbol">:</a> <a id="461" class="Symbol">{</a><a id="462" href="List-functions.html#462" class="Bound">A</a> <a id="464" class="Symbol">:</a> <a id="466" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="470" class="Symbol">}</a> <a id="472" class="Symbol">→</a> <a id="474" href="List.html#402" data-type="Type → Set" class="Datatype">List</a> <a id="479" href="List-functions.html#462" class="Bound">A</a> <a id="481" class="Symbol">→</a> <a id="483" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a>
+<a id="485" href="List-functions.html#452" data-type="List A → ℕ" class="Function">length</a> <a id="492" href="List.html#432" data-type="List A" class="InductiveConstructor">[]</a>        <a id="502" class="Symbol">=</a> <a id="504" class="Number">0</a>
+<a id="506" href="List-functions.html#452" data-type="List A → ℕ" class="Function">length</a> <a id="513" class="Symbol">(</a><a id="514" href="List-functions.html#514" class="Bound">x</a> <a id="516" href="List.html#447" data-type="A → List A → List A" class="InductiveConstructor Operator">::</a> <a id="519" href="List-functions.html#519" class="Bound">xs</a><a id="521" class="Symbol">)</a> <a id="523" class="Symbol">=</a> <a id="525" class="Number">1</a> <a id="527" href="natural-numbers-type.html#2879" data-type="ℕ → ℕ → ℕ" class="Function Operator">+</a> <a id="529" href="List-functions.html#452" data-type="List A → ℕ" class="Function">length</a> <a id="536" href="List-functions.html#519" class="Bound">xs</a>
+
+<a id="_++_"></a><a id="540" href="List-functions.html#540" data-type="List A → List A → List A" class="Function Operator">_++_</a> <a id="545" class="Symbol">:</a> <a id="547" class="Symbol">{</a><a id="548" href="List-functions.html#548" class="Bound">A</a> <a id="550" class="Symbol">:</a> <a id="552" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="556" class="Symbol">}</a> <a id="558" class="Symbol">→</a> <a id="560" href="List.html#402" data-type="Type → Set" class="Datatype">List</a> <a id="565" href="List-functions.html#548" class="Bound">A</a> <a id="567" class="Symbol">→</a> <a id="569" href="List.html#402" data-type="Type → Set" class="Datatype">List</a> <a id="574" href="List-functions.html#548" class="Bound">A</a> <a id="576" class="Symbol">→</a> <a id="578" href="List.html#402" data-type="Type → Set" class="Datatype">List</a> <a id="583" href="List-functions.html#548" class="Bound">A</a>
+<a id="585" href="List.html#432" data-type="List A" class="InductiveConstructor">[]</a>        <a id="595" href="List-functions.html#540" data-type="List A → List A → List A" class="Function Operator">++</a> <a id="598" href="List-functions.html#598" class="Bound">ys</a> <a id="601" class="Symbol">=</a> <a id="603" href="List-functions.html#598" class="Bound">ys</a>
+<a id="606" class="Symbol">(</a><a id="607" href="List-functions.html#607" class="Bound">x</a> <a id="609" href="List.html#447" data-type="A → List A → List A" class="InductiveConstructor Operator">::</a> <a id="612" href="List-functions.html#612" class="Bound">xs</a><a id="614" class="Symbol">)</a> <a id="616" href="List-functions.html#540" data-type="List A → List A → List A" class="Function Operator">++</a> <a id="619" href="List-functions.html#619" class="Bound">ys</a> <a id="622" class="Symbol">=</a> <a id="624" href="List-functions.html#607" class="Bound">x</a> <a id="626" href="List.html#447" data-type="A → List A → List A" class="InductiveConstructor Operator">::</a> <a id="629" class="Symbol">(</a><a id="630" href="List-functions.html#612" class="Bound">xs</a> <a id="633" href="List-functions.html#540" data-type="List A → List A → List A" class="Function Operator">++</a> <a id="636" href="List-functions.html#619" class="Bound">ys</a><a id="638" class="Symbol">)</a>
+
+<a id="641" class="Keyword">infixr</a> <a id="648" class="Number">20</a> <a id="651" href="List-functions.html#540" data-type="List A → List A → List A" class="Function Operator">_++_</a>
+
+<a id="map"></a><a id="657" href="List-functions.html#657" data-type="(A → B) → List A → List B" class="Function">map</a> <a id="661" class="Symbol">:</a> <a id="663" class="Symbol">{</a><a id="664" href="List-functions.html#664" class="Bound">A</a> <a id="666" href="List-functions.html#666" class="Bound">B</a> <a id="668" class="Symbol">:</a> <a id="670" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="674" class="Symbol">}</a> <a id="676" class="Symbol">→</a> <a id="678" class="Symbol">(</a><a id="679" href="List-functions.html#664" class="Bound">A</a> <a id="681" class="Symbol">→</a> <a id="683" href="List-functions.html#666" class="Bound">B</a><a id="684" class="Symbol">)</a> <a id="686" class="Symbol">→</a> <a id="688" href="List.html#402" data-type="Type → Set" class="Datatype">List</a> <a id="693" href="List-functions.html#664" class="Bound">A</a> <a id="695" class="Symbol">→</a> <a id="697" href="List.html#402" data-type="Type → Set" class="Datatype">List</a> <a id="702" href="List-functions.html#666" class="Bound">B</a>
+<a id="704" href="List-functions.html#657" data-type="(A → B) → List A → List B" class="Function">map</a> <a id="708" href="List-functions.html#708" class="Bound">f</a> <a id="710" href="List.html#432" data-type="List A" class="InductiveConstructor">[]</a>        <a id="720" class="Symbol">=</a> <a id="722" href="List.html#432" data-type="List A" class="InductiveConstructor">[]</a>
+<a id="725" href="List-functions.html#657" data-type="(A → B) → List A → List B" class="Function">map</a> <a id="729" href="List-functions.html#729" class="Bound">f</a> <a id="731" class="Symbol">(</a><a id="732" href="List-functions.html#732" class="Bound">x</a> <a id="734" href="List.html#447" data-type="A → List A → List A" class="InductiveConstructor Operator">::</a> <a id="737" href="List-functions.html#737" class="Bound">xs</a><a id="739" class="Symbol">)</a> <a id="741" class="Symbol">=</a> <a id="743" href="List-functions.html#729" class="Bound">f</a> <a id="745" href="List-functions.html#732" class="Bound">x</a> <a id="747" href="List.html#447" data-type="A → List A → List A" class="InductiveConstructor Operator">::</a> <a id="750" href="List-functions.html#657" data-type="(A → B) → List A → List B" class="Function">map</a> <a id="754" href="List-functions.html#729" class="Bound">f</a> <a id="756" href="List-functions.html#737" class="Bound">xs</a>
+
+<a id="[_]"></a><a id="760" href="List-functions.html#760" data-type="A → List A" class="Function Operator">[_]</a> <a id="764" class="Symbol">:</a> <a id="766" class="Symbol">{</a><a id="767" href="List-functions.html#767" class="Bound">A</a> <a id="769" class="Symbol">:</a> <a id="771" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="775" class="Symbol">}</a> <a id="777" class="Symbol">→</a> <a id="779" href="List-functions.html#767" class="Bound">A</a> <a id="781" class="Symbol">→</a> <a id="783" href="List.html#402" data-type="Type → Set" class="Datatype">List</a> <a id="788" href="List-functions.html#767" class="Bound">A</a>
+<a id="790" href="List-functions.html#760" data-type="A → List A" class="Function Operator">[</a> <a id="792" href="List-functions.html#792" class="Bound">x</a> <a id="794" href="List-functions.html#760" data-type="A → List A" class="Function Operator">]</a> <a id="796" class="Symbol">=</a> <a id="798" href="List-functions.html#792" class="Bound">x</a> <a id="800" href="List.html#447" data-type="A → List A → List A" class="InductiveConstructor Operator">::</a> <a id="803" href="List.html#432" data-type="List A" class="InductiveConstructor">[]</a>
+</pre>
+<h2 id="properties-of-list-concatenation">Properties of list
+concatenation</h2>
+<pre class="Agda"><a id="[]-left-neutral"></a><a id="856" href="List-functions.html#856" data-type="(xs : List X) → [] ++ xs ≡ xs" class="Function">[]-left-neutral</a> <a id="872" class="Symbol">:</a> <a id="874" class="Symbol">{</a><a id="875" href="List-functions.html#875" class="Bound">X</a> <a id="877" class="Symbol">:</a> <a id="879" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="883" class="Symbol">}</a> <a id="885" class="Symbol">(</a><a id="886" href="List-functions.html#886" class="Bound">xs</a> <a id="889" class="Symbol">:</a> <a id="891" href="List.html#402" data-type="Type → Set" class="Datatype">List</a> <a id="896" href="List-functions.html#875" class="Bound">X</a><a id="897" class="Symbol">)</a> <a id="899" class="Symbol">→</a> <a id="901" class="InductiveConstructor">[]</a> <a id="904" href="List-functions.html#540" data-type="List A → List A → List A" class="Function Operator">++</a> <a id="907" href="List-functions.html#886" class="Bound">xs</a> <a id="910" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="912" href="List-functions.html#886" class="Bound">xs</a>
+<a id="915" href="List-functions.html#856" data-type="(xs : List X) → [] ++ xs ≡ xs" class="Function">[]-left-neutral</a> <a id="931" class="Symbol">=</a> <a id="933" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a>
+
+<a id="[]-right-neutral"></a><a id="939" href="List-functions.html#939" data-type="(xs : List X) → xs ++ [] ≡ xs" class="Function">[]-right-neutral</a> <a id="956" class="Symbol">:</a> <a id="958" class="Symbol">{</a><a id="959" href="List-functions.html#959" class="Bound">X</a> <a id="961" class="Symbol">:</a> <a id="963" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="967" class="Symbol">}</a> <a id="969" class="Symbol">(</a><a id="970" href="List-functions.html#970" class="Bound">xs</a> <a id="973" class="Symbol">:</a> <a id="975" href="List.html#402" data-type="Type → Set" class="Datatype">List</a> <a id="980" href="List-functions.html#959" class="Bound">X</a><a id="981" class="Symbol">)</a> <a id="983" class="Symbol">→</a> <a id="985" href="List-functions.html#970" class="Bound">xs</a> <a id="988" href="List-functions.html#540" data-type="List A → List A → List A" class="Function Operator">++</a> <a id="991" class="InductiveConstructor">[]</a> <a id="994" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="996" href="List-functions.html#970" class="Bound">xs</a>
+<a id="999" href="List-functions.html#939" data-type="(xs : List X) → xs ++ [] ≡ xs" class="Function">[]-right-neutral</a> <a id="1016" href="List.html#432" data-type="List A" class="InductiveConstructor">[]</a>        <a id="1026" class="Symbol">=</a> <a id="1028" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="1033" href="List.html#432" data-type="List A" class="InductiveConstructor">[]</a>
+<a id="1036" href="List-functions.html#939" data-type="(xs : List X) → xs ++ [] ≡ xs" class="Function">[]-right-neutral</a> <a id="1053" class="Symbol">(</a><a id="1054" href="List-functions.html#1054" class="Bound">x</a> <a id="1056" href="List.html#447" data-type="A → List A → List A" class="InductiveConstructor Operator">::</a> <a id="1059" href="List-functions.html#1059" class="Bound">xs</a><a id="1061" class="Symbol">)</a> <a id="1063" class="Symbol">=</a>
+   <a id="1068" class="Symbol">(</a><a id="1069" href="List-functions.html#1054" class="Bound">x</a> <a id="1071" href="List.html#447" data-type="A → List A → List A" class="InductiveConstructor Operator">::</a> <a id="1074" href="List-functions.html#1059" class="Bound">xs</a><a id="1076" class="Symbol">)</a> <a id="1078" href="List-functions.html#540" data-type="List A → List A → List A" class="Function Operator">++</a> <a id="1081" href="List.html#432" data-type="List A" class="InductiveConstructor">[]</a> <a id="1084" href="identity-type.html#4152" data-type="(x : X) → x ≡ y → y ≡ z → x ≡ z" class="Function Operator">≡⟨</a> <a id="1087" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="1092" class="Symbol">_</a> <a id="1094" href="identity-type.html#4152" data-type="(x : X) → x ≡ y → y ≡ z → x ≡ z" class="Function Operator">⟩</a>
+   <a id="1099" href="List-functions.html#1054" class="Bound">x</a> <a id="1101" href="List.html#447" data-type="A → List A → List A" class="InductiveConstructor Operator">::</a> <a id="1104" class="Symbol">(</a><a id="1105" href="List-functions.html#1059" class="Bound">xs</a> <a id="1108" href="List-functions.html#540" data-type="List A → List A → List A" class="Function Operator">++</a> <a id="1111" href="List.html#432" data-type="List A" class="InductiveConstructor">[]</a><a id="1113" class="Symbol">)</a> <a id="1115" href="identity-type.html#4152" data-type="(x : X) → x ≡ y → y ≡ z → x ≡ z" class="Function Operator">≡⟨</a> <a id="1118" href="identity-type.html#2307" data-type="(f : A → B) → x ≡ y → f x ≡ f y" class="Function">ap</a> <a id="1121" class="Symbol">(</a><a id="1122" href="List-functions.html#1054" class="Bound">x</a> <a id="1124" href="List.html#447" data-type="A → List A → List A" class="InductiveConstructor Operator">::_</a><a id="1127" class="Symbol">)</a> <a id="1129" class="Symbol">(</a><a id="1130" href="List-functions.html#939" data-type="(xs : List X) → xs ++ [] ≡ xs" class="Function">[]-right-neutral</a> <a id="1147" href="List-functions.html#1059" class="Bound">xs</a><a id="1149" class="Symbol">)</a> <a id="1151" href="identity-type.html#4152" data-type="(x : X) → x ≡ y → y ≡ z → x ≡ z" class="Function Operator">⟩</a>
+   <a id="1156" href="List-functions.html#1054" class="Bound">x</a> <a id="1158" href="List.html#447" data-type="A → List A → List A" class="InductiveConstructor Operator">::</a> <a id="1161" href="List-functions.html#1059" class="Bound">xs</a>         <a id="1172" href="identity-type.html#4238" data-type="(x : X) → x ≡ x" class="Function Operator">∎</a>
+
+<a id="++-assoc"></a><a id="1175" href="List-functions.html#1175" data-type="(xs ys zs : List A) → (xs ++ ys) ++ zs ≡ xs ++ ys ++ zs" class="Function">++-assoc</a> <a id="1184" class="Symbol">:</a> <a id="1186" class="Symbol">{</a><a id="1187" href="List-functions.html#1187" class="Bound">A</a> <a id="1189" class="Symbol">:</a> <a id="1191" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="1195" class="Symbol">}</a> <a id="1197" class="Symbol">(</a><a id="1198" href="List-functions.html#1198" class="Bound">xs</a> <a id="1201" href="List-functions.html#1201" class="Bound">ys</a> <a id="1204" href="List-functions.html#1204" class="Bound">zs</a> <a id="1207" class="Symbol">:</a> <a id="1209" href="List.html#402" data-type="Type → Set" class="Datatype">List</a> <a id="1214" href="List-functions.html#1187" class="Bound">A</a><a id="1215" class="Symbol">)</a> <a id="1217" class="Symbol">→</a> <a id="1219" class="Symbol">(</a><a id="1220" href="List-functions.html#1198" class="Bound">xs</a> <a id="1223" href="List-functions.html#540" data-type="List A → List A → List A" class="Function Operator">++</a> <a id="1226" href="List-functions.html#1201" class="Bound">ys</a><a id="1228" class="Symbol">)</a> <a id="1230" href="List-functions.html#540" data-type="List A → List A → List A" class="Function Operator">++</a> <a id="1233" href="List-functions.html#1204" class="Bound">zs</a> <a id="1236" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="1238" href="List-functions.html#1198" class="Bound">xs</a> <a id="1241" href="List-functions.html#540" data-type="List A → List A → List A" class="Function Operator">++</a> <a id="1244" class="Symbol">(</a><a id="1245" href="List-functions.html#1201" class="Bound">ys</a> <a id="1248" href="List-functions.html#540" data-type="List A → List A → List A" class="Function Operator">++</a> <a id="1251" href="List-functions.html#1204" class="Bound">zs</a><a id="1253" class="Symbol">)</a>
+<a id="1255" href="List-functions.html#1175" data-type="(xs ys zs : List A) → (xs ++ ys) ++ zs ≡ xs ++ ys ++ zs" class="Function">++-assoc</a> <a id="1264" href="List.html#432" data-type="List A" class="InductiveConstructor">[]</a>        <a id="1274" href="List-functions.html#1274" class="Bound">ys</a> <a id="1277" href="List-functions.html#1277" class="Bound">zs</a> <a id="1280" class="Symbol">=</a> <a id="1282" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="1287" class="Symbol">(</a><a id="1288" href="List-functions.html#1274" class="Bound">ys</a> <a id="1291" href="List-functions.html#540" data-type="List A → List A → List A" class="Function Operator">++</a> <a id="1294" href="List-functions.html#1277" class="Bound">zs</a><a id="1296" class="Symbol">)</a>
+<a id="1298" href="List-functions.html#1175" data-type="(xs ys zs : List A) → (xs ++ ys) ++ zs ≡ xs ++ ys ++ zs" class="Function">++-assoc</a> <a id="1307" class="Symbol">(</a><a id="1308" href="List-functions.html#1308" class="Bound">x</a> <a id="1310" href="List.html#447" data-type="A → List A → List A" class="InductiveConstructor Operator">::</a> <a id="1313" href="List-functions.html#1313" class="Bound">xs</a><a id="1315" class="Symbol">)</a> <a id="1317" href="List-functions.html#1317" class="Bound">ys</a> <a id="1320" href="List-functions.html#1320" class="Bound">zs</a> <a id="1323" class="Symbol">=</a>
+   <a id="1328" class="Symbol">((</a><a id="1330" href="List-functions.html#1308" class="Bound">x</a> <a id="1332" href="List.html#447" data-type="A → List A → List A" class="InductiveConstructor Operator">::</a> <a id="1335" href="List-functions.html#1313" class="Bound">xs</a><a id="1337" class="Symbol">)</a> <a id="1339" href="List-functions.html#540" data-type="List A → List A → List A" class="Function Operator">++</a> <a id="1342" href="List-functions.html#1317" class="Bound">ys</a><a id="1344" class="Symbol">)</a> <a id="1346" href="List-functions.html#540" data-type="List A → List A → List A" class="Function Operator">++</a> <a id="1349" href="List-functions.html#1320" class="Bound">zs</a> <a id="1352" href="identity-type.html#4152" data-type="(x : X) → x ≡ y → y ≡ z → x ≡ z" class="Function Operator">≡⟨</a> <a id="1355" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="1360" class="Symbol">_</a> <a id="1362" href="identity-type.html#4152" data-type="(x : X) → x ≡ y → y ≡ z → x ≡ z" class="Function Operator">⟩</a>
+   <a id="1367" href="List-functions.html#1308" class="Bound">x</a> <a id="1369" href="List.html#447" data-type="A → List A → List A" class="InductiveConstructor Operator">::</a> <a id="1372" class="Symbol">((</a><a id="1374" href="List-functions.html#1313" class="Bound">xs</a> <a id="1377" href="List-functions.html#540" data-type="List A → List A → List A" class="Function Operator">++</a> <a id="1380" href="List-functions.html#1317" class="Bound">ys</a><a id="1382" class="Symbol">)</a> <a id="1384" href="List-functions.html#540" data-type="List A → List A → List A" class="Function Operator">++</a> <a id="1387" href="List-functions.html#1320" class="Bound">zs</a><a id="1389" class="Symbol">)</a> <a id="1391" href="identity-type.html#4152" data-type="(x : X) → x ≡ y → y ≡ z → x ≡ z" class="Function Operator">≡⟨</a> <a id="1394" href="identity-type.html#2307" data-type="(f : A → B) → x ≡ y → f x ≡ f y" class="Function">ap</a> <a id="1397" class="Symbol">(</a><a id="1398" href="List-functions.html#1308" class="Bound">x</a> <a id="1400" href="List.html#447" data-type="A → List A → List A" class="InductiveConstructor Operator">::_</a><a id="1403" class="Symbol">)</a> <a id="1405" class="Symbol">(</a><a id="1406" href="List-functions.html#1175" data-type="(xs ys zs : List A) → (xs ++ ys) ++ zs ≡ xs ++ ys ++ zs" class="Function">++-assoc</a> <a id="1415" href="List-functions.html#1313" class="Bound">xs</a> <a id="1418" href="List-functions.html#1317" class="Bound">ys</a> <a id="1421" href="List-functions.html#1320" class="Bound">zs</a><a id="1423" class="Symbol">)</a> <a id="1425" href="identity-type.html#4152" data-type="(x : X) → x ≡ y → y ≡ z → x ≡ z" class="Function Operator">⟩</a>
+   <a id="1430" href="List-functions.html#1308" class="Bound">x</a> <a id="1432" href="List.html#447" data-type="A → List A → List A" class="InductiveConstructor Operator">::</a> <a id="1435" class="Symbol">(</a><a id="1436" href="List-functions.html#1313" class="Bound">xs</a> <a id="1439" href="List-functions.html#540" data-type="List A → List A → List A" class="Function Operator">++</a> <a id="1442" class="Symbol">(</a><a id="1443" href="List-functions.html#1317" class="Bound">ys</a> <a id="1446" href="List-functions.html#540" data-type="List A → List A → List A" class="Function Operator">++</a> <a id="1449" href="List-functions.html#1320" class="Bound">zs</a><a id="1451" class="Symbol">))</a> <a id="1454" href="identity-type.html#4152" data-type="(x : X) → x ≡ y → y ≡ z → x ≡ z" class="Function Operator">≡⟨</a> <a id="1457" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="1462" class="Symbol">_</a> <a id="1464" href="identity-type.html#4152" data-type="(x : X) → x ≡ y → y ≡ z → x ≡ z" class="Function Operator">⟩</a>
+   <a id="1469" class="Symbol">(</a><a id="1470" href="List-functions.html#1308" class="Bound">x</a> <a id="1472" href="List.html#447" data-type="A → List A → List A" class="InductiveConstructor Operator">::</a> <a id="1475" href="List-functions.html#1313" class="Bound">xs</a><a id="1477" class="Symbol">)</a> <a id="1479" href="List-functions.html#540" data-type="List A → List A → List A" class="Function Operator">++</a> <a id="1482" href="List-functions.html#1317" class="Bound">ys</a> <a id="1485" href="List-functions.html#540" data-type="List A → List A → List A" class="Function Operator">++</a> <a id="1488" href="List-functions.html#1320" class="Bound">zs</a>   <a id="1493" href="identity-type.html#4238" data-type="(x : X) → x ≡ x" class="Function Operator">∎</a>
+</pre>
+Short proofs:
+<pre class="Agda"><a id="[]-right-neutral&#39;"></a><a id="1522" href="List-functions.html#1522" data-type="(xs : List X) → xs ++ [] ≡ xs" class="Function">[]-right-neutral&#39;</a> <a id="1540" class="Symbol">:</a> <a id="1542" class="Symbol">{</a><a id="1543" href="List-functions.html#1543" class="Bound">X</a> <a id="1545" class="Symbol">:</a> <a id="1547" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="1551" class="Symbol">}</a> <a id="1553" class="Symbol">(</a><a id="1554" href="List-functions.html#1554" class="Bound">xs</a> <a id="1557" class="Symbol">:</a> <a id="1559" href="List.html#402" data-type="Type → Set" class="Datatype">List</a> <a id="1564" href="List-functions.html#1543" class="Bound">X</a><a id="1565" class="Symbol">)</a> <a id="1567" class="Symbol">→</a> <a id="1569" href="List-functions.html#1554" class="Bound">xs</a> <a id="1572" href="List-functions.html#540" data-type="List A → List A → List A" class="Function Operator">++</a> <a id="1575" class="InductiveConstructor">[]</a> <a id="1578" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="1580" href="List-functions.html#1554" class="Bound">xs</a>
+<a id="1583" href="List-functions.html#1522" data-type="(xs : List X) → xs ++ [] ≡ xs" class="Function">[]-right-neutral&#39;</a> <a id="1601" href="List.html#432" data-type="List A" class="InductiveConstructor">[]</a>        <a id="1611" class="Symbol">=</a> <a id="1613" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="1618" href="List.html#432" data-type="List A" class="InductiveConstructor">[]</a>
+<a id="1621" href="List-functions.html#1522" data-type="(xs : List X) → xs ++ [] ≡ xs" class="Function">[]-right-neutral&#39;</a> <a id="1639" class="Symbol">(</a><a id="1640" href="List-functions.html#1640" class="Bound">x</a> <a id="1642" href="List.html#447" data-type="A → List A → List A" class="InductiveConstructor Operator">::</a> <a id="1645" href="List-functions.html#1645" class="Bound">xs</a><a id="1647" class="Symbol">)</a> <a id="1649" class="Symbol">=</a> <a id="1651" href="identity-type.html#2307" data-type="(f : A → B) → x ≡ y → f x ≡ f y" class="Function">ap</a> <a id="1654" class="Symbol">(</a><a id="1655" href="List-functions.html#1640" class="Bound">x</a> <a id="1657" href="List.html#447" data-type="A → List A → List A" class="InductiveConstructor Operator">::_</a><a id="1660" class="Symbol">)</a> <a id="1662" class="Symbol">(</a><a id="1663" href="List-functions.html#1522" data-type="(xs : List X) → xs ++ [] ≡ xs" class="Function">[]-right-neutral&#39;</a> <a id="1681" href="List-functions.html#1645" class="Bound">xs</a><a id="1683" class="Symbol">)</a>
+
+<a id="++-assoc&#39;"></a><a id="1686" href="List-functions.html#1686" data-type="(xs ys zs : List A) → (xs ++ ys) ++ zs ≡ xs ++ ys ++ zs" class="Function">++-assoc&#39;</a> <a id="1696" class="Symbol">:</a> <a id="1698" class="Symbol">{</a><a id="1699" href="List-functions.html#1699" class="Bound">A</a> <a id="1701" class="Symbol">:</a> <a id="1703" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="1707" class="Symbol">}</a> <a id="1709" class="Symbol">(</a><a id="1710" href="List-functions.html#1710" class="Bound">xs</a> <a id="1713" href="List-functions.html#1713" class="Bound">ys</a> <a id="1716" href="List-functions.html#1716" class="Bound">zs</a> <a id="1719" class="Symbol">:</a> <a id="1721" href="List.html#402" data-type="Type → Set" class="Datatype">List</a> <a id="1726" href="List-functions.html#1699" class="Bound">A</a><a id="1727" class="Symbol">)</a> <a id="1729" class="Symbol">→</a> <a id="1731" class="Symbol">(</a><a id="1732" href="List-functions.html#1710" class="Bound">xs</a> <a id="1735" href="List-functions.html#540" data-type="List A → List A → List A" class="Function Operator">++</a> <a id="1738" href="List-functions.html#1713" class="Bound">ys</a><a id="1740" class="Symbol">)</a> <a id="1742" href="List-functions.html#540" data-type="List A → List A → List A" class="Function Operator">++</a> <a id="1745" href="List-functions.html#1716" class="Bound">zs</a> <a id="1748" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="1750" href="List-functions.html#1710" class="Bound">xs</a> <a id="1753" href="List-functions.html#540" data-type="List A → List A → List A" class="Function Operator">++</a> <a id="1756" class="Symbol">(</a><a id="1757" href="List-functions.html#1713" class="Bound">ys</a> <a id="1760" href="List-functions.html#540" data-type="List A → List A → List A" class="Function Operator">++</a> <a id="1763" href="List-functions.html#1716" class="Bound">zs</a><a id="1765" class="Symbol">)</a>
+<a id="1767" href="List-functions.html#1686" data-type="(xs ys zs : List A) → (xs ++ ys) ++ zs ≡ xs ++ ys ++ zs" class="Function">++-assoc&#39;</a> <a id="1777" href="List.html#432" data-type="List A" class="InductiveConstructor">[]</a>        <a id="1787" href="List-functions.html#1787" class="Bound">ys</a> <a id="1790" href="List-functions.html#1790" class="Bound">zs</a> <a id="1793" class="Symbol">=</a> <a id="1795" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="1800" class="Symbol">(</a><a id="1801" href="List-functions.html#1787" class="Bound">ys</a> <a id="1804" href="List-functions.html#540" data-type="List A → List A → List A" class="Function Operator">++</a> <a id="1807" href="List-functions.html#1790" class="Bound">zs</a><a id="1809" class="Symbol">)</a>
+<a id="1811" href="List-functions.html#1686" data-type="(xs ys zs : List A) → (xs ++ ys) ++ zs ≡ xs ++ ys ++ zs" class="Function">++-assoc&#39;</a> <a id="1821" class="Symbol">(</a><a id="1822" href="List-functions.html#1822" class="Bound">x</a> <a id="1824" href="List.html#447" data-type="A → List A → List A" class="InductiveConstructor Operator">::</a> <a id="1827" href="List-functions.html#1827" class="Bound">xs</a><a id="1829" class="Symbol">)</a> <a id="1831" href="List-functions.html#1831" class="Bound">ys</a> <a id="1834" href="List-functions.html#1834" class="Bound">zs</a> <a id="1837" class="Symbol">=</a> <a id="1839" href="identity-type.html#2307" data-type="(f : A → B) → x ≡ y → f x ≡ f y" class="Function">ap</a> <a id="1842" class="Symbol">(</a><a id="1843" href="List-functions.html#1822" class="Bound">x</a> <a id="1845" href="List.html#447" data-type="A → List A → List A" class="InductiveConstructor Operator">::_</a><a id="1848" class="Symbol">)</a> <a id="1850" class="Symbol">(</a><a id="1851" href="List-functions.html#1686" data-type="(xs ys zs : List A) → (xs ++ ys) ++ zs ≡ xs ++ ys ++ zs" class="Function">++-assoc&#39;</a> <a id="1861" href="List-functions.html#1827" class="Bound">xs</a> <a id="1864" href="List-functions.html#1831" class="Bound">ys</a> <a id="1867" href="List-functions.html#1834" class="Bound">zs</a><a id="1869" class="Symbol">)</a>
+</pre>
+<h2 id="list-reversal">List reversal</h2>
+First an obvious, but slow reversal algorithm:
+<pre class="Agda"><a id="reverse"></a><a id="1949" href="List-functions.html#1949" data-type="List A → List A" class="Function">reverse</a> <a id="1957" class="Symbol">:</a> <a id="1959" class="Symbol">{</a><a id="1960" href="List-functions.html#1960" class="Bound">A</a> <a id="1962" class="Symbol">:</a> <a id="1964" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="1968" class="Symbol">}</a> <a id="1970" class="Symbol">→</a> <a id="1972" href="List.html#402" data-type="Type → Set" class="Datatype">List</a> <a id="1977" href="List-functions.html#1960" class="Bound">A</a> <a id="1979" class="Symbol">→</a> <a id="1981" href="List.html#402" data-type="Type → Set" class="Datatype">List</a> <a id="1986" href="List-functions.html#1960" class="Bound">A</a>
+<a id="1988" href="List-functions.html#1949" data-type="List A → List A" class="Function">reverse</a> <a id="1996" href="List.html#432" data-type="List A" class="InductiveConstructor">[]</a>        <a id="2006" class="Symbol">=</a> <a id="2008" href="List.html#432" data-type="List A" class="InductiveConstructor">[]</a>
+<a id="2011" href="List-functions.html#1949" data-type="List A → List A" class="Function">reverse</a> <a id="2019" class="Symbol">(</a><a id="2020" href="List-functions.html#2020" class="Bound">x</a> <a id="2022" href="List.html#447" data-type="A → List A → List A" class="InductiveConstructor Operator">::</a> <a id="2025" href="List-functions.html#2025" class="Bound">xs</a><a id="2027" class="Symbol">)</a> <a id="2029" class="Symbol">=</a> <a id="2031" href="List-functions.html#1949" data-type="List A → List A" class="Function">reverse</a> <a id="2039" href="List-functions.html#2025" class="Bound">xs</a> <a id="2042" href="List-functions.html#540" data-type="List A → List A → List A" class="Function Operator">++</a> <a id="2045" href="List-functions.html#760" data-type="A → List A" class="Function Operator">[</a> <a id="2047" href="List-functions.html#2020" class="Bound">x</a> <a id="2049" href="List-functions.html#760" data-type="A → List A" class="Function Operator">]</a>
+</pre>
+This is quadratic time. To get a linear-time algorithm, we use the
+following auxiliary function:
+<pre class="Agda"><a id="rev-append"></a><a id="2160" href="List-functions.html#2160" data-type="List A → List A → List A" class="Function">rev-append</a> <a id="2171" class="Symbol">:</a> <a id="2173" class="Symbol">{</a><a id="2174" href="List-functions.html#2174" class="Bound">A</a> <a id="2176" class="Symbol">:</a> <a id="2178" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="2182" class="Symbol">}</a> <a id="2184" class="Symbol">→</a> <a id="2186" href="List.html#402" data-type="Type → Set" class="Datatype">List</a> <a id="2191" href="List-functions.html#2174" class="Bound">A</a> <a id="2193" class="Symbol">→</a> <a id="2195" href="List.html#402" data-type="Type → Set" class="Datatype">List</a> <a id="2200" href="List-functions.html#2174" class="Bound">A</a> <a id="2202" class="Symbol">→</a> <a id="2204" href="List.html#402" data-type="Type → Set" class="Datatype">List</a> <a id="2209" href="List-functions.html#2174" class="Bound">A</a>
+<a id="2211" href="List-functions.html#2160" data-type="List A → List A → List A" class="Function">rev-append</a> <a id="2222" href="List.html#432" data-type="List A" class="InductiveConstructor">[]</a>        <a id="2232" href="List-functions.html#2232" class="Bound">ys</a> <a id="2235" class="Symbol">=</a> <a id="2237" href="List-functions.html#2232" class="Bound">ys</a>
+<a id="2240" href="List-functions.html#2160" data-type="List A → List A → List A" class="Function">rev-append</a> <a id="2251" class="Symbol">(</a><a id="2252" href="List-functions.html#2252" class="Bound">x</a> <a id="2254" href="List.html#447" data-type="A → List A → List A" class="InductiveConstructor Operator">::</a> <a id="2257" href="List-functions.html#2257" class="Bound">xs</a><a id="2259" class="Symbol">)</a> <a id="2261" href="List-functions.html#2261" class="Bound">ys</a> <a id="2264" class="Symbol">=</a> <a id="2266" href="List-functions.html#2160" data-type="List A → List A → List A" class="Function">rev-append</a> <a id="2277" href="List-functions.html#2257" class="Bound">xs</a> <a id="2280" class="Symbol">(</a><a id="2281" href="List-functions.html#2252" class="Bound">x</a> <a id="2283" href="List.html#447" data-type="A → List A → List A" class="InductiveConstructor Operator">::</a> <a id="2286" href="List-functions.html#2261" class="Bound">ys</a><a id="2288" class="Symbol">)</a>
+</pre>
+The intended behaviour of <code>rev-append</code> is that
+<code>rev-append xs ys = reverse xs ++ ys</code>. Using this fact, the
+linear time algorithm is the following:
+<pre class="Agda"><a id="rev"></a><a id="2449" href="List-functions.html#2449" data-type="List A → List A" class="Function">rev</a> <a id="2453" class="Symbol">:</a> <a id="2455" class="Symbol">{</a><a id="2456" href="List-functions.html#2456" class="Bound">A</a> <a id="2458" class="Symbol">:</a> <a id="2460" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="2464" class="Symbol">}</a> <a id="2466" class="Symbol">→</a> <a id="2468" href="List.html#402" data-type="Type → Set" class="Datatype">List</a> <a id="2473" href="List-functions.html#2456" class="Bound">A</a> <a id="2475" class="Symbol">→</a> <a id="2477" href="List.html#402" data-type="Type → Set" class="Datatype">List</a> <a id="2482" href="List-functions.html#2456" class="Bound">A</a>
+<a id="2484" href="List-functions.html#2449" data-type="List A → List A" class="Function">rev</a> <a id="2488" href="List-functions.html#2488" class="Bound">xs</a> <a id="2491" class="Symbol">=</a> <a id="2493" href="List-functions.html#2160" data-type="List A → List A → List A" class="Function">rev-append</a> <a id="2504" href="List-functions.html#2488" class="Bound">xs</a> <a id="2507" href="List.html#432" data-type="List A" class="InductiveConstructor">[]</a>
+</pre>
+We now want to show that <code>rev</code> and <code>reverse</code>
+behave in the same way. To do this, we first show that the auxiliary
+function does behave as intended:
+<pre class="Agda"><a id="rev-append-behaviour"></a><a id="2670" href="List-functions.html#2670" data-type="(xs ys : List A) → rev-append xs ys ≡ reverse xs ++ ys" class="Function">rev-append-behaviour</a> <a id="2691" class="Symbol">:</a> <a id="2693" class="Symbol">{</a><a id="2694" href="List-functions.html#2694" class="Bound">A</a> <a id="2696" class="Symbol">:</a> <a id="2698" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="2702" class="Symbol">}</a> <a id="2704" class="Symbol">(</a><a id="2705" href="List-functions.html#2705" class="Bound">xs</a> <a id="2708" href="List-functions.html#2708" class="Bound">ys</a> <a id="2711" class="Symbol">:</a> <a id="2713" href="List.html#402" data-type="Type → Set" class="Datatype">List</a> <a id="2718" href="List-functions.html#2694" class="Bound">A</a><a id="2719" class="Symbol">)</a>
+                     <a id="2742" class="Symbol">→</a> <a id="2744" href="List-functions.html#2160" data-type="List A → List A → List A" class="Function">rev-append</a> <a id="2755" href="List-functions.html#2705" class="Bound">xs</a> <a id="2758" href="List-functions.html#2708" class="Bound">ys</a> <a id="2761" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="2763" href="List-functions.html#1949" data-type="List A → List A" class="Function">reverse</a> <a id="2771" href="List-functions.html#2705" class="Bound">xs</a> <a id="2774" href="List-functions.html#540" data-type="List A → List A → List A" class="Function Operator">++</a> <a id="2777" href="List-functions.html#2708" class="Bound">ys</a>
+<a id="2780" href="List-functions.html#2670" data-type="(xs ys : List A) → rev-append xs ys ≡ reverse xs ++ ys" class="Function">rev-append-behaviour</a> <a id="2801" href="List.html#432" data-type="List A" class="InductiveConstructor">[]</a>        <a id="2811" href="List-functions.html#2811" class="Bound">ys</a> <a id="2814" class="Symbol">=</a> <a id="2816" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="2821" href="List-functions.html#2811" class="Bound">ys</a>
+<a id="2824" href="List-functions.html#2670" data-type="(xs ys : List A) → rev-append xs ys ≡ reverse xs ++ ys" class="Function">rev-append-behaviour</a> <a id="2845" class="Symbol">(</a><a id="2846" href="List-functions.html#2846" class="Bound">x</a> <a id="2848" href="List.html#447" data-type="A → List A → List A" class="InductiveConstructor Operator">::</a> <a id="2851" href="List-functions.html#2851" class="Bound">xs</a><a id="2853" class="Symbol">)</a> <a id="2855" href="List-functions.html#2855" class="Bound">ys</a> <a id="2858" class="Symbol">=</a>
+   <a id="2863" href="List-functions.html#2160" data-type="List A → List A → List A" class="Function">rev-append</a> <a id="2874" class="Symbol">(</a><a id="2875" href="List-functions.html#2846" class="Bound">x</a> <a id="2877" href="List.html#447" data-type="A → List A → List A" class="InductiveConstructor Operator">::</a> <a id="2880" href="List-functions.html#2851" class="Bound">xs</a><a id="2882" class="Symbol">)</a> <a id="2884" href="List-functions.html#2855" class="Bound">ys</a>     <a id="2891" href="identity-type.html#4152" data-type="(x : X) → x ≡ y → y ≡ z → x ≡ z" class="Function Operator">≡⟨</a> <a id="2894" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="2899" class="Symbol">_</a> <a id="2901" href="identity-type.html#4152" data-type="(x : X) → x ≡ y → y ≡ z → x ≡ z" class="Function Operator">⟩</a>
+   <a id="2906" href="List-functions.html#2160" data-type="List A → List A → List A" class="Function">rev-append</a> <a id="2917" href="List-functions.html#2851" class="Bound">xs</a> <a id="2920" class="Symbol">(</a><a id="2921" href="List-functions.html#2846" class="Bound">x</a> <a id="2923" href="List.html#447" data-type="A → List A → List A" class="InductiveConstructor Operator">::</a> <a id="2926" href="List-functions.html#2855" class="Bound">ys</a><a id="2928" class="Symbol">)</a>     <a id="2934" href="identity-type.html#4152" data-type="(x : X) → x ≡ y → y ≡ z → x ≡ z" class="Function Operator">≡⟨</a> <a id="2937" href="List-functions.html#2670" data-type="(xs ys : List A) → rev-append xs ys ≡ reverse xs ++ ys" class="Function">rev-append-behaviour</a> <a id="2958" href="List-functions.html#2851" class="Bound">xs</a> <a id="2961" class="Symbol">(</a><a id="2962" href="List-functions.html#2846" class="Bound">x</a> <a id="2964" href="List.html#447" data-type="A → List A → List A" class="InductiveConstructor Operator">::</a> <a id="2967" href="List-functions.html#2855" class="Bound">ys</a><a id="2969" class="Symbol">)</a> <a id="2971" href="identity-type.html#4152" data-type="(x : X) → x ≡ y → y ≡ z → x ≡ z" class="Function Operator">⟩</a>
+   <a id="2976" href="List-functions.html#1949" data-type="List A → List A" class="Function">reverse</a> <a id="2984" href="List-functions.html#2851" class="Bound">xs</a> <a id="2987" href="List-functions.html#540" data-type="List A → List A → List A" class="Function Operator">++</a> <a id="2990" class="Symbol">(</a><a id="2991" href="List-functions.html#2846" class="Bound">x</a> <a id="2993" href="List.html#447" data-type="A → List A → List A" class="InductiveConstructor Operator">::</a> <a id="2996" href="List-functions.html#2855" class="Bound">ys</a><a id="2998" class="Symbol">)</a>     <a id="3004" href="identity-type.html#4152" data-type="(x : X) → x ≡ y → y ≡ z → x ≡ z" class="Function Operator">≡⟨</a> <a id="3007" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="3012" class="Symbol">_</a> <a id="3014" href="identity-type.html#4152" data-type="(x : X) → x ≡ y → y ≡ z → x ≡ z" class="Function Operator">⟩</a>
+   <a id="3019" href="List-functions.html#1949" data-type="List A → List A" class="Function">reverse</a> <a id="3027" href="List-functions.html#2851" class="Bound">xs</a> <a id="3030" href="List-functions.html#540" data-type="List A → List A → List A" class="Function Operator">++</a> <a id="3033" class="Symbol">(</a><a id="3034" href="List-functions.html#760" data-type="A → List A" class="Function Operator">[</a> <a id="3036" href="List-functions.html#2846" class="Bound">x</a> <a id="3038" href="List-functions.html#760" data-type="A → List A" class="Function Operator">]</a> <a id="3040" href="List-functions.html#540" data-type="List A → List A → List A" class="Function Operator">++</a> <a id="3043" href="List-functions.html#2855" class="Bound">ys</a><a id="3045" class="Symbol">)</a> <a id="3047" href="identity-type.html#4152" data-type="(x : X) → x ≡ y → y ≡ z → x ≡ z" class="Function Operator">≡⟨</a> <a id="3050" href="identity-type.html#2241" data-type="x ≡ y → y ≡ x" class="Function">sym</a> <a id="3054" class="Symbol">(</a><a id="3055" href="List-functions.html#1175" data-type="(xs ys zs : List A) → (xs ++ ys) ++ zs ≡ xs ++ ys ++ zs" class="Function">++-assoc</a> <a id="3064" class="Symbol">(</a><a id="3065" href="List-functions.html#1949" data-type="List A → List A" class="Function">reverse</a> <a id="3073" href="List-functions.html#2851" class="Bound">xs</a><a id="3075" class="Symbol">)</a> <a id="3077" href="List-functions.html#760" data-type="A → List A" class="Function Operator">[</a> <a id="3079" href="List-functions.html#2846" class="Bound">x</a> <a id="3081" href="List-functions.html#760" data-type="A → List A" class="Function Operator">]</a> <a id="3083" href="List-functions.html#2855" class="Bound">ys</a><a id="3085" class="Symbol">)</a> <a id="3087" href="identity-type.html#4152" data-type="(x : X) → x ≡ y → y ≡ z → x ≡ z" class="Function Operator">⟩</a>
+   <a id="3092" class="Symbol">(</a><a id="3093" href="List-functions.html#1949" data-type="List A → List A" class="Function">reverse</a> <a id="3101" href="List-functions.html#2851" class="Bound">xs</a> <a id="3104" href="List-functions.html#540" data-type="List A → List A → List A" class="Function Operator">++</a> <a id="3107" href="List-functions.html#760" data-type="A → List A" class="Function Operator">[</a> <a id="3109" href="List-functions.html#2846" class="Bound">x</a> <a id="3111" href="List-functions.html#760" data-type="A → List A" class="Function Operator">]</a><a id="3112" class="Symbol">)</a> <a id="3114" href="List-functions.html#540" data-type="List A → List A → List A" class="Function Operator">++</a> <a id="3117" href="List-functions.html#2855" class="Bound">ys</a> <a id="3120" href="identity-type.html#4152" data-type="(x : X) → x ≡ y → y ≡ z → x ≡ z" class="Function Operator">≡⟨</a> <a id="3123" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="3128" class="Symbol">_</a> <a id="3130" href="identity-type.html#4152" data-type="(x : X) → x ≡ y → y ≡ z → x ≡ z" class="Function Operator">⟩</a>
+   <a id="3135" href="List-functions.html#1949" data-type="List A → List A" class="Function">reverse</a> <a id="3143" class="Symbol">(</a><a id="3144" href="List-functions.html#2846" class="Bound">x</a> <a id="3146" href="List.html#447" data-type="A → List A → List A" class="InductiveConstructor Operator">::</a> <a id="3149" href="List-functions.html#2851" class="Bound">xs</a><a id="3151" class="Symbol">)</a> <a id="3153" href="List-functions.html#540" data-type="List A → List A → List A" class="Function Operator">++</a> <a id="3156" href="List-functions.html#2855" class="Bound">ys</a>     <a id="3163" href="identity-type.html#4238" data-type="(x : X) → x ≡ x" class="Function Operator">∎</a>
+</pre>
+We state this as follows in Agda:
+<pre class="Agda"><a id="rev-correct"></a><a id="3211" href="List-functions.html#3211" data-type="(xs : List A) → rev xs ≡ reverse xs" class="Function">rev-correct</a> <a id="3223" class="Symbol">:</a> <a id="3225" class="Symbol">{</a><a id="3226" href="List-functions.html#3226" class="Bound">A</a> <a id="3228" class="Symbol">:</a> <a id="3230" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="3234" class="Symbol">}</a> <a id="3236" class="Symbol">(</a><a id="3237" href="List-functions.html#3237" class="Bound">xs</a> <a id="3240" class="Symbol">:</a> <a id="3242" href="List.html#402" data-type="Type → Set" class="Datatype">List</a> <a id="3247" href="List-functions.html#3226" class="Bound">A</a><a id="3248" class="Symbol">)</a> <a id="3250" class="Symbol">→</a> <a id="3252" href="List-functions.html#2449" data-type="List A → List A" class="Function">rev</a> <a id="3256" href="List-functions.html#3237" class="Bound">xs</a> <a id="3259" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="3261" href="List-functions.html#1949" data-type="List A → List A" class="Function">reverse</a> <a id="3269" href="List-functions.html#3237" class="Bound">xs</a>
+<a id="3272" href="List-functions.html#3211" data-type="(xs : List A) → rev xs ≡ reverse xs" class="Function">rev-correct</a> <a id="3284" href="List-functions.html#3284" class="Bound">xs</a> <a id="3287" class="Symbol">=</a>
+   <a id="3292" href="List-functions.html#2449" data-type="List A → List A" class="Function">rev</a> <a id="3296" href="List-functions.html#3284" class="Bound">xs</a>           <a id="3309" href="identity-type.html#4152" data-type="(x : X) → x ≡ y → y ≡ z → x ≡ z" class="Function Operator">≡⟨</a> <a id="3312" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="3317" class="Symbol">_</a> <a id="3319" href="identity-type.html#4152" data-type="(x : X) → x ≡ y → y ≡ z → x ≡ z" class="Function Operator">⟩</a>
+   <a id="3324" href="List-functions.html#2160" data-type="List A → List A → List A" class="Function">rev-append</a> <a id="3335" href="List-functions.html#3284" class="Bound">xs</a> <a id="3338" href="List.html#432" data-type="List A" class="InductiveConstructor">[]</a> <a id="3341" href="identity-type.html#4152" data-type="(x : X) → x ≡ y → y ≡ z → x ≡ z" class="Function Operator">≡⟨</a> <a id="3344" href="List-functions.html#2670" data-type="(xs ys : List A) → rev-append xs ys ≡ reverse xs ++ ys" class="Function">rev-append-behaviour</a> <a id="3365" href="List-functions.html#3284" class="Bound">xs</a> <a id="3368" href="List.html#432" data-type="List A" class="InductiveConstructor">[]</a> <a id="3371" href="identity-type.html#4152" data-type="(x : X) → x ≡ y → y ≡ z → x ≡ z" class="Function Operator">⟩</a>
+   <a id="3376" href="List-functions.html#1949" data-type="List A → List A" class="Function">reverse</a> <a id="3384" href="List-functions.html#3284" class="Bound">xs</a> <a id="3387" href="List-functions.html#540" data-type="List A → List A → List A" class="Function Operator">++</a> <a id="3390" href="List.html#432" data-type="List A" class="InductiveConstructor">[]</a> <a id="3393" href="identity-type.html#4152" data-type="(x : X) → x ≡ y → y ≡ z → x ≡ z" class="Function Operator">≡⟨</a> <a id="3396" href="List-functions.html#939" data-type="(xs : List X) → xs ++ [] ≡ xs" class="Function">[]-right-neutral</a> <a id="3413" class="Symbol">(</a><a id="3414" href="List-functions.html#1949" data-type="List A → List A" class="Function">reverse</a> <a id="3422" href="List-functions.html#3284" class="Bound">xs</a><a id="3424" class="Symbol">)</a> <a id="3426" href="identity-type.html#4152" data-type="(x : X) → x ≡ y → y ≡ z → x ≡ z" class="Function Operator">⟩</a>
+   <a id="3431" href="List-functions.html#1949" data-type="List A → List A" class="Function">reverse</a> <a id="3439" href="List-functions.html#3284" class="Bound">xs</a>       <a id="3448" href="identity-type.html#4238" data-type="(x : X) → x ≡ x" class="Function Operator">∎</a>
+</pre>
+<p><a href="https://martinescardo.github.io/HoTTEST-Summer-School/">Go
+back to the table of contents</a></p>
+
+  </article>
+</div>
+</main>
+</body>
+<style>
+
+:root {
+  --text-bg: #fff;
+  --text-fg: #222;
+  --shadow: #000;
+  --primary: #0054F4;
+  --secondary: #9C1BD6;
+  --modal-bg: #ccccccaa;
+  --warning-bg: #fef08a;
+  --code-bg: var(--text-bg);
+  --code-fg: var(--text-fg);
+  --code-keyword: #BB3B13;
+  --code-string:  #d52753;
+  --code-number:  #8A1060;
+  --code-module:  #8A1060;
+  --code-field:   #9C1BD6;
+  --code-constructor: #207B1D;
+  --code-highlight: #F5DEB3;
+  --search-selected: #e2e8f0;
+  --details-summary: #b2ebf2;
+  --details-open:    #80deea;
+  --depgraph-edge: #eee;
+  --blockquote-bg: #d8b4fe; }
+
+.diagram-dark {
+  display: none !important; }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-bg: #282C34;
+    --text-fg: #bfbfbf;
+    --shadow: #475569;
+    --primary: #61AFEF;
+    --secondary: #C878DD;
+    --modal-bg: #282C34aa;
+    --warning-bg: #991b1b;
+    --code-keyword:     #E5C07B;
+    --code-string:      #E06C75;
+    --code-number:      #98C379;
+    --code-module:      #56B6C2;
+    --code-field:       #C878DD;
+    --code-constructor: #98C379;
+    --code-highlight: #ef444499;
+    --search-selected: #474e5e;
+    --details-summary: #5b21b6;
+    --details-open:    #4c1d95;
+    --depgraph-edge: #474e5e;
+    --blockquote-bg: #475569; }
+  div.warning {
+    --shadow: #7f1d1d
+  ; }
+  input {
+    background-color: #334155;
+    border: 1px solid #475569;
+    color: var(--text-fg); }
+  body {
+    scrollbar-color: #3b4454 #2b2e33; }
+  .diagram-dark {
+    display: block !important; }
+  .diagram-light {
+    display: none !important; } }
+
+table {
+  margin: auto;
+  border-collapse: collapse; }
+  table td, table th {
+    text-align: center;
+    padding: 0px 1em 0px 1em;
+    border: 1px solid black; }
+  table th {
+    border-bottom: 2px solid black; }
+  table td {
+    white-space: nowrap; }
+
+html { max-width: 100%; }
+
+body {
+  font-family: "Inria Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  width: 100%;
+  font-size: var(--font-size);
+  overflow-x: clip;
+  background-color: var(--text-bg);
+  color: var(--text-fg);
+}
+
+div#post-toc-container { max-width: 120ch; margin: auto; }
+
+article a[href], div#return > a[href], div#top > a[href], aside#toc > div#toc-container ul a[href] {
+  color: var(--primary);
+  text-decoration: none; }
+  article a[href]:hover, div#return > a[href]:hover, div#top > a[href]:hover, aside#toc > div#toc-container ul a[href]:hover {
+    text-decoration: 2px currentColor underline !important; }
+  article a[href]:visited, div#return > a[href]:visited, div#top > a[href]:visited, aside#toc > div#toc-container ul a[href]:visited {
+    color: var(--secondary); }
+
+/* Aspects. */
+.Agda {
+  /* NameKinds. */
+  /* OtherAspects. */
+  /* Standard attributes. */
+  font-family: 'iosevka', 'Iosevka', 'Fantasque Sans Mono', 'Roboto Mono', monospace;
+  font-weight: 400; }
+  .Agda .Comment {
+    color: var(--code-fg);
+    font-style: italic; }
+  .Agda .Background {
+    background-color: var(--code-bg); }
+  .Agda .Markup {
+    color: var(--code-fg); }
+  .Agda .Keyword {
+    color: var(--code-keyword); }
+  .Agda .String {
+    color: var(--code-string); }
+  .Agda .Number {
+    color: var(--code-number); }
+  .Agda .Symbol {
+    color: var(--code-fg); }
+  .Agda .PrimitiveType {
+    color: var(--primary); }
+  .Agda .Pragma {
+    color: var(--code-fg); }
+  .Agda .Bound {
+    color: var(--code-fg) !important; }
+  .Agda .Generalizable {
+    color: var(--code-fg) !important; }
+  .Agda .InductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .CoinductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .Datatype {
+    color: var(--primary) !important; }
+  .Agda .Field {
+    color: var(--code-field) !important; }
+  .Agda .Function {
+    color: var(--primary) !important; }
+  .Agda .Module {
+    color: var(--code-module) !important; }
+  .Agda .Postulate {
+    color: var(--primary) !important; }
+  .Agda .Primitive {
+    color: var(--primary) !important; }
+  .Agda .Record {
+    color: var(--primary) !important; }
+  .Agda .UnsolvedMeta {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .UnsolvedConstraint {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .TerminationProblem {
+    color: var(--code-fg);
+    background: #FFA07A; }
+  .Agda .IncompletePattern {
+    color: var(--code-fg);
+    background: #F5DEB3; }
+  .Agda .Error {
+    color: red;
+    text-decoration: underline; }
+  .Agda .TypeChecks {
+    color: var(--code-fg);
+    background: #ADD8E6; }
+  .Agda .ShadowingInTelescope {
+    color: var(--code-fg);
+    background: #808080; }
+  .Agda .Deadcode {
+    color: var(--code-keyword);
+    font-weight: bold; }
+  .Agda a {
+    text-decoration: none; }
+  .Agda a[href]:hover {
+    text-decoration: 2px var(--primary) underline; }
+  .Agda a[href]:target {
+    animation: highlight 2.5s; }
+  body.text-page .Agda {
+    font-size: var(--code-font-size); }
+
+pre.Agda, div.sourceCode, pre {
+  border-radius: 0;
+  box-shadow: none;
+  overflow-y: clip;
+  margin: 0;
+  padding: 1em;
+  padding-top: 0.25em;
+  padding-bottom: 0.25em;
+  background-color: var(--code-bg);
+  color: var(--code-fg);
+  font-size: var(--code-font-size);
+  max-width: 100%;
+  overflow-x: auto;
+}
+</style>
+</html>

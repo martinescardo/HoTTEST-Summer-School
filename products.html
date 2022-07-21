@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>HoTTEST Summer School 2022 Lecture Notes</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+</head>
+
+<body class="text-page">
+<main>
+<div id="post-toc-container" style="padding-left: 1em; padding-right: 1em;">
+
+  <article>
+
+<p><a href="Https://www.Cs.Bham.Ac.Uk/~mhe/">Martin Escardo</a>. Notes
+originally written for the module <em>Advanced Functional
+Programming</em> of the <a
+href="https://www.birmingham.ac.uk/index.aspx">University of
+Birmingham</a>, UK.</p>
+<!--
+<pre class="Agda"><a id="222" class="Symbol">{-#</a> <a id="226" class="Keyword">OPTIONS</a> <a id="234" class="Pragma">--without-K</a> <a id="246" class="Pragma">--safe</a> <a id="253" class="Symbol">#-}</a>
+
+<a id="258" class="Keyword">module</a> <a id="265" href="products.html" class="Module">products</a> <a id="274" class="Keyword">where</a>
+
+<a id="281" class="Keyword">open</a> <a id="286" class="Keyword">import</a> <a id="293" href="general-notation.html" class="Module">general-notation</a>
+</pre>-->
+<h1 id="products">Products</h1>
+<p>We discuss function types of the form <code>A → B</code> (called
+non-dependent function types) and of the form <code>(x : A) → B x</code>
+(called dependent function types). The latter are also called
+<em>products</em> in type theory and this terminology comes from
+mathematics.</p>
+<h2 id="the-identity-function">The identity function</h2>
+To <em>introduce</em> functions, we use <code>λ</code>-abstractions. For
+example, the identity function can be defined as follows: <!--
+The following trick allows us to check the correctness of alternative definitions without name clashes:
+<pre class="Agda"><a id="837" class="Keyword">module</a> <a id="844" href="products.html#844" class="Module">_</a> <a id="846" class="Keyword">where</a>
+ <a id="853" class="Keyword">private</a>
+</pre>-->
+<pre class="Agda">  <a id="879" href="products.html#879" class="Function">id</a> <a id="882" class="Symbol">:</a> <a id="884" class="Symbol">{</a><a id="885" href="products.html#885" class="Bound">A</a> <a id="887" class="Symbol">:</a> <a id="889" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="893" class="Symbol">}</a> <a id="895" class="Symbol">→</a> <a id="897" href="products.html#885" class="Bound">A</a> <a id="899" class="Symbol">→</a> <a id="901" href="products.html#885" class="Bound">A</a>
+  <a id="905" href="products.html#879" class="Function">id</a> <a id="908" class="Symbol">=</a> <a id="910" class="Symbol">λ</a> <a id="912" href="products.html#912" class="Bound">x</a> <a id="914" class="Symbol">→</a> <a id="916" href="products.html#912" class="Bound">x</a>
+</pre>
+But of course this function can be equivalently written as follows,
+which we take as our official definition:
+<pre class="Agda"><a id="id"></a><a id="1041" href="products.html#1041" data-type="A → A" class="Function">id</a> <a id="1044" class="Symbol">:</a> <a id="1046" class="Symbol">{</a><a id="1047" href="products.html#1047" class="Bound">A</a> <a id="1049" class="Symbol">:</a> <a id="1051" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="1055" class="Symbol">}</a> <a id="1057" class="Symbol">→</a> <a id="1059" href="products.html#1047" class="Bound">A</a> <a id="1061" class="Symbol">→</a> <a id="1063" href="products.html#1047" class="Bound">A</a>
+<a id="1065" href="products.html#1041" data-type="A → A" class="Function">id</a> <a id="1068" href="products.html#1068" class="Bound">x</a> <a id="1070" class="Symbol">=</a> <a id="1072" href="products.html#1068" class="Bound">x</a>
+</pre>
+<h2 id="logical-implication">Logical implication</h2>
+<p>A logical implication <code>A → B</code> is represented by the
+function type <code>A → B</code>, and it is a happy coincidence that
+both use the same notation.</p>
+<p>In terms of logic, the identity function implements the tautology
+“<code>A</code> implies <code>A</code>” when we understand the type
+<code>A</code> as a logical proposition. In general, most things we
+define in Agda have a dual interpretation type/proposition or
+program/proof, like this example.</p>
+The <em>elimination</em> principle for function types is given by
+function application, which is built-in in Agda, but we can explicitly
+(re)define it. We do with the arguments swapped here:
+<pre class="Agda"><a id="modus-ponens"></a><a id="1700" href="products.html#1700" data-type="A → (A → B) → B" class="Function">modus-ponens</a> <a id="1713" class="Symbol">:</a> <a id="1715" class="Symbol">{</a><a id="1716" href="products.html#1716" class="Bound">A</a> <a id="1718" href="products.html#1718" class="Bound">B</a> <a id="1720" class="Symbol">:</a> <a id="1722" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="1726" class="Symbol">}</a> <a id="1728" class="Symbol">→</a> <a id="1730" href="products.html#1716" class="Bound">A</a> <a id="1732" class="Symbol">→</a> <a id="1734" class="Symbol">(</a><a id="1735" href="products.html#1716" class="Bound">A</a> <a id="1737" class="Symbol">→</a> <a id="1739" href="products.html#1718" class="Bound">B</a><a id="1740" class="Symbol">)</a> <a id="1742" class="Symbol">→</a> <a id="1744" href="products.html#1718" class="Bound">B</a>
+<a id="1746" href="products.html#1700" data-type="A → (A → B) → B" class="Function">modus-ponens</a> <a id="1759" href="products.html#1759" class="Bound">a</a> <a id="1761" href="products.html#1761" class="Bound">f</a> <a id="1763" class="Symbol">=</a> <a id="1765" href="products.html#1761" class="Bound">f</a> <a id="1767" href="products.html#1759" class="Bound">a</a>
+</pre>
+<p><a href="https://en.wikipedia.org/wiki/Modus_ponens">Modus ponens</a>
+is the rule logic that says that if the proposition <code>A</code> holds
+and <code>A</code> implies <code>B</code>, then <code>B</code> also
+holds. The above definition gives a computational realization of
+this.</p>
+<h2 id="dependent-functions">Dependent functions</h2>
+<p>As already discussed, a dependent function type
+<code>(x : A) → B x</code>, with <code>A : Type</code> and
+<code>B : A → Type</code>, is that of functions with input
+<code>x</code> in the type <code>A</code> and output in the type
+<code>B x</code>. It is called “dependent” because the output
+<em>type</em> <code>B x</code> depends on the input <em>element</em>
+<code>x : A</code>.</p>
+<h2 id="universal-quantification">Universal quantification</h2>
+<p>The logical interpretation of <code>(x : A) → B x</code> is “for all
+x : A, B x”. This is because in order to show that this universal
+quantification holds, we have to show that <code>B x</code> holds for
+each given <code>x:A</code>. The input is the given <code>x : A</code>,
+and the output is a justification of <code>B x</code>. We will see some
+concrete examples shortly.</p>
+<h2 id="dependent-function-composition">Dependent function
+composition</h2>
+Composition can be defined for “non-dependent functions”, as in usual
+mathematics, and, more generally, with dependent functions. With
+non-dependent functions, it has the following type and definition: <!--
+<pre class="Agda"><a id="2907" class="Keyword">module</a> <a id="2914" href="products.html#2914" class="Module">_</a> <a id="2916" class="Keyword">where</a>
+ <a id="2923" class="Keyword">private</a>
+</pre>-->
+<pre class="Agda">  <a id="2949" href="products.html#2949" class="Function Operator">_∘_</a> <a id="2953" class="Symbol">:</a> <a id="2955" class="Symbol">{</a><a id="2956" href="products.html#2956" class="Bound">A</a> <a id="2958" href="products.html#2958" class="Bound">B</a> <a id="2960" href="products.html#2960" class="Bound">C</a> <a id="2962" class="Symbol">:</a> <a id="2964" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="2968" class="Symbol">}</a> <a id="2970" class="Symbol">→</a> <a id="2972" class="Symbol">(</a><a id="2973" href="products.html#2958" class="Bound">B</a> <a id="2975" class="Symbol">→</a> <a id="2977" href="products.html#2960" class="Bound">C</a><a id="2978" class="Symbol">)</a> <a id="2980" class="Symbol">→</a> <a id="2982" class="Symbol">(</a><a id="2983" href="products.html#2956" class="Bound">A</a> <a id="2985" class="Symbol">→</a> <a id="2987" href="products.html#2958" class="Bound">B</a><a id="2988" class="Symbol">)</a> <a id="2990" class="Symbol">→</a> <a id="2992" class="Symbol">(</a><a id="2993" href="products.html#2956" class="Bound">A</a> <a id="2995" class="Symbol">→</a> <a id="2997" href="products.html#2960" class="Bound">C</a><a id="2998" class="Symbol">)</a>
+  <a id="3002" href="products.html#3002" class="Bound">g</a> <a id="3004" href="products.html#2949" class="Function Operator">∘</a> <a id="3006" href="products.html#3006" class="Bound">f</a> <a id="3008" class="Symbol">=</a> <a id="3010" class="Symbol">λ</a> <a id="3012" href="products.html#3012" class="Bound">x</a> <a id="3014" class="Symbol">→</a> <a id="3016" href="products.html#3002" class="Bound">g</a> <a id="3018" class="Symbol">(</a><a id="3019" href="products.html#3006" class="Bound">f</a> <a id="3021" href="products.html#3012" class="Bound">x</a><a id="3022" class="Symbol">)</a>
+</pre>
+<p>In terms of computation, this means “first do f and then do g”. For
+this reason the function composition <code>g ∘ f</code> is often read
+“<code>g</code> after <code>f</code>”. In terms of logic, this
+implements “If B implies C and also A implies B, then A implies C”.</p>
+<p>With dependent types, it has the following more general type but the
+same definition, which is the one we adopt:</p>
+<pre class="Agda"><a id="_∘_"></a><a id="3388" href="products.html#3388" data-type="((y : B) → C y) → (f : A → B) (x : A) → C (f x)" class="Function Operator">_∘_</a> <a id="3392" class="Symbol">:</a> <a id="3394" class="Symbol">{</a><a id="3395" href="products.html#3395" class="Bound">A</a> <a id="3397" href="products.html#3397" class="Bound">B</a> <a id="3399" class="Symbol">:</a> <a id="3401" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="3405" class="Symbol">}</a> <a id="3407" class="Symbol">{</a><a id="3408" href="products.html#3408" class="Bound">C</a> <a id="3410" class="Symbol">:</a> <a id="3412" href="products.html#3397" class="Bound">B</a> <a id="3414" class="Symbol">→</a> <a id="3416" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="3420" class="Symbol">}</a>
+    <a id="3426" class="Symbol">→</a> <a id="3428" class="Symbol">((</a><a id="3430" href="products.html#3430" class="Bound">y</a> <a id="3432" class="Symbol">:</a> <a id="3434" href="products.html#3397" class="Bound">B</a><a id="3435" class="Symbol">)</a> <a id="3437" class="Symbol">→</a> <a id="3439" href="products.html#3408" class="Bound">C</a> <a id="3441" href="products.html#3430" class="Bound">y</a><a id="3442" class="Symbol">)</a>
+    <a id="3448" class="Symbol">→</a> <a id="3450" class="Symbol">(</a><a id="3451" href="products.html#3451" class="Bound">f</a> <a id="3453" class="Symbol">:</a> <a id="3455" href="products.html#3395" class="Bound">A</a> <a id="3457" class="Symbol">→</a> <a id="3459" href="products.html#3397" class="Bound">B</a><a id="3460" class="Symbol">)</a>
+    <a id="3466" class="Symbol">→</a> <a id="3468" class="Symbol">(</a><a id="3469" href="products.html#3469" class="Bound">x</a> <a id="3471" class="Symbol">:</a> <a id="3473" href="products.html#3395" class="Bound">A</a><a id="3474" class="Symbol">)</a> <a id="3476" class="Symbol">→</a> <a id="3478" href="products.html#3408" class="Bound">C</a> <a id="3480" class="Symbol">(</a><a id="3481" href="products.html#3451" class="Bound">f</a> <a id="3483" href="products.html#3469" class="Bound">x</a><a id="3484" class="Symbol">)</a>
+<a id="3486" href="products.html#3486" class="Bound">g</a> <a id="3488" href="products.html#3388" data-type="((y : B) → C y) → (f : A → B) (x : A) → C (f x)" class="Function Operator">∘</a> <a id="3490" href="products.html#3490" class="Bound">f</a> <a id="3492" class="Symbol">=</a> <a id="3494" class="Symbol">λ</a> <a id="3496" href="products.html#3496" class="Bound">x</a> <a id="3498" class="Symbol">→</a> <a id="3500" href="products.html#3486" class="Bound">g</a> <a id="3502" class="Symbol">(</a><a id="3503" href="products.html#3490" class="Bound">f</a> <a id="3505" href="products.html#3496" class="Bound">x</a><a id="3506" class="Symbol">)</a>
+</pre>
+<p>Its computational interpretation is the same, “first do f and then do
+g”, but its logical understanding changes: “If it is the case that for
+all y : B we have that C y holds, and we have a function f : A → B, then
+it is also the case that for all x : A, we have that C (f x) holds”.</p>
+<h2 id="π-notation"><code>Π</code> notation</h2>
+We have mentioned in the <a href="curry-howard.lagda">propositions as
+types table</a> that the official notation in MLTT for the dependent
+function type uses <code>Π</code>, the Greek letter Pi, for
+<em>product</em>. We can, if we want, introduce the same notation in
+Agda, using a <code>syntax</code> declaration:
+<pre class="Agda"><a id="Pi"></a><a id="4097" href="products.html#4097" data-type="(A : Type) → (A → Type) → Type" class="Function">Pi</a> <a id="4100" class="Symbol">:</a> <a id="4102" class="Symbol">(</a><a id="4103" href="products.html#4103" class="Bound">A</a> <a id="4105" class="Symbol">:</a> <a id="4107" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="4111" class="Symbol">)</a> <a id="4113" class="Symbol">(</a><a id="4114" href="products.html#4114" class="Bound">B</a> <a id="4116" class="Symbol">:</a> <a id="4118" href="products.html#4103" class="Bound">A</a> <a id="4120" class="Symbol">→</a> <a id="4122" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="4126" class="Symbol">)</a> <a id="4128" class="Symbol">→</a> <a id="4130" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a>
+<a id="4135" href="products.html#4097" data-type="(A : Type) → (A → Type) → Type" class="Function">Pi</a> <a id="4138" href="products.html#4138" class="Bound">A</a> <a id="4140" href="products.html#4140" class="Bound">B</a> <a id="4142" class="Symbol">=</a> <a id="4144" class="Symbol">(</a><a id="4145" href="products.html#4145" class="Bound">x</a> <a id="4147" class="Symbol">:</a> <a id="4149" href="products.html#4138" class="Bound">A</a><a id="4150" class="Symbol">)</a> <a id="4152" class="Symbol">→</a> <a id="4154" href="products.html#4140" class="Bound">B</a> <a id="4156" href="products.html#4145" class="Bound">x</a>
+
+<a id="4159" class="Keyword">syntax</a> <a id="4166" href="products.html#4097" data-type="(A : Type) → (A → Type) → Type" class="Function">Pi</a> <a id="4169" class="Bound">A</a> <a id="4171" class="Symbol">(λ</a> <a id="4174" class="Bound">x</a> <a id="4176" class="Symbol">→</a> <a id="4178" class="Bound">b</a><a id="4179" class="Symbol">)</a> <a id="4181" class="Symbol">=</a> <a id="4183" class="Function">Π</a> <a id="4185" class="Bound">x</a> <a id="4187" class="Function">꞉</a> <a id="4189" class="Bound">A</a> <a id="4191" class="Function">,</a> <a id="4193" class="Bound">b</a>
+</pre>
+<p><strong>Important.</strong> We are using the alternative symbol
+<code>꞉</code> (typed “<code>\:4</code>” in the emacs mode for Agda),
+which is different from the reserved symbol “<code>:</code>”. We will
+use the same alternative symbol when we define syntax for the sum type
+<code>Σ</code>.</p>
+<p>Notice that, for some reason, Agda has this kind of definition
+backwards. The end result of this is that now <code>(x : A) → B x</code>
+can be written as <code>Π x ꞉ A , B x</code> in Agda as in type theory.
+(If you happen to know a bit of maths, you may be familiar with the <a
+href="https://en.wikipedia.org/wiki/Cartesian_product#Infinite_Cartesian_products">cartesian
+product of a family of sets</a>, and this is the reason the letter
+<code>Π</code> is used.)</p>
+<p><a href="https://martinescardo.github.io/HoTTEST-Summer-School/">Go
+back to the table of contents</a></p>
+
+  </article>
+</div>
+</main>
+</body>
+<style>
+
+:root {
+  --text-bg: #fff;
+  --text-fg: #222;
+  --shadow: #000;
+  --primary: #0054F4;
+  --secondary: #9C1BD6;
+  --modal-bg: #ccccccaa;
+  --warning-bg: #fef08a;
+  --code-bg: var(--text-bg);
+  --code-fg: var(--text-fg);
+  --code-keyword: #BB3B13;
+  --code-string:  #d52753;
+  --code-number:  #8A1060;
+  --code-module:  #8A1060;
+  --code-field:   #9C1BD6;
+  --code-constructor: #207B1D;
+  --code-highlight: #F5DEB3;
+  --search-selected: #e2e8f0;
+  --details-summary: #b2ebf2;
+  --details-open:    #80deea;
+  --depgraph-edge: #eee;
+  --blockquote-bg: #d8b4fe; }
+
+.diagram-dark {
+  display: none !important; }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-bg: #282C34;
+    --text-fg: #bfbfbf;
+    --shadow: #475569;
+    --primary: #61AFEF;
+    --secondary: #C878DD;
+    --modal-bg: #282C34aa;
+    --warning-bg: #991b1b;
+    --code-keyword:     #E5C07B;
+    --code-string:      #E06C75;
+    --code-number:      #98C379;
+    --code-module:      #56B6C2;
+    --code-field:       #C878DD;
+    --code-constructor: #98C379;
+    --code-highlight: #ef444499;
+    --search-selected: #474e5e;
+    --details-summary: #5b21b6;
+    --details-open:    #4c1d95;
+    --depgraph-edge: #474e5e;
+    --blockquote-bg: #475569; }
+  div.warning {
+    --shadow: #7f1d1d
+  ; }
+  input {
+    background-color: #334155;
+    border: 1px solid #475569;
+    color: var(--text-fg); }
+  body {
+    scrollbar-color: #3b4454 #2b2e33; }
+  .diagram-dark {
+    display: block !important; }
+  .diagram-light {
+    display: none !important; } }
+
+table {
+  margin: auto;
+  border-collapse: collapse; }
+  table td, table th {
+    text-align: center;
+    padding: 0px 1em 0px 1em;
+    border: 1px solid black; }
+  table th {
+    border-bottom: 2px solid black; }
+  table td {
+    white-space: nowrap; }
+
+html { max-width: 100%; }
+
+body {
+  font-family: "Inria Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  width: 100%;
+  font-size: var(--font-size);
+  overflow-x: clip;
+  background-color: var(--text-bg);
+  color: var(--text-fg);
+}
+
+div#post-toc-container { max-width: 120ch; margin: auto; }
+
+article a[href], div#return > a[href], div#top > a[href], aside#toc > div#toc-container ul a[href] {
+  color: var(--primary);
+  text-decoration: none; }
+  article a[href]:hover, div#return > a[href]:hover, div#top > a[href]:hover, aside#toc > div#toc-container ul a[href]:hover {
+    text-decoration: 2px currentColor underline !important; }
+  article a[href]:visited, div#return > a[href]:visited, div#top > a[href]:visited, aside#toc > div#toc-container ul a[href]:visited {
+    color: var(--secondary); }
+
+/* Aspects. */
+.Agda {
+  /* NameKinds. */
+  /* OtherAspects. */
+  /* Standard attributes. */
+  font-family: 'iosevka', 'Iosevka', 'Fantasque Sans Mono', 'Roboto Mono', monospace;
+  font-weight: 400; }
+  .Agda .Comment {
+    color: var(--code-fg);
+    font-style: italic; }
+  .Agda .Background {
+    background-color: var(--code-bg); }
+  .Agda .Markup {
+    color: var(--code-fg); }
+  .Agda .Keyword {
+    color: var(--code-keyword); }
+  .Agda .String {
+    color: var(--code-string); }
+  .Agda .Number {
+    color: var(--code-number); }
+  .Agda .Symbol {
+    color: var(--code-fg); }
+  .Agda .PrimitiveType {
+    color: var(--primary); }
+  .Agda .Pragma {
+    color: var(--code-fg); }
+  .Agda .Bound {
+    color: var(--code-fg) !important; }
+  .Agda .Generalizable {
+    color: var(--code-fg) !important; }
+  .Agda .InductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .CoinductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .Datatype {
+    color: var(--primary) !important; }
+  .Agda .Field {
+    color: var(--code-field) !important; }
+  .Agda .Function {
+    color: var(--primary) !important; }
+  .Agda .Module {
+    color: var(--code-module) !important; }
+  .Agda .Postulate {
+    color: var(--primary) !important; }
+  .Agda .Primitive {
+    color: var(--primary) !important; }
+  .Agda .Record {
+    color: var(--primary) !important; }
+  .Agda .UnsolvedMeta {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .UnsolvedConstraint {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .TerminationProblem {
+    color: var(--code-fg);
+    background: #FFA07A; }
+  .Agda .IncompletePattern {
+    color: var(--code-fg);
+    background: #F5DEB3; }
+  .Agda .Error {
+    color: red;
+    text-decoration: underline; }
+  .Agda .TypeChecks {
+    color: var(--code-fg);
+    background: #ADD8E6; }
+  .Agda .ShadowingInTelescope {
+    color: var(--code-fg);
+    background: #808080; }
+  .Agda .Deadcode {
+    color: var(--code-keyword);
+    font-weight: bold; }
+  .Agda a {
+    text-decoration: none; }
+  .Agda a[href]:hover {
+    text-decoration: 2px var(--primary) underline; }
+  .Agda a[href]:target {
+    animation: highlight 2.5s; }
+  body.text-page .Agda {
+    font-size: var(--code-font-size); }
+
+pre.Agda, div.sourceCode, pre {
+  border-radius: 0;
+  box-shadow: none;
+  overflow-y: clip;
+  margin: 0;
+  padding: 1em;
+  padding-top: 0.25em;
+  padding-bottom: 0.25em;
+  background-color: var(--code-bg);
+  color: var(--code-fg);
+  font-size: var(--code-font-size);
+  max-width: 100%;
+  overflow-x: auto;
+}
+</style>
+</html>

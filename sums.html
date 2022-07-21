@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>HoTTEST Summer School 2022 Lecture Notes</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+</head>
+
+<body class="text-page">
+<main>
+<div id="post-toc-container" style="padding-left: 1em; padding-right: 1em;">
+
+  <article>
+
+<p><a href="Https://www.Cs.Bham.Ac.Uk/~mhe/">Martin Escardo</a>. Notes
+originally written for the module <em>Advanced Functional
+Programming</em> of the <a
+href="https://www.birmingham.ac.uk/index.aspx">University of
+Birmingham</a>, UK.</p>
+<!--
+<pre class="Agda"><a id="222" class="Symbol">{-#</a> <a id="226" class="Keyword">OPTIONS</a> <a id="234" class="Pragma">--without-K</a> <a id="246" class="Pragma">--safe</a> <a id="253" class="Symbol">#-}</a>
+
+<a id="258" class="Keyword">module</a> <a id="265" href="sums.html" class="Module">sums</a> <a id="270" class="Keyword">where</a>
+
+<a id="277" class="Keyword">open</a> <a id="282" class="Keyword">import</a> <a id="289" href="general-notation.html" class="Module">general-notation</a>
+</pre>-->
+<h1 id="the-sum-type-former-σ">The sum type former <code>Σ</code></h1>
+<p>Very often in computation we work with the type of pairs
+<code>(x , y)</code> with <code>x : A</code> and <code>y : B</code>
+where <code>A</code> and <code>B</code> are types. We will write
+<code>A × B</code> for the type of such pairs, and call it the <a
+href="https://en.wikipedia.org/wiki/Cartesian_product"><em>cartesian
+product</em></a>. We will define this type as a particular case of a
+more general type, whose elements are again of the form
+<code>(x , y)</code> but with the difference that <code>x : A</code> and
+<code>y : B x</code> where <code>A : Type</code> and
+<code>B : A → Type</code>. The difference amounts to the fact that the
+type of the second component <code>y</code> depends on the first element
+<code>x</code>. The default notation for this type will be
+<code>Σ {A} B</code>, or simply <code>Σ B</code> when <code>A</code> can
+be inferred from the context, but we will also introduce the more common
+sum notation <code>Σ x ꞉ A , B x</code>. This type is also called the <a
+href="https://en.wikipedia.org/wiki/Disjoint_union">disjoint union</a>
+of the type family <code>B : A → Type</code>.</p>
+<h2 id="examples">Examples</h2>
+<p>A simple example is the type
+<code>Σ xs ꞉ List X , Vector X (length xs)</code> with
+<code>X : Type</code>. An element of this type is a pair
+<code>(xs , ys)</code> where <code>xs</code> is a list and
+<code>ys</code> is a vector of the same length as <code>xs</code>.</p>
+<p>Another example, which iterates the <code>Σ</code> type construction,
+is <code>Σ x : ℕ , Σ y : ℕ , Σ z : ℕ , x ≡ y * z</code>. An element of
+this type is now a quadruple <code>(x , (y , (z , p)))</code> where
+<code>x y z : ℕ</code> and <code>p : x ≡ y * z</code>. That is, the
+fourth component ensures that <code>x y z : ℕ</code> are allowed in the
+tuple if, and only if, <code>x ≡ y * z</code>. We will see more
+interesting examples shortly.</p>
+<h2 id="definition">Definition</h2>
+The <code>Σ</code> type can be defined in Agda using a <code>data</code>
+declaration as follows: <!--
+<pre class="Agda"><a id="1915" class="Keyword">module</a> <a id="1922" href="sums.html#1922" class="Module">_</a> <a id="1924" class="Keyword">where</a>
+ <a id="1931" class="Keyword">private</a>
+</pre>-->
+<pre class="Agda">  <a id="1957" class="Keyword">data</a> <a id="1962" href="sums.html#1962" class="Datatype">Σ</a> <a id="1964" class="Symbol">{</a><a id="1965" href="sums.html#1965" class="Bound">A</a> <a id="1967" class="Symbol">:</a> <a id="1969" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a> <a id="1974" class="Symbol">}</a> <a id="1976" class="Symbol">(</a><a id="1977" href="sums.html#1977" class="Bound">B</a> <a id="1979" class="Symbol">:</a> <a id="1981" href="sums.html#1965" class="Bound">A</a> <a id="1983" class="Symbol">→</a> <a id="1985" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="1989" class="Symbol">)</a> <a id="1991" class="Symbol">:</a> <a id="1993" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a>  <a id="1999" class="Keyword">where</a>
+   <a id="2008" href="sums.html#2008" class="InductiveConstructor Operator">_,_</a> <a id="2012" class="Symbol">:</a> <a id="2014" class="Symbol">(</a><a id="2015" href="sums.html#2015" class="Bound">x</a> <a id="2017" class="Symbol">:</a> <a id="2019" href="sums.html#1965" class="Bound">A</a><a id="2020" class="Symbol">)</a> <a id="2022" class="Symbol">(</a><a id="2023" href="sums.html#2023" class="Bound">y</a> <a id="2025" class="Symbol">:</a> <a id="2027" href="sums.html#1977" class="Bound">B</a> <a id="2029" href="sums.html#2015" class="Bound">x</a><a id="2030" class="Symbol">)</a> <a id="2032" class="Symbol">→</a> <a id="2034" href="sums.html#1962" class="Datatype">Σ</a> <a id="2036" class="Symbol">{</a><a id="2037" href="sums.html#1965" class="Bound">A</a><a id="2038" class="Symbol">}</a> <a id="2040" href="sums.html#1977" class="Bound">B</a>
+
+  <a id="2045" href="sums.html#2045" class="Function">pr₁</a> <a id="2049" class="Symbol">:</a> <a id="2051" class="Symbol">{</a><a id="2052" href="sums.html#2052" class="Bound">A</a> <a id="2054" class="Symbol">:</a> <a id="2056" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="2060" class="Symbol">}</a> <a id="2062" class="Symbol">{</a><a id="2063" href="sums.html#2063" class="Bound">B</a> <a id="2065" class="Symbol">:</a> <a id="2067" href="sums.html#2052" class="Bound">A</a> <a id="2069" class="Symbol">→</a> <a id="2071" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="2075" class="Symbol">}</a> <a id="2077" class="Symbol">→</a> <a id="2079" href="sums.html#1962" class="Datatype">Σ</a> <a id="2081" href="sums.html#2063" class="Bound">B</a> <a id="2083" class="Symbol">→</a> <a id="2085" href="sums.html#2052" class="Bound">A</a>
+  <a id="2089" href="sums.html#2045" class="Function">pr₁</a> <a id="2093" class="Symbol">(</a><a id="2094" href="sums.html#2094" class="Bound">x</a> <a id="2096" href="sums.html#2008" class="InductiveConstructor Operator">,</a> <a id="2098" href="sums.html#2098" class="Bound">y</a><a id="2099" class="Symbol">)</a> <a id="2101" class="Symbol">=</a> <a id="2103" href="sums.html#2094" class="Bound">x</a>
+
+  <a id="2108" href="sums.html#2108" class="Function">pr₂</a> <a id="2112" class="Symbol">:</a> <a id="2114" class="Symbol">{</a><a id="2115" href="sums.html#2115" class="Bound">A</a> <a id="2117" class="Symbol">:</a> <a id="2119" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="2123" class="Symbol">}</a> <a id="2125" class="Symbol">{</a><a id="2126" href="sums.html#2126" class="Bound">B</a> <a id="2128" class="Symbol">:</a> <a id="2130" href="sums.html#2115" class="Bound">A</a> <a id="2132" class="Symbol">→</a> <a id="2134" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="2138" class="Symbol">}</a> <a id="2140" class="Symbol">→</a> <a id="2142" class="Symbol">(</a><a id="2143" href="sums.html#2143" class="Bound">z</a> <a id="2145" class="Symbol">:</a> <a id="2147" href="sums.html#1962" class="Datatype">Σ</a> <a id="2149" href="sums.html#2126" class="Bound">B</a><a id="2150" class="Symbol">)</a> <a id="2152" class="Symbol">→</a> <a id="2154" href="sums.html#2126" class="Bound">B</a> <a id="2156" class="Symbol">(</a><a id="2157" href="sums.html#2045" class="Function">pr₁</a> <a id="2161" href="sums.html#2143" class="Bound">z</a><a id="2162" class="Symbol">)</a>
+  <a id="2166" href="sums.html#2108" class="Function">pr₂</a> <a id="2170" class="Symbol">(</a><a id="2171" href="sums.html#2171" class="Bound">x</a> <a id="2173" href="sums.html#2008" class="InductiveConstructor Operator">,</a> <a id="2175" href="sums.html#2175" class="Bound">y</a><a id="2176" class="Symbol">)</a> <a id="2178" class="Symbol">=</a> <a id="2180" href="sums.html#2175" class="Bound">y</a>
+</pre>
+<p>Notice that the type of <code>pr₂</code> is dependent and uses
+<code>pr₁</code> to express the dependency.</p>
+<p>However, for a number of reasons to be explained later, we prefer to
+define it using a <a
+href="https://agda.readthedocs.io/en/latest/language/record-types.html">record</a>
+definition:</p>
+<pre class="Agda"><a id="2457" class="Keyword">record</a> <a id="Σ"></a><a id="2464" href="sums.html#2464" data-type="(B : A → Type) → Type" class="Record">Σ</a> <a id="2466" class="Symbol">{</a><a id="2467" href="sums.html#2467" class="Bound">A</a> <a id="2469" class="Symbol">:</a> <a id="2471" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a> <a id="2476" class="Symbol">}</a> <a id="2478" class="Symbol">(</a><a id="2479" href="sums.html#2479" class="Bound">B</a> <a id="2481" class="Symbol">:</a> <a id="2483" href="sums.html#2467" class="Bound">A</a> <a id="2485" class="Symbol">→</a> <a id="2487" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="2491" class="Symbol">)</a> <a id="2493" class="Symbol">:</a> <a id="2495" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a>  <a id="2501" class="Keyword">where</a>
+ <a id="2508" class="Keyword">constructor</a>
+  <a id="_,_"></a><a id="2522" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">_,_</a>
+ <a id="2527" class="Keyword">field</a>
+  <a id="Σ.pr₁"></a><a id="2535" href="sums.html#2535" data-type="Σ B → A" class="Field">pr₁</a> <a id="2539" class="Symbol">:</a> <a id="2541" href="sums.html#2467" class="Bound">A</a>
+  <a id="Σ.pr₂"></a><a id="2545" href="sums.html#2545" data-type="(r : Σ B) → B (pr₁ r)" class="Field">pr₂</a> <a id="2549" class="Symbol">:</a> <a id="2551" href="sums.html#2479" class="Bound">B</a> <a id="2553" href="sums.html#2535" data-type="Σ B → A" class="Field">pr₁</a>
+</pre>
+<p>Here we automatically get the projections with the same types and
+definitions as above and hence we don’t need to provide them. In order
+for the projections <code>pr₁</code> and <code>pr₂</code> to be visible
+outside the scope of the record, we <code>open</code> the record.
+Moreover, we open it <code>public</code> so that when other files import
+this one, these two projections will be visible in the other files. The
+“constructor” allows to form an element of this type. Because “,” is not
+a reserved symbol in Agda, we can use it as a binary operator to write
+<code>x , y</code>. However, following mathematical tradition, we will
+write brackets around that, to get <code>(x , y)</code>, even if this is
+not necessary. We also declare a fixity and precedence for this
+operator.</p>
+<pre class="Agda"><a id="3287" class="Keyword">open</a> <a id="3292" href="sums.html#2464" data-type="(B : A → Type) → Type" class="Module">Σ</a> <a id="3294" class="Keyword">public</a>
+<a id="3301" class="Keyword">infixr</a> <a id="3308" class="Number">0</a> <a id="3310" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">_,_</a>
+</pre>
+<p>Because we make <code>_,_</code> right associative, we can write
+<code>(x , y , z , p)</code> rather than
+<code>(x , (y , (z , p)))</code> as we did above.</p>
+We also use a syntax declaration, <a href="products.html">as we did</a>
+for dependent function types using Π, to get the more traditional
+type-theoretical notation.
+<pre class="Agda"><a id="Sigma"></a><a id="3608" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">Sigma</a> <a id="3614" class="Symbol">:</a> <a id="3616" class="Symbol">(</a><a id="3617" href="sums.html#3617" class="Bound">A</a> <a id="3619" class="Symbol">:</a> <a id="3621" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="3625" class="Symbol">)</a> <a id="3627" class="Symbol">(</a><a id="3628" href="sums.html#3628" class="Bound">B</a> <a id="3630" class="Symbol">:</a> <a id="3632" href="sums.html#3617" class="Bound">A</a> <a id="3634" class="Symbol">→</a> <a id="3636" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="3640" class="Symbol">)</a> <a id="3642" class="Symbol">→</a> <a id="3644" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a>
+<a id="3649" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">Sigma</a> <a id="3655" href="sums.html#3655" class="Bound">A</a> <a id="3657" href="sums.html#3657" class="Bound">B</a> <a id="3659" class="Symbol">=</a> <a id="3661" href="sums.html#2464" data-type="(B : A → Type) → Type" class="Record">Σ</a> <a id="3663" class="Symbol">{</a><a id="3664" href="sums.html#3655" class="Bound">A</a><a id="3665" class="Symbol">}</a> <a id="3667" href="sums.html#3657" class="Bound">B</a>
+
+<a id="3670" class="Keyword">syntax</a> <a id="3677" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">Sigma</a> <a id="3683" class="Bound">A</a> <a id="3685" class="Symbol">(λ</a> <a id="3688" class="Bound">x</a> <a id="3690" class="Symbol">→</a> <a id="3692" class="Bound">b</a><a id="3693" class="Symbol">)</a> <a id="3695" class="Symbol">=</a> <a id="3697" class="Function">Σ</a> <a id="3699" class="Bound">x</a> <a id="3701" class="Function">꞉</a> <a id="3703" class="Bound">A</a> <a id="3705" class="Function">,</a> <a id="3707" class="Bound">b</a>
+
+<a id="3710" class="Keyword">infix</a> <a id="3716" class="Number">-1</a> <a id="3719" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">Sigma</a>
+</pre>
+<h2 id="elimination-principle">Elimination principle</h2>
+We now define and discuss the elimination principle.
+<pre class="Agda"><a id="Σ-elim"></a><a id="3817" href="sums.html#3817" data-type="((x : A) (y : B x) → C (x , y)) → (z : Sigma A B) → C z" class="Function">Σ-elim</a> <a id="3824" class="Symbol">:</a> <a id="3826" class="Symbol">{</a><a id="3827" href="sums.html#3827" class="Bound">A</a> <a id="3829" class="Symbol">:</a> <a id="3831" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a> <a id="3836" class="Symbol">}</a> <a id="3838" class="Symbol">{</a><a id="3839" href="sums.html#3839" class="Bound">B</a> <a id="3841" class="Symbol">:</a> <a id="3843" href="sums.html#3827" class="Bound">A</a> <a id="3845" class="Symbol">→</a> <a id="3847" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="3851" class="Symbol">}</a> <a id="3853" class="Symbol">{</a><a id="3854" href="sums.html#3854" class="Bound">C</a> <a id="3856" class="Symbol">:</a> <a id="3858" class="Symbol">(</a><a id="3859" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">Σ</a> <a id="3861" href="sums.html#3861" class="Bound">x</a> <a id="3863" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">꞉</a> <a id="3865" href="sums.html#3827" class="Bound">A</a> <a id="3867" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">,</a> <a id="3869" href="sums.html#3839" class="Bound">B</a> <a id="3871" href="sums.html#3861" class="Bound">x</a><a id="3872" class="Symbol">)</a> <a id="3874" class="Symbol">→</a> <a id="3876" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="3880" class="Symbol">}</a>
+       <a id="3889" class="Symbol">→</a> <a id="3891" class="Symbol">((</a><a id="3893" href="sums.html#3893" class="Bound">x</a> <a id="3895" class="Symbol">:</a> <a id="3897" href="sums.html#3827" class="Bound">A</a><a id="3898" class="Symbol">)</a> <a id="3900" class="Symbol">(</a><a id="3901" href="sums.html#3901" class="Bound">y</a> <a id="3903" class="Symbol">:</a> <a id="3905" href="sums.html#3839" class="Bound">B</a> <a id="3907" href="sums.html#3893" class="Bound">x</a><a id="3908" class="Symbol">)</a> <a id="3910" class="Symbol">→</a> <a id="3912" href="sums.html#3854" class="Bound">C</a> <a id="3914" class="Symbol">(</a><a id="3915" href="sums.html#3893" class="Bound">x</a> <a id="3917" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="3919" href="sums.html#3901" class="Bound">y</a><a id="3920" class="Symbol">))</a>
+       <a id="3930" class="Symbol">→</a> <a id="3932" class="Symbol">(</a><a id="3933" href="sums.html#3933" class="Bound">z</a> <a id="3935" class="Symbol">:</a> <a id="3937" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">Σ</a> <a id="3939" href="sums.html#3939" class="Bound">x</a> <a id="3941" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">꞉</a> <a id="3943" href="sums.html#3827" class="Bound">A</a> <a id="3945" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">,</a> <a id="3947" href="sums.html#3839" class="Bound">B</a> <a id="3949" href="sums.html#3939" class="Bound">x</a><a id="3950" class="Symbol">)</a> <a id="3952" class="Symbol">→</a> <a id="3954" href="sums.html#3854" class="Bound">C</a> <a id="3956" href="sums.html#3933" class="Bound">z</a>
+<a id="3958" href="sums.html#3817" data-type="((x : A) (y : B x) → C (x , y)) → (z : Sigma A B) → C z" class="Function">Σ-elim</a> <a id="3965" href="sums.html#3965" class="Bound">f</a> <a id="3967" class="Symbol">(</a><a id="3968" href="sums.html#3968" class="Bound">x</a> <a id="3970" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="3972" href="sums.html#3972" class="Bound">y</a><a id="3973" class="Symbol">)</a> <a id="3975" class="Symbol">=</a> <a id="3977" href="sums.html#3965" class="Bound">f</a> <a id="3979" href="sums.html#3968" class="Bound">x</a> <a id="3981" href="sums.html#3972" class="Bound">y</a>
+</pre>
+So the elimination principle for <code>Σ</code> is what was called
+<code>curry</code> in functional programming. The logical interpretation
+for this principle is that in order to show that “for all z : Σ x ꞉ A ,
+B x) we have that C z holds”, it is enough to show that “for all x : A
+and y : B x we have that C (x , y) holds”. This condition is not only
+sufficient but also <a
+href="https://en.wikipedia.org/wiki/Necessity_and_sufficiency">necessary</a>:
+<pre class="Agda"><a id="Σ-uncurry"></a><a id="4416" href="sums.html#4416" data-type="((z : Sigma A B) → C z) → (x : A) (y : B x) → C (x , y)" class="Function">Σ-uncurry</a> <a id="4426" class="Symbol">:</a> <a id="4428" class="Symbol">{</a><a id="4429" href="sums.html#4429" class="Bound">A</a> <a id="4431" class="Symbol">:</a> <a id="4433" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a> <a id="4438" class="Symbol">}</a> <a id="4440" class="Symbol">{</a><a id="4441" href="sums.html#4441" class="Bound">B</a> <a id="4443" class="Symbol">:</a> <a id="4445" href="sums.html#4429" class="Bound">A</a> <a id="4447" class="Symbol">→</a> <a id="4449" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="4453" class="Symbol">}</a> <a id="4455" class="Symbol">{</a><a id="4456" href="sums.html#4456" class="Bound">C</a> <a id="4458" class="Symbol">:</a> <a id="4460" class="Symbol">(</a><a id="4461" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">Σ</a> <a id="4463" href="sums.html#4463" class="Bound">x</a> <a id="4465" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">꞉</a> <a id="4467" href="sums.html#4429" class="Bound">A</a> <a id="4469" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">,</a> <a id="4471" href="sums.html#4441" class="Bound">B</a> <a id="4473" href="sums.html#4463" class="Bound">x</a><a id="4474" class="Symbol">)</a> <a id="4476" class="Symbol">→</a> <a id="4478" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="4482" class="Symbol">}</a>
+          <a id="4494" class="Symbol">→</a> <a id="4496" class="Symbol">((</a><a id="4498" href="sums.html#4498" class="Bound">z</a> <a id="4500" class="Symbol">:</a> <a id="4502" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">Σ</a> <a id="4504" href="sums.html#4504" class="Bound">x</a> <a id="4506" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">꞉</a> <a id="4508" href="sums.html#4429" class="Bound">A</a> <a id="4510" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">,</a> <a id="4512" href="sums.html#4441" class="Bound">B</a> <a id="4514" href="sums.html#4504" class="Bound">x</a><a id="4515" class="Symbol">)</a> <a id="4517" class="Symbol">→</a> <a id="4519" href="sums.html#4456" class="Bound">C</a> <a id="4521" href="sums.html#4498" class="Bound">z</a><a id="4522" class="Symbol">)</a>
+          <a id="4534" class="Symbol">→</a> <a id="4536" class="Symbol">(</a><a id="4537" href="sums.html#4537" class="Bound">x</a> <a id="4539" class="Symbol">:</a> <a id="4541" href="sums.html#4429" class="Bound">A</a><a id="4542" class="Symbol">)</a> <a id="4544" class="Symbol">(</a><a id="4545" href="sums.html#4545" class="Bound">y</a> <a id="4547" class="Symbol">:</a> <a id="4549" href="sums.html#4441" class="Bound">B</a> <a id="4551" href="sums.html#4537" class="Bound">x</a><a id="4552" class="Symbol">)</a> <a id="4554" class="Symbol">→</a> <a id="4556" href="sums.html#4456" class="Bound">C</a> <a id="4558" class="Symbol">(</a><a id="4559" href="sums.html#4537" class="Bound">x</a> <a id="4561" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="4563" href="sums.html#4545" class="Bound">y</a><a id="4564" class="Symbol">)</a>
+<a id="4566" href="sums.html#4416" data-type="((z : Sigma A B) → C z) → (x : A) (y : B x) → C (x , y)" class="Function">Σ-uncurry</a> <a id="4576" href="sums.html#4576" class="Bound">g</a> <a id="4578" href="sums.html#4578" class="Bound">x</a> <a id="4580" href="sums.html#4580" class="Bound">y</a> <a id="4582" class="Symbol">=</a> <a id="4584" href="sums.html#4576" class="Bound">g</a> <a id="4586" class="Symbol">(</a><a id="4587" href="sums.html#4578" class="Bound">x</a> <a id="4589" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="4591" href="sums.html#4580" class="Bound">y</a><a id="4592" class="Symbol">)</a>
+</pre>
+<h2 id="existential-quantification">Existential quantification</h2>
+<p>Regarding logic, the <code>Σ</code> type is used to interpret the
+existential quantifier <code>∃</code>. The logical proposition
+<code>∃ x : X, A x</code>, that is, “there exists x : X such that A x”,
+is interpreted as the type <code>Σ x ꞉ X , A x</code>. The reason is
+that to show that <code>∃ x : X, A x</code> we have to exhibit an
+example <code>x : X</code> and show that <code>x</code> satisfies the
+condition <code>A x</code> with some <code>y : A x</code>, in a pair
+<code>(x , y)</code>.</p>
+<p>For example, the type
+<code>Σ x : ℕ , Σ y : ℕ , Σ z : ℕ , x ≡ y * z</code> can be interpreted
+as saying that “there are natural numbers x, y, and z such that x = y *
+z”, which is true as witnessed by the element
+<code>(6,2,3,refl 6)</code> of that type. But there are many other
+witnesses of this type, of course, such as
+<code>(10,5,2,refl 10)</code>.</p>
+<p>It is important to notice that it is possible to write types that
+correspond to false logical statements, and hence are empty. For
+example, consider <code>Σ x : ℕ , x ≡ x + 1</code>. There is no natural
+number that is its own successor, of course, and so this type is empty.
+While this type is empty, the type <code>¬ (Σ x : ℕ , x ≡ x + 1)</code>
+has an element, as we will see, which witnesses the fact that “there
+doesn’t exist a natural number <code>x</code> such that
+<code>x = x + 1</code>”.</p>
+<h2 id="existential-quantification-in-hottuf">Existential quantification
+in HoTT/UF</h2>
+<p>In HoTT/UF it useful to have an alternative existential quantifier
+<code>∃ x : X , A x</code> defined to be <code>∥ Σ x : X , A x ∥</code>
+where <code>∥_∥</code> is a certain <em>propositional truncation</em>
+operation.</p>
+<p><a href="https://martinescardo.github.io/HoTTEST-Summer-School/">Go
+back to the table of contents</a></p>
+
+  </article>
+</div>
+</main>
+</body>
+<style>
+
+:root {
+  --text-bg: #fff;
+  --text-fg: #222;
+  --shadow: #000;
+  --primary: #0054F4;
+  --secondary: #9C1BD6;
+  --modal-bg: #ccccccaa;
+  --warning-bg: #fef08a;
+  --code-bg: var(--text-bg);
+  --code-fg: var(--text-fg);
+  --code-keyword: #BB3B13;
+  --code-string:  #d52753;
+  --code-number:  #8A1060;
+  --code-module:  #8A1060;
+  --code-field:   #9C1BD6;
+  --code-constructor: #207B1D;
+  --code-highlight: #F5DEB3;
+  --search-selected: #e2e8f0;
+  --details-summary: #b2ebf2;
+  --details-open:    #80deea;
+  --depgraph-edge: #eee;
+  --blockquote-bg: #d8b4fe; }
+
+.diagram-dark {
+  display: none !important; }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-bg: #282C34;
+    --text-fg: #bfbfbf;
+    --shadow: #475569;
+    --primary: #61AFEF;
+    --secondary: #C878DD;
+    --modal-bg: #282C34aa;
+    --warning-bg: #991b1b;
+    --code-keyword:     #E5C07B;
+    --code-string:      #E06C75;
+    --code-number:      #98C379;
+    --code-module:      #56B6C2;
+    --code-field:       #C878DD;
+    --code-constructor: #98C379;
+    --code-highlight: #ef444499;
+    --search-selected: #474e5e;
+    --details-summary: #5b21b6;
+    --details-open:    #4c1d95;
+    --depgraph-edge: #474e5e;
+    --blockquote-bg: #475569; }
+  div.warning {
+    --shadow: #7f1d1d
+  ; }
+  input {
+    background-color: #334155;
+    border: 1px solid #475569;
+    color: var(--text-fg); }
+  body {
+    scrollbar-color: #3b4454 #2b2e33; }
+  .diagram-dark {
+    display: block !important; }
+  .diagram-light {
+    display: none !important; } }
+
+table {
+  margin: auto;
+  border-collapse: collapse; }
+  table td, table th {
+    text-align: center;
+    padding: 0px 1em 0px 1em;
+    border: 1px solid black; }
+  table th {
+    border-bottom: 2px solid black; }
+  table td {
+    white-space: nowrap; }
+
+html { max-width: 100%; }
+
+body {
+  font-family: "Inria Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  width: 100%;
+  font-size: var(--font-size);
+  overflow-x: clip;
+  background-color: var(--text-bg);
+  color: var(--text-fg);
+}
+
+div#post-toc-container { max-width: 120ch; margin: auto; }
+
+article a[href], div#return > a[href], div#top > a[href], aside#toc > div#toc-container ul a[href] {
+  color: var(--primary);
+  text-decoration: none; }
+  article a[href]:hover, div#return > a[href]:hover, div#top > a[href]:hover, aside#toc > div#toc-container ul a[href]:hover {
+    text-decoration: 2px currentColor underline !important; }
+  article a[href]:visited, div#return > a[href]:visited, div#top > a[href]:visited, aside#toc > div#toc-container ul a[href]:visited {
+    color: var(--secondary); }
+
+/* Aspects. */
+.Agda {
+  /* NameKinds. */
+  /* OtherAspects. */
+  /* Standard attributes. */
+  font-family: 'iosevka', 'Iosevka', 'Fantasque Sans Mono', 'Roboto Mono', monospace;
+  font-weight: 400; }
+  .Agda .Comment {
+    color: var(--code-fg);
+    font-style: italic; }
+  .Agda .Background {
+    background-color: var(--code-bg); }
+  .Agda .Markup {
+    color: var(--code-fg); }
+  .Agda .Keyword {
+    color: var(--code-keyword); }
+  .Agda .String {
+    color: var(--code-string); }
+  .Agda .Number {
+    color: var(--code-number); }
+  .Agda .Symbol {
+    color: var(--code-fg); }
+  .Agda .PrimitiveType {
+    color: var(--primary); }
+  .Agda .Pragma {
+    color: var(--code-fg); }
+  .Agda .Bound {
+    color: var(--code-fg) !important; }
+  .Agda .Generalizable {
+    color: var(--code-fg) !important; }
+  .Agda .InductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .CoinductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .Datatype {
+    color: var(--primary) !important; }
+  .Agda .Field {
+    color: var(--code-field) !important; }
+  .Agda .Function {
+    color: var(--primary) !important; }
+  .Agda .Module {
+    color: var(--code-module) !important; }
+  .Agda .Postulate {
+    color: var(--primary) !important; }
+  .Agda .Primitive {
+    color: var(--primary) !important; }
+  .Agda .Record {
+    color: var(--primary) !important; }
+  .Agda .UnsolvedMeta {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .UnsolvedConstraint {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .TerminationProblem {
+    color: var(--code-fg);
+    background: #FFA07A; }
+  .Agda .IncompletePattern {
+    color: var(--code-fg);
+    background: #F5DEB3; }
+  .Agda .Error {
+    color: red;
+    text-decoration: underline; }
+  .Agda .TypeChecks {
+    color: var(--code-fg);
+    background: #ADD8E6; }
+  .Agda .ShadowingInTelescope {
+    color: var(--code-fg);
+    background: #808080; }
+  .Agda .Deadcode {
+    color: var(--code-keyword);
+    font-weight: bold; }
+  .Agda a {
+    text-decoration: none; }
+  .Agda a[href]:hover {
+    text-decoration: 2px var(--primary) underline; }
+  .Agda a[href]:target {
+    animation: highlight 2.5s; }
+  body.text-page .Agda {
+    font-size: var(--code-font-size); }
+
+pre.Agda, div.sourceCode, pre {
+  border-radius: 0;
+  box-shadow: none;
+  overflow-y: clip;
+  margin: 0;
+  padding: 1em;
+  padding-top: 0.25em;
+  padding-bottom: 0.25em;
+  background-color: var(--code-bg);
+  color: var(--code-fg);
+  font-size: var(--code-font-size);
+  max-width: 100%;
+  overflow-x: auto;
+}
+</style>
+</html>

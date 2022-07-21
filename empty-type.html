@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>HoTTEST Summer School 2022 Lecture Notes</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+</head>
+
+<body class="text-page">
+<main>
+<div id="post-toc-container" style="padding-left: 1em; padding-right: 1em;">
+
+  <article>
+
+<p><a href="Https://www.Cs.Bham.Ac.Uk/~mhe/">Martin Escardo</a>. Notes
+originally written for the module <em>Advanced Functional
+Programming</em> of the <a
+href="https://www.birmingham.ac.uk/index.aspx">University of
+Birmingham</a>, UK.</p>
+<!--
+<pre class="Agda"><a id="222" class="Symbol">{-#</a> <a id="226" class="Keyword">OPTIONS</a> <a id="234" class="Pragma">--without-K</a> <a id="246" class="Pragma">--safe</a> <a id="253" class="Symbol">#-}</a>
+
+<a id="258" class="Keyword">module</a> <a id="265" href="empty-type.html" class="Module">empty-type</a> <a id="276" class="Keyword">where</a>
+
+<a id="283" class="Keyword">open</a> <a id="288" class="Keyword">import</a> <a id="295" href="general-notation.html" class="Module">general-notation</a>
+</pre>-->
+<h1 id="the-empty-type-𝟘">The empty type 𝟘</h1>
+<p>It is convenient to have an empty type <code>𝟘</code>, with no
+elements at all. For example, this can be used in order to define <a
+href="negation.html">negation</a>, among other things.</p>
+<pre class="Agda"><a id="518" class="Keyword">data</a> <a id="𝟘"></a><a id="523" href="empty-type.html#523" data-type="Set" class="Datatype">𝟘</a> <a id="525" class="Symbol">:</a> <a id="527" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a> <a id="532" class="Keyword">where</a>
+</pre>
+<p>And that’s the complete definition. The list of constructors that
+define the type <code>𝟘</code> is empty.</p>
+<p>Perhaps counter-intuitively, there is one function
+<code>𝟘 → 𝟘</code>, namely the <a href="products.html">identity
+function</a>. So although the type <code>𝟘</code> is empty, the type
+<code>𝟘 → 𝟘</code> is non-empty. In fact, the non-dependent elimination
+principle generalizes that.</p>
+<h2 id="proposition-as-types-interpretation">Proposition as types
+interpretation</h2>
+<p>The empty type is used to interpret “false”. Because there is no way
+to prove the statement <code>false</code>, we use the empty type to
+represent <code>false</code> as a type.</p>
+In logic, in order to prove that a proposition is false, we assume it is
+true and use this assumption to reach a contradiction, such as
+<code>0 = 1</code>. With proofs as programs, in order to show that a
+statement represented by a type <code>A</code> is false, we assume a
+hypothetical element <code>x : A</code>, and from this we try to build a
+(necessarily impossible) element of the type <code>𝟘</code>, which is
+the desired contradiction. Because of this, in logic the negation of
+<code>A</code> is defined as <code>A implies false</code> or
+<code>A implies a contradiction</code>. Hence in type theory we define
+the negation of a type <code>A</code> to be the function type
+<code>A → 𝟘</code>:
+<pre class="Agda"><a id="¬_"></a><a id="1685" href="empty-type.html#1685" data-type="Type → Type" class="Function Operator">¬_</a> <a id="1688" class="Symbol">:</a> <a id="1690" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a> <a id="1695" class="Symbol">→</a> <a id="1697" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a>
+<a id="1702" href="empty-type.html#1685" data-type="Type → Type" class="Function Operator">¬</a> <a id="1704" href="empty-type.html#1704" class="Bound">A</a> <a id="1706" class="Symbol">=</a> <a id="1708" href="empty-type.html#1704" class="Bound">A</a> <a id="1710" class="Symbol">→</a> <a id="1712" href="empty-type.html#523" data-type="Set" class="Datatype">𝟘</a>
+
+<a id="1715" class="Keyword">infix</a> <a id="1721" class="Number">1000</a> <a id="1726" href="empty-type.html#1685" data-type="Type → Type" class="Function Operator">¬_</a>
+</pre>
+<h2 id="elimination-principle">Elimination principle</h2>
+<pre class="Agda"><a id="𝟘-elim"></a><a id="1769" href="empty-type.html#1769" data-type="(x : 𝟘) → A x" class="Function">𝟘-elim</a> <a id="1776" class="Symbol">:</a> <a id="1778" class="Symbol">{</a><a id="1779" href="empty-type.html#1779" class="Bound">A</a> <a id="1781" class="Symbol">:</a> <a id="1783" href="empty-type.html#523" data-type="Set" class="Datatype">𝟘</a> <a id="1785" class="Symbol">→</a> <a id="1787" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="1791" class="Symbol">}</a> <a id="1793" class="Symbol">(</a><a id="1794" href="empty-type.html#1794" class="Bound">x</a> <a id="1796" class="Symbol">:</a> <a id="1798" href="empty-type.html#523" data-type="Set" class="Datatype">𝟘</a><a id="1799" class="Symbol">)</a> <a id="1801" class="Symbol">→</a> <a id="1803" href="empty-type.html#1779" class="Bound">A</a> <a id="1805" href="empty-type.html#1794" class="Bound">x</a>
+<a id="1807" href="empty-type.html#1769" data-type="(x : 𝟘) → A x" class="Function">𝟘-elim</a> <a id="1814" class="Symbol">()</a>
+</pre>
+<p>The <a
+href="https://agda.readthedocs.io/en/latest/language/function-definitions.html#absurd-patterns">absurd
+pattern</a> <code>()</code> expresses the fact that there is no pattern
+available because the type is empty. So in the same way that we define
+the type by giving an empty list of constructors, we define the function
+<code>𝟘-elim</code> by giving an empty list of equations. But we
+indicate this explicitly with the absurd pattern.</p>
+<p>In terms of logic, this says that in order to show that a property
+<code>A</code> of elements of the empty type holds for all
+<code>x : 𝟘</code>, we have to do nothing, because there is no element
+to check, and by doing nothing we exhaust all possibilities. This is
+called <a href="https://en.wikipedia.org/wiki/Vacuous_truth">vacuous
+truth</a>.</p>
+<p>It is important to notice that this is not a mere technicality. We’ll
+see practical examples in due course.</p>
+The non-dependent version of the eliminator says that there is a
+function from the empty type to any type:
+<pre class="Agda"><a id="𝟘-nondep-elim"></a><a id="2768" href="empty-type.html#2768" data-type="𝟘 → A" class="Function">𝟘-nondep-elim</a> <a id="2782" class="Symbol">:</a> <a id="2784" class="Symbol">{</a><a id="2785" href="empty-type.html#2785" class="Bound">A</a> <a id="2787" class="Symbol">:</a> <a id="2789" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="2793" class="Symbol">}</a> <a id="2795" class="Symbol">→</a> <a id="2797" href="empty-type.html#523" data-type="Set" class="Datatype">𝟘</a> <a id="2799" class="Symbol">→</a> <a id="2801" href="empty-type.html#2785" class="Bound">A</a>
+<a id="2803" href="empty-type.html#2768" data-type="𝟘 → A" class="Function">𝟘-nondep-elim</a> <a id="2817" class="Symbol">{</a><a id="2818" href="empty-type.html#2818" class="Bound">A</a><a id="2819" class="Symbol">}</a> <a id="2821" class="Symbol">=</a> <a id="2823" href="empty-type.html#1769" data-type="(x : 𝟘) → A x" class="Function">𝟘-elim</a> <a id="2830" class="Symbol">{λ</a> <a id="2833" href="empty-type.html#2833" class="Bound">_</a> <a id="2835" class="Symbol">→</a> <a id="2837" href="empty-type.html#2818" class="Bound">A</a><a id="2838" class="Symbol">}</a>
+</pre>
+<h2 id="definition-of-emptiness">Definition of emptiness</h2>
+On the other hand, there is a function <code>f : A → 𝟘</code> if and
+only if <code>A</code> has no elements, that is, if <code>A</code> is
+also empty. This is because if <code>x : A</code>, there is no element
+<code>y : 𝟘</code> we can choose in order to define <code>f x</code> to
+be <code>y</code>. In fact, we make this observation into our definition
+of emptiness:
+<pre class="Agda"><a id="is-empty"></a><a id="3173" href="empty-type.html#3173" data-type="Type → Type" class="Function">is-empty</a> <a id="3182" class="Symbol">:</a> <a id="3184" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a> <a id="3189" class="Symbol">→</a> <a id="3191" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a>
+<a id="3196" href="empty-type.html#3173" data-type="Type → Type" class="Function">is-empty</a> <a id="3205" href="empty-type.html#3205" class="Bound">A</a> <a id="3207" class="Symbol">=</a> <a id="3209" href="empty-type.html#3205" class="Bound">A</a> <a id="3211" class="Symbol">→</a> <a id="3213" href="empty-type.html#523" data-type="Set" class="Datatype">𝟘</a>
+</pre>
+<p>So notice that this is the same definition as that of negation.</p>
+Here is another example of a type that is empty. In the <a
+href="introduction.html">introduction</a> we defined the identity type
+former <code>_≡_</code>, which <a href="identity-type.html">we will
+revisit</a>, and we have that, for example, the type <code>3 ≡ 4</code>
+is empty, whereas the type <code>3 ≡ 3</code> has an element
+<code>refl 3</code>. Here are some examples coded in Agda:
+<pre class="Agda"><a id="𝟘-is-empty"></a><a id="3624" href="empty-type.html#3624" data-type="is-empty 𝟘" class="Function">𝟘-is-empty</a> <a id="3635" class="Symbol">:</a> <a id="3637" href="empty-type.html#3173" data-type="Type → Type" class="Function">is-empty</a> <a id="3646" href="empty-type.html#523" data-type="Set" class="Datatype">𝟘</a>
+<a id="3648" href="empty-type.html#3624" data-type="is-empty 𝟘" class="Function">𝟘-is-empty</a> <a id="3659" class="Symbol">=</a> <a id="3661" href="empty-type.html#2768" data-type="𝟘 → A" class="Function">𝟘-nondep-elim</a>
+
+<a id="3676" class="Keyword">open</a> <a id="3681" class="Keyword">import</a> <a id="3688" href="unit-type.html" class="Module">unit-type</a>
+
+<a id="𝟙-is-nonempty"></a><a id="3699" href="empty-type.html#3699" data-type="¬ is-empty 𝟙" class="Function">𝟙-is-nonempty</a> <a id="3713" class="Symbol">:</a> <a id="3715" href="empty-type.html#1685" data-type="Type → Type" class="Function Operator">¬</a> <a id="3717" href="empty-type.html#3173" data-type="Type → Type" class="Function">is-empty</a> <a id="3726" href="unit-type.html#396" data-type="Type" class="Record">𝟙</a>
+<a id="3728" href="empty-type.html#3699" data-type="¬ is-empty 𝟙" class="Function">𝟙-is-nonempty</a> <a id="3742" href="empty-type.html#3742" class="Bound">f</a> <a id="3744" class="Symbol">=</a> <a id="3746" href="empty-type.html#3742" class="Bound">f</a> <a id="3748" href="unit-type.html#426" data-type="𝟙" class="InductiveConstructor">⋆</a>
+</pre>
+The last function works as follows. First we unfold the definition of
+<code>¬ is-empty 𝟙</code> to get <code>is-empty 𝟙 → 𝟘</code>. Unfolding
+again, we get the type <code>(𝟙 → 𝟘) → 𝟘</code>. So, given a
+hypothetical function <code>f : 𝟙 → 𝟘</code>, which of course cannot
+exist (and this what we are trying to conclude), we need to produce an
+element of <code>𝟘</code>. We do this by simply applying the mythical
+<code>f</code> to <code>⋆ : 𝟙</code>. We can actually incorporate this
+discussion in the Agda code, if we want:
+<pre class="Agda"><a id="𝟙-is-nonempty&#39;"></a><a id="4211" href="empty-type.html#4211" data-type="¬ is-empty 𝟙" class="Function">𝟙-is-nonempty&#39;</a> <a id="4226" class="Symbol">:</a> <a id="4228" href="empty-type.html#1685" data-type="Type → Type" class="Function Operator">¬</a> <a id="4230" href="empty-type.html#3173" data-type="Type → Type" class="Function">is-empty</a> <a id="4239" href="unit-type.html#396" data-type="Type" class="Record">𝟙</a>
+<a id="4241" href="empty-type.html#4211" data-type="¬ is-empty 𝟙" class="Function">𝟙-is-nonempty&#39;</a> <a id="4256" class="Symbol">=</a> <a id="4258" href="empty-type.html#4269" data-type="(𝟙 → 𝟘) → 𝟘" class="Function">γ</a>
+ <a id="4261" class="Keyword">where</a>
+  <a id="4269" href="empty-type.html#4269" data-type="(𝟙 → 𝟘) → 𝟘" class="Function">γ</a> <a id="4271" class="Symbol">:</a> <a id="4273" class="Symbol">(</a><a id="4274" href="unit-type.html#396" data-type="Type" class="Record">𝟙</a> <a id="4276" class="Symbol">→</a> <a id="4278" href="empty-type.html#523" data-type="Set" class="Datatype">𝟘</a><a id="4279" class="Symbol">)</a> <a id="4281" class="Symbol">→</a> <a id="4283" href="empty-type.html#523" data-type="Set" class="Datatype">𝟘</a>
+  <a id="4287" href="empty-type.html#4269" data-type="(𝟙 → 𝟘) → 𝟘" class="Function">γ</a> <a id="4289" href="empty-type.html#4289" class="Bound">f</a> <a id="4291" class="Symbol">=</a> <a id="4293" href="empty-type.html#4289" class="Bound">f</a> <a id="4295" href="unit-type.html#426" data-type="𝟙" class="InductiveConstructor">⋆</a>
+</pre>
+<p>Agda accepts this second version because it automatically unfolds
+definitions, just as we have done above, to check whether what we have
+written makes sense. In this case, Agda knows that
+<code>¬ is-empty 𝟙</code> is exactly the same thing as
+<code>(𝟙 → 𝟘) → 𝟘</code> <em>by definition</em> of <code>¬</code> and
+<code>is-empty</code>. More examples are given in the file <a
+href="negation.html">negation</a>.</p>
+<p><a href="https://martinescardo.github.io/HoTTEST-Summer-School/">Go
+back to the table of contents</a></p>
+
+  </article>
+</div>
+</main>
+</body>
+<style>
+
+:root {
+  --text-bg: #fff;
+  --text-fg: #222;
+  --shadow: #000;
+  --primary: #0054F4;
+  --secondary: #9C1BD6;
+  --modal-bg: #ccccccaa;
+  --warning-bg: #fef08a;
+  --code-bg: var(--text-bg);
+  --code-fg: var(--text-fg);
+  --code-keyword: #BB3B13;
+  --code-string:  #d52753;
+  --code-number:  #8A1060;
+  --code-module:  #8A1060;
+  --code-field:   #9C1BD6;
+  --code-constructor: #207B1D;
+  --code-highlight: #F5DEB3;
+  --search-selected: #e2e8f0;
+  --details-summary: #b2ebf2;
+  --details-open:    #80deea;
+  --depgraph-edge: #eee;
+  --blockquote-bg: #d8b4fe; }
+
+.diagram-dark {
+  display: none !important; }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-bg: #282C34;
+    --text-fg: #bfbfbf;
+    --shadow: #475569;
+    --primary: #61AFEF;
+    --secondary: #C878DD;
+    --modal-bg: #282C34aa;
+    --warning-bg: #991b1b;
+    --code-keyword:     #E5C07B;
+    --code-string:      #E06C75;
+    --code-number:      #98C379;
+    --code-module:      #56B6C2;
+    --code-field:       #C878DD;
+    --code-constructor: #98C379;
+    --code-highlight: #ef444499;
+    --search-selected: #474e5e;
+    --details-summary: #5b21b6;
+    --details-open:    #4c1d95;
+    --depgraph-edge: #474e5e;
+    --blockquote-bg: #475569; }
+  div.warning {
+    --shadow: #7f1d1d
+  ; }
+  input {
+    background-color: #334155;
+    border: 1px solid #475569;
+    color: var(--text-fg); }
+  body {
+    scrollbar-color: #3b4454 #2b2e33; }
+  .diagram-dark {
+    display: block !important; }
+  .diagram-light {
+    display: none !important; } }
+
+table {
+  margin: auto;
+  border-collapse: collapse; }
+  table td, table th {
+    text-align: center;
+    padding: 0px 1em 0px 1em;
+    border: 1px solid black; }
+  table th {
+    border-bottom: 2px solid black; }
+  table td {
+    white-space: nowrap; }
+
+html { max-width: 100%; }
+
+body {
+  font-family: "Inria Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  width: 100%;
+  font-size: var(--font-size);
+  overflow-x: clip;
+  background-color: var(--text-bg);
+  color: var(--text-fg);
+}
+
+div#post-toc-container { max-width: 120ch; margin: auto; }
+
+article a[href], div#return > a[href], div#top > a[href], aside#toc > div#toc-container ul a[href] {
+  color: var(--primary);
+  text-decoration: none; }
+  article a[href]:hover, div#return > a[href]:hover, div#top > a[href]:hover, aside#toc > div#toc-container ul a[href]:hover {
+    text-decoration: 2px currentColor underline !important; }
+  article a[href]:visited, div#return > a[href]:visited, div#top > a[href]:visited, aside#toc > div#toc-container ul a[href]:visited {
+    color: var(--secondary); }
+
+/* Aspects. */
+.Agda {
+  /* NameKinds. */
+  /* OtherAspects. */
+  /* Standard attributes. */
+  font-family: 'iosevka', 'Iosevka', 'Fantasque Sans Mono', 'Roboto Mono', monospace;
+  font-weight: 400; }
+  .Agda .Comment {
+    color: var(--code-fg);
+    font-style: italic; }
+  .Agda .Background {
+    background-color: var(--code-bg); }
+  .Agda .Markup {
+    color: var(--code-fg); }
+  .Agda .Keyword {
+    color: var(--code-keyword); }
+  .Agda .String {
+    color: var(--code-string); }
+  .Agda .Number {
+    color: var(--code-number); }
+  .Agda .Symbol {
+    color: var(--code-fg); }
+  .Agda .PrimitiveType {
+    color: var(--primary); }
+  .Agda .Pragma {
+    color: var(--code-fg); }
+  .Agda .Bound {
+    color: var(--code-fg) !important; }
+  .Agda .Generalizable {
+    color: var(--code-fg) !important; }
+  .Agda .InductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .CoinductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .Datatype {
+    color: var(--primary) !important; }
+  .Agda .Field {
+    color: var(--code-field) !important; }
+  .Agda .Function {
+    color: var(--primary) !important; }
+  .Agda .Module {
+    color: var(--code-module) !important; }
+  .Agda .Postulate {
+    color: var(--primary) !important; }
+  .Agda .Primitive {
+    color: var(--primary) !important; }
+  .Agda .Record {
+    color: var(--primary) !important; }
+  .Agda .UnsolvedMeta {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .UnsolvedConstraint {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .TerminationProblem {
+    color: var(--code-fg);
+    background: #FFA07A; }
+  .Agda .IncompletePattern {
+    color: var(--code-fg);
+    background: #F5DEB3; }
+  .Agda .Error {
+    color: red;
+    text-decoration: underline; }
+  .Agda .TypeChecks {
+    color: var(--code-fg);
+    background: #ADD8E6; }
+  .Agda .ShadowingInTelescope {
+    color: var(--code-fg);
+    background: #808080; }
+  .Agda .Deadcode {
+    color: var(--code-keyword);
+    font-weight: bold; }
+  .Agda a {
+    text-decoration: none; }
+  .Agda a[href]:hover {
+    text-decoration: 2px var(--primary) underline; }
+  .Agda a[href]:target {
+    animation: highlight 2.5s; }
+  body.text-page .Agda {
+    font-size: var(--code-font-size); }
+
+pre.Agda, div.sourceCode, pre {
+  border-radius: 0;
+  box-shadow: none;
+  overflow-y: clip;
+  margin: 0;
+  padding: 1em;
+  padding-top: 0.25em;
+  padding-bottom: 0.25em;
+  background-color: var(--code-bg);
+  color: var(--code-fg);
+  font-size: var(--code-font-size);
+  max-width: 100%;
+  overflow-x: auto;
+}
+</style>
+</html>
