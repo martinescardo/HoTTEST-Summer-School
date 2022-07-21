@@ -1,4 +1,4 @@
-# Week 02 - Agda Exercises - Solutions
+# Week 03 - Agda Exercises - Solutions
 
 ```agda
 {-# OPTIONS --without-K --safe #-}
