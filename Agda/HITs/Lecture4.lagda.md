@@ -101,7 +101,10 @@ example = loop ∙ ! loop ∙ loop ∙ ! loop  ∙ loop  ≡⟨ refl _ ⟩
 ```
 
 We'll use the notation x ≡ y [ A ] if we want to make the type a path is
-in explicit.
+in explicit.  We'll sometimes write (\ x → e) for (λ x → e) because it
+easier to type and de-emphasizes the function a little (since ap almost
+always needs a lambda abstraction as input, it would IMO be nicer to have
+a syntax with a bound variable like ap (H → ...) p).  
 
 Up to homotopy, there should be ℤ many paths on the circle:
 ... , ! loop ∙ ! loop, ! loop, refl, loop, loop ∙ loop, ...
