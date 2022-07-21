@@ -1,4 +1,4 @@
-# Week 02 - Agda Exercises
+# Week 03 - Agda Exercises
 
 ## Please read before starting the exercises
 
