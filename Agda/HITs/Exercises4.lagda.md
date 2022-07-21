@@ -32,12 +32,20 @@ inverse of a path (! p) does (see ap-∙ for inspiration).
 
 State and prove a general lemma about what ! (p ∙ q) is.  
 
-Us them to prove that the double function takes loop-inverse to
+Use them to prove that the double function takes loop-inverse to
 loop-inverse concatenated with itself.
 
 ```agda
 double-!loop : ap double (! loop) ≡ ! loop ∙ ! loop
 double-!loop = {!!}
+```
+
+Define a function invert : S1 → S1 such that (ap invert) inverts a path
+on the circle, i.e. sends the n-fold loop to the -n-fold loop.  
+
+```agda
+invert : S1 → S1
+invert = ?
 ```
 
 # Circles equivalence

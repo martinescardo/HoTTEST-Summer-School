@@ -75,6 +75,11 @@ double-!loop = ap double (! loop) ≡⟨ ap-! loop ⟩
                ! loop ∙ ! loop ∎ 
 ```
 
+```agda
+invert : S1 → S1
+invert = S1-rec base (! loop)
+```
+
 # Circles equivalence
 
 See the maps between the 1 point circle and the 2 point circle in the
