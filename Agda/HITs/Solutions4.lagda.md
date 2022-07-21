@@ -1,4 +1,4 @@
-```
+```agda
 {-# OPTIONS --without-K --rewriting #-}
 
 open import new-prelude
@@ -16,7 +16,7 @@ loop.  But these aren't really *really* different, in that there will be
 a path-between-paths-between-paths between the two!  (Harder exercise
 that we haven't really prepared for: prove this!)
 
-```
+```agda
 homotopy1 : (loop ∙ ! loop) ∙ loop ≡ loop
 homotopy1 = (loop ∙ ! loop) ∙ loop ≡⟨ ap ( \ H → H ∙ loop) (!-inv-r loop) ⟩
             refl _ ∙ loop ≡⟨ ∙unit-l loop ⟩
@@ -37,7 +37,7 @@ here, but I think it's helpful to be concrete when first practicing
 these path algebra steps.
 
 
-```
+```agda
 harder : homotopy1 ≡ homotopy2
 harder = gen loop where
   gen : ∀ {A : Type} {x y : A} (p : x ≡ y)
@@ -59,7 +59,7 @@ State and prove a general lemma about what ! (p ∙ q) is.
 Us them to prove that the double function takes loop-inverse to
 loop-inverse concatenated with itself.
 
-```
+```agda
 !-∙ : {A : Type} {x y z : A} (p : x ≡ y) (q : y ≡ z)
       → ! (p ∙ q) ≡ ! q ∙ ! p
 !-∙ (refl _) (refl _) = refl _
@@ -81,7 +81,7 @@ See the maps between the 1 point circle and the 2 point circle in the
 lecture code.  Check that the composite map S1 → S1 is
 homotopic to the identity on base and loop.
 
-```
+```agda
 to-from-base : from (to base) ≡ base
 to-from-base = refl _
 
@@ -108,7 +108,7 @@ copy of the circle.  Define this map.
 Hint: for the image of the square, you might want a lemma saying how
 paths in product types compose:
 
-```
+```agda
 compose-pair≡ : {A B : Type} {x1 x2 x3 : A} {y1 y2 y3 : B}
                 (p12 : x1 ≡ x2) (p23 : x2 ≡ x3)
                 (q12 : y1 ≡ y2) (q23 : y2 ≡ y3)
@@ -131,7 +131,7 @@ the suspension Susp X.  Check your answer by defining a logical
 equivalence (functions back and forth), since we haven't seen how to
 prove that such functions are inverse yet.
 
-```
+```agda
 c2s : Circle2 → Susp Bool
 c2s = Circle2-rec northS southS (merid true) (merid false)
 
@@ -147,7 +147,7 @@ Check your answer by defining a logical equivalence (functions back and
 forth), since we haven't seen how to prove that such functions are
 inverse yet.
 
-```
+```agda
 SuspFromPush : Type → Type
 SuspFromPush A = Pushout A 𝟙 𝟙  (\ _ → ⋆) (\ _ → ⋆)
 
