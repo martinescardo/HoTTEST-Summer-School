@@ -2,7 +2,7 @@
 {-# OPTIONS --without-K --rewriting #-}
 
 open import new-prelude
-open import Lecture4
+open import Lecture4-notes
 
 module Solutions4 where
 ```
