@@ -6,3 +6,5 @@
    	    [Solutions](02-Solutions.lagda.md).
 1. Week 03: [Exercises](03-Exercises.lagda.md);
    	    [Solutions](03-Solutions.lagda.md).
+1. Week 04: [Exercises](../HITs/Exercises4.lagda.md);
+   	    [Solutions](../HITs/Solutions4.lagda.md);
