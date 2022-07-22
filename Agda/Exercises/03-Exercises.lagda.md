@@ -1,4 +1,4 @@
-# Week 02 - Agda Exercises
+# Week 03 - Agda Exercises
 
 ## Please read before starting the exercises
 
@@ -297,9 +297,7 @@ is-minimal-element-suc :
   (m : ℕ) (pm : P (suc m))
   (is-lower-bound-m : is-lower-bound (λ x → P (suc x)) m) →
   ¬ (P 0) → is-lower-bound P (suc m)
-is-minimal-element-suc P d m pm is-lower-bound-m neg-p0 0 p0 = {!!}
-is-minimal-element-suc P d 0 pm is-lower-bound-m neg-p0 (suc n) psuccn = {!!}
-is-minimal-element-suc P d (suc m) pm is-lower-bound-m neg-p0 (suc n) psuccn = {!!}
+is-minimal-element-suc P d m pm is-lower-bound neg-p0 = {!   !}
 ```
 
 ### Exercise 10 (🌶)
@@ -345,6 +343,7 @@ is-zero-well-ordering-principle :
   (n : ℕ) → (pn : P n) →
   P 0 →
   pr₁ (well-ordering-principle P d n pn) ≡ 0
-is-zero-well-ordering-principle P d 0 p p0 = refl 0
-is-zero-well-ordering-principle P d (suc m) pm = is-zero-well-ordering-principle-suc P d m pm (d 0) {!!}
+is-zero-well-ordering-principle P d zero p p0 = {!   !}
+is-zero-well-ordering-principle P d (suc m) pm =
+  is-zero-well-ordering-principle-suc P d m pm (d 0) {!!}
 ```
