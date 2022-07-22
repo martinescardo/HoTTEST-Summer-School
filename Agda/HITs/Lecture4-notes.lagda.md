@@ -4,7 +4,7 @@
 
 open import new-prelude
 
-module Lecture4 where
+module Lecture4-notes where
 ```
 
 # The circle
