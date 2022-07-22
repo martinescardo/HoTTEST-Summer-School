@@ -23,7 +23,7 @@ homotopy2 : (loop ∙ ! loop) ∙ loop ≡ loop
 homotopy2 = {!!}
 ```
 
-(Harder exercise (one pepper): give a path between homotopy1 and
+(Harder exercise (🌶️): give a path between homotopy1 and
 homotopy2! I'd recommend saving this until later though, because there
 is a trick to it that we haven't covered in lecture yet.)
 
@@ -97,13 +97,13 @@ compose-pair≡ : {A B : Type} {x1 x2 x3 : A} {y1 y2 y3 : B}
 compose-pair≡ = {!!}
 ```
 
-(one pepper)
+(🌶️)
 ```
 torus-to-circles : Torus → S1 × S1
 torus-to-circles = {!!}
 ```
 
-# Suspensions (one pepper)
+# Suspensions (🌶️)
 
 Find a type X such that the two-point circle Circle2 is equivalent to
 the suspension Susp X.  Check your answer by defining a logical
@@ -131,7 +131,7 @@ on functions preserves the identity function and composition of
 functions. But to do that we would need the dependent elimination rule
 for suspensions, which we haven't talked about yet.
 
-# Pushouts (one pepper)
+# Pushouts (🌶️)
 
 Fix a type X.  Find types A,B,C with functions f : C → A and g : C → B
 such that the suspension Susp X is equivalent to the Pushout C A B f g.
