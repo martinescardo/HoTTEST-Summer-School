@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>HoTTEST Summer School 2022 Lecture Notes</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+</head>
+
+<body class="text-page">
+<main>
+<div id="post-toc-container" style="padding-left: 1em; padding-right: 1em;">
+
+  <article>
+
+<p><a href="Https://www.Cs.Bham.Ac.Uk/~mhe/">Martin Escardo</a>. Notes
+originally written for the module <em>Advanced Functional
+Programming</em> of the <a
+href="https://www.birmingham.ac.uk/index.aspx">University of
+Birmingham</a>, UK.</p>
+<!--
+<pre class="Agda"><a id="222" class="Symbol">{-#</a> <a id="226" class="Keyword">OPTIONS</a> <a id="234" class="Pragma">--without-K</a> <a id="246" class="Pragma">--safe</a> <a id="253" class="Symbol">#-}</a>
+
+<a id="258" class="Keyword">module</a> <a id="265" href="isomorphisms.html" class="Module">isomorphisms</a> <a id="278" class="Keyword">where</a>
+
+<a id="285" class="Keyword">open</a> <a id="290" class="Keyword">import</a> <a id="297" href="prelude.html" class="Module">prelude</a>
+
+</pre>-->
+<h1 id="type-isomorphisms">Type isomorphisms</h1>
+<p>A function <code>f : A → B</code> is called a <em>bijection</em> if
+there is a function <code>g : B → A</code> in the opposite direction
+such that <code>g ∘ f ∼ id</code> and <code>f ∘ g ∼ id</code>. Recall
+that <code>_∼_</code> is <a href="identity-type.html">pointwise
+equality</a> and that <code>id</code> is the <a
+href="products.html">identity function</a>. This means that we can
+convert back and forth between the types <code>A</code> and
+<code>B</code> landing at the same element with started with, either
+from <code>A</code> or from <code>B</code>. In this case, we say that
+the types <code>A</code> and <code>B</code> are <em>isomorphic</em>, and
+we write <code>A ≅ B</code>. Bijections are also called type
+<em>isomorphisms</em>. We can define these concepts in Agda using <a
+href="sums.html">sum types</a> or <a
+href="https://agda.readthedocs.io/en/latest/language/record-types.html">records</a>.
+We will adopt the latter, but we include both definitions for the sake
+of illustration. Recall that we <a
+href="general-notation.html">defined</a> the domain of a function
+<code>f : A → B</code> to be <code>A</code> and its codomain to be
+<code>B</code>.</p>
+Here we apply the proposition-as-types interpretation of logic to define
+the concepts: <!--
+<pre class="Agda"><a id="1365" class="Keyword">module</a> <a id="1372" href="isomorphisms.html#1372" class="Module">_</a> <a id="1374" class="Keyword">where</a>
+ <a id="1381" class="Keyword">private</a>
+</pre>-->
+<pre class="Agda">  <a id="1407" href="isomorphisms.html#1407" class="Function">is-bijection</a> <a id="1420" class="Symbol">:</a> <a id="1422" class="Symbol">{</a><a id="1423" href="isomorphisms.html#1423" class="Bound">A</a> <a id="1425" href="isomorphisms.html#1425" class="Bound">B</a> <a id="1427" class="Symbol">:</a> <a id="1429" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="1433" class="Symbol">}</a> <a id="1435" class="Symbol">→</a> <a id="1437" class="Symbol">(</a><a id="1438" href="isomorphisms.html#1423" class="Bound">A</a> <a id="1440" class="Symbol">→</a> <a id="1442" href="isomorphisms.html#1425" class="Bound">B</a><a id="1443" class="Symbol">)</a> <a id="1445" class="Symbol">→</a> <a id="1447" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a>
+  <a id="1454" href="isomorphisms.html#1407" class="Function">is-bijection</a> <a id="1467" href="isomorphisms.html#1467" class="Bound">f</a> <a id="1469" class="Symbol">=</a> <a id="1471" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">Σ</a> <a id="1473" href="isomorphisms.html#1473" class="Bound">g</a> <a id="1475" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">꞉</a> <a id="1477" class="Symbol">(</a><a id="1478" href="general-notation.html#1179" data-type="(X → Y) → Type" class="Function">codomain</a> <a id="1487" href="isomorphisms.html#1467" class="Bound">f</a> <a id="1489" class="Symbol">→</a> <a id="1491" href="general-notation.html#1118" data-type="(X → Y) → Type" class="Function">domain</a> <a id="1498" href="isomorphisms.html#1467" class="Bound">f</a><a id="1499" class="Symbol">)</a> <a id="1501" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">,</a> <a id="1503" class="Symbol">((</a><a id="1505" href="isomorphisms.html#1473" class="Bound">g</a> <a id="1507" href="products.html#3388" data-type="((y : B) → C y) → (f : A → B) (x : A) → C (f x)" class="Function Operator">∘</a> <a id="1509" href="isomorphisms.html#1467" class="Bound">f</a> <a id="1511" href="identity-type.html#3258" data-type="((x : A) → B x) → ((x : A) → B x) → Type" class="Function Operator">∼</a> <a id="1513" href="products.html#1041" data-type="A → A" class="Function">id</a><a id="1515" class="Symbol">)</a> <a id="1517" href="binary-products.html#670" data-type="Type → Type → Type" class="Function Operator">×</a> <a id="1519" class="Symbol">(</a><a id="1520" href="isomorphisms.html#1467" class="Bound">f</a> <a id="1522" href="products.html#3388" data-type="((y : B) → C y) → (f : A → B) (x : A) → C (f x)" class="Function Operator">∘</a> <a id="1524" href="isomorphisms.html#1473" class="Bound">g</a> <a id="1526" href="identity-type.html#3258" data-type="((x : A) → B x) → ((x : A) → B x) → Type" class="Function Operator">∼</a> <a id="1528" href="products.html#1041" data-type="A → A" class="Function">id</a><a id="1530" class="Symbol">))</a>
+
+  <a id="1536" href="isomorphisms.html#1536" class="Function Operator">_≅_</a> <a id="1540" class="Symbol">:</a> <a id="1542" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a> <a id="1547" class="Symbol">→</a> <a id="1549" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a> <a id="1554" class="Symbol">→</a> <a id="1556" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a>
+  <a id="1563" href="isomorphisms.html#1563" class="Bound">A</a> <a id="1565" href="isomorphisms.html#1536" class="Function Operator">≅</a> <a id="1567" href="isomorphisms.html#1567" class="Bound">B</a> <a id="1569" class="Symbol">=</a> <a id="1571" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">Σ</a> <a id="1573" href="isomorphisms.html#1573" class="Bound">f</a> <a id="1575" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">꞉</a> <a id="1577" class="Symbol">(</a><a id="1578" href="isomorphisms.html#1563" class="Bound">A</a> <a id="1580" class="Symbol">→</a> <a id="1582" href="isomorphisms.html#1567" class="Bound">B</a><a id="1583" class="Symbol">)</a> <a id="1585" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">,</a> <a id="1587" href="isomorphisms.html#1407" class="Function">is-bijection</a> <a id="1600" href="isomorphisms.html#1573" class="Bound">f</a>
+</pre>
+And here we give an equivalent definition which uses records and is
+usually more convenient in practice and is the one we adopt:
+<pre class="Agda"><a id="1743" class="Keyword">record</a> <a id="is-bijection"></a><a id="1750" href="isomorphisms.html#1750" data-type="(f : A → B) → Type" class="Record">is-bijection</a> <a id="1763" class="Symbol">{</a><a id="1764" href="isomorphisms.html#1764" class="Bound">A</a> <a id="1766" href="isomorphisms.html#1766" class="Bound">B</a> <a id="1768" class="Symbol">:</a> <a id="1770" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="1774" class="Symbol">}</a> <a id="1776" class="Symbol">(</a><a id="1777" href="isomorphisms.html#1777" class="Bound">f</a> <a id="1779" class="Symbol">:</a> <a id="1781" href="isomorphisms.html#1764" class="Bound">A</a> <a id="1783" class="Symbol">→</a> <a id="1785" href="isomorphisms.html#1766" class="Bound">B</a><a id="1786" class="Symbol">)</a> <a id="1788" class="Symbol">:</a> <a id="1790" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a> <a id="1795" class="Keyword">where</a>
+ <a id="1802" class="Keyword">constructor</a>
+  <a id="Inverse"></a><a id="1816" href="isomorphisms.html#1816" data-type="(inverse : B → A) (η : (inverse ∘ f) ∼ id)
+(ε : (f ∘ inverse) ∼ id) →
+is-bijection f" class="InductiveConstructor">Inverse</a>
+ <a id="1825" class="Keyword">field</a>
+  <a id="is-bijection.inverse"></a><a id="1833" href="isomorphisms.html#1833" data-type="is-bijection f → B → A" class="Field">inverse</a> <a id="1841" class="Symbol">:</a> <a id="1843" href="isomorphisms.html#1766" class="Bound">B</a> <a id="1845" class="Symbol">→</a> <a id="1847" href="isomorphisms.html#1764" class="Bound">A</a>
+  <a id="is-bijection.η"></a><a id="1851" href="isomorphisms.html#1851" data-type="(r : is-bijection f) → (inverse r ∘ f) ∼ id" class="Field">η</a>       <a id="1859" class="Symbol">:</a> <a id="1861" href="isomorphisms.html#1833" data-type="is-bijection f → B → A" class="Field">inverse</a> <a id="1869" href="products.html#3388" data-type="((y : B) → C y) → (f : A → B) (x : A) → C (f x)" class="Function Operator">∘</a> <a id="1871" href="isomorphisms.html#1777" class="Bound">f</a> <a id="1873" href="identity-type.html#3258" data-type="((x : A) → B x) → ((x : A) → B x) → Type" class="Function Operator">∼</a> <a id="1875" href="products.html#1041" data-type="A → A" class="Function">id</a>
+  <a id="is-bijection.ε"></a><a id="1880" href="isomorphisms.html#1880" data-type="(r : is-bijection f) → (f ∘ inverse r) ∼ id" class="Field">ε</a>       <a id="1888" class="Symbol">:</a> <a id="1890" href="isomorphisms.html#1777" class="Bound">f</a> <a id="1892" href="products.html#3388" data-type="((y : B) → C y) → (f : A → B) (x : A) → C (f x)" class="Function Operator">∘</a> <a id="1894" href="isomorphisms.html#1833" data-type="is-bijection f → B → A" class="Field">inverse</a> <a id="1902" href="identity-type.html#3258" data-type="((x : A) → B x) → ((x : A) → B x) → Type" class="Function Operator">∼</a> <a id="1904" href="products.html#1041" data-type="A → A" class="Function">id</a>
+
+<a id="1908" class="Keyword">record</a> <a id="_≅_"></a><a id="1915" href="isomorphisms.html#1915" data-type="(A B : Type) → Type" class="Record Operator">_≅_</a> <a id="1919" class="Symbol">(</a><a id="1920" href="isomorphisms.html#1920" class="Bound">A</a> <a id="1922" href="isomorphisms.html#1922" class="Bound">B</a> <a id="1924" class="Symbol">:</a> <a id="1926" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="1930" class="Symbol">)</a> <a id="1932" class="Symbol">:</a> <a id="1934" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a> <a id="1939" class="Keyword">where</a>
+ <a id="1946" class="Keyword">constructor</a>
+  <a id="Isomorphism"></a><a id="1960" href="isomorphisms.html#1960" data-type="(bijection : A → B) (bijectivity : is-bijection bijection) → A ≅ B" class="InductiveConstructor">Isomorphism</a>
+ <a id="1973" class="Keyword">field</a>
+  <a id="_≅_.bijection"></a><a id="1981" href="isomorphisms.html#1981" data-type="A ≅ B → A → B" class="Field">bijection</a>   <a id="1993" class="Symbol">:</a> <a id="1995" href="isomorphisms.html#1920" class="Bound">A</a> <a id="1997" class="Symbol">→</a> <a id="1999" href="isomorphisms.html#1922" class="Bound">B</a>
+  <a id="_≅_.bijectivity"></a><a id="2003" href="isomorphisms.html#2003" data-type="(r : A ≅ B) → is-bijection (bijection r)" class="Field">bijectivity</a> <a id="2015" class="Symbol">:</a> <a id="2017" href="isomorphisms.html#1750" data-type="(f : A → B) → Type" class="Record">is-bijection</a> <a id="2030" href="isomorphisms.html#1981" data-type="A ≅ B → A → B" class="Field">bijection</a>
+
+<a id="2041" class="Keyword">infix</a> <a id="2047" class="Number">0</a> <a id="2049" href="isomorphisms.html#1915" data-type="(A B : Type) → Type" class="Record Operator">_≅_</a>
+</pre>
+<p>The definition with <code>Σ</code> is probably more intuitive, but,
+as discussed above, the definition with a record is often easier to work
+with, because we can easily extract the components of the definitions
+using the names of the fields. It also often allows Agda to infer more
+types, and to give us more sensible goals in the interactive development
+of Agda programs and proofs.</p>
+<p>Notice that <code>inverse</code> plays the role of <code>g</code>.
+The reason we use <code>inverse</code> is that then we can use the word
+<code>inverse</code> to extract the inverse of a bijection. Similarly we
+use <code>bijection</code> for <code>f</code>, as we can use the word
+<code>bijection</code> to extract the bijection from a record.</p>
+<h2 id="equivalences-in-hottuf">Equivalences in HoTT/UF</h2>
+<p>In HoTT/UF one uses a refinement of the notion of isomorphism defined
+above, not discussed in these lecture notes.</p>
+<h2 id="some-basic-examples">Some basic examples</h2>
+<pre class="Agda"><a id="2876" class="Keyword">open</a> <a id="2881" class="Keyword">import</a> <a id="2888" href="binary-type.html" class="Module">binary-type</a>
+<a id="2900" class="Keyword">open</a> <a id="2905" class="Keyword">import</a> <a id="2912" href="Bool.html" class="Module">Bool</a>
+
+<a id="Bool-𝟚-isomorphism"></a><a id="2918" href="isomorphisms.html#2918" data-type="Bool ≅ 𝟚" class="Function">Bool-𝟚-isomorphism</a> <a id="2937" class="Symbol">:</a> <a id="2939" href="Bool.html#492" data-type="Set" class="Datatype">Bool</a> <a id="2944" href="isomorphisms.html#1915" data-type="(A B : Type) → Type" class="Record Operator">≅</a> <a id="2946" href="binary-type.html#568" data-type="Set" class="Datatype">𝟚</a>
+<a id="2948" href="isomorphisms.html#2918" data-type="Bool ≅ 𝟚" class="Function">Bool-𝟚-isomorphism</a> <a id="2967" class="Symbol">=</a> <a id="2969" class="Keyword">record</a> <a id="2976" class="Symbol">{</a> <a id="2978" href="isomorphisms.html#1981" data-type="A ≅ B → A → B" class="Field">bijection</a> <a id="2988" class="Symbol">=</a> <a id="2990" href="isomorphisms.html#3034" data-type="Bool → 𝟚" class="Function">f</a> <a id="2992" class="Symbol">;</a> <a id="2994" href="isomorphisms.html#2003" data-type="(r : A ≅ B) → is-bijection (bijection r)" class="Field">bijectivity</a> <a id="3006" class="Symbol">=</a> <a id="3008" href="isomorphisms.html#3238" data-type="is-bijection f" class="Function">f-is-bijection</a> <a id="3023" class="Symbol">}</a>
+ <a id="3026" class="Keyword">where</a>
+  <a id="3034" href="isomorphisms.html#3034" data-type="Bool → 𝟚" class="Function">f</a> <a id="3036" class="Symbol">:</a> <a id="3038" href="Bool.html#492" data-type="Set" class="Datatype">Bool</a> <a id="3043" class="Symbol">→</a> <a id="3045" href="binary-type.html#568" data-type="Set" class="Datatype">𝟚</a>
+  <a id="3049" href="isomorphisms.html#3034" data-type="Bool → 𝟚" class="Function">f</a> <a id="3051" href="Bool.html#516" data-type="Bool" class="InductiveConstructor">false</a> <a id="3057" class="Symbol">=</a> <a id="3059" href="binary-type.html#584" data-type="𝟚" class="InductiveConstructor">𝟎</a>
+  <a id="3063" href="isomorphisms.html#3034" data-type="Bool → 𝟚" class="Function">f</a> <a id="3065" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a>  <a id="3071" class="Symbol">=</a> <a id="3073" href="binary-type.html#586" data-type="𝟚" class="InductiveConstructor">𝟏</a>
+
+  <a id="3078" href="isomorphisms.html#3078" data-type="𝟚 → Bool" class="Function">g</a> <a id="3080" class="Symbol">:</a> <a id="3082" href="binary-type.html#568" data-type="Set" class="Datatype">𝟚</a> <a id="3084" class="Symbol">→</a> <a id="3086" href="Bool.html#492" data-type="Set" class="Datatype">Bool</a>
+  <a id="3093" href="isomorphisms.html#3078" data-type="𝟚 → Bool" class="Function">g</a> <a id="3095" href="binary-type.html#584" data-type="𝟚" class="InductiveConstructor">𝟎</a> <a id="3097" class="Symbol">=</a> <a id="3099" href="Bool.html#516" data-type="Bool" class="InductiveConstructor">false</a>
+  <a id="3107" href="isomorphisms.html#3078" data-type="𝟚 → Bool" class="Function">g</a> <a id="3109" href="binary-type.html#586" data-type="𝟚" class="InductiveConstructor">𝟏</a> <a id="3111" class="Symbol">=</a> <a id="3113" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a>
+
+  <a id="3121" href="isomorphisms.html#3121" data-type="(g ∘ f) ∼ id" class="Function">gf</a> <a id="3124" class="Symbol">:</a> <a id="3126" href="isomorphisms.html#3078" data-type="𝟚 → Bool" class="Function">g</a> <a id="3128" href="products.html#3388" data-type="((y : B) → C y) → (f : A → B) (x : A) → C (f x)" class="Function Operator">∘</a> <a id="3130" href="isomorphisms.html#3034" data-type="Bool → 𝟚" class="Function">f</a> <a id="3132" href="identity-type.html#3258" data-type="((x : A) → B x) → ((x : A) → B x) → Type" class="Function Operator">∼</a> <a id="3134" href="products.html#1041" data-type="A → A" class="Function">id</a>
+  <a id="3139" href="isomorphisms.html#3121" data-type="(g ∘ f) ∼ id" class="Function">gf</a> <a id="3142" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a>  <a id="3148" class="Symbol">=</a> <a id="3150" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="3155" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a>
+  <a id="3162" href="isomorphisms.html#3121" data-type="(g ∘ f) ∼ id" class="Function">gf</a> <a id="3165" href="Bool.html#516" data-type="Bool" class="InductiveConstructor">false</a> <a id="3171" class="Symbol">=</a> <a id="3173" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="3178" href="Bool.html#516" data-type="Bool" class="InductiveConstructor">false</a>
+
+  <a id="3187" href="isomorphisms.html#3187" data-type="(f ∘ g) ∼ id" class="Function">fg</a> <a id="3190" class="Symbol">:</a> <a id="3192" href="isomorphisms.html#3034" data-type="Bool → 𝟚" class="Function">f</a> <a id="3194" href="products.html#3388" data-type="((y : B) → C y) → (f : A → B) (x : A) → C (f x)" class="Function Operator">∘</a> <a id="3196" href="isomorphisms.html#3078" data-type="𝟚 → Bool" class="Function">g</a> <a id="3198" href="identity-type.html#3258" data-type="((x : A) → B x) → ((x : A) → B x) → Type" class="Function Operator">∼</a> <a id="3200" href="products.html#1041" data-type="A → A" class="Function">id</a>
+  <a id="3205" href="isomorphisms.html#3187" data-type="(f ∘ g) ∼ id" class="Function">fg</a> <a id="3208" href="binary-type.html#584" data-type="𝟚" class="InductiveConstructor">𝟎</a> <a id="3210" class="Symbol">=</a> <a id="3212" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="3217" href="binary-type.html#584" data-type="𝟚" class="InductiveConstructor">𝟎</a>
+  <a id="3221" href="isomorphisms.html#3187" data-type="(f ∘ g) ∼ id" class="Function">fg</a> <a id="3224" href="binary-type.html#586" data-type="𝟚" class="InductiveConstructor">𝟏</a> <a id="3226" class="Symbol">=</a> <a id="3228" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="3233" href="binary-type.html#586" data-type="𝟚" class="InductiveConstructor">𝟏</a>
+
+  <a id="3238" href="isomorphisms.html#3238" data-type="is-bijection f" class="Function">f-is-bijection</a> <a id="3253" class="Symbol">:</a> <a id="3255" href="isomorphisms.html#1750" data-type="(f : A → B) → Type" class="Record">is-bijection</a> <a id="3268" href="isomorphisms.html#3034" data-type="Bool → 𝟚" class="Function">f</a>
+  <a id="3272" href="isomorphisms.html#3238" data-type="is-bijection f" class="Function">f-is-bijection</a> <a id="3287" class="Symbol">=</a> <a id="3289" class="Keyword">record</a> <a id="3296" class="Symbol">{</a> <a id="3298" href="isomorphisms.html#1833" data-type="is-bijection f → B → A" class="Field">inverse</a> <a id="3306" class="Symbol">=</a> <a id="3308" href="isomorphisms.html#3078" data-type="𝟚 → Bool" class="Function">g</a> <a id="3310" class="Symbol">;</a> <a id="3312" href="isomorphisms.html#1851" data-type="(r : is-bijection f) → (inverse r ∘ f) ∼ id" class="Field">η</a> <a id="3314" class="Symbol">=</a> <a id="3316" href="isomorphisms.html#3121" data-type="(g ∘ f) ∼ id" class="Function">gf</a> <a id="3319" class="Symbol">;</a> <a id="3321" href="isomorphisms.html#1880" data-type="(r : is-bijection f) → (f ∘ inverse r) ∼ id" class="Field">ε</a> <a id="3323" class="Symbol">=</a> <a id="3325" href="isomorphisms.html#3187" data-type="(f ∘ g) ∼ id" class="Function">fg</a> <a id="3328" class="Symbol">}</a>
+</pre>
+But there is also a different isomorphism:
+<pre class="Agda"><a id="Bool-𝟚-isomorphism&#39;"></a><a id="3385" href="isomorphisms.html#3385" data-type="Bool ≅ 𝟚" class="Function">Bool-𝟚-isomorphism&#39;</a> <a id="3405" class="Symbol">:</a> <a id="3407" href="Bool.html#492" data-type="Set" class="Datatype">Bool</a> <a id="3412" href="isomorphisms.html#1915" data-type="(A B : Type) → Type" class="Record Operator">≅</a> <a id="3414" href="binary-type.html#568" data-type="Set" class="Datatype">𝟚</a>
+<a id="3416" href="isomorphisms.html#3385" data-type="Bool ≅ 𝟚" class="Function">Bool-𝟚-isomorphism&#39;</a> <a id="3436" class="Symbol">=</a> <a id="3438" class="Keyword">record</a> <a id="3445" class="Symbol">{</a> <a id="3447" href="isomorphisms.html#1981" data-type="A ≅ B → A → B" class="Field">bijection</a> <a id="3457" class="Symbol">=</a> <a id="3459" href="isomorphisms.html#3503" data-type="Bool → 𝟚" class="Function">f</a> <a id="3461" class="Symbol">;</a> <a id="3463" href="isomorphisms.html#2003" data-type="(r : A ≅ B) → is-bijection (bijection r)" class="Field">bijectivity</a> <a id="3475" class="Symbol">=</a> <a id="3477" href="isomorphisms.html#3707" data-type="is-bijection f" class="Function">f-is-bijection</a> <a id="3492" class="Symbol">}</a>
+ <a id="3495" class="Keyword">where</a>
+  <a id="3503" href="isomorphisms.html#3503" data-type="Bool → 𝟚" class="Function">f</a> <a id="3505" class="Symbol">:</a> <a id="3507" href="Bool.html#492" data-type="Set" class="Datatype">Bool</a> <a id="3512" class="Symbol">→</a> <a id="3514" href="binary-type.html#568" data-type="Set" class="Datatype">𝟚</a>
+  <a id="3518" href="isomorphisms.html#3503" data-type="Bool → 𝟚" class="Function">f</a> <a id="3520" href="Bool.html#516" data-type="Bool" class="InductiveConstructor">false</a> <a id="3526" class="Symbol">=</a> <a id="3528" href="binary-type.html#586" data-type="𝟚" class="InductiveConstructor">𝟏</a>
+  <a id="3532" href="isomorphisms.html#3503" data-type="Bool → 𝟚" class="Function">f</a> <a id="3534" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a>  <a id="3540" class="Symbol">=</a> <a id="3542" href="binary-type.html#584" data-type="𝟚" class="InductiveConstructor">𝟎</a>
+
+  <a id="3547" href="isomorphisms.html#3547" data-type="𝟚 → Bool" class="Function">g</a> <a id="3549" class="Symbol">:</a> <a id="3551" href="binary-type.html#568" data-type="Set" class="Datatype">𝟚</a> <a id="3553" class="Symbol">→</a> <a id="3555" href="Bool.html#492" data-type="Set" class="Datatype">Bool</a>
+  <a id="3562" href="isomorphisms.html#3547" data-type="𝟚 → Bool" class="Function">g</a> <a id="3564" href="binary-type.html#584" data-type="𝟚" class="InductiveConstructor">𝟎</a> <a id="3566" class="Symbol">=</a> <a id="3568" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a>
+  <a id="3575" href="isomorphisms.html#3547" data-type="𝟚 → Bool" class="Function">g</a> <a id="3577" href="binary-type.html#586" data-type="𝟚" class="InductiveConstructor">𝟏</a> <a id="3579" class="Symbol">=</a> <a id="3581" href="Bool.html#516" data-type="Bool" class="InductiveConstructor">false</a>
+
+  <a id="3590" href="isomorphisms.html#3590" data-type="(g ∘ f) ∼ id" class="Function">gf</a> <a id="3593" class="Symbol">:</a> <a id="3595" href="isomorphisms.html#3547" data-type="𝟚 → Bool" class="Function">g</a> <a id="3597" href="products.html#3388" data-type="((y : B) → C y) → (f : A → B) (x : A) → C (f x)" class="Function Operator">∘</a> <a id="3599" href="isomorphisms.html#3503" data-type="Bool → 𝟚" class="Function">f</a> <a id="3601" href="identity-type.html#3258" data-type="((x : A) → B x) → ((x : A) → B x) → Type" class="Function Operator">∼</a> <a id="3603" href="products.html#1041" data-type="A → A" class="Function">id</a>
+  <a id="3608" href="isomorphisms.html#3590" data-type="(g ∘ f) ∼ id" class="Function">gf</a> <a id="3611" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a>  <a id="3617" class="Symbol">=</a> <a id="3619" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="3624" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a>
+  <a id="3631" href="isomorphisms.html#3590" data-type="(g ∘ f) ∼ id" class="Function">gf</a> <a id="3634" href="Bool.html#516" data-type="Bool" class="InductiveConstructor">false</a> <a id="3640" class="Symbol">=</a> <a id="3642" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="3647" href="Bool.html#516" data-type="Bool" class="InductiveConstructor">false</a>
+
+  <a id="3656" href="isomorphisms.html#3656" data-type="(f ∘ g) ∼ id" class="Function">fg</a> <a id="3659" class="Symbol">:</a> <a id="3661" href="isomorphisms.html#3503" data-type="Bool → 𝟚" class="Function">f</a> <a id="3663" href="products.html#3388" data-type="((y : B) → C y) → (f : A → B) (x : A) → C (f x)" class="Function Operator">∘</a> <a id="3665" href="isomorphisms.html#3547" data-type="𝟚 → Bool" class="Function">g</a> <a id="3667" href="identity-type.html#3258" data-type="((x : A) → B x) → ((x : A) → B x) → Type" class="Function Operator">∼</a> <a id="3669" href="products.html#1041" data-type="A → A" class="Function">id</a>
+  <a id="3674" href="isomorphisms.html#3656" data-type="(f ∘ g) ∼ id" class="Function">fg</a> <a id="3677" href="binary-type.html#584" data-type="𝟚" class="InductiveConstructor">𝟎</a> <a id="3679" class="Symbol">=</a> <a id="3681" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="3686" href="binary-type.html#584" data-type="𝟚" class="InductiveConstructor">𝟎</a>
+  <a id="3690" href="isomorphisms.html#3656" data-type="(f ∘ g) ∼ id" class="Function">fg</a> <a id="3693" href="binary-type.html#586" data-type="𝟚" class="InductiveConstructor">𝟏</a> <a id="3695" class="Symbol">=</a> <a id="3697" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="3702" href="binary-type.html#586" data-type="𝟚" class="InductiveConstructor">𝟏</a>
+
+  <a id="3707" href="isomorphisms.html#3707" data-type="is-bijection f" class="Function">f-is-bijection</a> <a id="3722" class="Symbol">:</a> <a id="3724" href="isomorphisms.html#1750" data-type="(f : A → B) → Type" class="Record">is-bijection</a> <a id="3737" href="isomorphisms.html#3503" data-type="Bool → 𝟚" class="Function">f</a>
+  <a id="3741" href="isomorphisms.html#3707" data-type="is-bijection f" class="Function">f-is-bijection</a> <a id="3756" class="Symbol">=</a> <a id="3758" class="Keyword">record</a> <a id="3765" class="Symbol">{</a> <a id="3767" href="isomorphisms.html#1833" data-type="is-bijection f → B → A" class="Field">inverse</a> <a id="3775" class="Symbol">=</a> <a id="3777" href="isomorphisms.html#3547" data-type="𝟚 → Bool" class="Function">g</a> <a id="3779" class="Symbol">;</a> <a id="3781" href="isomorphisms.html#1851" data-type="(r : is-bijection f) → (inverse r ∘ f) ∼ id" class="Field">η</a> <a id="3783" class="Symbol">=</a> <a id="3785" href="isomorphisms.html#3590" data-type="(g ∘ f) ∼ id" class="Function">gf</a> <a id="3788" class="Symbol">;</a> <a id="3790" href="isomorphisms.html#1880" data-type="(r : is-bijection f) → (f ∘ inverse r) ∼ id" class="Field">ε</a> <a id="3792" class="Symbol">=</a> <a id="3794" href="isomorphisms.html#3656" data-type="(f ∘ g) ∼ id" class="Function">fg</a> <a id="3797" class="Symbol">}</a>
+</pre>
+<p>And these are the only two isomorphisms (you could try to prove this
+in Agda as a rather advanced exercise). More advanced examples are in
+other files.</p>
+<p><a href="https://martinescardo.github.io/HoTTEST-Summer-School/">Go
+back to the table of contents</a></p>
+
+  </article>
+</div>
+</main>
+</body>
+<style>
+
+:root {
+  --text-bg: #fff;
+  --text-fg: #222;
+  --shadow: #000;
+  --primary: #0054F4;
+  --secondary: #9C1BD6;
+  --modal-bg: #ccccccaa;
+  --warning-bg: #fef08a;
+  --code-bg: var(--text-bg);
+  --code-fg: var(--text-fg);
+  --code-keyword: #BB3B13;
+  --code-string:  #d52753;
+  --code-number:  #8A1060;
+  --code-module:  #8A1060;
+  --code-field:   #9C1BD6;
+  --code-constructor: #207B1D;
+  --code-highlight: #F5DEB3;
+  --search-selected: #e2e8f0;
+  --details-summary: #b2ebf2;
+  --details-open:    #80deea;
+  --depgraph-edge: #eee;
+  --blockquote-bg: #d8b4fe; }
+
+.diagram-dark {
+  display: none !important; }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-bg: #282C34;
+    --text-fg: #bfbfbf;
+    --shadow: #475569;
+    --primary: #61AFEF;
+    --secondary: #C878DD;
+    --modal-bg: #282C34aa;
+    --warning-bg: #991b1b;
+    --code-keyword:     #E5C07B;
+    --code-string:      #E06C75;
+    --code-number:      #98C379;
+    --code-module:      #56B6C2;
+    --code-field:       #C878DD;
+    --code-constructor: #98C379;
+    --code-highlight: #ef444499;
+    --search-selected: #474e5e;
+    --details-summary: #5b21b6;
+    --details-open:    #4c1d95;
+    --depgraph-edge: #474e5e;
+    --blockquote-bg: #475569; }
+  div.warning {
+    --shadow: #7f1d1d
+  ; }
+  input {
+    background-color: #334155;
+    border: 1px solid #475569;
+    color: var(--text-fg); }
+  body {
+    scrollbar-color: #3b4454 #2b2e33; }
+  .diagram-dark {
+    display: block !important; }
+  .diagram-light {
+    display: none !important; } }
+
+table {
+  margin: auto;
+  border-collapse: collapse; }
+  table td, table th {
+    text-align: center;
+    padding: 0px 1em 0px 1em;
+    border: 1px solid black; }
+  table th {
+    border-bottom: 2px solid black; }
+  table td {
+    white-space: nowrap; }
+
+html { max-width: 100%; }
+
+body {
+  font-family: "Inria Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  width: 100%;
+  font-size: var(--font-size);
+  overflow-x: clip;
+  background-color: var(--text-bg);
+  color: var(--text-fg);
+}
+
+div#post-toc-container { max-width: 120ch; margin: auto; }
+
+article a[href], div#return > a[href], div#top > a[href], aside#toc > div#toc-container ul a[href] {
+  color: var(--primary);
+  text-decoration: none; }
+  article a[href]:hover, div#return > a[href]:hover, div#top > a[href]:hover, aside#toc > div#toc-container ul a[href]:hover {
+    text-decoration: 2px currentColor underline !important; }
+  article a[href]:visited, div#return > a[href]:visited, div#top > a[href]:visited, aside#toc > div#toc-container ul a[href]:visited {
+    color: var(--secondary); }
+
+/* Aspects. */
+.Agda {
+  /* NameKinds. */
+  /* OtherAspects. */
+  /* Standard attributes. */
+  font-family: 'iosevka', 'Iosevka', 'Fantasque Sans Mono', 'Roboto Mono', monospace;
+  font-weight: 400; }
+  .Agda .Comment {
+    color: var(--code-fg);
+    font-style: italic; }
+  .Agda .Background {
+    background-color: var(--code-bg); }
+  .Agda .Markup {
+    color: var(--code-fg); }
+  .Agda .Keyword {
+    color: var(--code-keyword); }
+  .Agda .String {
+    color: var(--code-string); }
+  .Agda .Number {
+    color: var(--code-number); }
+  .Agda .Symbol {
+    color: var(--code-fg); }
+  .Agda .PrimitiveType {
+    color: var(--primary); }
+  .Agda .Pragma {
+    color: var(--code-fg); }
+  .Agda .Bound {
+    color: var(--code-fg) !important; }
+  .Agda .Generalizable {
+    color: var(--code-fg) !important; }
+  .Agda .InductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .CoinductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .Datatype {
+    color: var(--primary) !important; }
+  .Agda .Field {
+    color: var(--code-field) !important; }
+  .Agda .Function {
+    color: var(--primary) !important; }
+  .Agda .Module {
+    color: var(--code-module) !important; }
+  .Agda .Postulate {
+    color: var(--primary) !important; }
+  .Agda .Primitive {
+    color: var(--primary) !important; }
+  .Agda .Record {
+    color: var(--primary) !important; }
+  .Agda .UnsolvedMeta {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .UnsolvedConstraint {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .TerminationProblem {
+    color: var(--code-fg);
+    background: #FFA07A; }
+  .Agda .IncompletePattern {
+    color: var(--code-fg);
+    background: #F5DEB3; }
+  .Agda .Error {
+    color: red;
+    text-decoration: underline; }
+  .Agda .TypeChecks {
+    color: var(--code-fg);
+    background: #ADD8E6; }
+  .Agda .ShadowingInTelescope {
+    color: var(--code-fg);
+    background: #808080; }
+  .Agda .Deadcode {
+    color: var(--code-keyword);
+    font-weight: bold; }
+  .Agda a {
+    text-decoration: none; }
+  .Agda a[href]:hover {
+    text-decoration: 2px var(--primary) underline; }
+  .Agda a[href]:target {
+    animation: highlight 2.5s; }
+  body.text-page .Agda {
+    font-size: var(--code-font-size); }
+
+pre.Agda, div.sourceCode, pre {
+  border-radius: 0;
+  box-shadow: none;
+  overflow-y: clip;
+  margin: 0;
+  padding: 1em;
+  padding-top: 0.25em;
+  padding-bottom: 0.25em;
+  background-color: var(--code-bg);
+  color: var(--code-fg);
+  font-size: var(--code-font-size);
+  max-width: 100%;
+  overflow-x: auto;
+}
+</style>
+</html>

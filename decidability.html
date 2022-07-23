@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>HoTTEST Summer School 2022 Lecture Notes</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+</head>
+
+<body class="text-page">
+<main>
+<div id="post-toc-container" style="padding-left: 1em; padding-right: 1em;">
+
+  <article>
+
+<p><a href="Https://www.Cs.Bham.Ac.Uk/~mhe/">Martin Escardo</a>. Notes
+originally written for the module <em>Advanced Functional
+Programming</em> of the <a
+href="https://www.birmingham.ac.uk/index.aspx">University of
+Birmingham</a>, UK.</p>
+<!--
+<pre class="Agda"><a id="222" class="Symbol">{-#</a> <a id="226" class="Keyword">OPTIONS</a> <a id="234" class="Pragma">--without-K</a> <a id="246" class="Pragma">--safe</a> <a id="253" class="Symbol">#-}</a>
+
+<a id="258" class="Keyword">module</a> <a id="265" href="decidability.html" class="Module">decidability</a> <a id="278" class="Keyword">where</a>
+
+<a id="285" class="Keyword">open</a> <a id="290" class="Keyword">import</a> <a id="297" href="prelude.html" class="Module">prelude</a>
+<a id="305" class="Keyword">open</a> <a id="310" class="Keyword">import</a> <a id="317" href="negation.html" class="Module">negation</a>
+<a id="326" class="Keyword">open</a> <a id="331" class="Keyword">import</a> <a id="338" href="natural-numbers-type.html" class="Module">natural-numbers-type</a>
+</pre>-->
+<h1
+id="propositions-as-types-versus-propositions-as-booleans">Propositions
+as types versus propositions as booleans</h1>
+<p>When programming in conventional programming languages such as
+Haskell, C, Java, Python, etc., we use <em>booleans</em> rather than
+<em>types</em> to encode logical propositions. But this works only
+because we restrict ourselves to <em>decidable</em> propositions, as
+we’ll see below.</p>
+<p>We now discuss <em>why</em> we use <em>types</em> to encode logical
+propositions, and <em>when</em> we can use <em>booleans</em> instead. It
+is not always.</p>
+<h2 id="discussion-and-motivation">Discussion and motivation</h2>
+<p><strong>Examples.</strong> We <em>can automatically check</em>
+equality of booleans, integers, strings and much more, using
+algorithms.</p>
+<p><strong>Counter-example.</strong> We <em>can’t check</em> equality of
+functions of type <code>ℕ → ℕ</code>, for instance. Intuitively, to
+check that two functions <code>f</code> and <code>g</code> of this type
+are equal, we need to check infinitely many cases, namely
+<code>f x = g x</code> for all <code>x : ℕ</code>. But, we are afraid,
+intuition is not enough. This has to be proved. Luckily in our case, <a
+href="https://en.wikipedia.org/wiki/Alan_Turing">Alan Turing</a>
+provided the basis to prove that. He showed that the <a
+href="https://en.wikipedia.org/wiki/Halting_problem">Halting Problem</a>
+can’t be solved by an algorithm in any programming language. It follows
+from this that we can’t check whether two such functions <code>f</code>
+and <code>g</code> are equal or not using an algorithm.</p>
+<p>The above examples and counter-examples show that sometimes we can
+decide equality with an algorithm, and sometimes we can’t. However, for
+example, the identity type <code>_≡_</code> applies to <em>all</em>
+types, whether they have decidable equality or not, and this is why it
+is useful. We can think about equality, not only in our heads but also
+in Agda, without worrying whether it can be <em>checked</em> to be true
+or not by a computer. The identity type is not about <em>checking</em>
+equality. It is about asserting that two things are equal, and then
+proving this ourselves. In fact, equality is very often not checkable by
+the computer. It is instead about <em>stating</em> and <em>proving</em>
+or <em>disproving</em> equalities, where the proving and disproving is
+done by people (the lecturers and the students in this case), by hard,
+intelligent work.</p>
+<h2 id="decidable-propositions">Decidable propositions</h2>
+Motivated by the above discussion, we define when a logical proposition
+is decidable under the understanding of propositions as types:
+<pre class="Agda"><a id="is-decidable"></a><a id="2635" href="decidability.html#2635" data-type="Type → Type" class="Function">is-decidable</a> <a id="2648" class="Symbol">:</a> <a id="2650" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a> <a id="2655" class="Symbol">→</a> <a id="2657" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a>
+<a id="2662" href="decidability.html#2635" data-type="Type → Type" class="Function">is-decidable</a> <a id="2675" href="decidability.html#2675" class="Bound">A</a> <a id="2677" class="Symbol">=</a> <a id="2679" href="decidability.html#2675" class="Bound">A</a> <a id="2681" href="binary-sums.html#672" data-type="Type → Type → Set" class="Datatype Operator">∔</a> <a id="2683" href="empty-type.html#1685" data-type="Type → Type" class="Function Operator">¬</a> <a id="2685" href="decidability.html#2675" class="Bound">A</a>
+</pre>
+<p>This means that we can produce an element of <code>A</code> or show
+that no such element can be found.</p>
+Although it is not possible in general to write a program of type
+<code>¬¬ A → A</code>, this is possible when <code>A</code> is
+decidable:
+<pre class="Agda"><a id="¬¬-elim"></a><a id="2910" href="decidability.html#2910" data-type="is-decidable A → ¬¬ A → A" class="Function">¬¬-elim</a> <a id="2918" class="Symbol">:</a> <a id="2920" class="Symbol">{</a><a id="2921" href="decidability.html#2921" class="Bound">A</a> <a id="2923" class="Symbol">:</a> <a id="2925" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="2929" class="Symbol">}</a> <a id="2931" class="Symbol">→</a> <a id="2933" href="decidability.html#2635" data-type="Type → Type" class="Function">is-decidable</a> <a id="2946" href="decidability.html#2921" class="Bound">A</a> <a id="2948" class="Symbol">→</a> <a id="2950" href="negation.html#3352" data-type="Type → Type" class="Function Operator">¬¬</a> <a id="2953" href="decidability.html#2921" class="Bound">A</a> <a id="2955" class="Symbol">→</a> <a id="2957" href="decidability.html#2921" class="Bound">A</a>
+<a id="2959" href="decidability.html#2910" data-type="is-decidable A → ¬¬ A → A" class="Function">¬¬-elim</a> <a id="2967" class="Symbol">(</a><a id="2968" href="binary-sums.html#703" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="2972" href="decidability.html#2972" class="Bound">x</a><a id="2973" class="Symbol">)</a> <a id="2975" href="decidability.html#2975" class="Bound">f</a> <a id="2977" class="Symbol">=</a> <a id="2979" href="decidability.html#2972" class="Bound">x</a>
+<a id="2981" href="decidability.html#2910" data-type="is-decidable A → ¬¬ A → A" class="Function">¬¬-elim</a> <a id="2989" class="Symbol">(</a><a id="2990" href="binary-sums.html#720" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="2994" href="decidability.html#2994" class="Bound">g</a><a id="2995" class="Symbol">)</a> <a id="2997" href="decidability.html#2997" class="Bound">f</a> <a id="2999" class="Symbol">=</a> <a id="3001" href="empty-type.html#1769" data-type="(x : 𝟘) → A x" class="Function">𝟘-elim</a> <a id="3008" class="Symbol">(</a><a id="3009" href="decidability.html#2997" class="Bound">f</a> <a id="3011" href="decidability.html#2994" class="Bound">g</a><a id="3012" class="Symbol">)</a>
+</pre>
+<h2 id="decidable-propositions-as-booleans">Decidable propositions as
+booleans</h2>
+<p>The following shows that a type <code>A</code> is decidable if and
+only if there is <code>b : Bool</code> such that <code>A</code> holds if
+and only if the boolean <code>b</code> is <code>true</code>.</p>
+For the purposes of this handout, understanding the following proof is
+not important at a first reading. What is important is to understand
+<em>what</em> the type of the following function is saying, which is
+what we explained above.
+<pre class="Agda"><a id="decidability-with-booleans"></a><a id="3440" href="decidability.html#3440" data-type="(A : Type) → is-decidable A ⇔ Sigma Bool (λ b → A ⇔ b ≡ true)" class="Function">decidability-with-booleans</a> <a id="3467" class="Symbol">:</a> <a id="3469" class="Symbol">(</a><a id="3470" href="decidability.html#3470" class="Bound">A</a> <a id="3472" class="Symbol">:</a> <a id="3474" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="3478" class="Symbol">)</a> <a id="3480" class="Symbol">→</a> <a id="3482" href="decidability.html#2635" data-type="Type → Type" class="Function">is-decidable</a> <a id="3495" href="decidability.html#3470" class="Bound">A</a> <a id="3497" href="binary-products.html#1314" data-type="Type → Type → Type" class="Function Operator">⇔</a> <a id="3499" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">Σ</a> <a id="3501" href="decidability.html#3501" class="Bound">b</a> <a id="3503" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">꞉</a> <a id="3505" href="Bool.html#492" data-type="Set" class="Datatype">Bool</a> <a id="3510" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">,</a> <a id="3512" class="Symbol">(</a><a id="3513" href="decidability.html#3470" class="Bound">A</a> <a id="3515" href="binary-products.html#1314" data-type="Type → Type → Type" class="Function Operator">⇔</a> <a id="3517" href="decidability.html#3501" class="Bound">b</a> <a id="3519" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="3521" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a><a id="3525" class="Symbol">)</a>
+<a id="3527" href="decidability.html#3440" data-type="(A : Type) → is-decidable A ⇔ Sigma Bool (λ b → A ⇔ b ≡ true)" class="Function">decidability-with-booleans</a> <a id="3554" href="decidability.html#3554" class="Bound">A</a> <a id="3556" class="Symbol">=</a> <a id="3558" href="decidability.html#3573" data-type="(A : Type) → is-decidable A → Sigma Bool (λ b → A ⇔ b ≡ true)" class="Function">f</a> <a id="3560" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="3562" href="decidability.html#3867" data-type="(A : Type) → Sigma Bool (λ b → A ⇔ b ≡ true) → is-decidable A" class="Function">g</a>
+ <a id="3565" class="Keyword">where</a>
+  <a id="3573" href="decidability.html#3573" data-type="(A : Type) → is-decidable A → Sigma Bool (λ b → A ⇔ b ≡ true)" class="Function">f</a> <a id="3575" class="Symbol">:</a> <a id="3577" href="decidability.html#2635" data-type="Type → Type" class="Function">is-decidable</a> <a id="3590" href="decidability.html#3554" class="Bound">A</a> <a id="3592" class="Symbol">→</a> <a id="3594" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">Σ</a> <a id="3596" href="decidability.html#3596" class="Bound">b</a> <a id="3598" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">꞉</a> <a id="3600" href="Bool.html#492" data-type="Set" class="Datatype">Bool</a> <a id="3605" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">,</a> <a id="3607" class="Symbol">(</a><a id="3608" href="decidability.html#3554" class="Bound">A</a> <a id="3610" href="binary-products.html#1314" data-type="Type → Type → Type" class="Function Operator">⇔</a> <a id="3612" href="decidability.html#3596" class="Bound">b</a> <a id="3614" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="3616" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a><a id="3620" class="Symbol">)</a>
+  <a id="3624" href="decidability.html#3573" data-type="(A : Type) → is-decidable A → Sigma Bool (λ b → A ⇔ b ≡ true)" class="Function">f</a> <a id="3626" class="Symbol">(</a><a id="3627" href="binary-sums.html#703" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="3631" href="decidability.html#3631" class="Bound">x</a><a id="3632" class="Symbol">)</a> <a id="3634" class="Symbol">=</a> <a id="3636" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a> <a id="3641" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="3643" class="Symbol">(</a><a id="3644" href="decidability.html#3664" data-type="(A : Type) (x : A) → A → true ≡ true" class="Function">α</a> <a id="3646" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="3648" href="decidability.html#3709" data-type="(A : Type) (x : A) → true ≡ true → A" class="Function">β</a><a id="3649" class="Symbol">)</a>
+   <a id="3654" class="Keyword">where</a>
+    <a id="3664" href="decidability.html#3664" data-type="(A : Type) (x : A) → A → true ≡ true" class="Function">α</a> <a id="3666" class="Symbol">:</a> <a id="3668" href="decidability.html#3554" class="Bound">A</a> <a id="3670" class="Symbol">→</a> <a id="3672" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a> <a id="3677" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="3679" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a>
+    <a id="3688" href="decidability.html#3664" data-type="(A : Type) (x : A) → A → true ≡ true" class="Function">α</a> <a id="3690" class="Symbol">_</a> <a id="3692" class="Symbol">=</a> <a id="3694" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="3699" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a>
+
+    <a id="3709" href="decidability.html#3709" data-type="(A : Type) (x : A) → true ≡ true → A" class="Function">β</a> <a id="3711" class="Symbol">:</a> <a id="3713" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a> <a id="3718" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="3720" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a> <a id="3725" class="Symbol">→</a> <a id="3727" href="decidability.html#3554" class="Bound">A</a>
+    <a id="3733" href="decidability.html#3709" data-type="(A : Type) (x : A) → true ≡ true → A" class="Function">β</a> <a id="3735" class="Symbol">_</a> <a id="3737" class="Symbol">=</a> <a id="3739" href="decidability.html#3631" class="Bound">x</a>
+
+  <a id="3744" href="decidability.html#3573" data-type="(A : Type) → is-decidable A → Sigma Bool (λ b → A ⇔ b ≡ true)" class="Function">f</a> <a id="3746" class="Symbol">(</a><a id="3747" href="binary-sums.html#720" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="3751" href="decidability.html#3751" class="Bound">ν</a><a id="3752" class="Symbol">)</a> <a id="3754" class="Symbol">=</a> <a id="3756" href="Bool.html#516" data-type="Bool" class="InductiveConstructor">false</a> <a id="3762" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="3764" class="Symbol">(</a><a id="3765" href="decidability.html#3785" data-type="(A : Type) (ν : ¬ A) → A → false ≡ true" class="Function">α</a> <a id="3767" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="3769" href="decidability.html#3834" data-type="(A : Type) (ν : ¬ A) → false ≡ true → A" class="Function">β</a><a id="3770" class="Symbol">)</a>
+   <a id="3775" class="Keyword">where</a>
+    <a id="3785" href="decidability.html#3785" data-type="(A : Type) (ν : ¬ A) → A → false ≡ true" class="Function">α</a> <a id="3787" class="Symbol">:</a> <a id="3789" href="decidability.html#3554" class="Bound">A</a> <a id="3791" class="Symbol">→</a> <a id="3793" href="Bool.html#516" data-type="Bool" class="InductiveConstructor">false</a> <a id="3799" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="3801" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a>
+    <a id="3810" href="decidability.html#3785" data-type="(A : Type) (ν : ¬ A) → A → false ≡ true" class="Function">α</a> <a id="3812" href="decidability.html#3812" class="Bound">x</a> <a id="3814" class="Symbol">=</a> <a id="3816" href="empty-type.html#1769" data-type="(x : 𝟘) → A x" class="Function">𝟘-elim</a> <a id="3823" class="Symbol">(</a><a id="3824" href="decidability.html#3751" class="Bound">ν</a> <a id="3826" href="decidability.html#3812" class="Bound">x</a><a id="3827" class="Symbol">)</a>
+
+    <a id="3834" href="decidability.html#3834" data-type="(A : Type) (ν : ¬ A) → false ≡ true → A" class="Function">β</a> <a id="3836" class="Symbol">:</a> <a id="3838" href="Bool.html#516" data-type="Bool" class="InductiveConstructor">false</a> <a id="3844" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="3846" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a> <a id="3851" class="Symbol">→</a> <a id="3853" href="decidability.html#3554" class="Bound">A</a>
+    <a id="3859" href="decidability.html#3834" data-type="(A : Type) (ν : ¬ A) → false ≡ true → A" class="Function">β</a> <a id="3861" class="Symbol">()</a>
+
+  <a id="3867" href="decidability.html#3867" data-type="(A : Type) → Sigma Bool (λ b → A ⇔ b ≡ true) → is-decidable A" class="Function">g</a> <a id="3869" class="Symbol">:</a> <a id="3871" class="Symbol">(</a><a id="3872" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">Σ</a> <a id="3874" href="decidability.html#3874" class="Bound">b</a> <a id="3876" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">꞉</a> <a id="3878" href="Bool.html#492" data-type="Set" class="Datatype">Bool</a> <a id="3883" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">,</a> <a id="3885" class="Symbol">(</a><a id="3886" href="decidability.html#3554" class="Bound">A</a> <a id="3888" href="binary-products.html#1314" data-type="Type → Type → Type" class="Function Operator">⇔</a> <a id="3890" href="decidability.html#3874" class="Bound">b</a> <a id="3892" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="3894" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a><a id="3898" class="Symbol">))</a> <a id="3901" class="Symbol">→</a> <a id="3903" href="decidability.html#2635" data-type="Type → Type" class="Function">is-decidable</a> <a id="3916" href="decidability.html#3554" class="Bound">A</a>
+  <a id="3920" href="decidability.html#3867" data-type="(A : Type) → Sigma Bool (λ b → A ⇔ b ≡ true) → is-decidable A" class="Function">g</a> <a id="3922" class="Symbol">(</a><a id="3923" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a> <a id="3928" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a>  <a id="3931" href="decidability.html#3931" class="Bound">α</a> <a id="3933" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="3935" href="decidability.html#3935" class="Bound">β</a><a id="3936" class="Symbol">)</a> <a id="3938" class="Symbol">=</a> <a id="3940" href="binary-sums.html#703" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="3944" class="Symbol">(</a><a id="3945" href="decidability.html#3935" class="Bound">β</a> <a id="3947" class="Symbol">(</a><a id="3948" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="3953" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a><a id="3957" class="Symbol">))</a>
+  <a id="3962" href="decidability.html#3867" data-type="(A : Type) → Sigma Bool (λ b → A ⇔ b ≡ true) → is-decidable A" class="Function">g</a> <a id="3964" class="Symbol">(</a><a id="3965" href="Bool.html#516" data-type="Bool" class="InductiveConstructor">false</a> <a id="3971" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="3973" href="decidability.html#3973" class="Bound">α</a> <a id="3975" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="3977" href="decidability.html#3977" class="Bound">β</a><a id="3978" class="Symbol">)</a> <a id="3980" class="Symbol">=</a> <a id="3982" href="binary-sums.html#720" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="3986" class="Symbol">(λ</a> <a id="3989" href="decidability.html#3989" class="Bound">x</a> <a id="3991" class="Symbol">→</a> <a id="3993" href="negation.html#4699" data-type="false ≢ true" class="Function">false-is-not-true</a> <a id="4011" class="Symbol">(</a><a id="4012" href="decidability.html#3973" class="Bound">α</a> <a id="4014" href="decidability.html#3989" class="Bound">x</a><a id="4015" class="Symbol">))</a>
+</pre>
+<h2 id="decidable-predicates-as-boolean-valued-functions">Decidable
+predicates as boolean-valued functions</h2>
+Consider the logical statement “x is even”. This is decidable, because
+there is an easy algorithm that tells whether a natural number
+<code>x</code> is even or not. In programming languages we write this
+algorithm as a procedure that returns a boolean. But an equally valid
+definition is to say that <code>x</code> is even if there is a natural
+number <code>y</code> such that <code>x = 2 * y</code>. This definition
+doesn’t automatically give an algorithm to check whether or not
+<code>x</code> is even. <!--
+<pre class="Agda"><a id="4539" class="Keyword">module</a> <a id="4546" href="decidability.html#4546" class="Module">_</a> <a id="4548" class="Keyword">where</a>
+ <a id="4555" class="Keyword">private</a>
+</pre>-->
+<pre class="Agda">  <a id="4581" href="decidability.html#4581" class="Function">is-even</a> <a id="4589" class="Symbol">:</a> <a id="4591" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a> <a id="4593" class="Symbol">→</a> <a id="4595" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a>
+  <a id="4602" href="decidability.html#4581" class="Function">is-even</a> <a id="4610" href="decidability.html#4610" class="Bound">x</a> <a id="4612" class="Symbol">=</a> <a id="4614" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">Σ</a> <a id="4616" href="decidability.html#4616" class="Bound">y</a> <a id="4618" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">꞉</a> <a id="4620" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a> <a id="4622" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">,</a> <a id="4624" href="decidability.html#4610" class="Bound">x</a> <a id="4626" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="4628" class="Number">2</a> <a id="4630" href="natural-numbers-type.html#2934" data-type="ℕ → ℕ → ℕ" class="Function Operator">*</a> <a id="4632" href="decidability.html#4616" class="Bound">y</a>
+</pre>
+This says what to be even <em>means</em>. But it doesn’t say how we
+<em>check</em> with a computer program whether a number is even or not,
+which would be given by a function <code>check-even : ℕ → Bool</code>.
+<pre class="Agda">  <a id="4834" href="decidability.html#4834" class="Function">check-even</a> <a id="4845" class="Symbol">:</a> <a id="4847" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a> <a id="4849" class="Symbol">→</a> <a id="4851" href="Bool.html#492" data-type="Set" class="Datatype">Bool</a>
+  <a id="4858" href="decidability.html#4834" class="Function">check-even</a> <a id="4869" class="Number">0</a>       <a id="4877" class="Symbol">=</a> <a id="4879" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a>
+  <a id="4886" href="decidability.html#4834" class="Function">check-even</a> <a id="4897" class="Symbol">(</a><a id="4898" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="4902" href="decidability.html#4902" class="Bound">x</a><a id="4903" class="Symbol">)</a> <a id="4905" class="Symbol">=</a> <a id="4907" href="Bool.html#4051" data-type="Bool → Bool" class="Function">not</a> <a id="4911" class="Symbol">(</a><a id="4912" href="decidability.html#4834" class="Function">check-even</a> <a id="4923" href="decidability.html#4902" class="Bound">x</a><a id="4924" class="Symbol">)</a>
+</pre>
+<p>For this function to be correct, it has to be the case that</p>
+<blockquote>
+<p><code>is-even x ⇔ check-even x ≡ true</code></p>
+</blockquote>
+<p><strong>Exercise.</strong> We believe you have learned enough Agda,
+try this.</p>
+<p>This is possible because</p>
+<blockquote>
+<p><code>(x : X) → is-decidable (is-even x)</code>.</p>
+</blockquote>
+<p>The following generalizes the above discussion and implements it in
+Agda.</p>
+First we define what it means for a predicate, such as
+<code>A = is-even</code>, to be decidable:
+<pre class="Agda"><a id="is-decidable-predicate"></a><a id="5334" href="decidability.html#5334" data-type="(X → Type) → Type" class="Function">is-decidable-predicate</a> <a id="5357" class="Symbol">:</a> <a id="5359" class="Symbol">{</a><a id="5360" href="decidability.html#5360" class="Bound">X</a> <a id="5362" class="Symbol">:</a> <a id="5364" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="5368" class="Symbol">}</a> <a id="5370" class="Symbol">→</a> <a id="5372" class="Symbol">(</a><a id="5373" href="decidability.html#5360" class="Bound">X</a> <a id="5375" class="Symbol">→</a> <a id="5377" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="5381" class="Symbol">)</a> <a id="5383" class="Symbol">→</a> <a id="5385" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a>
+<a id="5390" href="decidability.html#5334" data-type="(X → Type) → Type" class="Function">is-decidable-predicate</a> <a id="5413" class="Symbol">{</a><a id="5414" href="decidability.html#5414" class="Bound">X</a><a id="5415" class="Symbol">}</a> <a id="5417" href="decidability.html#5417" class="Bound">A</a> <a id="5419" class="Symbol">=</a> <a id="5421" class="Symbol">(</a><a id="5422" href="decidability.html#5422" class="Bound">x</a> <a id="5424" class="Symbol">:</a> <a id="5426" href="decidability.html#5414" class="Bound">X</a><a id="5427" class="Symbol">)</a> <a id="5429" class="Symbol">→</a> <a id="5431" href="decidability.html#2635" data-type="Type → Type" class="Function">is-decidable</a> <a id="5444" class="Symbol">(</a><a id="5445" href="decidability.html#5417" class="Bound">A</a> <a id="5447" href="decidability.html#5422" class="Bound">x</a><a id="5448" class="Symbol">)</a>
+
+</pre>
+<p>In our example, this means that we can tell whether a number is even
+or not.</p>
+<p>Next we show that a predicate <code>A</code> is decidable if and only
+if there is a boolean valued function <code>α</code> such that
+<code>A x</code> holds if and only if <code>α x ≡ true</code>. In the
+above example, <code>A</code> plays the role of <code>is-even</code> and
+<code>alpha</code> plays the role of <code>check-even</code>.</p>
+<p>Again, what is important at a first reading of this handout is not to
+understand the proof but what the type of the function is saying. But we
+will discuss the proof in lectures.</p>
+<pre class="Agda"><a id="predicate-decidability-with-booleans"></a><a id="5972" href="decidability.html#5972" data-type="(A : X → Type) →
+is-decidable-predicate A ⇔
+Sigma (X → Bool) (λ α → (x : X) → A x ⇔ α x ≡ true)" class="Function">predicate-decidability-with-booleans</a> <a id="6009" class="Symbol">:</a> <a id="6011" class="Symbol">{</a><a id="6012" href="decidability.html#6012" class="Bound">X</a> <a id="6014" class="Symbol">:</a> <a id="6016" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="6020" class="Symbol">}</a> <a id="6022" class="Symbol">(</a><a id="6023" href="decidability.html#6023" class="Bound">A</a> <a id="6025" class="Symbol">:</a> <a id="6027" href="decidability.html#6012" class="Bound">X</a> <a id="6029" class="Symbol">→</a> <a id="6031" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="6035" class="Symbol">)</a>
+                                     <a id="6074" class="Symbol">→</a> <a id="6076" href="decidability.html#5334" data-type="(X → Type) → Type" class="Function">is-decidable-predicate</a> <a id="6099" href="decidability.html#6023" class="Bound">A</a>
+                                     <a id="6138" href="binary-products.html#1314" data-type="Type → Type → Type" class="Function Operator">⇔</a> <a id="6140" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">Σ</a> <a id="6142" href="decidability.html#6142" class="Bound">α</a> <a id="6144" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">꞉</a> <a id="6146" class="Symbol">(</a><a id="6147" href="decidability.html#6012" class="Bound">X</a> <a id="6149" class="Symbol">→</a> <a id="6151" href="Bool.html#492" data-type="Set" class="Datatype">Bool</a><a id="6155" class="Symbol">)</a> <a id="6157" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">,</a> <a id="6159" class="Symbol">((</a><a id="6161" href="decidability.html#6161" class="Bound">x</a> <a id="6163" class="Symbol">:</a> <a id="6165" href="decidability.html#6012" class="Bound">X</a><a id="6166" class="Symbol">)</a> <a id="6168" class="Symbol">→</a> <a id="6170" href="decidability.html#6023" class="Bound">A</a> <a id="6172" href="decidability.html#6161" class="Bound">x</a> <a id="6174" href="binary-products.html#1314" data-type="Type → Type → Type" class="Function Operator">⇔</a> <a id="6176" href="decidability.html#6142" class="Bound">α</a> <a id="6178" href="decidability.html#6161" class="Bound">x</a> <a id="6180" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="6182" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a><a id="6186" class="Symbol">)</a>
+<a id="6188" href="decidability.html#5972" data-type="(A : X → Type) →
+is-decidable-predicate A ⇔
+Sigma (X → Bool) (λ α → (x : X) → A x ⇔ α x ≡ true)" class="Function">predicate-decidability-with-booleans</a> <a id="6225" class="Symbol">{</a><a id="6226" href="decidability.html#6226" class="Bound">X</a><a id="6227" class="Symbol">}</a> <a id="6229" href="decidability.html#6229" class="Bound">A</a> <a id="6231" class="Symbol">=</a> <a id="6233" href="decidability.html#6248" data-type="(A : X → Type) →
+is-decidable-predicate A →
+Sigma (X → Bool) (λ α → (x : X) → A x ⇔ α x ≡ true)" class="Function">f</a> <a id="6235" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="6237" href="decidability.html#6893" data-type="(A : X → Type) →
+Sigma (X → Bool) (λ α → (x : X) → A x ⇔ α x ≡ true) →
+is-decidable-predicate A" class="Function">g</a>
+ <a id="6240" class="Keyword">where</a>
+  <a id="6248" href="decidability.html#6248" data-type="(A : X → Type) →
+is-decidable-predicate A →
+Sigma (X → Bool) (λ α → (x : X) → A x ⇔ α x ≡ true)" class="Function">f</a> <a id="6250" class="Symbol">:</a> <a id="6252" href="decidability.html#5334" data-type="(X → Type) → Type" class="Function">is-decidable-predicate</a> <a id="6275" href="decidability.html#6229" class="Bound">A</a> <a id="6277" class="Symbol">→</a> <a id="6279" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">Σ</a> <a id="6281" href="decidability.html#6281" class="Bound">α</a> <a id="6283" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">꞉</a> <a id="6285" class="Symbol">(</a><a id="6286" href="decidability.html#6226" class="Bound">X</a> <a id="6288" class="Symbol">→</a> <a id="6290" href="Bool.html#492" data-type="Set" class="Datatype">Bool</a><a id="6294" class="Symbol">)</a> <a id="6296" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">,</a> <a id="6298" class="Symbol">((</a><a id="6300" href="decidability.html#6300" class="Bound">x</a> <a id="6302" class="Symbol">:</a> <a id="6304" href="decidability.html#6226" class="Bound">X</a><a id="6305" class="Symbol">)</a> <a id="6307" class="Symbol">→</a> <a id="6309" href="decidability.html#6229" class="Bound">A</a> <a id="6311" href="decidability.html#6300" class="Bound">x</a> <a id="6313" href="binary-products.html#1314" data-type="Type → Type → Type" class="Function Operator">⇔</a> <a id="6315" href="decidability.html#6281" class="Bound">α</a> <a id="6317" href="decidability.html#6300" class="Bound">x</a> <a id="6319" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="6321" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a><a id="6325" class="Symbol">)</a>
+  <a id="6329" href="decidability.html#6248" data-type="(A : X → Type) →
+is-decidable-predicate A →
+Sigma (X → Bool) (λ α → (x : X) → A x ⇔ α x ≡ true)" class="Function">f</a> <a id="6331" href="decidability.html#6331" class="Bound">d</a> <a id="6333" class="Symbol">=</a> <a id="6335" href="decidability.html#6354" data-type="(A : X → Type) (d : is-decidable-predicate A) → X → Bool" class="Function">α</a> <a id="6337" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="6339" href="decidability.html#6526" data-type="(A : X → Type) (d : is-decidable-predicate A) (x : X) →
+A x ⇔ α A d x ≡ true" class="Function">β</a>
+   <a id="6344" class="Keyword">where</a>
+    <a id="6354" href="decidability.html#6354" data-type="(A : X → Type) (d : is-decidable-predicate A) → X → Bool" class="Function">α</a> <a id="6356" class="Symbol">:</a> <a id="6358" href="decidability.html#6226" class="Bound">X</a> <a id="6360" class="Symbol">→</a> <a id="6362" href="Bool.html#492" data-type="Set" class="Datatype">Bool</a>
+    <a id="6371" href="decidability.html#6354" data-type="(A : X → Type) (d : is-decidable-predicate A) → X → Bool" class="Function">α</a> <a id="6373" href="decidability.html#6373" class="Bound">x</a> <a id="6375" class="Symbol">=</a> <a id="6377" href="sums.html#2535" data-type="Σ B → A" class="Field">pr₁</a> <a id="6381" class="Symbol">(</a><a id="6382" href="binary-products.html#1561" data-type="A ⇔ B → A → B" class="Function">lr-implication</a> <a id="6397" href="decidability.html#6423" data-type="(A : X → Type) (d : is-decidable-predicate A) (x : X) →
+is-decidable (A x) ⇔ Sigma Bool (λ b → A x ⇔ b ≡ true)" class="Function">I</a> <a id="6399" class="Symbol">(</a><a id="6400" href="decidability.html#6331" class="Bound">d</a> <a id="6402" href="decidability.html#6373" class="Bound">x</a><a id="6403" class="Symbol">))</a>
+     <a id="6411" class="Keyword">where</a>
+      <a id="6423" href="decidability.html#6423" data-type="(A : X → Type) (d : is-decidable-predicate A) (x : X) →
+is-decidable (A x) ⇔ Sigma Bool (λ b → A x ⇔ b ≡ true)" class="Function">I</a> <a id="6425" class="Symbol">:</a> <a id="6427" href="decidability.html#2635" data-type="Type → Type" class="Function">is-decidable</a> <a id="6440" class="Symbol">(</a><a id="6441" href="decidability.html#6229" class="Bound">A</a> <a id="6443" href="decidability.html#6373" class="Bound">x</a><a id="6444" class="Symbol">)</a> <a id="6446" href="binary-products.html#1314" data-type="Type → Type → Type" class="Function Operator">⇔</a> <a id="6448" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">Σ</a> <a id="6450" href="decidability.html#6450" class="Bound">b</a> <a id="6452" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">꞉</a> <a id="6454" href="Bool.html#492" data-type="Set" class="Datatype">Bool</a> <a id="6459" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">,</a> <a id="6461" class="Symbol">(</a><a id="6462" href="decidability.html#6229" class="Bound">A</a> <a id="6464" href="decidability.html#6373" class="Bound">x</a> <a id="6466" href="binary-products.html#1314" data-type="Type → Type → Type" class="Function Operator">⇔</a> <a id="6468" href="decidability.html#6450" class="Bound">b</a> <a id="6470" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="6472" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a><a id="6476" class="Symbol">)</a>
+      <a id="6484" href="decidability.html#6423" data-type="(A : X → Type) (d : is-decidable-predicate A) (x : X) →
+is-decidable (A x) ⇔ Sigma Bool (λ b → A x ⇔ b ≡ true)" class="Function">I</a> <a id="6486" class="Symbol">=</a> <a id="6488" href="decidability.html#3440" data-type="(A : Type) → is-decidable A ⇔ Sigma Bool (λ b → A ⇔ b ≡ true)" class="Function">decidability-with-booleans</a> <a id="6515" class="Symbol">(</a><a id="6516" href="decidability.html#6229" class="Bound">A</a> <a id="6518" href="decidability.html#6373" class="Bound">x</a><a id="6519" class="Symbol">)</a>
+
+    <a id="6526" href="decidability.html#6526" data-type="(A : X → Type) (d : is-decidable-predicate A) (x : X) →
+A x ⇔ α A d x ≡ true" class="Function">β</a> <a id="6528" class="Symbol">:</a> <a id="6530" class="Symbol">(</a><a id="6531" href="decidability.html#6531" class="Bound">x</a> <a id="6533" class="Symbol">:</a> <a id="6535" href="decidability.html#6226" class="Bound">X</a><a id="6536" class="Symbol">)</a> <a id="6538" class="Symbol">→</a> <a id="6540" href="decidability.html#6229" class="Bound">A</a> <a id="6542" href="decidability.html#6531" class="Bound">x</a> <a id="6544" href="binary-products.html#1314" data-type="Type → Type → Type" class="Function Operator">⇔</a> <a id="6546" href="decidability.html#6354" data-type="(A : X → Type) (d : is-decidable-predicate A) → X → Bool" class="Function">α</a> <a id="6548" href="decidability.html#6531" class="Bound">x</a> <a id="6550" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="6552" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a>
+    <a id="6561" href="decidability.html#6526" data-type="(A : X → Type) (d : is-decidable-predicate A) (x : X) →
+A x ⇔ α A d x ≡ true" class="Function">β</a> <a id="6563" href="decidability.html#6563" class="Bound">x</a> <a id="6565" class="Symbol">=</a> <a id="6567" href="decidability.html#6773" data-type="(A : X → Type) (d : is-decidable-predicate A) (x : X) →
+A x → α A d x ≡ true" class="Function">ϕ</a> <a id="6569" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="6571" href="decidability.html#6835" data-type="(A : X → Type) (d : is-decidable-predicate A) (x : X) →
+α A d x ≡ true → A x" class="Function">γ</a>
+     <a id="6578" class="Keyword">where</a>
+      <a id="6590" href="decidability.html#6590" data-type="(A : X → Type) (d : is-decidable-predicate A) (x : X) →
+is-decidable (A x) → Sigma Bool (λ b → A x ⇔ b ≡ true)" class="Function">I</a> <a id="6592" class="Symbol">:</a> <a id="6594" href="decidability.html#2635" data-type="Type → Type" class="Function">is-decidable</a> <a id="6607" class="Symbol">(</a><a id="6608" href="decidability.html#6229" class="Bound">A</a> <a id="6610" href="decidability.html#6563" class="Bound">x</a><a id="6611" class="Symbol">)</a> <a id="6613" class="Symbol">→</a> <a id="6615" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">Σ</a> <a id="6617" href="decidability.html#6617" class="Bound">b</a> <a id="6619" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">꞉</a> <a id="6621" href="Bool.html#492" data-type="Set" class="Datatype">Bool</a> <a id="6626" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">,</a> <a id="6628" class="Symbol">(</a><a id="6629" href="decidability.html#6229" class="Bound">A</a> <a id="6631" href="decidability.html#6563" class="Bound">x</a> <a id="6633" href="binary-products.html#1314" data-type="Type → Type → Type" class="Function Operator">⇔</a> <a id="6635" href="decidability.html#6617" class="Bound">b</a> <a id="6637" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="6639" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a><a id="6643" class="Symbol">)</a>
+      <a id="6651" href="decidability.html#6590" data-type="(A : X → Type) (d : is-decidable-predicate A) (x : X) →
+is-decidable (A x) → Sigma Bool (λ b → A x ⇔ b ≡ true)" class="Function">I</a> <a id="6653" class="Symbol">=</a> <a id="6655" href="binary-products.html#1561" data-type="A ⇔ B → A → B" class="Function">lr-implication</a> <a id="6670" class="Symbol">(</a><a id="6671" href="decidability.html#3440" data-type="(A : Type) → is-decidable A ⇔ Sigma Bool (λ b → A ⇔ b ≡ true)" class="Function">decidability-with-booleans</a> <a id="6698" class="Symbol">(</a><a id="6699" href="decidability.html#6229" class="Bound">A</a> <a id="6701" href="decidability.html#6563" class="Bound">x</a><a id="6702" class="Symbol">))</a>
+
+      <a id="6712" href="decidability.html#6712" data-type="(A : X → Type) (d : is-decidable-predicate A) (x : X) →
+Sigma Bool (λ b → A x ⇔ b ≡ true)" class="Function">II</a> <a id="6715" class="Symbol">:</a> <a id="6717" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">Σ</a> <a id="6719" href="decidability.html#6719" class="Bound">b</a> <a id="6721" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">꞉</a> <a id="6723" href="Bool.html#492" data-type="Set" class="Datatype">Bool</a> <a id="6728" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">,</a> <a id="6730" class="Symbol">(</a><a id="6731" href="decidability.html#6229" class="Bound">A</a> <a id="6733" href="decidability.html#6563" class="Bound">x</a> <a id="6735" href="binary-products.html#1314" data-type="Type → Type → Type" class="Function Operator">⇔</a> <a id="6737" href="decidability.html#6719" class="Bound">b</a> <a id="6739" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="6741" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a><a id="6745" class="Symbol">)</a>
+      <a id="6753" href="decidability.html#6712" data-type="(A : X → Type) (d : is-decidable-predicate A) (x : X) →
+Sigma Bool (λ b → A x ⇔ b ≡ true)" class="Function">II</a> <a id="6756" class="Symbol">=</a> <a id="6758" href="decidability.html#6590" data-type="(A : X → Type) (d : is-decidable-predicate A) (x : X) →
+is-decidable (A x) → Sigma Bool (λ b → A x ⇔ b ≡ true)" class="Function">I</a> <a id="6760" class="Symbol">(</a><a id="6761" href="decidability.html#6331" class="Bound">d</a> <a id="6763" href="decidability.html#6563" class="Bound">x</a><a id="6764" class="Symbol">)</a>
+
+      <a id="6773" href="decidability.html#6773" data-type="(A : X → Type) (d : is-decidable-predicate A) (x : X) →
+A x → α A d x ≡ true" class="Function">ϕ</a> <a id="6775" class="Symbol">:</a> <a id="6777" href="decidability.html#6229" class="Bound">A</a> <a id="6779" href="decidability.html#6563" class="Bound">x</a> <a id="6781" class="Symbol">→</a> <a id="6783" href="decidability.html#6354" data-type="(A : X → Type) (d : is-decidable-predicate A) → X → Bool" class="Function">α</a> <a id="6785" href="decidability.html#6563" class="Bound">x</a> <a id="6787" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="6789" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a>
+      <a id="6800" href="decidability.html#6773" data-type="(A : X → Type) (d : is-decidable-predicate A) (x : X) →
+A x → α A d x ≡ true" class="Function">ϕ</a> <a id="6802" class="Symbol">=</a> <a id="6804" href="binary-products.html#1561" data-type="A ⇔ B → A → B" class="Function">lr-implication</a> <a id="6819" class="Symbol">(</a><a id="6820" href="sums.html#2545" data-type="(r : Σ B) → B (pr₁ r)" class="Field">pr₂</a> <a id="6824" href="decidability.html#6712" data-type="(A : X → Type) (d : is-decidable-predicate A) (x : X) →
+Sigma Bool (λ b → A x ⇔ b ≡ true)" class="Function">II</a><a id="6826" class="Symbol">)</a>
+
+      <a id="6835" href="decidability.html#6835" data-type="(A : X → Type) (d : is-decidable-predicate A) (x : X) →
+α A d x ≡ true → A x" class="Function">γ</a> <a id="6837" class="Symbol">:</a> <a id="6839" href="decidability.html#6354" data-type="(A : X → Type) (d : is-decidable-predicate A) → X → Bool" class="Function">α</a> <a id="6841" href="decidability.html#6563" class="Bound">x</a> <a id="6843" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="6845" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a> <a id="6850" class="Symbol">→</a> <a id="6852" href="decidability.html#6229" class="Bound">A</a> <a id="6854" href="decidability.html#6563" class="Bound">x</a>
+      <a id="6862" href="decidability.html#6835" data-type="(A : X → Type) (d : is-decidable-predicate A) (x : X) →
+α A d x ≡ true → A x" class="Function">γ</a> <a id="6864" class="Symbol">=</a> <a id="6866" href="binary-products.html#1633" data-type="A ⇔ B → B → A" class="Function">rl-implication</a> <a id="6881" class="Symbol">(</a><a id="6882" href="sums.html#2545" data-type="(r : Σ B) → B (pr₁ r)" class="Field">pr₂</a> <a id="6886" href="decidability.html#6712" data-type="(A : X → Type) (d : is-decidable-predicate A) (x : X) →
+Sigma Bool (λ b → A x ⇔ b ≡ true)" class="Function">II</a><a id="6888" class="Symbol">)</a>
+
+  <a id="6893" href="decidability.html#6893" data-type="(A : X → Type) →
+Sigma (X → Bool) (λ α → (x : X) → A x ⇔ α x ≡ true) →
+is-decidable-predicate A" class="Function">g</a> <a id="6895" class="Symbol">:</a> <a id="6897" class="Symbol">(</a><a id="6898" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">Σ</a> <a id="6900" href="decidability.html#6900" class="Bound">α</a> <a id="6902" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">꞉</a> <a id="6904" class="Symbol">(</a><a id="6905" href="decidability.html#6226" class="Bound">X</a> <a id="6907" class="Symbol">→</a> <a id="6909" href="Bool.html#492" data-type="Set" class="Datatype">Bool</a><a id="6913" class="Symbol">)</a> <a id="6915" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">,</a> <a id="6917" class="Symbol">((</a><a id="6919" href="decidability.html#6919" class="Bound">x</a> <a id="6921" class="Symbol">:</a> <a id="6923" href="decidability.html#6226" class="Bound">X</a><a id="6924" class="Symbol">)</a> <a id="6926" class="Symbol">→</a> <a id="6928" href="decidability.html#6229" class="Bound">A</a> <a id="6930" href="decidability.html#6919" class="Bound">x</a> <a id="6932" href="binary-products.html#1314" data-type="Type → Type → Type" class="Function Operator">⇔</a> <a id="6934" href="decidability.html#6900" class="Bound">α</a> <a id="6936" href="decidability.html#6919" class="Bound">x</a> <a id="6938" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="6940" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a><a id="6944" class="Symbol">))</a> <a id="6947" class="Symbol">→</a> <a id="6949" href="decidability.html#5334" data-type="(X → Type) → Type" class="Function">is-decidable-predicate</a> <a id="6972" href="decidability.html#6229" class="Bound">A</a>
+  <a id="6976" href="decidability.html#6893" data-type="(A : X → Type) →
+Sigma (X → Bool) (λ α → (x : X) → A x ⇔ α x ≡ true) →
+is-decidable-predicate A" class="Function">g</a> <a id="6978" class="Symbol">(</a><a id="6979" href="decidability.html#6979" class="Bound">α</a> <a id="6981" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="6983" href="decidability.html#6983" class="Bound">ϕ</a><a id="6984" class="Symbol">)</a> <a id="6986" class="Symbol">=</a> <a id="6988" href="decidability.html#7003" data-type="(A : X → Type) (α : X → Bool) (ϕ : (x : X) → A x ⇔ α x ≡ true) →
+is-decidable-predicate A" class="Function">d</a>
+   <a id="6993" class="Keyword">where</a>
+    <a id="7003" href="decidability.html#7003" data-type="(A : X → Type) (α : X → Bool) (ϕ : (x : X) → A x ⇔ α x ≡ true) →
+is-decidable-predicate A" class="Function">d</a> <a id="7005" class="Symbol">:</a> <a id="7007" href="decidability.html#5334" data-type="(X → Type) → Type" class="Function">is-decidable-predicate</a> <a id="7030" href="decidability.html#6229" class="Bound">A</a>
+    <a id="7036" href="decidability.html#7003" data-type="(A : X → Type) (α : X → Bool) (ϕ : (x : X) → A x ⇔ α x ≡ true) →
+is-decidable-predicate A" class="Function">d</a> <a id="7038" href="decidability.html#7038" class="Bound">x</a> <a id="7040" class="Symbol">=</a> <a id="7042" href="decidability.html#7252" data-type="(A : X → Type) (α : X → Bool) (ϕ : (x : X) → A x ⇔ α x ≡ true)
+(x : X) →
+is-decidable (A x)" class="Function">III</a>
+     <a id="7051" class="Keyword">where</a>
+      <a id="7063" href="decidability.html#7063" data-type="(A : X → Type) (α : X → Bool) (ϕ : (x : X) → A x ⇔ α x ≡ true)
+(x : X) →
+Sigma Bool (λ b → A x ⇔ b ≡ true) → is-decidable (A x)" class="Function">I</a> <a id="7065" class="Symbol">:</a> <a id="7067" class="Symbol">(</a><a id="7068" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">Σ</a> <a id="7070" href="decidability.html#7070" class="Bound">b</a> <a id="7072" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">꞉</a> <a id="7074" href="Bool.html#492" data-type="Set" class="Datatype">Bool</a> <a id="7079" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">,</a> <a id="7081" class="Symbol">(</a><a id="7082" href="decidability.html#6229" class="Bound">A</a> <a id="7084" href="decidability.html#7038" class="Bound">x</a> <a id="7086" href="binary-products.html#1314" data-type="Type → Type → Type" class="Function Operator">⇔</a> <a id="7088" href="decidability.html#7070" class="Bound">b</a> <a id="7090" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="7092" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a><a id="7096" class="Symbol">))</a> <a id="7099" class="Symbol">→</a> <a id="7101" href="decidability.html#2635" data-type="Type → Type" class="Function">is-decidable</a> <a id="7114" class="Symbol">(</a><a id="7115" href="decidability.html#6229" class="Bound">A</a> <a id="7117" href="decidability.html#7038" class="Bound">x</a><a id="7118" class="Symbol">)</a>
+      <a id="7126" href="decidability.html#7063" data-type="(A : X → Type) (α : X → Bool) (ϕ : (x : X) → A x ⇔ α x ≡ true)
+(x : X) →
+Sigma Bool (λ b → A x ⇔ b ≡ true) → is-decidable (A x)" class="Function">I</a> <a id="7128" class="Symbol">=</a> <a id="7130" href="binary-products.html#1633" data-type="A ⇔ B → B → A" class="Function">rl-implication</a> <a id="7145" class="Symbol">(</a><a id="7146" href="decidability.html#3440" data-type="(A : Type) → is-decidable A ⇔ Sigma Bool (λ b → A ⇔ b ≡ true)" class="Function">decidability-with-booleans</a> <a id="7173" class="Symbol">(</a><a id="7174" href="decidability.html#6229" class="Bound">A</a> <a id="7176" href="decidability.html#7038" class="Bound">x</a><a id="7177" class="Symbol">))</a>
+
+      <a id="7187" href="decidability.html#7187" data-type="(A : X → Type) (α : X → Bool) (ϕ : (x : X) → A x ⇔ α x ≡ true)
+(x : X) →
+Sigma Bool (λ b → A x ⇔ b ≡ true)" class="Function">II</a> <a id="7190" class="Symbol">:</a> <a id="7192" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">Σ</a> <a id="7194" href="decidability.html#7194" class="Bound">b</a> <a id="7196" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">꞉</a> <a id="7198" href="Bool.html#492" data-type="Set" class="Datatype">Bool</a> <a id="7203" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">,</a> <a id="7205" class="Symbol">(</a><a id="7206" href="decidability.html#6229" class="Bound">A</a> <a id="7208" href="decidability.html#7038" class="Bound">x</a> <a id="7210" href="binary-products.html#1314" data-type="Type → Type → Type" class="Function Operator">⇔</a> <a id="7212" href="decidability.html#7194" class="Bound">b</a> <a id="7214" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="7216" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a><a id="7220" class="Symbol">)</a>
+      <a id="7228" href="decidability.html#7187" data-type="(A : X → Type) (α : X → Bool) (ϕ : (x : X) → A x ⇔ α x ≡ true)
+(x : X) →
+Sigma Bool (λ b → A x ⇔ b ≡ true)" class="Function">II</a> <a id="7231" class="Symbol">=</a> <a id="7233" class="Symbol">(</a><a id="7234" href="decidability.html#6979" class="Bound">α</a> <a id="7236" href="decidability.html#7038" class="Bound">x</a> <a id="7238" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="7240" href="decidability.html#6983" class="Bound">ϕ</a> <a id="7242" href="decidability.html#7038" class="Bound">x</a><a id="7243" class="Symbol">)</a>
+
+      <a id="7252" href="decidability.html#7252" data-type="(A : X → Type) (α : X → Bool) (ϕ : (x : X) → A x ⇔ α x ≡ true)
+(x : X) →
+is-decidable (A x)" class="Function">III</a> <a id="7256" class="Symbol">:</a> <a id="7258" href="decidability.html#2635" data-type="Type → Type" class="Function">is-decidable</a> <a id="7271" class="Symbol">(</a><a id="7272" href="decidability.html#6229" class="Bound">A</a> <a id="7274" href="decidability.html#7038" class="Bound">x</a><a id="7275" class="Symbol">)</a>
+      <a id="7283" href="decidability.html#7252" data-type="(A : X → Type) (α : X → Bool) (ϕ : (x : X) → A x ⇔ α x ≡ true)
+(x : X) →
+is-decidable (A x)" class="Function">III</a> <a id="7287" class="Symbol">=</a> <a id="7289" href="decidability.html#7063" data-type="(A : X → Type) (α : X → Bool) (ϕ : (x : X) → A x ⇔ α x ≡ true)
+(x : X) →
+Sigma Bool (λ b → A x ⇔ b ≡ true) → is-decidable (A x)" class="Function">I</a> <a id="7291" href="decidability.html#7187" data-type="(A : X → Type) (α : X → Bool) (ϕ : (x : X) → A x ⇔ α x ≡ true)
+(x : X) →
+Sigma Bool (λ b → A x ⇔ b ≡ true)" class="Function">II</a>
+</pre>
+<p>Although boolean-valued predicates are fine, we prefer to use
+type-valued predicates for the sake of uniformity, because we can always
+define type valued predicates, but only on special circumstances can we
+define boolean-valued predicates. It is better to define all predicates
+in the same way, and then write Agda code for predicates that happen to
+be decidable.</p>
+<h2 id="preservation-of-decidability">Preservation of decidability</h2>
+If <code>A</code> and <code>B</code> are logically equivalent, then
+<code>A</code> is decidable if and only if <code>B</code> is decidable.
+We first prove one direction.
+<pre class="Agda"><a id="map-decidable"></a><a id="7832" href="decidability.html#7832" data-type="(A → B) → (B → A) → is-decidable A → is-decidable B" class="Function">map-decidable</a> <a id="7846" class="Symbol">:</a> <a id="7848" class="Symbol">{</a><a id="7849" href="decidability.html#7849" class="Bound">A</a> <a id="7851" href="decidability.html#7851" class="Bound">B</a> <a id="7853" class="Symbol">:</a> <a id="7855" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="7859" class="Symbol">}</a> <a id="7861" class="Symbol">→</a> <a id="7863" class="Symbol">(</a><a id="7864" href="decidability.html#7849" class="Bound">A</a> <a id="7866" class="Symbol">→</a> <a id="7868" href="decidability.html#7851" class="Bound">B</a><a id="7869" class="Symbol">)</a> <a id="7871" class="Symbol">→</a> <a id="7873" class="Symbol">(</a><a id="7874" href="decidability.html#7851" class="Bound">B</a> <a id="7876" class="Symbol">→</a> <a id="7878" href="decidability.html#7849" class="Bound">A</a><a id="7879" class="Symbol">)</a> <a id="7881" class="Symbol">→</a> <a id="7883" href="decidability.html#2635" data-type="Type → Type" class="Function">is-decidable</a> <a id="7896" href="decidability.html#7849" class="Bound">A</a> <a id="7898" class="Symbol">→</a> <a id="7900" href="decidability.html#2635" data-type="Type → Type" class="Function">is-decidable</a> <a id="7913" href="decidability.html#7851" class="Bound">B</a>
+<a id="7915" href="decidability.html#7832" data-type="(A → B) → (B → A) → is-decidable A → is-decidable B" class="Function">map-decidable</a> <a id="7929" href="decidability.html#7929" class="Bound">f</a> <a id="7931" href="decidability.html#7931" class="Bound">g</a> <a id="7933" class="Symbol">(</a><a id="7934" href="binary-sums.html#703" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="7938" href="decidability.html#7938" class="Bound">x</a><a id="7939" class="Symbol">)</a> <a id="7941" class="Symbol">=</a> <a id="7943" href="binary-sums.html#703" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="7947" class="Symbol">(</a><a id="7948" href="decidability.html#7929" class="Bound">f</a> <a id="7950" href="decidability.html#7938" class="Bound">x</a><a id="7951" class="Symbol">)</a>
+<a id="7953" href="decidability.html#7832" data-type="(A → B) → (B → A) → is-decidable A → is-decidable B" class="Function">map-decidable</a> <a id="7967" href="decidability.html#7967" class="Bound">f</a> <a id="7969" href="decidability.html#7969" class="Bound">g</a> <a id="7971" class="Symbol">(</a><a id="7972" href="binary-sums.html#720" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="7976" href="decidability.html#7976" class="Bound">h</a><a id="7977" class="Symbol">)</a> <a id="7979" class="Symbol">=</a> <a id="7981" href="binary-sums.html#720" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="7985" class="Symbol">(λ</a> <a id="7988" href="decidability.html#7988" class="Bound">y</a> <a id="7990" class="Symbol">→</a> <a id="7992" href="decidability.html#7976" class="Bound">h</a> <a id="7994" class="Symbol">(</a><a id="7995" href="decidability.html#7969" class="Bound">g</a> <a id="7997" href="decidability.html#7988" class="Bound">y</a><a id="7998" class="Symbol">))</a>
+
+<a id="map-decidable-corollary"></a><a id="8002" href="decidability.html#8002" data-type="A ⇔ B → is-decidable A ⇔ is-decidable B" class="Function">map-decidable-corollary</a> <a id="8026" class="Symbol">:</a> <a id="8028" class="Symbol">{</a><a id="8029" href="decidability.html#8029" class="Bound">A</a> <a id="8031" href="decidability.html#8031" class="Bound">B</a> <a id="8033" class="Symbol">:</a> <a id="8035" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="8039" class="Symbol">}</a> <a id="8041" class="Symbol">→</a> <a id="8043" class="Symbol">(</a><a id="8044" href="decidability.html#8029" class="Bound">A</a> <a id="8046" href="binary-products.html#1314" data-type="Type → Type → Type" class="Function Operator">⇔</a> <a id="8048" href="decidability.html#8031" class="Bound">B</a><a id="8049" class="Symbol">)</a> <a id="8051" class="Symbol">→</a> <a id="8053" class="Symbol">(</a><a id="8054" href="decidability.html#2635" data-type="Type → Type" class="Function">is-decidable</a> <a id="8067" href="decidability.html#8029" class="Bound">A</a> <a id="8069" href="binary-products.html#1314" data-type="Type → Type → Type" class="Function Operator">⇔</a> <a id="8071" href="decidability.html#2635" data-type="Type → Type" class="Function">is-decidable</a> <a id="8084" href="decidability.html#8031" class="Bound">B</a><a id="8085" class="Symbol">)</a>
+<a id="8087" href="decidability.html#8002" data-type="A ⇔ B → is-decidable A ⇔ is-decidable B" class="Function">map-decidable-corollary</a> <a id="8111" class="Symbol">(</a><a id="8112" href="decidability.html#8112" class="Bound">f</a> <a id="8114" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="8116" href="decidability.html#8116" class="Bound">g</a><a id="8117" class="Symbol">)</a> <a id="8119" class="Symbol">=</a> <a id="8121" href="decidability.html#7832" data-type="(A → B) → (B → A) → is-decidable A → is-decidable B" class="Function">map-decidable</a> <a id="8135" href="decidability.html#8112" class="Bound">f</a> <a id="8137" href="decidability.html#8116" class="Bound">g</a> <a id="8139" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="8141" href="decidability.html#7832" data-type="(A → B) → (B → A) → is-decidable A → is-decidable B" class="Function">map-decidable</a> <a id="8155" href="decidability.html#8116" class="Bound">g</a> <a id="8157" href="decidability.html#8112" class="Bound">f</a>
+</pre>
+Variation:
+<pre class="Agda"><a id="map-decidable&#39;"></a><a id="8182" href="decidability.html#8182" data-type="(A → ¬ B) → (¬ A → B) → is-decidable A → is-decidable B" class="Function">map-decidable&#39;</a> <a id="8197" class="Symbol">:</a> <a id="8199" class="Symbol">{</a><a id="8200" href="decidability.html#8200" class="Bound">A</a> <a id="8202" href="decidability.html#8202" class="Bound">B</a> <a id="8204" class="Symbol">:</a> <a id="8206" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="8210" class="Symbol">}</a> <a id="8212" class="Symbol">→</a> <a id="8214" class="Symbol">(</a><a id="8215" href="decidability.html#8200" class="Bound">A</a> <a id="8217" class="Symbol">→</a> <a id="8219" href="empty-type.html#1685" data-type="Type → Type" class="Function Operator">¬</a> <a id="8221" href="decidability.html#8202" class="Bound">B</a><a id="8222" class="Symbol">)</a> <a id="8224" class="Symbol">→</a> <a id="8226" class="Symbol">(</a><a id="8227" href="empty-type.html#1685" data-type="Type → Type" class="Function Operator">¬</a> <a id="8229" href="decidability.html#8200" class="Bound">A</a> <a id="8231" class="Symbol">→</a> <a id="8233" href="decidability.html#8202" class="Bound">B</a><a id="8234" class="Symbol">)</a> <a id="8236" class="Symbol">→</a> <a id="8238" href="decidability.html#2635" data-type="Type → Type" class="Function">is-decidable</a> <a id="8251" href="decidability.html#8200" class="Bound">A</a> <a id="8253" class="Symbol">→</a> <a id="8255" href="decidability.html#2635" data-type="Type → Type" class="Function">is-decidable</a> <a id="8268" href="decidability.html#8202" class="Bound">B</a>
+<a id="8270" href="decidability.html#8182" data-type="(A → ¬ B) → (¬ A → B) → is-decidable A → is-decidable B" class="Function">map-decidable&#39;</a> <a id="8285" href="decidability.html#8285" class="Bound">f</a> <a id="8287" href="decidability.html#8287" class="Bound">g</a> <a id="8289" class="Symbol">(</a><a id="8290" href="binary-sums.html#703" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="8294" href="decidability.html#8294" class="Bound">x</a><a id="8295" class="Symbol">)</a> <a id="8297" class="Symbol">=</a> <a id="8299" href="binary-sums.html#720" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="8303" class="Symbol">(</a><a id="8304" href="decidability.html#8285" class="Bound">f</a> <a id="8306" href="decidability.html#8294" class="Bound">x</a><a id="8307" class="Symbol">)</a>
+<a id="8309" href="decidability.html#8182" data-type="(A → ¬ B) → (¬ A → B) → is-decidable A → is-decidable B" class="Function">map-decidable&#39;</a> <a id="8324" href="decidability.html#8324" class="Bound">f</a> <a id="8326" href="decidability.html#8326" class="Bound">g</a> <a id="8328" class="Symbol">(</a><a id="8329" href="binary-sums.html#720" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="8333" href="decidability.html#8333" class="Bound">h</a><a id="8334" class="Symbol">)</a> <a id="8336" class="Symbol">=</a> <a id="8338" href="binary-sums.html#703" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="8342" class="Symbol">(</a><a id="8343" href="decidability.html#8326" class="Bound">g</a> <a id="8345" href="decidability.html#8333" class="Bound">h</a><a id="8346" class="Symbol">)</a>
+</pre>
+<pre class="Agda"><a id="pointed-types-are-decidable"></a><a id="8361" href="decidability.html#8361" data-type="A → is-decidable A" class="Function">pointed-types-are-decidable</a> <a id="8389" class="Symbol">:</a> <a id="8391" class="Symbol">{</a><a id="8392" href="decidability.html#8392" class="Bound">A</a> <a id="8394" class="Symbol">:</a> <a id="8396" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="8400" class="Symbol">}</a> <a id="8402" class="Symbol">→</a> <a id="8404" href="decidability.html#8392" class="Bound">A</a> <a id="8406" class="Symbol">→</a> <a id="8408" href="decidability.html#2635" data-type="Type → Type" class="Function">is-decidable</a> <a id="8421" href="decidability.html#8392" class="Bound">A</a>
+<a id="8423" href="decidability.html#8361" data-type="A → is-decidable A" class="Function">pointed-types-are-decidable</a> <a id="8451" class="Symbol">=</a> <a id="8453" href="binary-sums.html#703" data-type="A → A ∔ B" class="InductiveConstructor">inl</a>
+
+<a id="empty-types-are-decidable"></a><a id="8458" href="decidability.html#8458" data-type="¬ A → is-decidable A" class="Function">empty-types-are-decidable</a> <a id="8484" class="Symbol">:</a> <a id="8486" class="Symbol">{</a><a id="8487" href="decidability.html#8487" class="Bound">A</a> <a id="8489" class="Symbol">:</a> <a id="8491" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="8495" class="Symbol">}</a> <a id="8497" class="Symbol">→</a> <a id="8499" href="empty-type.html#1685" data-type="Type → Type" class="Function Operator">¬</a> <a id="8501" href="decidability.html#8487" class="Bound">A</a> <a id="8503" class="Symbol">→</a> <a id="8505" href="decidability.html#2635" data-type="Type → Type" class="Function">is-decidable</a> <a id="8518" href="decidability.html#8487" class="Bound">A</a>
+<a id="8520" href="decidability.html#8458" data-type="¬ A → is-decidable A" class="Function">empty-types-are-decidable</a> <a id="8546" class="Symbol">=</a> <a id="8548" href="binary-sums.html#720" data-type="B → A ∔ B" class="InductiveConstructor">inr</a>
+
+<a id="𝟙-is-decidable"></a><a id="8553" href="decidability.html#8553" data-type="is-decidable 𝟙" class="Function">𝟙-is-decidable</a> <a id="8568" class="Symbol">:</a> <a id="8570" href="decidability.html#2635" data-type="Type → Type" class="Function">is-decidable</a> <a id="8583" href="unit-type.html#396" data-type="Type" class="Record">𝟙</a>
+<a id="8585" href="decidability.html#8553" data-type="is-decidable 𝟙" class="Function">𝟙-is-decidable</a> <a id="8600" class="Symbol">=</a> <a id="8602" href="decidability.html#8361" data-type="A → is-decidable A" class="Function">pointed-types-are-decidable</a> <a id="8630" href="unit-type.html#426" data-type="𝟙" class="InductiveConstructor">⋆</a>
+
+<a id="𝟘-is-decidable"></a><a id="8633" href="decidability.html#8633" data-type="is-decidable 𝟘" class="Function">𝟘-is-decidable</a> <a id="8648" class="Symbol">:</a> <a id="8650" href="decidability.html#2635" data-type="Type → Type" class="Function">is-decidable</a> <a id="8663" href="empty-type.html#523" data-type="Set" class="Datatype">𝟘</a>
+<a id="8665" href="decidability.html#8633" data-type="is-decidable 𝟘" class="Function">𝟘-is-decidable</a> <a id="8680" class="Symbol">=</a> <a id="8682" href="decidability.html#8458" data-type="¬ A → is-decidable A" class="Function">empty-types-are-decidable</a> <a id="8708" href="empty-type.html#3624" data-type="is-empty 𝟘" class="Function">𝟘-is-empty</a>
+
+<a id="∔-preserves-decidability"></a><a id="8720" href="decidability.html#8720" data-type="is-decidable A → is-decidable B → is-decidable (A ∔ B)" class="Function">∔-preserves-decidability</a> <a id="8745" class="Symbol">:</a> <a id="8747" class="Symbol">{</a><a id="8748" href="decidability.html#8748" class="Bound">A</a> <a id="8750" href="decidability.html#8750" class="Bound">B</a> <a id="8752" class="Symbol">:</a> <a id="8754" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="8758" class="Symbol">}</a>
+                         <a id="8785" class="Symbol">→</a> <a id="8787" href="decidability.html#2635" data-type="Type → Type" class="Function">is-decidable</a> <a id="8800" href="decidability.html#8748" class="Bound">A</a>
+                         <a id="8827" class="Symbol">→</a> <a id="8829" href="decidability.html#2635" data-type="Type → Type" class="Function">is-decidable</a> <a id="8842" href="decidability.html#8750" class="Bound">B</a>
+                         <a id="8869" class="Symbol">→</a> <a id="8871" href="decidability.html#2635" data-type="Type → Type" class="Function">is-decidable</a> <a id="8884" class="Symbol">(</a><a id="8885" href="decidability.html#8748" class="Bound">A</a> <a id="8887" href="binary-sums.html#672" data-type="Type → Type → Set" class="Datatype Operator">∔</a> <a id="8889" href="decidability.html#8750" class="Bound">B</a><a id="8890" class="Symbol">)</a>
+<a id="8892" href="decidability.html#8720" data-type="is-decidable A → is-decidable B → is-decidable (A ∔ B)" class="Function">∔-preserves-decidability</a> <a id="8917" class="Symbol">(</a><a id="8918" href="binary-sums.html#703" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="8922" href="decidability.html#8922" class="Bound">x</a><a id="8923" class="Symbol">)</a> <a id="8925" class="Symbol">_</a>       <a id="8933" class="Symbol">=</a> <a id="8935" href="binary-sums.html#703" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="8939" class="Symbol">(</a><a id="8940" href="binary-sums.html#703" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="8944" href="decidability.html#8922" class="Bound">x</a><a id="8945" class="Symbol">)</a>
+<a id="8947" href="decidability.html#8720" data-type="is-decidable A → is-decidable B → is-decidable (A ∔ B)" class="Function">∔-preserves-decidability</a> <a id="8972" class="Symbol">(</a><a id="8973" href="binary-sums.html#720" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="8977" class="Symbol">_)</a> <a id="8980" class="Symbol">(</a><a id="8981" href="binary-sums.html#703" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="8985" href="decidability.html#8985" class="Bound">y</a><a id="8986" class="Symbol">)</a> <a id="8988" class="Symbol">=</a> <a id="8990" href="binary-sums.html#703" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="8994" class="Symbol">(</a><a id="8995" href="binary-sums.html#720" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="8999" href="decidability.html#8985" class="Bound">y</a><a id="9000" class="Symbol">)</a>
+<a id="9002" href="decidability.html#8720" data-type="is-decidable A → is-decidable B → is-decidable (A ∔ B)" class="Function">∔-preserves-decidability</a> <a id="9027" class="Symbol">(</a><a id="9028" href="binary-sums.html#720" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="9032" href="decidability.html#9032" class="Bound">h</a><a id="9033" class="Symbol">)</a> <a id="9035" class="Symbol">(</a><a id="9036" href="binary-sums.html#720" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="9040" href="decidability.html#9040" class="Bound">k</a><a id="9041" class="Symbol">)</a> <a id="9043" class="Symbol">=</a> <a id="9045" href="binary-sums.html#720" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="9049" class="Symbol">(</a><a id="9050" href="binary-sums.html#3794" data-type="(A → C) → (B → C) → A ∔ B → C" class="Function">∔-nondep-elim</a> <a id="9064" href="decidability.html#9032" class="Bound">h</a> <a id="9066" href="decidability.html#9040" class="Bound">k</a><a id="9067" class="Symbol">)</a>
+
+<a id="×-preserves-decidability"></a><a id="9070" href="decidability.html#9070" data-type="is-decidable A → is-decidable B → is-decidable (A × B)" class="Function">×-preserves-decidability</a> <a id="9095" class="Symbol">:</a> <a id="9097" class="Symbol">{</a><a id="9098" href="decidability.html#9098" class="Bound">A</a> <a id="9100" href="decidability.html#9100" class="Bound">B</a> <a id="9102" class="Symbol">:</a> <a id="9104" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="9108" class="Symbol">}</a>
+                         <a id="9135" class="Symbol">→</a> <a id="9137" href="decidability.html#2635" data-type="Type → Type" class="Function">is-decidable</a> <a id="9150" href="decidability.html#9098" class="Bound">A</a>
+                         <a id="9177" class="Symbol">→</a> <a id="9179" href="decidability.html#2635" data-type="Type → Type" class="Function">is-decidable</a> <a id="9192" href="decidability.html#9100" class="Bound">B</a>
+                         <a id="9219" class="Symbol">→</a> <a id="9221" href="decidability.html#2635" data-type="Type → Type" class="Function">is-decidable</a> <a id="9234" class="Symbol">(</a><a id="9235" href="decidability.html#9098" class="Bound">A</a> <a id="9237" href="binary-products.html#670" data-type="Type → Type → Type" class="Function Operator">×</a> <a id="9239" href="decidability.html#9100" class="Bound">B</a><a id="9240" class="Symbol">)</a>
+<a id="9242" href="decidability.html#9070" data-type="is-decidable A → is-decidable B → is-decidable (A × B)" class="Function">×-preserves-decidability</a> <a id="9267" class="Symbol">(</a><a id="9268" href="binary-sums.html#703" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="9272" href="decidability.html#9272" class="Bound">x</a><a id="9273" class="Symbol">)</a> <a id="9275" class="Symbol">(</a><a id="9276" href="binary-sums.html#703" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="9280" href="decidability.html#9280" class="Bound">y</a><a id="9281" class="Symbol">)</a> <a id="9283" class="Symbol">=</a> <a id="9285" href="binary-sums.html#703" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="9289" class="Symbol">(</a><a id="9290" href="decidability.html#9272" class="Bound">x</a> <a id="9292" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="9294" href="decidability.html#9280" class="Bound">y</a><a id="9295" class="Symbol">)</a>
+<a id="9297" href="decidability.html#9070" data-type="is-decidable A → is-decidable B → is-decidable (A × B)" class="Function">×-preserves-decidability</a> <a id="9322" class="Symbol">(</a><a id="9323" href="binary-sums.html#703" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="9327" class="Symbol">_)</a> <a id="9330" class="Symbol">(</a><a id="9331" href="binary-sums.html#720" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="9335" href="decidability.html#9335" class="Bound">k</a><a id="9336" class="Symbol">)</a> <a id="9338" class="Symbol">=</a> <a id="9340" href="binary-sums.html#720" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="9344" class="Symbol">(λ</a> <a id="9347" class="Symbol">(</a><a id="9348" href="decidability.html#9348" class="Bound">x</a> <a id="9350" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="9352" href="decidability.html#9352" class="Bound">y</a><a id="9353" class="Symbol">)</a> <a id="9355" class="Symbol">→</a> <a id="9357" href="decidability.html#9335" class="Bound">k</a> <a id="9359" href="decidability.html#9352" class="Bound">y</a><a id="9360" class="Symbol">)</a>
+<a id="9362" href="decidability.html#9070" data-type="is-decidable A → is-decidable B → is-decidable (A × B)" class="Function">×-preserves-decidability</a> <a id="9387" class="Symbol">(</a><a id="9388" href="binary-sums.html#720" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="9392" href="decidability.html#9392" class="Bound">h</a><a id="9393" class="Symbol">)</a> <a id="9395" class="Symbol">_</a>       <a id="9403" class="Symbol">=</a> <a id="9405" href="binary-sums.html#720" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="9409" class="Symbol">(λ</a> <a id="9412" class="Symbol">(</a><a id="9413" href="decidability.html#9413" class="Bound">x</a> <a id="9415" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="9417" href="decidability.html#9417" class="Bound">y</a><a id="9418" class="Symbol">)</a> <a id="9420" class="Symbol">→</a> <a id="9422" href="decidability.html#9392" class="Bound">h</a> <a id="9424" href="decidability.html#9413" class="Bound">x</a><a id="9425" class="Symbol">)</a>
+
+<a id="→-preserves-decidability"></a><a id="9428" href="decidability.html#9428" data-type="is-decidable A → is-decidable B → is-decidable (A → B)" class="Function">→-preserves-decidability</a> <a id="9453" class="Symbol">:</a> <a id="9455" class="Symbol">{</a><a id="9456" href="decidability.html#9456" class="Bound">A</a> <a id="9458" href="decidability.html#9458" class="Bound">B</a> <a id="9460" class="Symbol">:</a> <a id="9462" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="9466" class="Symbol">}</a>
+                         <a id="9493" class="Symbol">→</a> <a id="9495" href="decidability.html#2635" data-type="Type → Type" class="Function">is-decidable</a> <a id="9508" href="decidability.html#9456" class="Bound">A</a>
+                         <a id="9535" class="Symbol">→</a> <a id="9537" href="decidability.html#2635" data-type="Type → Type" class="Function">is-decidable</a> <a id="9550" href="decidability.html#9458" class="Bound">B</a>
+                         <a id="9577" class="Symbol">→</a> <a id="9579" href="decidability.html#2635" data-type="Type → Type" class="Function">is-decidable</a> <a id="9592" class="Symbol">(</a><a id="9593" href="decidability.html#9456" class="Bound">A</a> <a id="9595" class="Symbol">→</a> <a id="9597" href="decidability.html#9458" class="Bound">B</a><a id="9598" class="Symbol">)</a>
+<a id="9600" href="decidability.html#9428" data-type="is-decidable A → is-decidable B → is-decidable (A → B)" class="Function">→-preserves-decidability</a> <a id="9625" class="Symbol">_</a>       <a id="9633" class="Symbol">(</a><a id="9634" href="binary-sums.html#703" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="9638" href="decidability.html#9638" class="Bound">y</a><a id="9639" class="Symbol">)</a> <a id="9641" class="Symbol">=</a> <a id="9643" href="binary-sums.html#703" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="9647" class="Symbol">(λ</a> <a id="9650" href="decidability.html#9650" class="Bound">_</a> <a id="9652" class="Symbol">→</a> <a id="9654" href="decidability.html#9638" class="Bound">y</a><a id="9655" class="Symbol">)</a>
+<a id="9657" href="decidability.html#9428" data-type="is-decidable A → is-decidable B → is-decidable (A → B)" class="Function">→-preserves-decidability</a> <a id="9682" class="Symbol">(</a><a id="9683" href="binary-sums.html#703" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="9687" href="decidability.html#9687" class="Bound">x</a><a id="9688" class="Symbol">)</a> <a id="9690" class="Symbol">(</a><a id="9691" href="binary-sums.html#720" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="9695" href="decidability.html#9695" class="Bound">k</a><a id="9696" class="Symbol">)</a> <a id="9698" class="Symbol">=</a> <a id="9700" href="binary-sums.html#720" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="9704" class="Symbol">(λ</a> <a id="9707" href="decidability.html#9707" class="Bound">f</a> <a id="9709" class="Symbol">→</a> <a id="9711" href="decidability.html#9695" class="Bound">k</a> <a id="9713" class="Symbol">(</a><a id="9714" href="decidability.html#9707" class="Bound">f</a> <a id="9716" href="decidability.html#9687" class="Bound">x</a><a id="9717" class="Symbol">))</a>
+<a id="9720" href="decidability.html#9428" data-type="is-decidable A → is-decidable B → is-decidable (A → B)" class="Function">→-preserves-decidability</a> <a id="9745" class="Symbol">(</a><a id="9746" href="binary-sums.html#720" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="9750" href="decidability.html#9750" class="Bound">h</a><a id="9751" class="Symbol">)</a> <a id="9753" class="Symbol">(</a><a id="9754" href="binary-sums.html#720" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="9758" href="decidability.html#9758" class="Bound">k</a><a id="9759" class="Symbol">)</a> <a id="9761" class="Symbol">=</a> <a id="9763" href="binary-sums.html#703" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="9767" class="Symbol">(λ</a> <a id="9770" href="decidability.html#9770" class="Bound">x</a> <a id="9772" class="Symbol">→</a> <a id="9774" href="empty-type.html#1769" data-type="(x : 𝟘) → A x" class="Function">𝟘-elim</a> <a id="9781" class="Symbol">(</a><a id="9782" href="decidability.html#9750" class="Bound">h</a> <a id="9784" href="decidability.html#9770" class="Bound">x</a><a id="9785" class="Symbol">))</a>
+
+<a id="¬-preserves-decidability"></a><a id="9789" href="decidability.html#9789" data-type="is-decidable A → is-decidable (¬ A)" class="Function">¬-preserves-decidability</a> <a id="9814" class="Symbol">:</a> <a id="9816" class="Symbol">{</a><a id="9817" href="decidability.html#9817" class="Bound">A</a> <a id="9819" class="Symbol">:</a> <a id="9821" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="9825" class="Symbol">}</a>
+                         <a id="9852" class="Symbol">→</a> <a id="9854" href="decidability.html#2635" data-type="Type → Type" class="Function">is-decidable</a> <a id="9867" href="decidability.html#9817" class="Bound">A</a>
+                         <a id="9894" class="Symbol">→</a> <a id="9896" href="decidability.html#2635" data-type="Type → Type" class="Function">is-decidable</a> <a id="9909" class="Symbol">(</a><a id="9910" href="empty-type.html#1685" data-type="Type → Type" class="Function Operator">¬</a> <a id="9912" href="decidability.html#9817" class="Bound">A</a><a id="9913" class="Symbol">)</a>
+<a id="9915" href="decidability.html#9789" data-type="is-decidable A → is-decidable (¬ A)" class="Function">¬-preserves-decidability</a> <a id="9940" href="decidability.html#9940" class="Bound">d</a> <a id="9942" class="Symbol">=</a> <a id="9944" href="decidability.html#9428" data-type="is-decidable A → is-decidable B → is-decidable (A → B)" class="Function">→-preserves-decidability</a> <a id="9969" href="decidability.html#9940" class="Bound">d</a> <a id="9971" href="decidability.html#8633" data-type="is-decidable 𝟘" class="Function">𝟘-is-decidable</a>
+</pre>
+<h2 id="exhaustively-searchable-types">Exhaustively searchable
+types</h2>
+We will explain in a future lecture why we need to use
+<code>Type₁</code> rather than <code>Type</code> in the following
+definition. For the moment we just mention that because the definition
+mentions <code>Type</code>, there would be a circularity if the type of
+the definition where again <code>Type</code>. Such circular definitions
+are not allowed because if they were then we would be able to prove that
+<code>0=1</code>. We have that <code>Type : Type₁</code> (the type of
+<code>Type</code> is <code>Type₁</code>) but we can’t have
+<code>Type : Type</code>.
+<pre class="Agda"><a id="is-exhaustively-searchable"></a><a id="10498" href="decidability.html#10498" data-type="Type → Type₁" class="Function">is-exhaustively-searchable</a> <a id="10525" class="Symbol">:</a> <a id="10527" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a> <a id="10532" class="Symbol">→</a> <a id="10534" href="general-notation.html#727" data-type="Set₂" class="Function">Type₁</a>
+<a id="10540" href="decidability.html#10498" data-type="Type → Type₁" class="Function">is-exhaustively-searchable</a> <a id="10567" href="decidability.html#10567" class="Bound">X</a> <a id="10569" class="Symbol">=</a> <a id="10571" class="Symbol">(</a><a id="10572" href="decidability.html#10572" class="Bound">A</a> <a id="10574" class="Symbol">:</a> <a id="10576" href="decidability.html#10567" class="Bound">X</a> <a id="10578" class="Symbol">→</a> <a id="10580" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="10584" class="Symbol">)</a>
+                             <a id="10615" class="Symbol">→</a> <a id="10617" href="decidability.html#5334" data-type="(X → Type) → Type" class="Function">is-decidable-predicate</a> <a id="10640" href="decidability.html#10572" class="Bound">A</a>
+                             <a id="10671" class="Symbol">→</a> <a id="10673" href="decidability.html#2635" data-type="Type → Type" class="Function">is-decidable</a> <a id="10686" class="Symbol">(</a><a id="10687" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">Σ</a> <a id="10689" href="decidability.html#10689" class="Bound">x</a> <a id="10691" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">꞉</a> <a id="10693" href="decidability.html#10567" class="Bound">X</a> <a id="10695" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">,</a> <a id="10697" href="decidability.html#10572" class="Bound">A</a> <a id="10699" href="decidability.html#10689" class="Bound">x</a><a id="10700" class="Symbol">)</a>
+</pre>
+<p><strong>Exercise</strong>. Show, in Agda, that the types
+<code>𝟘</code>, <code>𝟙</code> , <code>Bool</code> and
+<code>Fin n</code>, for any <code>n : ℕ</code>, are exhaustively
+searchable. The idea is that we check whether or not <code>A x</code>
+holds for each <code>x : A</code>, and if we find at least one, we
+conclude that <code>Σ x ꞉ X , A x</code>, and otherwise we conclude that
+<code>¬ (Σ x ꞉ X , A x)</code>. This is possible because these types are
+finite.</p>
+<p><strong>Exercise</strong>. Think why there can’t be any program of
+type <code>is-exhaustively-searchable ℕ</code>, by reduction to the
+Halting Problem. No Agda code is asked in this question. In fact, the
+question is asking you to think why such Agda code can’t exist. This is
+very different from proving, in Agda, that
+<code>¬ is-exhaustively-searchable ℕ</code>. Interestingly, this is also
+not provable in Agda, but explaining why this is the case is beyond the
+scope of this module. In any case, this is an example of a statement
+<code>A</code> such that neither <code>A</code> nor <code>¬ A</code> are
+provable in Agda. Such statements are called <em>independent</em>. It
+must be remarked that the reason why there isn’t an Agda program of type
+<code>is-exhaustively-searchable ℕ</code> is <em>not</em> merely that
+<code>ℕ</code> is infinite, because there are, perhaps surprisingly,
+infinite types <code>A</code> such that a program of type
+<code>is-exhastively-searchable A</code> can be coded in Agda. One
+really does an argument such as reduction to the Halting Problem to show
+that there is no program that can exaustively search the set
+<code>ℕ</code> of natural numbers.</p>
+<pre class="Agda"><a id="Π-exhaustibility"></a><a id="12119" href="decidability.html#12119" data-type="(X : Type) →
+is-exhaustively-searchable X →
+(A : X → Type) → is-decidable-predicate A → is-decidable (Pi X A)" class="Function">Π-exhaustibility</a> <a id="12136" class="Symbol">:</a> <a id="12138" class="Symbol">(</a><a id="12139" href="decidability.html#12139" class="Bound">X</a> <a id="12141" class="Symbol">:</a> <a id="12143" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="12147" class="Symbol">)</a>
+                 <a id="12166" class="Symbol">→</a> <a id="12168" href="decidability.html#10498" data-type="Type → Type₁" class="Function">is-exhaustively-searchable</a> <a id="12195" href="decidability.html#12139" class="Bound">X</a>
+                 <a id="12214" class="Symbol">→</a> <a id="12216" class="Symbol">(</a><a id="12217" href="decidability.html#12217" class="Bound">A</a> <a id="12219" class="Symbol">:</a> <a id="12221" href="decidability.html#12139" class="Bound">X</a> <a id="12223" class="Symbol">→</a> <a id="12225" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="12229" class="Symbol">)</a>
+                 <a id="12248" class="Symbol">→</a> <a id="12250" href="decidability.html#5334" data-type="(X → Type) → Type" class="Function">is-decidable-predicate</a> <a id="12273" href="decidability.html#12217" class="Bound">A</a>
+                 <a id="12292" class="Symbol">→</a> <a id="12294" href="decidability.html#2635" data-type="Type → Type" class="Function">is-decidable</a> <a id="12307" class="Symbol">(</a><a id="12308" href="products.html#4097" data-type="(A : Type) → (A → Type) → Type" class="Function">Π</a> <a id="12310" href="decidability.html#12310" class="Bound">x</a> <a id="12312" href="products.html#4097" data-type="(A : Type) → (A → Type) → Type" class="Function">꞉</a> <a id="12314" href="decidability.html#12139" class="Bound">X</a> <a id="12316" href="products.html#4097" data-type="(A : Type) → (A → Type) → Type" class="Function">,</a> <a id="12318" href="decidability.html#12217" class="Bound">A</a> <a id="12320" href="decidability.html#12310" class="Bound">x</a><a id="12321" class="Symbol">)</a>
+<a id="12323" href="decidability.html#12119" data-type="(X : Type) →
+is-exhaustively-searchable X →
+(A : X → Type) → is-decidable-predicate A → is-decidable (Pi X A)" class="Function">Π-exhaustibility</a> <a id="12340" href="decidability.html#12340" class="Bound">X</a> <a id="12342" href="decidability.html#12342" class="Bound">s</a> <a id="12344" href="decidability.html#12344" class="Bound">A</a> <a id="12346" href="decidability.html#12346" class="Bound">d</a> <a id="12348" class="Symbol">=</a> <a id="12350" href="decidability.html#12834" data-type="(X : Type) (s : is-exhaustively-searchable X) (A : X → Type)
+(d : is-decidable-predicate A) →
+is-decidable (Pi X A)" class="Function">VI</a>
+ <a id="12354" class="Keyword">where</a>
+  <a id="12362" href="decidability.html#12362" data-type="(X : Type) (s : is-exhaustively-searchable X) (A : X → Type)
+(d : is-decidable-predicate A) →
+is-decidable-predicate (λ x → ¬ A x)" class="Function">I</a> <a id="12364" class="Symbol">:</a> <a id="12366" href="decidability.html#5334" data-type="(X → Type) → Type" class="Function">is-decidable-predicate</a> <a id="12389" class="Symbol">(λ</a> <a id="12392" href="decidability.html#12392" class="Bound">x</a> <a id="12394" class="Symbol">→</a> <a id="12396" href="empty-type.html#1685" data-type="Type → Type" class="Function Operator">¬</a> <a id="12398" class="Symbol">(</a><a id="12399" href="decidability.html#12344" class="Bound">A</a> <a id="12401" href="decidability.html#12392" class="Bound">x</a><a id="12402" class="Symbol">))</a>
+  <a id="12407" href="decidability.html#12362" data-type="(X : Type) (s : is-exhaustively-searchable X) (A : X → Type)
+(d : is-decidable-predicate A) →
+is-decidable-predicate (λ x → ¬ A x)" class="Function">I</a> <a id="12409" href="decidability.html#12409" class="Bound">x</a> <a id="12411" class="Symbol">=</a> <a id="12413" href="decidability.html#9789" data-type="is-decidable A → is-decidable (¬ A)" class="Function">¬-preserves-decidability</a> <a id="12438" class="Symbol">(</a><a id="12439" href="decidability.html#12346" class="Bound">d</a> <a id="12441" href="decidability.html#12409" class="Bound">x</a><a id="12442" class="Symbol">)</a>
+
+  <a id="12447" href="decidability.html#12447" data-type="(X : Type) (s : is-exhaustively-searchable X) (A : X → Type)
+(d : is-decidable-predicate A) →
+is-decidable (Sigma X (λ x → ¬ A x))" class="Function">II</a> <a id="12450" class="Symbol">:</a> <a id="12452" href="decidability.html#2635" data-type="Type → Type" class="Function">is-decidable</a> <a id="12465" class="Symbol">(</a><a id="12466" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">Σ</a> <a id="12468" href="decidability.html#12468" class="Bound">x</a> <a id="12470" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">꞉</a> <a id="12472" href="decidability.html#12340" class="Bound">X</a> <a id="12474" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">,</a> <a id="12476" href="empty-type.html#1685" data-type="Type → Type" class="Function Operator">¬</a> <a id="12478" class="Symbol">(</a><a id="12479" href="decidability.html#12344" class="Bound">A</a> <a id="12481" href="decidability.html#12468" class="Bound">x</a><a id="12482" class="Symbol">))</a>
+  <a id="12487" href="decidability.html#12447" data-type="(X : Type) (s : is-exhaustively-searchable X) (A : X → Type)
+(d : is-decidable-predicate A) →
+is-decidable (Sigma X (λ x → ¬ A x))" class="Function">II</a> <a id="12490" class="Symbol">=</a> <a id="12492" href="decidability.html#12342" class="Bound">s</a> <a id="12494" class="Symbol">(λ</a> <a id="12497" href="decidability.html#12497" class="Bound">x</a> <a id="12499" class="Symbol">→</a> <a id="12501" href="empty-type.html#1685" data-type="Type → Type" class="Function Operator">¬</a> <a id="12503" class="Symbol">(</a><a id="12504" href="decidability.html#12344" class="Bound">A</a> <a id="12506" href="decidability.html#12497" class="Bound">x</a><a id="12507" class="Symbol">))</a> <a id="12510" href="decidability.html#12362" data-type="(X : Type) (s : is-exhaustively-searchable X) (A : X → Type)
+(d : is-decidable-predicate A) →
+is-decidable-predicate (λ x → ¬ A x)" class="Function">I</a>
+
+  <a id="12515" href="decidability.html#12515" data-type="(X : Type) (s : is-exhaustively-searchable X) (A : X → Type)
+(d : is-decidable-predicate A) →
+Sigma X (λ x → ¬ A x) → ¬ Pi X A" class="Function">III</a> <a id="12519" class="Symbol">:</a> <a id="12521" class="Symbol">(</a><a id="12522" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">Σ</a> <a id="12524" href="decidability.html#12524" class="Bound">x</a> <a id="12526" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">꞉</a> <a id="12528" href="decidability.html#12340" class="Bound">X</a> <a id="12530" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">,</a> <a id="12532" href="empty-type.html#1685" data-type="Type → Type" class="Function Operator">¬</a> <a id="12534" class="Symbol">(</a><a id="12535" href="decidability.html#12344" class="Bound">A</a> <a id="12537" href="decidability.html#12524" class="Bound">x</a><a id="12538" class="Symbol">))</a> <a id="12541" class="Symbol">→</a> <a id="12543" href="empty-type.html#1685" data-type="Type → Type" class="Function Operator">¬</a> <a id="12545" class="Symbol">(</a><a id="12546" href="products.html#4097" data-type="(A : Type) → (A → Type) → Type" class="Function">Π</a> <a id="12548" href="decidability.html#12548" class="Bound">x</a> <a id="12550" href="products.html#4097" data-type="(A : Type) → (A → Type) → Type" class="Function">꞉</a> <a id="12552" href="decidability.html#12340" class="Bound">X</a> <a id="12554" href="products.html#4097" data-type="(A : Type) → (A → Type) → Type" class="Function">,</a> <a id="12556" href="decidability.html#12344" class="Bound">A</a> <a id="12558" href="decidability.html#12548" class="Bound">x</a><a id="12559" class="Symbol">)</a>
+  <a id="12563" href="decidability.html#12515" data-type="(X : Type) (s : is-exhaustively-searchable X) (A : X → Type)
+(d : is-decidable-predicate A) →
+Sigma X (λ x → ¬ A x) → ¬ Pi X A" class="Function">III</a> <a id="12567" class="Symbol">(</a><a id="12568" href="decidability.html#12568" class="Bound">x</a> <a id="12570" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="12572" href="decidability.html#12572" class="Bound">f</a><a id="12573" class="Symbol">)</a> <a id="12575" href="decidability.html#12575" class="Bound">g</a> <a id="12577" class="Symbol">=</a> <a id="12579" href="decidability.html#12572" class="Bound">f</a> <a id="12581" class="Symbol">(</a><a id="12582" href="decidability.html#12575" class="Bound">g</a> <a id="12584" href="decidability.html#12568" class="Bound">x</a><a id="12585" class="Symbol">)</a>
+
+  <a id="12590" href="decidability.html#12590" data-type="(X : Type) (s : is-exhaustively-searchable X) (A : X → Type)
+(d : is-decidable-predicate A) →
+¬ Sigma X (λ x → ¬ A x) → Pi X A" class="Function">IV</a> <a id="12593" class="Symbol">:</a> <a id="12595" href="empty-type.html#1685" data-type="Type → Type" class="Function Operator">¬</a> <a id="12597" class="Symbol">(</a><a id="12598" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">Σ</a> <a id="12600" href="decidability.html#12600" class="Bound">x</a> <a id="12602" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">꞉</a> <a id="12604" href="decidability.html#12340" class="Bound">X</a> <a id="12606" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">,</a> <a id="12608" href="empty-type.html#1685" data-type="Type → Type" class="Function Operator">¬</a> <a id="12610" class="Symbol">(</a><a id="12611" href="decidability.html#12344" class="Bound">A</a> <a id="12613" href="decidability.html#12600" class="Bound">x</a><a id="12614" class="Symbol">))</a> <a id="12617" class="Symbol">→</a> <a id="12619" class="Symbol">(</a><a id="12620" href="products.html#4097" data-type="(A : Type) → (A → Type) → Type" class="Function">Π</a> <a id="12622" href="decidability.html#12622" class="Bound">x</a> <a id="12624" href="products.html#4097" data-type="(A : Type) → (A → Type) → Type" class="Function">꞉</a> <a id="12626" href="decidability.html#12340" class="Bound">X</a> <a id="12628" href="products.html#4097" data-type="(A : Type) → (A → Type) → Type" class="Function">,</a> <a id="12630" href="decidability.html#12344" class="Bound">A</a> <a id="12632" href="decidability.html#12622" class="Bound">x</a><a id="12633" class="Symbol">)</a>
+  <a id="12637" href="decidability.html#12590" data-type="(X : Type) (s : is-exhaustively-searchable X) (A : X → Type)
+(d : is-decidable-predicate A) →
+¬ Sigma X (λ x → ¬ A x) → Pi X A" class="Function">IV</a> <a id="12640" href="decidability.html#12640" class="Bound">h</a> <a id="12642" href="decidability.html#12642" class="Bound">x</a> <a id="12644" class="Symbol">=</a> <a id="12646" href="decidability.html#12698" data-type="(X : Type) (s : is-exhaustively-searchable X) (A : X → Type)
+(d : is-decidable-predicate A) (h : ¬ Sigma X (λ x → ¬ A x))
+(x : X) →
+A x" class="Function">ii</a>
+   <a id="12652" class="Keyword">where</a>
+    <a id="12662" href="decidability.html#12662" data-type="(X : Type) (s : is-exhaustively-searchable X) (A : X → Type)
+(d : is-decidable-predicate A) (h : ¬ Sigma X (λ x → ¬ A x))
+(x : X) →
+¬¬ A x" class="Function">i</a> <a id="12664" class="Symbol">:</a> <a id="12666" href="negation.html#3352" data-type="Type → Type" class="Function Operator">¬¬</a> <a id="12669" href="decidability.html#12344" class="Bound">A</a> <a id="12671" href="decidability.html#12642" class="Bound">x</a>
+    <a id="12677" href="decidability.html#12662" data-type="(X : Type) (s : is-exhaustively-searchable X) (A : X → Type)
+(d : is-decidable-predicate A) (h : ¬ Sigma X (λ x → ¬ A x))
+(x : X) →
+¬¬ A x" class="Function">i</a> <a id="12679" href="decidability.html#12679" class="Bound">f</a> <a id="12681" class="Symbol">=</a> <a id="12683" href="decidability.html#12640" class="Bound">h</a> <a id="12685" class="Symbol">(</a><a id="12686" href="decidability.html#12642" class="Bound">x</a> <a id="12688" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="12690" href="decidability.html#12679" class="Bound">f</a><a id="12691" class="Symbol">)</a>
+
+    <a id="12698" href="decidability.html#12698" data-type="(X : Type) (s : is-exhaustively-searchable X) (A : X → Type)
+(d : is-decidable-predicate A) (h : ¬ Sigma X (λ x → ¬ A x))
+(x : X) →
+A x" class="Function">ii</a> <a id="12701" class="Symbol">:</a> <a id="12703" href="decidability.html#12344" class="Bound">A</a> <a id="12705" href="decidability.html#12642" class="Bound">x</a>
+    <a id="12711" href="decidability.html#12698" data-type="(X : Type) (s : is-exhaustively-searchable X) (A : X → Type)
+(d : is-decidable-predicate A) (h : ¬ Sigma X (λ x → ¬ A x))
+(x : X) →
+A x" class="Function">ii</a> <a id="12714" class="Symbol">=</a> <a id="12716" href="decidability.html#2910" data-type="is-decidable A → ¬¬ A → A" class="Function">¬¬-elim</a> <a id="12724" class="Symbol">(</a><a id="12725" href="decidability.html#12346" class="Bound">d</a> <a id="12727" href="decidability.html#12642" class="Bound">x</a><a id="12728" class="Symbol">)</a> <a id="12730" href="decidability.html#12662" data-type="(X : Type) (s : is-exhaustively-searchable X) (A : X → Type)
+(d : is-decidable-predicate A) (h : ¬ Sigma X (λ x → ¬ A x))
+(x : X) →
+¬¬ A x" class="Function">i</a>
+
+  <a id="12735" href="decidability.html#12735" data-type="(X : Type) (s : is-exhaustively-searchable X) (A : X → Type)
+(d : is-decidable-predicate A) →
+is-decidable (Sigma X (λ x → ¬ A x)) → is-decidable (Pi X A)" class="Function">V</a> <a id="12737" class="Symbol">:</a> <a id="12739" href="decidability.html#2635" data-type="Type → Type" class="Function">is-decidable</a> <a id="12752" class="Symbol">(</a><a id="12753" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">Σ</a> <a id="12755" href="decidability.html#12755" class="Bound">x</a> <a id="12757" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">꞉</a> <a id="12759" href="decidability.html#12340" class="Bound">X</a> <a id="12761" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">,</a> <a id="12763" href="empty-type.html#1685" data-type="Type → Type" class="Function Operator">¬</a> <a id="12765" class="Symbol">(</a><a id="12766" href="decidability.html#12344" class="Bound">A</a> <a id="12768" href="decidability.html#12755" class="Bound">x</a><a id="12769" class="Symbol">))</a> <a id="12772" class="Symbol">→</a> <a id="12774" href="decidability.html#2635" data-type="Type → Type" class="Function">is-decidable</a> <a id="12787" class="Symbol">(</a><a id="12788" href="products.html#4097" data-type="(A : Type) → (A → Type) → Type" class="Function">Π</a> <a id="12790" href="decidability.html#12790" class="Bound">x</a> <a id="12792" href="products.html#4097" data-type="(A : Type) → (A → Type) → Type" class="Function">꞉</a> <a id="12794" href="decidability.html#12340" class="Bound">X</a> <a id="12796" href="products.html#4097" data-type="(A : Type) → (A → Type) → Type" class="Function">,</a> <a id="12798" href="decidability.html#12344" class="Bound">A</a> <a id="12800" href="decidability.html#12790" class="Bound">x</a><a id="12801" class="Symbol">)</a>
+  <a id="12805" href="decidability.html#12735" data-type="(X : Type) (s : is-exhaustively-searchable X) (A : X → Type)
+(d : is-decidable-predicate A) →
+is-decidable (Sigma X (λ x → ¬ A x)) → is-decidable (Pi X A)" class="Function">V</a> <a id="12807" class="Symbol">=</a> <a id="12809" href="decidability.html#8182" data-type="(A → ¬ B) → (¬ A → B) → is-decidable A → is-decidable B" class="Function">map-decidable&#39;</a> <a id="12824" href="decidability.html#12515" data-type="(X : Type) (s : is-exhaustively-searchable X) (A : X → Type)
+(d : is-decidable-predicate A) →
+Sigma X (λ x → ¬ A x) → ¬ Pi X A" class="Function">III</a> <a id="12828" href="decidability.html#12590" data-type="(X : Type) (s : is-exhaustively-searchable X) (A : X → Type)
+(d : is-decidable-predicate A) →
+¬ Sigma X (λ x → ¬ A x) → Pi X A" class="Function">IV</a>
+
+  <a id="12834" href="decidability.html#12834" data-type="(X : Type) (s : is-exhaustively-searchable X) (A : X → Type)
+(d : is-decidable-predicate A) →
+is-decidable (Pi X A)" class="Function">VI</a> <a id="12837" class="Symbol">:</a> <a id="12839" href="decidability.html#2635" data-type="Type → Type" class="Function">is-decidable</a> <a id="12852" class="Symbol">(</a><a id="12853" href="products.html#4097" data-type="(A : Type) → (A → Type) → Type" class="Function">Π</a> <a id="12855" href="decidability.html#12855" class="Bound">x</a> <a id="12857" href="products.html#4097" data-type="(A : Type) → (A → Type) → Type" class="Function">꞉</a> <a id="12859" href="decidability.html#12340" class="Bound">X</a> <a id="12861" href="products.html#4097" data-type="(A : Type) → (A → Type) → Type" class="Function">,</a> <a id="12863" href="decidability.html#12344" class="Bound">A</a> <a id="12865" href="decidability.html#12855" class="Bound">x</a><a id="12866" class="Symbol">)</a>
+  <a id="12870" href="decidability.html#12834" data-type="(X : Type) (s : is-exhaustively-searchable X) (A : X → Type)
+(d : is-decidable-predicate A) →
+is-decidable (Pi X A)" class="Function">VI</a> <a id="12873" class="Symbol">=</a> <a id="12875" href="decidability.html#12735" data-type="(X : Type) (s : is-exhaustively-searchable X) (A : X → Type)
+(d : is-decidable-predicate A) →
+is-decidable (Sigma X (λ x → ¬ A x)) → is-decidable (Pi X A)" class="Function">V</a> <a id="12877" href="decidability.html#12447" data-type="(X : Type) (s : is-exhaustively-searchable X) (A : X → Type)
+(d : is-decidable-predicate A) →
+is-decidable (Sigma X (λ x → ¬ A x))" class="Function">II</a>
+</pre>
+<p><strong>Exercises.</strong> If two types <code>A</code> and
+<code>B</code> are exhaustively searchable types, then so are the types
+<code>A × B</code> and <code>A + B</code>. Moreover, if <code>X</code>
+is an exhaustively searchable type and <code>A : X → Type</code> is a
+family of types, and the type <code>A x</code> is exhaustively
+searchable for each <code>x : X</code>, then the type
+<code>Σ x ꞉ X , A x</code> is exhaustively searchable.</p>
+<h2 id="decidable-equality">Decidable equality</h2>
+<p>A particular case of interest regarding the above discussion is the
+notion of a type having decidable equality, which can be written in Agda
+as follows.</p>
+<pre class="Agda"><a id="has-decidable-equality"></a><a id="13403" href="decidability.html#13403" data-type="Type → Type" class="Function">has-decidable-equality</a> <a id="13426" class="Symbol">:</a> <a id="13428" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a> <a id="13433" class="Symbol">→</a> <a id="13435" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a>
+<a id="13440" href="decidability.html#13403" data-type="Type → Type" class="Function">has-decidable-equality</a> <a id="13463" href="decidability.html#13463" class="Bound">X</a> <a id="13465" class="Symbol">=</a> <a id="13467" class="Symbol">(</a><a id="13468" href="decidability.html#13468" class="Bound">x</a> <a id="13470" href="decidability.html#13470" class="Bound">y</a> <a id="13472" class="Symbol">:</a> <a id="13474" href="decidability.html#13463" class="Bound">X</a><a id="13475" class="Symbol">)</a> <a id="13477" class="Symbol">→</a> <a id="13479" href="decidability.html#2635" data-type="Type → Type" class="Function">is-decidable</a> <a id="13492" class="Symbol">(</a><a id="13493" href="decidability.html#13468" class="Bound">x</a> <a id="13495" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="13497" href="decidability.html#13470" class="Bound">y</a><a id="13498" class="Symbol">)</a>
+</pre>
+<p><strong>Exercise.</strong> Show, in Agda, that a type <code>X</code>
+has decidable equality if and only if there is a function
+<code>X → X → Bool</code> that checks whether two elements of
+<code>X</code> are equal or not.</p>
+Some examples:
+<pre class="Agda"><a id="Bool-has-decidable-equality"></a><a id="13704" href="decidability.html#13704" data-type="has-decidable-equality Bool" class="Function">Bool-has-decidable-equality</a> <a id="13732" class="Symbol">:</a> <a id="13734" href="decidability.html#13403" data-type="Type → Type" class="Function">has-decidable-equality</a> <a id="13757" href="Bool.html#492" data-type="Set" class="Datatype">Bool</a>
+<a id="13762" href="decidability.html#13704" data-type="has-decidable-equality Bool" class="Function">Bool-has-decidable-equality</a> <a id="13790" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a>  <a id="13796" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a>  <a id="13802" class="Symbol">=</a> <a id="13804" href="binary-sums.html#703" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="13808" class="Symbol">(</a><a id="13809" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="13814" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a><a id="13818" class="Symbol">)</a>
+<a id="13820" href="decidability.html#13704" data-type="has-decidable-equality Bool" class="Function">Bool-has-decidable-equality</a> <a id="13848" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a>  <a id="13854" href="Bool.html#516" data-type="Bool" class="InductiveConstructor">false</a> <a id="13860" class="Symbol">=</a> <a id="13862" href="binary-sums.html#720" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="13866" href="negation.html#4754" data-type="true ≢ false" class="Function">true-is-not-false</a>
+<a id="13884" href="decidability.html#13704" data-type="has-decidable-equality Bool" class="Function">Bool-has-decidable-equality</a> <a id="13912" href="Bool.html#516" data-type="Bool" class="InductiveConstructor">false</a> <a id="13918" href="Bool.html#511" data-type="Bool" class="InductiveConstructor">true</a>  <a id="13924" class="Symbol">=</a> <a id="13926" href="binary-sums.html#720" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="13930" href="negation.html#4699" data-type="false ≢ true" class="Function">false-is-not-true</a>
+<a id="13948" href="decidability.html#13704" data-type="has-decidable-equality Bool" class="Function">Bool-has-decidable-equality</a> <a id="13976" href="Bool.html#516" data-type="Bool" class="InductiveConstructor">false</a> <a id="13982" href="Bool.html#516" data-type="Bool" class="InductiveConstructor">false</a> <a id="13988" class="Symbol">=</a> <a id="13990" href="binary-sums.html#703" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="13994" class="Symbol">(</a><a id="13995" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="14000" href="Bool.html#516" data-type="Bool" class="InductiveConstructor">false</a><a id="14005" class="Symbol">)</a>
+
+<a id="14008" class="Keyword">open</a> <a id="14013" class="Keyword">import</a> <a id="14020" href="natural-numbers-functions.html" class="Module">natural-numbers-functions</a>
+
+<a id="ℕ-has-decidable-equality"></a><a id="14047" href="decidability.html#14047" data-type="has-decidable-equality ℕ" class="Function">ℕ-has-decidable-equality</a> <a id="14072" class="Symbol">:</a> <a id="14074" href="decidability.html#13403" data-type="Type → Type" class="Function">has-decidable-equality</a> <a id="14097" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a>
+<a id="14099" href="decidability.html#14047" data-type="has-decidable-equality ℕ" class="Function">ℕ-has-decidable-equality</a> <a id="14124" class="Number">0</a>       <a id="14132" class="Number">0</a>       <a id="14140" class="Symbol">=</a> <a id="14142" href="binary-sums.html#703" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="14146" class="Symbol">(</a><a id="14147" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="14152" href="introduction.html#1050" data-type="ℕ" class="InductiveConstructor">zero</a><a id="14156" class="Symbol">)</a>
+<a id="14158" href="decidability.html#14047" data-type="has-decidable-equality ℕ" class="Function">ℕ-has-decidable-equality</a> <a id="14183" class="Number">0</a>       <a id="14191" class="Symbol">(</a><a id="14192" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="14196" href="decidability.html#14196" class="Bound">y</a><a id="14197" class="Symbol">)</a> <a id="14199" class="Symbol">=</a> <a id="14201" href="binary-sums.html#720" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="14205" href="natural-numbers-functions.html#529" data-type="0 ≢ suc x" class="Function">zero-is-not-suc</a>
+<a id="14221" href="decidability.html#14047" data-type="has-decidable-equality ℕ" class="Function">ℕ-has-decidable-equality</a> <a id="14246" class="Symbol">(</a><a id="14247" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="14251" href="decidability.html#14251" class="Bound">x</a><a id="14252" class="Symbol">)</a> <a id="14254" class="Number">0</a>       <a id="14262" class="Symbol">=</a> <a id="14264" href="binary-sums.html#720" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="14268" href="natural-numbers-functions.html#471" data-type="suc x ≢ 0" class="Function">suc-is-not-zero</a>
+<a id="14284" href="decidability.html#14047" data-type="has-decidable-equality ℕ" class="Function">ℕ-has-decidable-equality</a> <a id="14309" class="Symbol">(</a><a id="14310" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="14314" href="decidability.html#14314" class="Bound">x</a><a id="14315" class="Symbol">)</a> <a id="14317" class="Symbol">(</a><a id="14318" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="14322" href="decidability.html#14322" class="Bound">y</a><a id="14323" class="Symbol">)</a> <a id="14325" class="Symbol">=</a> <a id="14327" href="decidability.html#14501" data-type="(x y : ℕ) → is-decidable (suc x ≡ suc y)" class="Function">III</a>
+ <a id="14332" class="Keyword">where</a>
+  <a id="14340" href="decidability.html#14340" data-type="(x y : ℕ) → is-decidable (x ≡ y)" class="Function">IH</a> <a id="14343" class="Symbol">:</a> <a id="14345" href="decidability.html#2635" data-type="Type → Type" class="Function">is-decidable</a> <a id="14358" class="Symbol">(</a><a id="14359" href="decidability.html#14314" class="Bound">x</a> <a id="14361" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="14363" href="decidability.html#14322" class="Bound">y</a><a id="14364" class="Symbol">)</a>
+  <a id="14368" href="decidability.html#14340" data-type="(x y : ℕ) → is-decidable (x ≡ y)" class="Function">IH</a> <a id="14371" class="Symbol">=</a> <a id="14373" href="decidability.html#14047" data-type="has-decidable-equality ℕ" class="Function">ℕ-has-decidable-equality</a> <a id="14398" href="decidability.html#14314" class="Bound">x</a> <a id="14400" href="decidability.html#14322" class="Bound">y</a>
+
+  <a id="14405" href="decidability.html#14405" data-type="(x y : ℕ) → x ≡ y → suc x ≡ suc y" class="Function">I</a> <a id="14407" class="Symbol">:</a> <a id="14409" href="decidability.html#14314" class="Bound">x</a> <a id="14411" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="14413" href="decidability.html#14322" class="Bound">y</a> <a id="14415" class="Symbol">→</a> <a id="14417" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="14421" href="decidability.html#14314" class="Bound">x</a> <a id="14423" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="14425" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="14429" href="decidability.html#14322" class="Bound">y</a>
+  <a id="14433" href="decidability.html#14405" data-type="(x y : ℕ) → x ≡ y → suc x ≡ suc y" class="Function">I</a> <a id="14435" class="Symbol">=</a> <a id="14437" href="identity-type.html#2307" data-type="(f : A → B) → x ≡ y → f x ≡ f y" class="Function">ap</a> <a id="14440" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a>
+
+  <a id="14447" href="decidability.html#14447" data-type="(x y : ℕ) → suc x ≡ suc y → x ≡ y" class="Function">II</a> <a id="14450" class="Symbol">:</a> <a id="14452" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="14456" href="decidability.html#14314" class="Bound">x</a> <a id="14458" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="14460" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="14464" href="decidability.html#14322" class="Bound">y</a> <a id="14466" class="Symbol">→</a> <a id="14468" href="decidability.html#14314" class="Bound">x</a> <a id="14470" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="14472" href="decidability.html#14322" class="Bound">y</a>
+  <a id="14476" href="decidability.html#14447" data-type="(x y : ℕ) → suc x ≡ suc y → x ≡ y" class="Function">II</a> <a id="14479" class="Symbol">=</a> <a id="14481" href="natural-numbers-functions.html#635" data-type="suc x ≡ suc y → x ≡ y" class="Function">suc-is-injective</a>
+
+  <a id="14501" href="decidability.html#14501" data-type="(x y : ℕ) → is-decidable (suc x ≡ suc y)" class="Function">III</a> <a id="14505" class="Symbol">:</a> <a id="14507" href="decidability.html#2635" data-type="Type → Type" class="Function">is-decidable</a> <a id="14520" class="Symbol">(</a><a id="14521" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="14525" href="decidability.html#14314" class="Bound">x</a> <a id="14527" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="14529" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="14533" href="decidability.html#14322" class="Bound">y</a><a id="14534" class="Symbol">)</a>
+  <a id="14538" href="decidability.html#14501" data-type="(x y : ℕ) → is-decidable (suc x ≡ suc y)" class="Function">III</a> <a id="14542" class="Symbol">=</a> <a id="14544" href="decidability.html#7832" data-type="(A → B) → (B → A) → is-decidable A → is-decidable B" class="Function">map-decidable</a> <a id="14558" href="decidability.html#14405" data-type="(x y : ℕ) → x ≡ y → suc x ≡ suc y" class="Function">I</a> <a id="14560" href="decidability.html#14447" data-type="(x y : ℕ) → suc x ≡ suc y → x ≡ y" class="Function">II</a> <a id="14563" href="decidability.html#14340" data-type="(x y : ℕ) → is-decidable (x ≡ y)" class="Function">IH</a>
+</pre>
+<h2 id="equality-of-functions">Equality of functions</h2>
+<p>As discussed above, it is not possible to decide whether or not we
+have <code>f ∼ g</code> for two functions <code>f</code> and
+<code>g</code>, for example of type <code>ℕ → ℕ</code>. However,
+sometimes we can <em>prove</em> or <em>disprove</em> this for
+<em>particular</em> functions. Here are some examples:</p>
+<pre class="Agda"><a id="14851" class="Keyword">private</a>
+ <a id="f"></a><a id="14860" href="decidability.html#14860" class="Function">f</a> <a id="g"></a><a id="14862" href="decidability.html#14862" class="Function">g</a> <a id="h"></a><a id="14864" href="decidability.html#14864" class="Function">h</a> <a id="14866" class="Symbol">:</a> <a id="14868" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a> <a id="14870" class="Symbol">→</a> <a id="14872" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a>
+
+ <a id="14876" href="decidability.html#14860" class="Function">f</a> <a id="14878" href="decidability.html#14878" class="Bound">x</a> <a id="14880" class="Symbol">=</a> <a id="14882" href="decidability.html#14878" class="Bound">x</a>
+
+ <a id="14886" href="decidability.html#14862" class="Function">g</a> <a id="14888" class="Number">0</a>       <a id="14896" class="Symbol">=</a> <a id="14898" class="Number">0</a>
+ <a id="14901" href="decidability.html#14862" class="Function">g</a> <a id="14903" class="Symbol">(</a><a id="14904" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="14908" href="decidability.html#14908" class="Bound">x</a><a id="14909" class="Symbol">)</a> <a id="14911" class="Symbol">=</a> <a id="14913" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="14917" class="Symbol">(</a><a id="14918" href="decidability.html#14862" class="Function">g</a> <a id="14920" href="decidability.html#14908" class="Bound">x</a><a id="14921" class="Symbol">)</a>
+
+ <a id="14925" href="decidability.html#14864" class="Function">h</a> <a id="14927" href="decidability.html#14927" class="Bound">x</a> <a id="14929" class="Symbol">=</a> <a id="14931" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="14935" href="decidability.html#14927" class="Bound">x</a>
+
+ <a id="f-equals-g"></a><a id="14939" href="decidability.html#14939" class="Function">f-equals-g</a> <a id="14950" class="Symbol">:</a> <a id="14952" href="decidability.html#14860" class="Function">f</a> <a id="14954" href="identity-type.html#3258" data-type="((x : A) → B x) → ((x : A) → B x) → Type" class="Function Operator">∼</a> <a id="14956" href="decidability.html#14862" class="Function">g</a>
+ <a id="14959" href="decidability.html#14939" class="Function">f-equals-g</a> <a id="14970" class="Number">0</a>       <a id="14978" class="Symbol">=</a> <a id="14980" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="14985" class="Symbol">(</a><a id="14986" href="decidability.html#14860" class="Function">f</a> <a id="14988" class="Number">0</a><a id="14989" class="Symbol">)</a>
+ <a id="14992" href="decidability.html#14939" class="Function">f-equals-g</a> <a id="15003" class="Symbol">(</a><a id="15004" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="15008" href="decidability.html#15008" class="Bound">x</a><a id="15009" class="Symbol">)</a> <a id="15011" class="Symbol">=</a> <a id="15013" href="decidability.html#15066" class="Function">γ</a>
+  <a id="15017" class="Keyword">where</a>
+   <a id="15026" href="decidability.html#15026" class="Function">IH</a> <a id="15029" class="Symbol">:</a> <a id="15031" href="decidability.html#14860" class="Function">f</a> <a id="15033" href="decidability.html#15008" class="Bound">x</a> <a id="15035" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="15037" href="decidability.html#14862" class="Function">g</a> <a id="15039" href="decidability.html#15008" class="Bound">x</a>
+   <a id="15044" href="decidability.html#15026" class="Function">IH</a> <a id="15047" class="Symbol">=</a> <a id="15049" href="decidability.html#14939" class="Function">f-equals-g</a> <a id="15060" href="decidability.html#15008" class="Bound">x</a>
+
+   <a id="15066" href="decidability.html#15066" class="Function">γ</a> <a id="15068" class="Symbol">:</a> <a id="15070" href="decidability.html#14860" class="Function">f</a> <a id="15072" class="Symbol">(</a><a id="15073" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="15077" href="decidability.html#15008" class="Bound">x</a><a id="15078" class="Symbol">)</a> <a id="15080" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="15082" href="decidability.html#14862" class="Function">g</a> <a id="15084" class="Symbol">(</a><a id="15085" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="15089" href="decidability.html#15008" class="Bound">x</a><a id="15090" class="Symbol">)</a>
+   <a id="15095" href="decidability.html#15066" class="Function">γ</a> <a id="15097" class="Symbol">=</a> <a id="15099" href="decidability.html#14860" class="Function">f</a> <a id="15101" class="Symbol">(</a><a id="15102" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="15106" href="decidability.html#15008" class="Bound">x</a><a id="15107" class="Symbol">)</a> <a id="15109" href="identity-type.html#4152" data-type="(x : X) → x ≡ y → y ≡ z → x ≡ z" class="Function Operator">≡⟨</a> <a id="15112" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="15117" class="Symbol">_</a> <a id="15119" href="identity-type.html#4152" data-type="(x : X) → x ≡ y → y ≡ z → x ≡ z" class="Function Operator">⟩</a>
+       <a id="15128" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="15132" href="decidability.html#15008" class="Bound">x</a>     <a id="15138" href="identity-type.html#4152" data-type="(x : X) → x ≡ y → y ≡ z → x ≡ z" class="Function Operator">≡⟨</a> <a id="15141" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="15146" class="Symbol">_</a> <a id="15148" href="identity-type.html#4152" data-type="(x : X) → x ≡ y → y ≡ z → x ≡ z" class="Function Operator">⟩</a>
+       <a id="15157" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="15161" class="Symbol">(</a><a id="15162" href="decidability.html#14860" class="Function">f</a> <a id="15164" href="decidability.html#15008" class="Bound">x</a><a id="15165" class="Symbol">)</a> <a id="15167" href="identity-type.html#4152" data-type="(x : X) → x ≡ y → y ≡ z → x ≡ z" class="Function Operator">≡⟨</a> <a id="15170" href="identity-type.html#2307" data-type="(f : A → B) → x ≡ y → f x ≡ f y" class="Function">ap</a> <a id="15173" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="15177" href="decidability.html#15026" class="Function">IH</a> <a id="15180" href="identity-type.html#4152" data-type="(x : X) → x ≡ y → y ≡ z → x ≡ z" class="Function Operator">⟩</a>
+       <a id="15189" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="15193" class="Symbol">(</a><a id="15194" href="decidability.html#14862" class="Function">g</a> <a id="15196" href="decidability.html#15008" class="Bound">x</a><a id="15197" class="Symbol">)</a> <a id="15199" href="identity-type.html#4152" data-type="(x : X) → x ≡ y → y ≡ z → x ≡ z" class="Function Operator">≡⟨</a> <a id="15202" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="15207" class="Symbol">_</a> <a id="15209" href="identity-type.html#4152" data-type="(x : X) → x ≡ y → y ≡ z → x ≡ z" class="Function Operator">⟩</a>
+       <a id="15218" href="decidability.html#14862" class="Function">g</a> <a id="15220" class="Symbol">(</a><a id="15221" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="15225" href="decidability.html#15008" class="Bound">x</a><a id="15226" class="Symbol">)</a> <a id="15228" href="identity-type.html#4238" data-type="(x : X) → x ≡ x" class="Function Operator">∎</a>
+
+ <a id="f-not-equals-h"></a><a id="15232" href="decidability.html#15232" class="Function">f-not-equals-h</a> <a id="15247" class="Symbol">:</a> <a id="15249" href="empty-type.html#1685" data-type="Type → Type" class="Function Operator">¬</a> <a id="15251" class="Symbol">(</a><a id="15252" href="decidability.html#14860" class="Function">f</a> <a id="15254" href="identity-type.html#3258" data-type="((x : A) → B x) → ((x : A) → B x) → Type" class="Function Operator">∼</a> <a id="15256" href="decidability.html#14864" class="Function">h</a><a id="15257" class="Symbol">)</a>
+ <a id="15260" href="decidability.html#15232" class="Function">f-not-equals-h</a> <a id="15275" href="decidability.html#15275" class="Bound">e</a> <a id="15277" class="Symbol">=</a> <a id="15279" href="decidability.html#15331" class="Function">contradiction</a> <a id="15293" href="decidability.html#15306" class="Function">d</a>
+  <a id="15297" class="Keyword">where</a>
+   <a id="15306" href="decidability.html#15306" class="Function">d</a> <a id="15308" class="Symbol">:</a> <a id="15310" class="Number">0</a> <a id="15312" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="15314" class="Number">1</a>
+   <a id="15319" href="decidability.html#15306" class="Function">d</a> <a id="15321" class="Symbol">=</a> <a id="15323" href="decidability.html#15275" class="Bound">e</a> <a id="15325" class="Number">0</a>
+
+   <a id="15331" href="decidability.html#15331" class="Function">contradiction</a> <a id="15345" class="Symbol">:</a> <a id="15347" href="empty-type.html#1685" data-type="Type → Type" class="Function Operator">¬</a> <a id="15349" class="Symbol">(</a><a id="15350" class="Number">0</a> <a id="15352" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="15354" class="Number">1</a><a id="15355" class="Symbol">)</a>
+   <a id="15360" href="decidability.html#15331" class="Function">contradiction</a> <a id="15374" class="Symbol">()</a>
+</pre>
+<p><a href="https://martinescardo.github.io/HoTTEST-Summer-School/">Go
+back to the table of contents</a></p>
+
+  </article>
+</div>
+</main>
+</body>
+<style>
+
+:root {
+  --text-bg: #fff;
+  --text-fg: #222;
+  --shadow: #000;
+  --primary: #0054F4;
+  --secondary: #9C1BD6;
+  --modal-bg: #ccccccaa;
+  --warning-bg: #fef08a;
+  --code-bg: var(--text-bg);
+  --code-fg: var(--text-fg);
+  --code-keyword: #BB3B13;
+  --code-string:  #d52753;
+  --code-number:  #8A1060;
+  --code-module:  #8A1060;
+  --code-field:   #9C1BD6;
+  --code-constructor: #207B1D;
+  --code-highlight: #F5DEB3;
+  --search-selected: #e2e8f0;
+  --details-summary: #b2ebf2;
+  --details-open:    #80deea;
+  --depgraph-edge: #eee;
+  --blockquote-bg: #d8b4fe; }
+
+.diagram-dark {
+  display: none !important; }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-bg: #282C34;
+    --text-fg: #bfbfbf;
+    --shadow: #475569;
+    --primary: #61AFEF;
+    --secondary: #C878DD;
+    --modal-bg: #282C34aa;
+    --warning-bg: #991b1b;
+    --code-keyword:     #E5C07B;
+    --code-string:      #E06C75;
+    --code-number:      #98C379;
+    --code-module:      #56B6C2;
+    --code-field:       #C878DD;
+    --code-constructor: #98C379;
+    --code-highlight: #ef444499;
+    --search-selected: #474e5e;
+    --details-summary: #5b21b6;
+    --details-open:    #4c1d95;
+    --depgraph-edge: #474e5e;
+    --blockquote-bg: #475569; }
+  div.warning {
+    --shadow: #7f1d1d
+  ; }
+  input {
+    background-color: #334155;
+    border: 1px solid #475569;
+    color: var(--text-fg); }
+  body {
+    scrollbar-color: #3b4454 #2b2e33; }
+  .diagram-dark {
+    display: block !important; }
+  .diagram-light {
+    display: none !important; } }
+
+table {
+  margin: auto;
+  border-collapse: collapse; }
+  table td, table th {
+    text-align: center;
+    padding: 0px 1em 0px 1em;
+    border: 1px solid black; }
+  table th {
+    border-bottom: 2px solid black; }
+  table td {
+    white-space: nowrap; }
+
+html { max-width: 100%; }
+
+body {
+  font-family: "Inria Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  width: 100%;
+  font-size: var(--font-size);
+  overflow-x: clip;
+  background-color: var(--text-bg);
+  color: var(--text-fg);
+}
+
+div#post-toc-container { max-width: 120ch; margin: auto; }
+
+article a[href], div#return > a[href], div#top > a[href], aside#toc > div#toc-container ul a[href] {
+  color: var(--primary);
+  text-decoration: none; }
+  article a[href]:hover, div#return > a[href]:hover, div#top > a[href]:hover, aside#toc > div#toc-container ul a[href]:hover {
+    text-decoration: 2px currentColor underline !important; }
+  article a[href]:visited, div#return > a[href]:visited, div#top > a[href]:visited, aside#toc > div#toc-container ul a[href]:visited {
+    color: var(--secondary); }
+
+/* Aspects. */
+.Agda {
+  /* NameKinds. */
+  /* OtherAspects. */
+  /* Standard attributes. */
+  font-family: 'iosevka', 'Iosevka', 'Fantasque Sans Mono', 'Roboto Mono', monospace;
+  font-weight: 400; }
+  .Agda .Comment {
+    color: var(--code-fg);
+    font-style: italic; }
+  .Agda .Background {
+    background-color: var(--code-bg); }
+  .Agda .Markup {
+    color: var(--code-fg); }
+  .Agda .Keyword {
+    color: var(--code-keyword); }
+  .Agda .String {
+    color: var(--code-string); }
+  .Agda .Number {
+    color: var(--code-number); }
+  .Agda .Symbol {
+    color: var(--code-fg); }
+  .Agda .PrimitiveType {
+    color: var(--primary); }
+  .Agda .Pragma {
+    color: var(--code-fg); }
+  .Agda .Bound {
+    color: var(--code-fg) !important; }
+  .Agda .Generalizable {
+    color: var(--code-fg) !important; }
+  .Agda .InductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .CoinductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .Datatype {
+    color: var(--primary) !important; }
+  .Agda .Field {
+    color: var(--code-field) !important; }
+  .Agda .Function {
+    color: var(--primary) !important; }
+  .Agda .Module {
+    color: var(--code-module) !important; }
+  .Agda .Postulate {
+    color: var(--primary) !important; }
+  .Agda .Primitive {
+    color: var(--primary) !important; }
+  .Agda .Record {
+    color: var(--primary) !important; }
+  .Agda .UnsolvedMeta {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .UnsolvedConstraint {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .TerminationProblem {
+    color: var(--code-fg);
+    background: #FFA07A; }
+  .Agda .IncompletePattern {
+    color: var(--code-fg);
+    background: #F5DEB3; }
+  .Agda .Error {
+    color: red;
+    text-decoration: underline; }
+  .Agda .TypeChecks {
+    color: var(--code-fg);
+    background: #ADD8E6; }
+  .Agda .ShadowingInTelescope {
+    color: var(--code-fg);
+    background: #808080; }
+  .Agda .Deadcode {
+    color: var(--code-keyword);
+    font-weight: bold; }
+  .Agda a {
+    text-decoration: none; }
+  .Agda a[href]:hover {
+    text-decoration: 2px var(--primary) underline; }
+  .Agda a[href]:target {
+    animation: highlight 2.5s; }
+  body.text-page .Agda {
+    font-size: var(--code-font-size); }
+
+pre.Agda, div.sourceCode, pre {
+  border-radius: 0;
+  box-shadow: none;
+  overflow-y: clip;
+  margin: 0;
+  padding: 1em;
+  padding-top: 0.25em;
+  padding-bottom: 0.25em;
+  background-color: var(--code-bg);
+  color: var(--code-fg);
+  font-size: var(--code-font-size);
+  max-width: 100%;
+  overflow-x: auto;
+}
+</style>
+</html>

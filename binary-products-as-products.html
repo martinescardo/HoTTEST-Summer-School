@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>HoTTEST Summer School 2022 Lecture Notes</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+</head>
+
+<body class="text-page">
+<main>
+<div id="post-toc-container" style="padding-left: 1em; padding-right: 1em;">
+
+  <article>
+
+<p><a href="Https://www.Cs.Bham.Ac.Uk/~mhe/">Martin Escardo</a>. Notes
+originally written for the module <em>Advanced Functional
+Programming</em> of the <a
+href="https://www.birmingham.ac.uk/index.aspx">University of
+Birmingham</a>, UK.</p>
+<!--
+<pre class="Agda"><a id="222" class="Symbol">{-#</a> <a id="226" class="Keyword">OPTIONS</a> <a id="234" class="Pragma">--without-K</a> <a id="246" class="Pragma">--safe</a> <a id="253" class="Symbol">#-}</a>
+
+<a id="258" class="Keyword">module</a> <a id="265" href="binary-products-as-products.html" class="Module">binary-products-as-products</a> <a id="293" class="Keyword">where</a>
+
+<a id="300" class="Keyword">open</a> <a id="305" class="Keyword">import</a> <a id="312" href="prelude.html" class="Module">prelude</a>
+</pre>-->
+<h2 id="binary-products-as-a-special-case-of-arbitrary-products">Binary
+products as a special case of arbitrary products</h2>
+Using the <a href="binary-type.html">binary type</a> <code>𝟚</code>,
+binary products can be seen as a special case of arbitrary products as
+follows:
+<pre class="Agda"><a id="528" class="Keyword">open</a> <a id="533" class="Keyword">import</a> <a id="540" href="binary-type.html" class="Module">binary-type</a>
+
+<a id="_×&#39;_"></a><a id="553" href="binary-products-as-products.html#553" data-type="Type → Type → Type" class="Function Operator">_×&#39;_</a> <a id="558" class="Symbol">:</a> <a id="560" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a> <a id="565" class="Symbol">→</a> <a id="567" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a> <a id="572" class="Symbol">→</a> <a id="574" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a>
+<a id="579" href="binary-products-as-products.html#579" class="Bound">A₀</a> <a id="582" href="binary-products-as-products.html#553" data-type="Type → Type → Type" class="Function Operator">×&#39;</a> <a id="585" href="binary-products-as-products.html#585" class="Bound">A₁</a> <a id="588" class="Symbol">=</a> <a id="590" href="products.html#4097" data-type="(A : Type) → (A → Type) → Type" class="Function">Π</a> <a id="592" href="binary-products-as-products.html#592" class="Bound">n</a> <a id="594" href="products.html#4097" data-type="(A : Type) → (A → Type) → Type" class="Function">꞉</a> <a id="596" href="binary-type.html#568" data-type="Set" class="Datatype">𝟚</a> <a id="598" href="products.html#4097" data-type="(A : Type) → (A → Type) → Type" class="Function">,</a> <a id="600" href="binary-products-as-products.html#613" data-type="(A₀ A₁ : Type) → 𝟚 → Type" class="Function">A</a> <a id="602" href="binary-products-as-products.html#592" class="Bound">n</a>
+ <a id="605" class="Keyword">where</a>
+  <a id="613" href="binary-products-as-products.html#613" data-type="(A₀ A₁ : Type) → 𝟚 → Type" class="Function">A</a> <a id="615" class="Symbol">:</a> <a id="617" href="binary-type.html#568" data-type="Set" class="Datatype">𝟚</a> <a id="619" class="Symbol">→</a> <a id="621" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a>
+  <a id="628" href="binary-products-as-products.html#613" data-type="(A₀ A₁ : Type) → 𝟚 → Type" class="Function">A</a> <a id="630" href="binary-type.html#584" data-type="𝟚" class="InductiveConstructor">𝟎</a> <a id="632" class="Symbol">=</a> <a id="634" href="binary-products-as-products.html#579" class="Bound">A₀</a>
+  <a id="639" href="binary-products-as-products.html#613" data-type="(A₀ A₁ : Type) → 𝟚 → Type" class="Function">A</a> <a id="641" href="binary-type.html#586" data-type="𝟚" class="InductiveConstructor">𝟏</a> <a id="643" class="Symbol">=</a> <a id="645" href="binary-products-as-products.html#585" class="Bound">A₁</a>
+
+<a id="649" class="Keyword">infixr</a> <a id="656" class="Number">2</a> <a id="658" href="binary-products-as-products.html#553" data-type="Type → Type → Type" class="Function Operator">_×&#39;_</a>
+</pre>
+<p>We could have written the type <code>Π n ꞉ 𝟚 , A n</code> as simply
+<code>(n : 𝟚) → A n</code>, but we wanted to emphasize that binary
+products <code>_×_</code> are special cases of arbitrary products
+<code>Π</code>.</p>
+To justify this claim, we establish an <a
+href="isomorphisms.html">isomorphism</a>. But we need to assume <a
+href="function-extensionality.html">function extensionality</a> for this
+purpose.
+<pre class="Agda"><a id="1026" class="Keyword">open</a> <a id="1031" class="Keyword">import</a> <a id="1038" href="isomorphisms.html" class="Module">isomorphisms</a>
+<a id="1051" class="Keyword">open</a> <a id="1056" class="Keyword">import</a> <a id="1063" href="function-extensionality.html" class="Module">function-extensionality</a>
+
+<a id="binary-product-isomorphism"></a><a id="1088" href="binary-products-as-products.html#1088" data-type="FunExt → (A₀ A₁ : Type) → A₀ × A₁ ≅ A₀ ×&#39; A₁" class="Function">binary-product-isomorphism</a> <a id="1115" class="Symbol">:</a> <a id="1117" href="function-extensionality.html#647" data-type="Set₁" class="Function">FunExt</a> <a id="1124" class="Symbol">→</a> <a id="1126" class="Symbol">(</a><a id="1127" href="binary-products-as-products.html#1127" class="Bound">A₀</a> <a id="1130" href="binary-products-as-products.html#1130" class="Bound">A₁</a> <a id="1133" class="Symbol">:</a> <a id="1135" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="1139" class="Symbol">)</a> <a id="1141" class="Symbol">→</a> <a id="1143" href="binary-products-as-products.html#1127" class="Bound">A₀</a> <a id="1146" href="binary-products.html#670" data-type="Type → Type → Type" class="Function Operator">×</a> <a id="1148" href="binary-products-as-products.html#1130" class="Bound">A₁</a> <a id="1151" href="isomorphisms.html#1915" data-type="(A B : Type) → Type" class="Record Operator">≅</a> <a id="1153" href="binary-products-as-products.html#1127" class="Bound">A₀</a> <a id="1156" href="binary-products-as-products.html#553" data-type="Type → Type → Type" class="Function Operator">×&#39;</a> <a id="1159" href="binary-products-as-products.html#1130" class="Bound">A₁</a>
+<a id="1162" href="binary-products-as-products.html#1088" data-type="FunExt → (A₀ A₁ : Type) → A₀ × A₁ ≅ A₀ ×&#39; A₁" class="Function">binary-product-isomorphism</a> <a id="1189" href="binary-products-as-products.html#1189" class="Bound">funext</a> <a id="1196" href="binary-products-as-products.html#1196" class="Bound">A₀</a> <a id="1199" href="binary-products-as-products.html#1199" class="Bound">A₁</a> <a id="1202" class="Symbol">=</a> <a id="1204" class="Keyword">record</a> <a id="1211" class="Symbol">{</a> <a id="1213" href="isomorphisms.html#1981" data-type="A ≅ B → A → B" class="Field">bijection</a> <a id="1223" class="Symbol">=</a> <a id="1225" href="binary-products-as-products.html#1269" data-type="(funext : FunExt) (A₀ A₁ : Type) → A₀ × A₁ → A₀ ×&#39; A₁" class="Function">f</a> <a id="1227" class="Symbol">;</a> <a id="1229" href="isomorphisms.html#2003" data-type="(r : A ≅ B) → is-bijection (bijection r)" class="Field">bijectivity</a> <a id="1241" class="Symbol">=</a> <a id="1243" href="binary-products-as-products.html#1571" data-type="(funext : FunExt) (A₀ A₁ : Type) → is-bijection (f funext A₀ A₁)" class="Function">f-is-bijection</a> <a id="1258" class="Symbol">}</a>
+ <a id="1261" class="Keyword">where</a>
+  <a id="1269" href="binary-products-as-products.html#1269" data-type="(funext : FunExt) (A₀ A₁ : Type) → A₀ × A₁ → A₀ ×&#39; A₁" class="Function">f</a> <a id="1271" class="Symbol">:</a> <a id="1273" href="binary-products-as-products.html#1196" class="Bound">A₀</a> <a id="1276" href="binary-products.html#670" data-type="Type → Type → Type" class="Function Operator">×</a> <a id="1278" href="binary-products-as-products.html#1199" class="Bound">A₁</a> <a id="1281" class="Symbol">→</a> <a id="1283" href="binary-products-as-products.html#1196" class="Bound">A₀</a> <a id="1286" href="binary-products-as-products.html#553" data-type="Type → Type → Type" class="Function Operator">×&#39;</a> <a id="1289" href="binary-products-as-products.html#1199" class="Bound">A₁</a>
+  <a id="1294" href="binary-products-as-products.html#1269" data-type="(funext : FunExt) (A₀ A₁ : Type) → A₀ × A₁ → A₀ ×&#39; A₁" class="Function">f</a> <a id="1296" class="Symbol">(</a><a id="1297" href="binary-products-as-products.html#1297" class="Bound">x₀</a> <a id="1300" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="1302" href="binary-products-as-products.html#1302" class="Bound">x₁</a><a id="1304" class="Symbol">)</a> <a id="1306" href="binary-type.html#584" data-type="𝟚" class="InductiveConstructor">𝟎</a> <a id="1308" class="Symbol">=</a> <a id="1310" href="binary-products-as-products.html#1297" class="Bound">x₀</a>
+  <a id="1315" href="binary-products-as-products.html#1269" data-type="(funext : FunExt) (A₀ A₁ : Type) → A₀ × A₁ → A₀ ×&#39; A₁" class="Function">f</a> <a id="1317" class="Symbol">(</a><a id="1318" href="binary-products-as-products.html#1318" class="Bound">x₀</a> <a id="1321" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="1323" href="binary-products-as-products.html#1323" class="Bound">x₁</a><a id="1325" class="Symbol">)</a> <a id="1327" href="binary-type.html#586" data-type="𝟚" class="InductiveConstructor">𝟏</a> <a id="1329" class="Symbol">=</a> <a id="1331" href="binary-products-as-products.html#1323" class="Bound">x₁</a>
+
+  <a id="1337" href="binary-products-as-products.html#1337" data-type="(funext : FunExt) (A₀ A₁ : Type) → A₀ ×&#39; A₁ → A₀ × A₁" class="Function">g</a> <a id="1339" class="Symbol">:</a> <a id="1341" href="binary-products-as-products.html#1196" class="Bound">A₀</a> <a id="1344" href="binary-products-as-products.html#553" data-type="Type → Type → Type" class="Function Operator">×&#39;</a> <a id="1347" href="binary-products-as-products.html#1199" class="Bound">A₁</a> <a id="1350" class="Symbol">→</a> <a id="1352" href="binary-products-as-products.html#1196" class="Bound">A₀</a> <a id="1355" href="binary-products.html#670" data-type="Type → Type → Type" class="Function Operator">×</a> <a id="1357" href="binary-products-as-products.html#1199" class="Bound">A₁</a>
+  <a id="1362" href="binary-products-as-products.html#1337" data-type="(funext : FunExt) (A₀ A₁ : Type) → A₀ ×&#39; A₁ → A₀ × A₁" class="Function">g</a> <a id="1364" href="binary-products-as-products.html#1364" class="Bound">h</a> <a id="1366" class="Symbol">=</a> <a id="1368" href="binary-products-as-products.html#1364" class="Bound">h</a> <a id="1370" href="binary-type.html#584" data-type="𝟚" class="InductiveConstructor">𝟎</a> <a id="1372" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="1374" href="binary-products-as-products.html#1364" class="Bound">h</a> <a id="1376" href="binary-type.html#586" data-type="𝟚" class="InductiveConstructor">𝟏</a>
+
+  <a id="1381" href="binary-products-as-products.html#1381" data-type="(funext : FunExt) (A₀ A₁ : Type) →
+(g funext A₀ A₁ ∘ f funext A₀ A₁) ∼ id" class="Function">gf</a> <a id="1384" class="Symbol">:</a> <a id="1386" href="binary-products-as-products.html#1337" data-type="(funext : FunExt) (A₀ A₁ : Type) → A₀ ×&#39; A₁ → A₀ × A₁" class="Function">g</a> <a id="1388" href="products.html#3388" data-type="((y : B) → C y) → (f : A → B) (x : A) → C (f x)" class="Function Operator">∘</a> <a id="1390" href="binary-products-as-products.html#1269" data-type="(funext : FunExt) (A₀ A₁ : Type) → A₀ × A₁ → A₀ ×&#39; A₁" class="Function">f</a> <a id="1392" href="identity-type.html#3258" data-type="((x : A) → B x) → ((x : A) → B x) → Type" class="Function Operator">∼</a> <a id="1394" href="products.html#1041" data-type="A → A" class="Function">id</a>
+  <a id="1399" href="binary-products-as-products.html#1381" data-type="(funext : FunExt) (A₀ A₁ : Type) →
+(g funext A₀ A₁ ∘ f funext A₀ A₁) ∼ id" class="Function">gf</a> <a id="1402" class="Symbol">(</a><a id="1403" href="binary-products-as-products.html#1403" class="Bound">x₀</a> <a id="1406" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="1408" href="binary-products-as-products.html#1408" class="Bound">x₁</a><a id="1410" class="Symbol">)</a> <a id="1412" class="Symbol">=</a> <a id="1414" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="1419" class="Symbol">(</a><a id="1420" href="binary-products-as-products.html#1403" class="Bound">x₀</a> <a id="1423" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="1425" href="binary-products-as-products.html#1408" class="Bound">x₁</a><a id="1427" class="Symbol">)</a>
+
+  <a id="1432" href="binary-products-as-products.html#1432" data-type="(funext : FunExt) (A₀ A₁ : Type) →
+(f funext A₀ A₁ ∘ g funext A₀ A₁) ∼ id" class="Function">fg</a> <a id="1435" class="Symbol">:</a> <a id="1437" href="binary-products-as-products.html#1269" data-type="(funext : FunExt) (A₀ A₁ : Type) → A₀ × A₁ → A₀ ×&#39; A₁" class="Function">f</a> <a id="1439" href="products.html#3388" data-type="((y : B) → C y) → (f : A → B) (x : A) → C (f x)" class="Function Operator">∘</a> <a id="1441" href="binary-products-as-products.html#1337" data-type="(funext : FunExt) (A₀ A₁ : Type) → A₀ ×&#39; A₁ → A₀ × A₁" class="Function">g</a> <a id="1443" href="identity-type.html#3258" data-type="((x : A) → B x) → ((x : A) → B x) → Type" class="Function Operator">∼</a> <a id="1445" href="products.html#1041" data-type="A → A" class="Function">id</a>
+  <a id="1450" href="binary-products-as-products.html#1432" data-type="(funext : FunExt) (A₀ A₁ : Type) →
+(f funext A₀ A₁ ∘ g funext A₀ A₁) ∼ id" class="Function">fg</a> <a id="1453" href="binary-products-as-products.html#1453" class="Bound">h</a> <a id="1455" class="Symbol">=</a> <a id="1457" href="binary-products-as-products.html#1535" data-type="(funext : FunExt) (A₀ A₁ : Type) (h : A₀ ×&#39; A₁) →
+f funext A₀ A₁ (g funext A₀ A₁ h) ≡ h" class="Function">γ</a>
+   <a id="1462" class="Keyword">where</a>
+    <a id="1472" href="binary-products-as-products.html#1472" data-type="(funext : FunExt) (A₀ A₁ : Type) (h : A₀ ×&#39; A₁) →
+f funext A₀ A₁ (g funext A₀ A₁ h) ∼ h" class="Function">p</a> <a id="1474" class="Symbol">:</a> <a id="1476" href="binary-products-as-products.html#1269" data-type="(funext : FunExt) (A₀ A₁ : Type) → A₀ × A₁ → A₀ ×&#39; A₁" class="Function">f</a> <a id="1478" class="Symbol">(</a><a id="1479" href="binary-products-as-products.html#1337" data-type="(funext : FunExt) (A₀ A₁ : Type) → A₀ ×&#39; A₁ → A₀ × A₁" class="Function">g</a> <a id="1481" href="binary-products-as-products.html#1453" class="Bound">h</a><a id="1482" class="Symbol">)</a> <a id="1484" href="identity-type.html#3258" data-type="((x : A) → B x) → ((x : A) → B x) → Type" class="Function Operator">∼</a> <a id="1486" href="binary-products-as-products.html#1453" class="Bound">h</a>
+    <a id="1492" href="binary-products-as-products.html#1472" data-type="(funext : FunExt) (A₀ A₁ : Type) (h : A₀ ×&#39; A₁) →
+f funext A₀ A₁ (g funext A₀ A₁ h) ∼ h" class="Function">p</a> <a id="1494" href="binary-type.html#584" data-type="𝟚" class="InductiveConstructor">𝟎</a> <a id="1496" class="Symbol">=</a> <a id="1498" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="1503" class="Symbol">(</a><a id="1504" href="binary-products-as-products.html#1453" class="Bound">h</a> <a id="1506" href="binary-type.html#584" data-type="𝟚" class="InductiveConstructor">𝟎</a><a id="1507" class="Symbol">)</a>
+    <a id="1513" href="binary-products-as-products.html#1472" data-type="(funext : FunExt) (A₀ A₁ : Type) (h : A₀ ×&#39; A₁) →
+f funext A₀ A₁ (g funext A₀ A₁ h) ∼ h" class="Function">p</a> <a id="1515" href="binary-type.html#586" data-type="𝟚" class="InductiveConstructor">𝟏</a> <a id="1517" class="Symbol">=</a> <a id="1519" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="1524" class="Symbol">(</a><a id="1525" href="binary-products-as-products.html#1453" class="Bound">h</a> <a id="1527" href="binary-type.html#586" data-type="𝟚" class="InductiveConstructor">𝟏</a><a id="1528" class="Symbol">)</a>
+
+    <a id="1535" href="binary-products-as-products.html#1535" data-type="(funext : FunExt) (A₀ A₁ : Type) (h : A₀ ×&#39; A₁) →
+f funext A₀ A₁ (g funext A₀ A₁ h) ≡ h" class="Function">γ</a> <a id="1537" class="Symbol">:</a> <a id="1539" href="binary-products-as-products.html#1269" data-type="(funext : FunExt) (A₀ A₁ : Type) → A₀ × A₁ → A₀ ×&#39; A₁" class="Function">f</a> <a id="1541" class="Symbol">(</a><a id="1542" href="binary-products-as-products.html#1337" data-type="(funext : FunExt) (A₀ A₁ : Type) → A₀ ×&#39; A₁ → A₀ × A₁" class="Function">g</a> <a id="1544" href="binary-products-as-products.html#1453" class="Bound">h</a><a id="1545" class="Symbol">)</a> <a id="1547" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="1549" href="binary-products-as-products.html#1453" class="Bound">h</a>
+    <a id="1555" href="binary-products-as-products.html#1535" data-type="(funext : FunExt) (A₀ A₁ : Type) (h : A₀ ×&#39; A₁) →
+f funext A₀ A₁ (g funext A₀ A₁ h) ≡ h" class="Function">γ</a> <a id="1557" class="Symbol">=</a> <a id="1559" href="binary-products-as-products.html#1189" class="Bound">funext</a> <a id="1566" href="binary-products-as-products.html#1472" data-type="(funext : FunExt) (A₀ A₁ : Type) (h : A₀ ×&#39; A₁) →
+f funext A₀ A₁ (g funext A₀ A₁ h) ∼ h" class="Function">p</a>
+
+  <a id="1571" href="binary-products-as-products.html#1571" data-type="(funext : FunExt) (A₀ A₁ : Type) → is-bijection (f funext A₀ A₁)" class="Function">f-is-bijection</a> <a id="1586" class="Symbol">:</a> <a id="1588" href="isomorphisms.html#1750" data-type="(f : A → B) → Type" class="Record">is-bijection</a> <a id="1601" href="binary-products-as-products.html#1269" data-type="(funext : FunExt) (A₀ A₁ : Type) → A₀ × A₁ → A₀ ×&#39; A₁" class="Function">f</a>
+  <a id="1605" href="binary-products-as-products.html#1571" data-type="(funext : FunExt) (A₀ A₁ : Type) → is-bijection (f funext A₀ A₁)" class="Function">f-is-bijection</a> <a id="1620" class="Symbol">=</a> <a id="1622" class="Keyword">record</a> <a id="1629" class="Symbol">{</a> <a id="1631" href="isomorphisms.html#1833" data-type="is-bijection f → B → A" class="Field">inverse</a> <a id="1639" class="Symbol">=</a> <a id="1641" href="binary-products-as-products.html#1337" data-type="(funext : FunExt) (A₀ A₁ : Type) → A₀ ×&#39; A₁ → A₀ × A₁" class="Function">g</a> <a id="1643" class="Symbol">;</a> <a id="1645" href="isomorphisms.html#1851" data-type="(r : is-bijection f) → (inverse r ∘ f) ∼ id" class="Field">η</a> <a id="1647" class="Symbol">=</a> <a id="1649" href="binary-products-as-products.html#1381" data-type="(funext : FunExt) (A₀ A₁ : Type) →
+(g funext A₀ A₁ ∘ f funext A₀ A₁) ∼ id" class="Function">gf</a> <a id="1652" class="Symbol">;</a> <a id="1654" href="isomorphisms.html#1880" data-type="(r : is-bijection f) → (f ∘ inverse r) ∼ id" class="Field">ε</a> <a id="1656" class="Symbol">=</a> <a id="1658" href="binary-products-as-products.html#1432" data-type="(funext : FunExt) (A₀ A₁ : Type) →
+(f funext A₀ A₁ ∘ g funext A₀ A₁) ∼ id" class="Function">fg</a> <a id="1661" class="Symbol">}</a>
+</pre>
+<p>Notice that the above argument, in Agda, not only <em>shows</em> that
+the types are indeed isomorphic, but also explains <em>how</em> and
+<em>why</em> they are isomorphic. Thus, logical arguments coded in Agda
+are useful not only to get confidence in correctness, but also to gain
+understanding.</p>
+<p><a href="https://martinescardo.github.io/HoTTEST-Summer-School/">Go
+back to the table of contents</a></p>
+
+  </article>
+</div>
+</main>
+</body>
+<style>
+
+:root {
+  --text-bg: #fff;
+  --text-fg: #222;
+  --shadow: #000;
+  --primary: #0054F4;
+  --secondary: #9C1BD6;
+  --modal-bg: #ccccccaa;
+  --warning-bg: #fef08a;
+  --code-bg: var(--text-bg);
+  --code-fg: var(--text-fg);
+  --code-keyword: #BB3B13;
+  --code-string:  #d52753;
+  --code-number:  #8A1060;
+  --code-module:  #8A1060;
+  --code-field:   #9C1BD6;
+  --code-constructor: #207B1D;
+  --code-highlight: #F5DEB3;
+  --search-selected: #e2e8f0;
+  --details-summary: #b2ebf2;
+  --details-open:    #80deea;
+  --depgraph-edge: #eee;
+  --blockquote-bg: #d8b4fe; }
+
+.diagram-dark {
+  display: none !important; }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-bg: #282C34;
+    --text-fg: #bfbfbf;
+    --shadow: #475569;
+    --primary: #61AFEF;
+    --secondary: #C878DD;
+    --modal-bg: #282C34aa;
+    --warning-bg: #991b1b;
+    --code-keyword:     #E5C07B;
+    --code-string:      #E06C75;
+    --code-number:      #98C379;
+    --code-module:      #56B6C2;
+    --code-field:       #C878DD;
+    --code-constructor: #98C379;
+    --code-highlight: #ef444499;
+    --search-selected: #474e5e;
+    --details-summary: #5b21b6;
+    --details-open:    #4c1d95;
+    --depgraph-edge: #474e5e;
+    --blockquote-bg: #475569; }
+  div.warning {
+    --shadow: #7f1d1d
+  ; }
+  input {
+    background-color: #334155;
+    border: 1px solid #475569;
+    color: var(--text-fg); }
+  body {
+    scrollbar-color: #3b4454 #2b2e33; }
+  .diagram-dark {
+    display: block !important; }
+  .diagram-light {
+    display: none !important; } }
+
+table {
+  margin: auto;
+  border-collapse: collapse; }
+  table td, table th {
+    text-align: center;
+    padding: 0px 1em 0px 1em;
+    border: 1px solid black; }
+  table th {
+    border-bottom: 2px solid black; }
+  table td {
+    white-space: nowrap; }
+
+html { max-width: 100%; }
+
+body {
+  font-family: "Inria Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  width: 100%;
+  font-size: var(--font-size);
+  overflow-x: clip;
+  background-color: var(--text-bg);
+  color: var(--text-fg);
+}
+
+div#post-toc-container { max-width: 120ch; margin: auto; }
+
+article a[href], div#return > a[href], div#top > a[href], aside#toc > div#toc-container ul a[href] {
+  color: var(--primary);
+  text-decoration: none; }
+  article a[href]:hover, div#return > a[href]:hover, div#top > a[href]:hover, aside#toc > div#toc-container ul a[href]:hover {
+    text-decoration: 2px currentColor underline !important; }
+  article a[href]:visited, div#return > a[href]:visited, div#top > a[href]:visited, aside#toc > div#toc-container ul a[href]:visited {
+    color: var(--secondary); }
+
+/* Aspects. */
+.Agda {
+  /* NameKinds. */
+  /* OtherAspects. */
+  /* Standard attributes. */
+  font-family: 'iosevka', 'Iosevka', 'Fantasque Sans Mono', 'Roboto Mono', monospace;
+  font-weight: 400; }
+  .Agda .Comment {
+    color: var(--code-fg);
+    font-style: italic; }
+  .Agda .Background {
+    background-color: var(--code-bg); }
+  .Agda .Markup {
+    color: var(--code-fg); }
+  .Agda .Keyword {
+    color: var(--code-keyword); }
+  .Agda .String {
+    color: var(--code-string); }
+  .Agda .Number {
+    color: var(--code-number); }
+  .Agda .Symbol {
+    color: var(--code-fg); }
+  .Agda .PrimitiveType {
+    color: var(--primary); }
+  .Agda .Pragma {
+    color: var(--code-fg); }
+  .Agda .Bound {
+    color: var(--code-fg) !important; }
+  .Agda .Generalizable {
+    color: var(--code-fg) !important; }
+  .Agda .InductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .CoinductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .Datatype {
+    color: var(--primary) !important; }
+  .Agda .Field {
+    color: var(--code-field) !important; }
+  .Agda .Function {
+    color: var(--primary) !important; }
+  .Agda .Module {
+    color: var(--code-module) !important; }
+  .Agda .Postulate {
+    color: var(--primary) !important; }
+  .Agda .Primitive {
+    color: var(--primary) !important; }
+  .Agda .Record {
+    color: var(--primary) !important; }
+  .Agda .UnsolvedMeta {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .UnsolvedConstraint {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .TerminationProblem {
+    color: var(--code-fg);
+    background: #FFA07A; }
+  .Agda .IncompletePattern {
+    color: var(--code-fg);
+    background: #F5DEB3; }
+  .Agda .Error {
+    color: red;
+    text-decoration: underline; }
+  .Agda .TypeChecks {
+    color: var(--code-fg);
+    background: #ADD8E6; }
+  .Agda .ShadowingInTelescope {
+    color: var(--code-fg);
+    background: #808080; }
+  .Agda .Deadcode {
+    color: var(--code-keyword);
+    font-weight: bold; }
+  .Agda a {
+    text-decoration: none; }
+  .Agda a[href]:hover {
+    text-decoration: 2px var(--primary) underline; }
+  .Agda a[href]:target {
+    animation: highlight 2.5s; }
+  body.text-page .Agda {
+    font-size: var(--code-font-size); }
+
+pre.Agda, div.sourceCode, pre {
+  border-radius: 0;
+  box-shadow: none;
+  overflow-y: clip;
+  margin: 0;
+  padding: 1em;
+  padding-top: 0.25em;
+  padding-bottom: 0.25em;
+  background-color: var(--code-bg);
+  color: var(--code-fg);
+  font-size: var(--code-font-size);
+  max-width: 100%;
+  overflow-x: auto;
+}
+</style>
+</html>

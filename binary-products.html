@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>HoTTEST Summer School 2022 Lecture Notes</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+</head>
+
+<body class="text-page">
+<main>
+<div id="post-toc-container" style="padding-left: 1em; padding-right: 1em;">
+
+  <article>
+
+<p><a href="Https://www.Cs.Bham.Ac.Uk/~mhe/">Martin Escardo</a>. Notes
+originally written for the module <em>Advanced Functional
+Programming</em> of the <a
+href="https://www.birmingham.ac.uk/index.aspx">University of
+Birmingham</a>, UK.</p>
+<!--
+<pre class="Agda"><a id="222" class="Symbol">{-#</a> <a id="226" class="Keyword">OPTIONS</a> <a id="234" class="Pragma">--without-K</a> <a id="246" class="Pragma">--safe</a> <a id="253" class="Symbol">#-}</a>
+
+<a id="258" class="Keyword">module</a> <a id="265" href="binary-products.html" class="Module">binary-products</a> <a id="281" class="Keyword">where</a>
+
+<a id="288" class="Keyword">open</a> <a id="293" class="Keyword">import</a> <a id="300" href="general-notation.html" class="Module">general-notation</a>
+</pre>-->
+<h1 id="the-cartesian-product-type-former-__">The cartesian-product type
+former <code>_×_</code></h1>
+As <a href="sums.html">discussed before</a>, the cartesian product
+<code>A × B</code> is simply <code>Σ {A} (λ x → B)</code> which means
+that for <code>(x , y) : A × B</code> the type of <code>y</code> is
+always <code>B</code>, independently of what <code>x</code> is. Using
+our special syntax for <code>Σ</code> this can be defined as follows in
+Agda:
+<pre class="Agda"><a id="645" class="Keyword">open</a> <a id="650" class="Keyword">import</a> <a id="657" href="sums.html" class="Module">sums</a> <a id="662" class="Keyword">public</a>
+
+<a id="_×_"></a><a id="670" href="binary-products.html#670" data-type="Type → Type → Type" class="Function Operator">_×_</a> <a id="674" class="Symbol">:</a> <a id="676" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a> <a id="681" class="Symbol">→</a> <a id="683" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a> <a id="688" class="Symbol">→</a> <a id="690" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a>
+<a id="695" href="binary-products.html#695" class="Bound">A</a> <a id="697" href="binary-products.html#670" data-type="Type → Type → Type" class="Function Operator">×</a> <a id="699" href="binary-products.html#699" class="Bound">B</a> <a id="701" class="Symbol">=</a> <a id="703" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">Σ</a> <a id="705" href="binary-products.html#705" class="Bound">x</a> <a id="707" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">꞉</a> <a id="709" href="binary-products.html#695" class="Bound">A</a> <a id="711" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">,</a> <a id="713" href="binary-products.html#699" class="Bound">B</a>
+
+<a id="716" class="Keyword">infixr</a> <a id="723" class="Number">2</a> <a id="725" href="binary-products.html#670" data-type="Type → Type → Type" class="Function Operator">_×_</a>
+</pre>
+<p>So the elements of <code>A × B</code> are of the form
+<code>(x , y)</code> with <code>x : A</code> and <code>y : B</code>.</p>
+<h2 id="logical-conjunction-and">Logical conjunction (“and”)</h2>
+<p>The logical interpretation of <code>A × B</code> is “A and B”. This
+is because in order to show that the proposition “A and B” holds, we
+have to show that each of A and B holds. To show that A holds we exhibit
+an element <code>x</code> of A, and to show that B holds we exhibit an
+element <code>y</code> of B, and so to show that “A and B” holds we
+exhibit a pair <code>(x , y)</code> with <code>x : A</code> and
+<code>b : B</code></p>
+<h2 id="logical-equivalence">Logical equivalence</h2>
+We now can define bi-implication, or logical equivalence, as follows:
+<pre class="Agda"><a id="_⇔_"></a><a id="1314" href="binary-products.html#1314" data-type="Type → Type → Type" class="Function Operator">_⇔_</a> <a id="1318" class="Symbol">:</a> <a id="1320" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a> <a id="1325" class="Symbol">→</a> <a id="1327" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a> <a id="1332" class="Symbol">→</a> <a id="1334" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a>
+<a id="1339" href="binary-products.html#1339" class="Bound">A</a> <a id="1341" href="binary-products.html#1314" data-type="Type → Type → Type" class="Function Operator">⇔</a> <a id="1343" href="binary-products.html#1343" class="Bound">B</a> <a id="1345" class="Symbol">=</a> <a id="1347" class="Symbol">(</a><a id="1348" href="binary-products.html#1339" class="Bound">A</a> <a id="1350" class="Symbol">→</a> <a id="1352" href="binary-products.html#1343" class="Bound">B</a><a id="1353" class="Symbol">)</a> <a id="1355" href="binary-products.html#670" data-type="Type → Type → Type" class="Function Operator">×</a> <a id="1357" class="Symbol">(</a><a id="1358" href="binary-products.html#1343" class="Bound">B</a> <a id="1360" class="Symbol">→</a> <a id="1362" href="binary-products.html#1339" class="Bound">A</a><a id="1363" class="Symbol">)</a>
+
+<a id="1366" class="Keyword">infix</a> <a id="1372" class="Number">-2</a> <a id="1375" href="binary-products.html#1314" data-type="Type → Type → Type" class="Function Operator">_⇔_</a>
+</pre>
+<p>The symbol <code>⇔</code> is often pronounced “if and only if”.</p>
+We use the first and second projections to extract the left-to-right
+implication and the right-to-left implication:
+<pre class="Agda"><a id="lr-implication"></a><a id="1561" href="binary-products.html#1561" data-type="A ⇔ B → A → B" class="Function">lr-implication</a> <a id="1576" class="Symbol">:</a> <a id="1578" class="Symbol">{</a><a id="1579" href="binary-products.html#1579" class="Bound">A</a> <a id="1581" href="binary-products.html#1581" class="Bound">B</a> <a id="1583" class="Symbol">:</a> <a id="1585" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="1589" class="Symbol">}</a> <a id="1591" class="Symbol">→</a> <a id="1593" class="Symbol">(</a><a id="1594" href="binary-products.html#1579" class="Bound">A</a> <a id="1596" href="binary-products.html#1314" data-type="Type → Type → Type" class="Function Operator">⇔</a> <a id="1598" href="binary-products.html#1581" class="Bound">B</a><a id="1599" class="Symbol">)</a> <a id="1601" class="Symbol">→</a> <a id="1603" class="Symbol">(</a><a id="1604" href="binary-products.html#1579" class="Bound">A</a> <a id="1606" class="Symbol">→</a> <a id="1608" href="binary-products.html#1581" class="Bound">B</a><a id="1609" class="Symbol">)</a>
+<a id="1611" href="binary-products.html#1561" data-type="A ⇔ B → A → B" class="Function">lr-implication</a> <a id="1626" class="Symbol">=</a> <a id="1628" href="sums.html#2535" data-type="Σ B → A" class="Field">pr₁</a>
+
+<a id="rl-implication"></a><a id="1633" href="binary-products.html#1633" data-type="A ⇔ B → B → A" class="Function">rl-implication</a> <a id="1648" class="Symbol">:</a> <a id="1650" class="Symbol">{</a><a id="1651" href="binary-products.html#1651" class="Bound">A</a> <a id="1653" href="binary-products.html#1653" class="Bound">B</a> <a id="1655" class="Symbol">:</a> <a id="1657" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="1661" class="Symbol">}</a> <a id="1663" class="Symbol">→</a> <a id="1665" class="Symbol">(</a><a id="1666" href="binary-products.html#1651" class="Bound">A</a> <a id="1668" href="binary-products.html#1314" data-type="Type → Type → Type" class="Function Operator">⇔</a> <a id="1670" href="binary-products.html#1653" class="Bound">B</a><a id="1671" class="Symbol">)</a> <a id="1673" class="Symbol">→</a> <a id="1675" class="Symbol">(</a><a id="1676" href="binary-products.html#1653" class="Bound">B</a> <a id="1678" class="Symbol">→</a> <a id="1680" href="binary-products.html#1651" class="Bound">A</a><a id="1681" class="Symbol">)</a>
+<a id="1683" href="binary-products.html#1633" data-type="A ⇔ B → B → A" class="Function">rl-implication</a> <a id="1698" class="Symbol">=</a> <a id="1700" href="sums.html#2545" data-type="(r : Σ B) → B (pr₁ r)" class="Field">pr₂</a>
+</pre>
+<h2 id="alternative-definition-of-__">Alternative definition of
+<code>_×_</code></h2>
+<p>There is <a href="binary-products-as-products.html">another way to
+define binary products</a> as a special case of <code>Π</code> rather
+than <code>Σ</code>.</p>
+<p><a href="https://martinescardo.github.io/HoTTEST-Summer-School/">Go
+back to the table of contents</a></p>
+
+  </article>
+</div>
+</main>
+</body>
+<style>
+
+:root {
+  --text-bg: #fff;
+  --text-fg: #222;
+  --shadow: #000;
+  --primary: #0054F4;
+  --secondary: #9C1BD6;
+  --modal-bg: #ccccccaa;
+  --warning-bg: #fef08a;
+  --code-bg: var(--text-bg);
+  --code-fg: var(--text-fg);
+  --code-keyword: #BB3B13;
+  --code-string:  #d52753;
+  --code-number:  #8A1060;
+  --code-module:  #8A1060;
+  --code-field:   #9C1BD6;
+  --code-constructor: #207B1D;
+  --code-highlight: #F5DEB3;
+  --search-selected: #e2e8f0;
+  --details-summary: #b2ebf2;
+  --details-open:    #80deea;
+  --depgraph-edge: #eee;
+  --blockquote-bg: #d8b4fe; }
+
+.diagram-dark {
+  display: none !important; }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-bg: #282C34;
+    --text-fg: #bfbfbf;
+    --shadow: #475569;
+    --primary: #61AFEF;
+    --secondary: #C878DD;
+    --modal-bg: #282C34aa;
+    --warning-bg: #991b1b;
+    --code-keyword:     #E5C07B;
+    --code-string:      #E06C75;
+    --code-number:      #98C379;
+    --code-module:      #56B6C2;
+    --code-field:       #C878DD;
+    --code-constructor: #98C379;
+    --code-highlight: #ef444499;
+    --search-selected: #474e5e;
+    --details-summary: #5b21b6;
+    --details-open:    #4c1d95;
+    --depgraph-edge: #474e5e;
+    --blockquote-bg: #475569; }
+  div.warning {
+    --shadow: #7f1d1d
+  ; }
+  input {
+    background-color: #334155;
+    border: 1px solid #475569;
+    color: var(--text-fg); }
+  body {
+    scrollbar-color: #3b4454 #2b2e33; }
+  .diagram-dark {
+    display: block !important; }
+  .diagram-light {
+    display: none !important; } }
+
+table {
+  margin: auto;
+  border-collapse: collapse; }
+  table td, table th {
+    text-align: center;
+    padding: 0px 1em 0px 1em;
+    border: 1px solid black; }
+  table th {
+    border-bottom: 2px solid black; }
+  table td {
+    white-space: nowrap; }
+
+html { max-width: 100%; }
+
+body {
+  font-family: "Inria Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  width: 100%;
+  font-size: var(--font-size);
+  overflow-x: clip;
+  background-color: var(--text-bg);
+  color: var(--text-fg);
+}
+
+div#post-toc-container { max-width: 120ch; margin: auto; }
+
+article a[href], div#return > a[href], div#top > a[href], aside#toc > div#toc-container ul a[href] {
+  color: var(--primary);
+  text-decoration: none; }
+  article a[href]:hover, div#return > a[href]:hover, div#top > a[href]:hover, aside#toc > div#toc-container ul a[href]:hover {
+    text-decoration: 2px currentColor underline !important; }
+  article a[href]:visited, div#return > a[href]:visited, div#top > a[href]:visited, aside#toc > div#toc-container ul a[href]:visited {
+    color: var(--secondary); }
+
+/* Aspects. */
+.Agda {
+  /* NameKinds. */
+  /* OtherAspects. */
+  /* Standard attributes. */
+  font-family: 'iosevka', 'Iosevka', 'Fantasque Sans Mono', 'Roboto Mono', monospace;
+  font-weight: 400; }
+  .Agda .Comment {
+    color: var(--code-fg);
+    font-style: italic; }
+  .Agda .Background {
+    background-color: var(--code-bg); }
+  .Agda .Markup {
+    color: var(--code-fg); }
+  .Agda .Keyword {
+    color: var(--code-keyword); }
+  .Agda .String {
+    color: var(--code-string); }
+  .Agda .Number {
+    color: var(--code-number); }
+  .Agda .Symbol {
+    color: var(--code-fg); }
+  .Agda .PrimitiveType {
+    color: var(--primary); }
+  .Agda .Pragma {
+    color: var(--code-fg); }
+  .Agda .Bound {
+    color: var(--code-fg) !important; }
+  .Agda .Generalizable {
+    color: var(--code-fg) !important; }
+  .Agda .InductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .CoinductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .Datatype {
+    color: var(--primary) !important; }
+  .Agda .Field {
+    color: var(--code-field) !important; }
+  .Agda .Function {
+    color: var(--primary) !important; }
+  .Agda .Module {
+    color: var(--code-module) !important; }
+  .Agda .Postulate {
+    color: var(--primary) !important; }
+  .Agda .Primitive {
+    color: var(--primary) !important; }
+  .Agda .Record {
+    color: var(--primary) !important; }
+  .Agda .UnsolvedMeta {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .UnsolvedConstraint {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .TerminationProblem {
+    color: var(--code-fg);
+    background: #FFA07A; }
+  .Agda .IncompletePattern {
+    color: var(--code-fg);
+    background: #F5DEB3; }
+  .Agda .Error {
+    color: red;
+    text-decoration: underline; }
+  .Agda .TypeChecks {
+    color: var(--code-fg);
+    background: #ADD8E6; }
+  .Agda .ShadowingInTelescope {
+    color: var(--code-fg);
+    background: #808080; }
+  .Agda .Deadcode {
+    color: var(--code-keyword);
+    font-weight: bold; }
+  .Agda a {
+    text-decoration: none; }
+  .Agda a[href]:hover {
+    text-decoration: 2px var(--primary) underline; }
+  .Agda a[href]:target {
+    animation: highlight 2.5s; }
+  body.text-page .Agda {
+    font-size: var(--code-font-size); }
+
+pre.Agda, div.sourceCode, pre {
+  border-radius: 0;
+  box-shadow: none;
+  overflow-y: clip;
+  margin: 0;
+  padding: 1em;
+  padding-top: 0.25em;
+  padding-bottom: 0.25em;
+  background-color: var(--code-bg);
+  color: var(--code-fg);
+  font-size: var(--code-font-size);
+  max-width: 100%;
+  overflow-x: auto;
+}
+</style>
+</html>

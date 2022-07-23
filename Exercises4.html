@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>HoTTEST Summer School 2022 Lecture Notes</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+</head>
+
+<body class="text-page">
+<main>
+<div id="post-toc-container" style="padding-left: 1em; padding-right: 1em;">
+
+  <article>
+
+<pre class="Agda"><a id="9" class="Symbol">{-#</a> <a id="13" class="Keyword">OPTIONS</a> <a id="21" class="Pragma">--without-K</a> <a id="33" class="Pragma">--rewriting</a> <a id="45" class="Pragma">--allow-unsolved-metas</a> <a id="68" class="Symbol">#-}</a>
+
+<a id="73" class="Keyword">open</a> <a id="78" class="Keyword">import</a> <a id="85" href="new-prelude.html" class="Module">new-prelude</a>
+<a id="97" class="Keyword">open</a> <a id="102" class="Keyword">import</a> <a id="109" href="Lecture4-notes.html" class="Module">Lecture4-notes</a>
+
+<a id="125" class="Keyword">module</a> <a id="132" href="Exercises4.html" class="Module">Exercises4</a> <a id="143" class="Keyword">where</a>
+</pre>
+<h1 id="constructing-homotopies-between-paths">Constructing homotopies
+between paths</h1>
+<p>(⋆) Give two “different” path-between-paths/homotopies between (loop
+∙ ! loop) ∙ loop and loop. They should be different in the sense that
+one should cancel the !loop with the first loop, and one with the second
+loop. But these aren’t really <em>really</em> different, in that there
+will be a path-between-paths-between-paths between the two!</p>
+<pre class="Agda"><a id="homotopy1"></a><a id="544" href="Exercises4.html#544" data-type="((loop ∙ ! loop) ∙ loop) ≡ loop" class="Function">homotopy1</a> <a id="554" class="Symbol">:</a> <a id="556" class="Symbol">(</a><a id="557" href="Lecture4-notes.html#769" data-type="base ≡ base" class="Postulate">loop</a> <a id="562" href="new-prelude.html#642" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function Operator">∙</a> <a id="564" href="new-prelude.html#861" data-type="x ≡ y → y ≡ x" class="Function">!</a> <a id="566" href="Lecture4-notes.html#769" data-type="base ≡ base" class="Postulate">loop</a><a id="570" class="Symbol">)</a> <a id="572" href="new-prelude.html#642" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function Operator">∙</a> <a id="574" href="Lecture4-notes.html#769" data-type="base ≡ base" class="Postulate">loop</a> <a id="579" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="581" href="Lecture4-notes.html#769" data-type="base ≡ base" class="Postulate">loop</a>
+<a id="586" href="Exercises4.html#544" data-type="((loop ∙ ! loop) ∙ loop) ≡ loop" class="Function">homotopy1</a> <a id="596" class="Symbol">=</a> <a id="598" class="Hole">{!!}</a>
+
+<a id="homotopy2"></a><a id="604" href="Exercises4.html#604" data-type="((loop ∙ ! loop) ∙ loop) ≡ loop" class="Function">homotopy2</a> <a id="614" class="Symbol">:</a> <a id="616" class="Symbol">(</a><a id="617" href="Lecture4-notes.html#769" data-type="base ≡ base" class="Postulate">loop</a> <a id="622" href="new-prelude.html#642" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function Operator">∙</a> <a id="624" href="new-prelude.html#861" data-type="x ≡ y → y ≡ x" class="Function">!</a> <a id="626" href="Lecture4-notes.html#769" data-type="base ≡ base" class="Postulate">loop</a><a id="630" class="Symbol">)</a> <a id="632" href="new-prelude.html#642" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function Operator">∙</a> <a id="634" href="Lecture4-notes.html#769" data-type="base ≡ base" class="Postulate">loop</a> <a id="639" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="641" href="Lecture4-notes.html#769" data-type="base ≡ base" class="Postulate">loop</a>
+<a id="646" href="Exercises4.html#604" data-type="((loop ∙ ! loop) ∙ loop) ≡ loop" class="Function">homotopy2</a> <a id="656" class="Symbol">=</a> <a id="658" class="Hole">{!!}</a>
+</pre>
+<p>(Harder exercise (🌶️): give a path between homotopy1 and homotopy2!
+I’d recommend saving this until later though, because there is a trick
+to it that we haven’t covered in lecture yet.)</p>
+<pre class="Agda"><a id="path-between-paths-between-paths"></a><a id="863" href="Exercises4.html#863" data-type="homotopy1 ≡ homotopy2" class="Function">path-between-paths-between-paths</a> <a id="896" class="Symbol">:</a> <a id="898" href="Exercises4.html#544" data-type="((loop ∙ ! loop) ∙ loop) ≡ loop" class="Function">homotopy1</a> <a id="908" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="910" href="Exercises4.html#604" data-type="((loop ∙ ! loop) ∙ loop) ≡ loop" class="Function">homotopy2</a>
+<a id="920" href="Exercises4.html#863" data-type="homotopy1 ≡ homotopy2" class="Function">path-between-paths-between-paths</a> <a id="953" class="Symbol">=</a> <a id="955" class="Hole">{!!}</a>
+</pre>
+<h1 id="functions-are-group-homomorphism">Functions are group
+homomorphism</h1>
+<p>(⋆⋆) State and prove a general lemma about what ap of a function on
+the inverse of a path (! p) does (see ap-∙ for inspiration).</p>
+<p>State and prove a general lemma about what ! (p ∙ q) is.</p>
+<p>Use them to prove that the double function takes loop-inverse to
+loop-inverse concatenated with itself.</p>
+<pre class="Agda"><a id="double-!loop"></a><a id="1307" href="Exercises4.html#1307" data-type="ap double (! loop) ≡ (! loop ∙ ! loop)" class="Function">double-!loop</a> <a id="1320" class="Symbol">:</a> <a id="1322" href="new-prelude.html#937" data-type="(f : A → B) → x ≡ y → f x ≡ f y" class="Function">ap</a> <a id="1325" href="Lecture4-notes.html#6849" data-type="S1 → S1" class="Function">double</a> <a id="1332" class="Symbol">(</a><a id="1333" href="new-prelude.html#861" data-type="x ≡ y → y ≡ x" class="Function">!</a> <a id="1335" href="Lecture4-notes.html#769" data-type="base ≡ base" class="Postulate">loop</a><a id="1339" class="Symbol">)</a> <a id="1341" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="1343" href="new-prelude.html#861" data-type="x ≡ y → y ≡ x" class="Function">!</a> <a id="1345" href="Lecture4-notes.html#769" data-type="base ≡ base" class="Postulate">loop</a> <a id="1350" href="new-prelude.html#642" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function Operator">∙</a> <a id="1352" href="new-prelude.html#861" data-type="x ≡ y → y ≡ x" class="Function">!</a> <a id="1354" href="Lecture4-notes.html#769" data-type="base ≡ base" class="Postulate">loop</a>
+<a id="1359" href="Exercises4.html#1307" data-type="ap double (! loop) ≡ (! loop ∙ ! loop)" class="Function">double-!loop</a> <a id="1372" class="Symbol">=</a> <a id="1374" class="Hole">{!!}</a>
+</pre>
+<p>(⋆) Define a function invert : S1 → S1 such that (ap invert) inverts
+a path on the circle, i.e. sends the n-fold loop to the -n-fold
+loop.</p>
+<pre class="Agda"><a id="invert"></a><a id="1534" href="Exercises4.html#1534" data-type="S1 → S1" class="Function">invert</a> <a id="1541" class="Symbol">:</a> <a id="1543" href="Lecture4-notes.html#745" data-type="Set" class="Postulate">S1</a> <a id="1546" class="Symbol">→</a> <a id="1548" href="Lecture4-notes.html#745" data-type="Set" class="Postulate">S1</a>
+<a id="1551" href="Exercises4.html#1534" data-type="S1 → S1" class="Function">invert</a> <a id="1558" class="Symbol">=</a> <a id="1560" class="Hole">{!!}</a>
+</pre>
+<h1 id="circles-equivalence">Circles equivalence</h1>
+<p>See the maps between the 1 point circle and the 2 point circle in the
+lecture code. Check that the composite map S1 → S1 is homotopic to the
+identity on base and loop:</p>
+<p>(⋆)</p>
+<pre class="Agda"><a id="to-from-base"></a><a id="1777" href="Exercises4.html#1777" data-type="from (to base) ≡ base" class="Function">to-from-base</a> <a id="1790" class="Symbol">:</a> <a id="1792" href="Lecture4-notes.html#9389" data-type="Circle2 → S1" class="Function">from</a> <a id="1797" class="Symbol">(</a><a id="1798" href="Lecture4-notes.html#9118" data-type="S1 → Circle2" class="Function">to</a> <a id="1801" href="Lecture4-notes.html#757" data-type="S1" class="Postulate">base</a><a id="1805" class="Symbol">)</a> <a id="1807" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="1809" href="Lecture4-notes.html#757" data-type="S1" class="Postulate">base</a>
+<a id="1814" href="Exercises4.html#1777" data-type="from (to base) ≡ base" class="Function">to-from-base</a> <a id="1827" class="Symbol">=</a> <a id="1829" class="Hole">{!!}</a>
+</pre>
+<p>(⋆⋆⋆)</p>
+<pre class="Agda"><a id="to-from-loop"></a><a id="1851" href="Exercises4.html#1851" data-type="ap from (ap to loop) ≡ loop" class="Function">to-from-loop</a> <a id="1864" class="Symbol">:</a> <a id="1866" href="new-prelude.html#937" data-type="(f : A → B) → x ≡ y → f x ≡ f y" class="Function">ap</a> <a id="1869" href="Lecture4-notes.html#9389" data-type="Circle2 → S1" class="Function">from</a> <a id="1874" class="Symbol">(</a><a id="1875" href="new-prelude.html#937" data-type="(f : A → B) → x ≡ y → f x ≡ f y" class="Function">ap</a> <a id="1878" href="Lecture4-notes.html#9118" data-type="S1 → Circle2" class="Function">to</a> <a id="1881" href="Lecture4-notes.html#769" data-type="base ≡ base" class="Postulate">loop</a><a id="1885" class="Symbol">)</a> <a id="1887" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="1889" href="Lecture4-notes.html#769" data-type="base ≡ base" class="Postulate">loop</a>
+<a id="1894" href="Exercises4.html#1851" data-type="ap from (ap to loop) ≡ loop" class="Function">to-from-loop</a> <a id="1907" class="Symbol">=</a> <a id="1909" class="Hole">{!!}</a>
+</pre>
+<p>Note: the problems below here are progressively more optional, so if
+you run out of time/energy at some point that is totally fine.</p>
+<h1 id="torus-to-circles">Torus to circles</h1>
+<p>The torus is equivalent to the product of two circles S1 × S1. The
+idea for the map from the torus to S1 × S1 that is part of this
+equivalence is that one loop on on the torus is sent to to the circle
+loop in one copy of S1, and the other loop on the torus to the loop in
+the other copy of the circle. Define this map.</p>
+<p>Hint: for the image of the square, you might want a lemma saying how
+paths in product types compose (⋆⋆⋆):</p>
+<pre class="Agda"><a id="compose-pair≡"></a><a id="2514" href="Exercises4.html#2514" data-type="(p12 : x1 ≡ x2) (p23 : x2 ≡ x3) (q12 : y1 ≡ y2) (q23 : y2 ≡ y3) →
+Path (Path (A × B) (x1 , y1) (x3 , y3))
+(pair≡ p12 q12 ∙ pair≡ p23 q23) (unsolved#meta.130 p12 p23 q12 q23)" class="Function">compose-pair≡</a> <a id="2528" class="Symbol">:</a> <a id="2530" class="Symbol">{</a><a id="2531" href="Exercises4.html#2531" class="Bound">A</a> <a id="2533" href="Exercises4.html#2533" class="Bound">B</a> <a id="2535" class="Symbol">:</a> <a id="2537" href="Agda.Primitive.html#311" data-type="Set₁" class="Primitive">Type</a><a id="2541" class="Symbol">}</a> <a id="2543" class="Symbol">{</a><a id="2544" href="Exercises4.html#2544" class="Bound">x1</a> <a id="2547" href="Exercises4.html#2547" class="Bound">x2</a> <a id="2550" href="Exercises4.html#2550" class="Bound">x3</a> <a id="2553" class="Symbol">:</a> <a id="2555" href="Exercises4.html#2531" class="Bound">A</a><a id="2556" class="Symbol">}</a> <a id="2558" class="Symbol">{</a><a id="2559" href="Exercises4.html#2559" class="Bound">y1</a> <a id="2562" href="Exercises4.html#2562" class="Bound">y2</a> <a id="2565" href="Exercises4.html#2565" class="Bound">y3</a> <a id="2568" class="Symbol">:</a> <a id="2570" href="Exercises4.html#2533" class="Bound">B</a><a id="2571" class="Symbol">}</a>
+                <a id="2589" class="Symbol">(</a><a id="2590" href="Exercises4.html#2590" class="Bound">p12</a> <a id="2594" class="Symbol">:</a> <a id="2596" href="Exercises4.html#2544" class="Bound">x1</a> <a id="2599" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="2601" href="Exercises4.html#2547" class="Bound">x2</a><a id="2603" class="Symbol">)</a> <a id="2605" class="Symbol">(</a><a id="2606" href="Exercises4.html#2606" class="Bound">p23</a> <a id="2610" class="Symbol">:</a> <a id="2612" href="Exercises4.html#2547" class="Bound">x2</a> <a id="2615" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="2617" href="Exercises4.html#2550" class="Bound">x3</a><a id="2619" class="Symbol">)</a>
+                <a id="2637" class="Symbol">(</a><a id="2638" href="Exercises4.html#2638" class="Bound">q12</a> <a id="2642" class="Symbol">:</a> <a id="2644" href="Exercises4.html#2559" class="Bound">y1</a> <a id="2647" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="2649" href="Exercises4.html#2562" class="Bound">y2</a><a id="2651" class="Symbol">)</a> <a id="2653" class="Symbol">(</a><a id="2654" href="Exercises4.html#2654" class="Bound">q23</a> <a id="2658" class="Symbol">:</a> <a id="2660" href="Exercises4.html#2562" class="Bound">y2</a> <a id="2663" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="2665" href="Exercises4.html#2565" class="Bound">y3</a><a id="2667" class="Symbol">)</a>
+              <a id="2683" class="Symbol">→</a> <a id="2685" class="Symbol">((</a><a id="2687" href="new-prelude.html#2369" data-type="x ≡ x&#39; → y ≡ y&#39; → (x , y) ≡ (x&#39; , y&#39;)" class="Function">pair≡</a> <a id="2693" href="Exercises4.html#2590" class="Bound">p12</a> <a id="2697" href="Exercises4.html#2638" class="Bound">q12</a><a id="2700" class="Symbol">)</a> <a id="2702" href="new-prelude.html#642" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function Operator">∙</a> <a id="2704" class="Symbol">(</a><a id="2705" href="new-prelude.html#2369" data-type="x ≡ x&#39; → y ≡ y&#39; → (x , y) ≡ (x&#39; , y&#39;)" class="Function">pair≡</a> <a id="2711" href="Exercises4.html#2606" class="Bound">p23</a> <a id="2715" href="Exercises4.html#2654" class="Bound">q23</a><a id="2718" class="Symbol">))</a> <a id="2721" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">≡</a> <a id="2723" class="Hole">{!!}</a> <a id="2728" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">[</a> <a id="2730" class="Symbol">(</a><a id="2731" href="Exercises4.html#2544" class="Bound">x1</a> <a id="2734" href="new-prelude.html#1801" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="2736" href="Exercises4.html#2559" class="Bound">y1</a><a id="2738" class="Symbol">)</a> <a id="2740" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">≡</a> <a id="2742" class="Symbol">(</a><a id="2743" href="Exercises4.html#2550" class="Bound">x3</a> <a id="2746" href="new-prelude.html#1801" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="2748" href="Exercises4.html#2565" class="Bound">y3</a><a id="2750" class="Symbol">)</a> <a id="2752" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">[</a> <a id="2754" href="Exercises4.html#2531" class="Bound">A</a> <a id="2756" href="new-prelude.html#2217" data-type="Set l1 → Set l2 → Set (l1 ⊔ l2)" class="Function Operator">×</a> <a id="2758" href="Exercises4.html#2533" class="Bound">B</a> <a id="2760" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">]</a> <a id="2762" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">]</a>
+<a id="2764" href="Exercises4.html#2514" data-type="(p12 : x1 ≡ x2) (p23 : x2 ≡ x3) (q12 : y1 ≡ y2) (q23 : y2 ≡ y3) →
+Path (Path (A × B) (x1 , y1) (x3 , y3))
+(pair≡ p12 q12 ∙ pair≡ p23 q23) (unsolved#meta.130 p12 p23 q12 q23)" class="Function">compose-pair≡</a> <a id="2778" class="Symbol">=</a> <a id="2780" class="Hole">{!!}</a>
+</pre>
+(🌶️)
+<pre class="Agda"><a id="torus-to-circles"></a><a id="2799" href="Exercises4.html#2799" data-type="Torus → S1 × S1" class="Function">torus-to-circles</a> <a id="2816" class="Symbol">:</a> <a id="2818" href="Lecture4-notes.html#10700" data-type="Set" class="Postulate">Torus</a> <a id="2824" class="Symbol">→</a> <a id="2826" href="Lecture4-notes.html#745" data-type="Set" class="Postulate">S1</a> <a id="2829" href="new-prelude.html#2217" data-type="Set l1 → Set l2 → Set (l1 ⊔ l2)" class="Function Operator">×</a> <a id="2831" href="Lecture4-notes.html#745" data-type="Set" class="Postulate">S1</a>
+<a id="2834" href="Exercises4.html#2799" data-type="Torus → S1 × S1" class="Function">torus-to-circles</a> <a id="2851" class="Symbol">=</a> <a id="2853" class="Hole">{!!}</a>
+</pre>
+<h1 id="suspensions">Suspensions (🌶️)</h1>
+<p>Find a type X such that the two-point circle Circle2 is equivalent to
+the suspension Susp X. Check your answer by defining a logical
+equivalence (functions back and forth), since we haven’t seen how to
+prove that such functions are inverse yet.</p>
+<pre class="Agda"><a id="c2s"></a><a id="3138" href="Exercises4.html#3138" data-type="Circle2 → Susp unsolved#meta.139" class="Function">c2s</a> <a id="3142" class="Symbol">:</a> <a id="3144" href="Lecture4-notes.html#7873" data-type="Set" class="Postulate">Circle2</a> <a id="3152" class="Symbol">→</a> <a id="3154" href="Lecture4-notes.html#11615" data-type="Set → Set" class="Postulate">Susp</a> <a id="3159" class="Hole">{!!}</a>
+<a id="3164" href="Exercises4.html#3138" data-type="Circle2 → Susp unsolved#meta.139" class="Function">c2s</a> <a id="3168" class="Symbol">=</a> <a id="3170" class="Hole">{!!}</a>
+
+<a id="s2c"></a><a id="3176" href="Exercises4.html#3176" data-type="Susp unsolved#meta.142 → Circle2" class="Function">s2c</a> <a id="3180" class="Symbol">:</a> <a id="3182" href="Lecture4-notes.html#11615" data-type="Set → Set" class="Postulate">Susp</a> <a id="3187" class="Hole">{!!}</a> <a id="3192" class="Symbol">→</a> <a id="3194" href="Lecture4-notes.html#7873" data-type="Set" class="Postulate">Circle2</a>
+<a id="3202" href="Exercises4.html#3176" data-type="Susp unsolved#meta.142 → Circle2" class="Function">s2c</a> <a id="3206" class="Symbol">=</a> <a id="3208" class="Hole">{!!}</a>
+</pre>
+<p>Suspension is a functor from types, which means that it acts on
+functions as well as types. Define the action of Susp on functions:</p>
+<pre class="Agda"><a id="susp-func"></a><a id="3360" href="Exercises4.html#3360" data-type="(X → Y) → Susp X → Susp Y" class="Function">susp-func</a> <a id="3370" class="Symbol">:</a> <a id="3372" class="Symbol">{</a><a id="3373" href="Exercises4.html#3373" class="Bound">X</a> <a id="3375" href="Exercises4.html#3375" class="Bound">Y</a> <a id="3377" class="Symbol">:</a> <a id="3379" href="Agda.Primitive.html#311" data-type="Set₁" class="Primitive">Type</a><a id="3383" class="Symbol">}</a> <a id="3385" class="Symbol">→</a> <a id="3387" class="Symbol">(</a><a id="3388" href="Exercises4.html#3388" class="Bound">f</a> <a id="3390" class="Symbol">:</a> <a id="3392" href="Exercises4.html#3373" class="Bound">X</a> <a id="3394" class="Symbol">→</a> <a id="3396" href="Exercises4.html#3375" class="Bound">Y</a><a id="3397" class="Symbol">)</a> <a id="3399" class="Symbol">→</a> <a id="3401" href="Lecture4-notes.html#11615" data-type="Set → Set" class="Postulate">Susp</a> <a id="3406" href="Exercises4.html#3373" class="Bound">X</a> <a id="3408" class="Symbol">→</a> <a id="3410" href="Lecture4-notes.html#11615" data-type="Set → Set" class="Postulate">Susp</a> <a id="3415" href="Exercises4.html#3375" class="Bound">Y</a>
+<a id="3417" href="Exercises4.html#3360" data-type="(X → Y) → Susp X → Susp Y" class="Function">susp-func</a> <a id="3427" href="Exercises4.html#3427" class="Bound">f</a> <a id="3429" class="Symbol">=</a> <a id="3431" class="Hole">{!!}</a> 
+</pre>
+<p>To really prove that Susp is a functor, we should check that this
+action on functions preserves the identity function and composition of
+functions. But to do that we would need the dependent elimination rule
+for suspensions, which we haven’t talked about yet.</p>
+<h1 id="pushouts">Pushouts (🌶️)</h1>
+<p>Fix a type X. Find types A,B,C with functions f : C → A and g : C → B
+such that the suspension Susp X is equivalent to the Pushout C A B f g.
+Check your answer by defining a logical equivalence (functions back and
+forth), since we haven’t seen how to prove that such functions are
+inverse yet.</p>
+<pre class="Agda"><a id="SuspFromPush"></a><a id="4024" href="Exercises4.html#4024" data-type="Set → Set" class="Function">SuspFromPush</a> <a id="4037" class="Symbol">:</a> <a id="4039" href="Agda.Primitive.html#311" data-type="Set₁" class="Primitive">Type</a> <a id="4044" class="Symbol">→</a> <a id="4046" href="Agda.Primitive.html#311" data-type="Set₁" class="Primitive">Type</a>
+<a id="4051" href="Exercises4.html#4024" data-type="Set → Set" class="Function">SuspFromPush</a> <a id="4064" href="Exercises4.html#4064" class="Bound">A</a> <a id="4066" class="Symbol">=</a> <a id="4068" class="Hole">{!!}</a>
+
+<a id="s2p"></a><a id="4074" href="Exercises4.html#4074" data-type="(A : Set) → Susp A → SuspFromPush A" class="Function">s2p</a> <a id="4078" class="Symbol">:</a> <a id="4080" class="Symbol">(</a><a id="4081" href="Exercises4.html#4081" class="Bound">A</a> <a id="4083" class="Symbol">:</a> <a id="4085" href="Agda.Primitive.html#311" data-type="Set₁" class="Primitive">Type</a><a id="4089" class="Symbol">)</a> <a id="4091" class="Symbol">→</a> <a id="4093" href="Lecture4-notes.html#11615" data-type="Set → Set" class="Postulate">Susp</a> <a id="4098" href="Exercises4.html#4081" class="Bound">A</a> <a id="4100" class="Symbol">→</a> <a id="4102" href="Exercises4.html#4024" data-type="Set → Set" class="Function">SuspFromPush</a> <a id="4115" href="Exercises4.html#4081" class="Bound">A</a>
+<a id="4117" href="Exercises4.html#4074" data-type="(A : Set) → Susp A → SuspFromPush A" class="Function">s2p</a> <a id="4121" href="Exercises4.html#4121" class="Bound">A</a> <a id="4123" class="Symbol">=</a> <a id="4125" class="Hole">{!!}</a>
+
+<a id="p2s"></a><a id="4131" href="Exercises4.html#4131" data-type="(A : Set) → SuspFromPush A → Susp A" class="Function">p2s</a> <a id="4135" class="Symbol">:</a> <a id="4137" class="Symbol">(</a><a id="4138" href="Exercises4.html#4138" class="Bound">A</a> <a id="4140" class="Symbol">:</a> <a id="4142" href="Agda.Primitive.html#311" data-type="Set₁" class="Primitive">Type</a><a id="4146" class="Symbol">)</a> <a id="4148" class="Symbol">→</a> <a id="4150" href="Exercises4.html#4024" data-type="Set → Set" class="Function">SuspFromPush</a> <a id="4163" href="Exercises4.html#4138" class="Bound">A</a> <a id="4165" class="Symbol">→</a> <a id="4167" href="Lecture4-notes.html#11615" data-type="Set → Set" class="Postulate">Susp</a> <a id="4172" href="Exercises4.html#4138" class="Bound">A</a>
+<a id="4174" href="Exercises4.html#4131" data-type="(A : Set) → SuspFromPush A → Susp A" class="Function">p2s</a> <a id="4178" href="Exercises4.html#4178" class="Bound">A</a> <a id="4180" class="Symbol">=</a> <a id="4182" class="Hole">{!!}</a>
+</pre>
+
+  </article>
+</div>
+</main>
+</body>
+<style>
+
+:root {
+  --text-bg: #fff;
+  --text-fg: #222;
+  --shadow: #000;
+  --primary: #0054F4;
+  --secondary: #9C1BD6;
+  --modal-bg: #ccccccaa;
+  --warning-bg: #fef08a;
+  --code-bg: var(--text-bg);
+  --code-fg: var(--text-fg);
+  --code-keyword: #BB3B13;
+  --code-string:  #d52753;
+  --code-number:  #8A1060;
+  --code-module:  #8A1060;
+  --code-field:   #9C1BD6;
+  --code-constructor: #207B1D;
+  --code-highlight: #F5DEB3;
+  --search-selected: #e2e8f0;
+  --details-summary: #b2ebf2;
+  --details-open:    #80deea;
+  --depgraph-edge: #eee;
+  --blockquote-bg: #d8b4fe; }
+
+.diagram-dark {
+  display: none !important; }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-bg: #282C34;
+    --text-fg: #bfbfbf;
+    --shadow: #475569;
+    --primary: #61AFEF;
+    --secondary: #C878DD;
+    --modal-bg: #282C34aa;
+    --warning-bg: #991b1b;
+    --code-keyword:     #E5C07B;
+    --code-string:      #E06C75;
+    --code-number:      #98C379;
+    --code-module:      #56B6C2;
+    --code-field:       #C878DD;
+    --code-constructor: #98C379;
+    --code-highlight: #ef444499;
+    --search-selected: #474e5e;
+    --details-summary: #5b21b6;
+    --details-open:    #4c1d95;
+    --depgraph-edge: #474e5e;
+    --blockquote-bg: #475569; }
+  div.warning {
+    --shadow: #7f1d1d
+  ; }
+  input {
+    background-color: #334155;
+    border: 1px solid #475569;
+    color: var(--text-fg); }
+  body {
+    scrollbar-color: #3b4454 #2b2e33; }
+  .diagram-dark {
+    display: block !important; }
+  .diagram-light {
+    display: none !important; } }
+
+table {
+  margin: auto;
+  border-collapse: collapse; }
+  table td, table th {
+    text-align: center;
+    padding: 0px 1em 0px 1em;
+    border: 1px solid black; }
+  table th {
+    border-bottom: 2px solid black; }
+  table td {
+    white-space: nowrap; }
+
+html { max-width: 100%; }
+
+body {
+  font-family: "Inria Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  width: 100%;
+  font-size: var(--font-size);
+  overflow-x: clip;
+  background-color: var(--text-bg);
+  color: var(--text-fg);
+}
+
+div#post-toc-container { max-width: 120ch; margin: auto; }
+
+article a[href], div#return > a[href], div#top > a[href], aside#toc > div#toc-container ul a[href] {
+  color: var(--primary);
+  text-decoration: none; }
+  article a[href]:hover, div#return > a[href]:hover, div#top > a[href]:hover, aside#toc > div#toc-container ul a[href]:hover {
+    text-decoration: 2px currentColor underline !important; }
+  article a[href]:visited, div#return > a[href]:visited, div#top > a[href]:visited, aside#toc > div#toc-container ul a[href]:visited {
+    color: var(--secondary); }
+
+/* Aspects. */
+.Agda {
+  /* NameKinds. */
+  /* OtherAspects. */
+  /* Standard attributes. */
+  font-family: 'iosevka', 'Iosevka', 'Fantasque Sans Mono', 'Roboto Mono', monospace;
+  font-weight: 400; }
+  .Agda .Comment {
+    color: var(--code-fg);
+    font-style: italic; }
+  .Agda .Background {
+    background-color: var(--code-bg); }
+  .Agda .Markup {
+    color: var(--code-fg); }
+  .Agda .Keyword {
+    color: var(--code-keyword); }
+  .Agda .String {
+    color: var(--code-string); }
+  .Agda .Number {
+    color: var(--code-number); }
+  .Agda .Symbol {
+    color: var(--code-fg); }
+  .Agda .PrimitiveType {
+    color: var(--primary); }
+  .Agda .Pragma {
+    color: var(--code-fg); }
+  .Agda .Bound {
+    color: var(--code-fg) !important; }
+  .Agda .Generalizable {
+    color: var(--code-fg) !important; }
+  .Agda .InductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .CoinductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .Datatype {
+    color: var(--primary) !important; }
+  .Agda .Field {
+    color: var(--code-field) !important; }
+  .Agda .Function {
+    color: var(--primary) !important; }
+  .Agda .Module {
+    color: var(--code-module) !important; }
+  .Agda .Postulate {
+    color: var(--primary) !important; }
+  .Agda .Primitive {
+    color: var(--primary) !important; }
+  .Agda .Record {
+    color: var(--primary) !important; }
+  .Agda .UnsolvedMeta {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .UnsolvedConstraint {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .TerminationProblem {
+    color: var(--code-fg);
+    background: #FFA07A; }
+  .Agda .IncompletePattern {
+    color: var(--code-fg);
+    background: #F5DEB3; }
+  .Agda .Error {
+    color: red;
+    text-decoration: underline; }
+  .Agda .TypeChecks {
+    color: var(--code-fg);
+    background: #ADD8E6; }
+  .Agda .ShadowingInTelescope {
+    color: var(--code-fg);
+    background: #808080; }
+  .Agda .Deadcode {
+    color: var(--code-keyword);
+    font-weight: bold; }
+  .Agda a {
+    text-decoration: none; }
+  .Agda a[href]:hover {
+    text-decoration: 2px var(--primary) underline; }
+  .Agda a[href]:target {
+    animation: highlight 2.5s; }
+  body.text-page .Agda {
+    font-size: var(--code-font-size); }
+
+pre.Agda, div.sourceCode, pre {
+  border-radius: 0;
+  box-shadow: none;
+  overflow-y: clip;
+  margin: 0;
+  padding: 1em;
+  padding-top: 0.25em;
+  padding-bottom: 0.25em;
+  background-color: var(--code-bg);
+  color: var(--code-fg);
+  font-size: var(--code-font-size);
+  max-width: 100%;
+  overflow-x: auto;
+}
+</style>
+</html>

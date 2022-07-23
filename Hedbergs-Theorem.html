@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>HoTTEST Summer School 2022 Lecture Notes</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+</head>
+
+<body class="text-page">
+<main>
+<div id="post-toc-container" style="padding-left: 1em; padding-right: 1em;">
+
+  <article>
+
+<p><a href="Https://www.Cs.Bham.Ac.Uk/~mhe/">Martin Escardo</a>. Notes
+originally written for the module <em>Advanced Functional
+Programming</em> of the <a
+href="https://www.birmingham.ac.uk/index.aspx">University of
+Birmingham</a>, UK.</p>
+<h1 id="hedbergs-theorem">Hedberg’s Theorem</h1>
+<p>Sometimes we wish to know that the identity type <code>x ≡ y</code>
+has at most one element for all elements <code>x</code> and
+<code>y</code> of a type. In this case we say that the type is a set.
+Alternatively, one says that the type satisfies <em>uniqueness of
+identity proofs</em> (UIP), or that it satisfies the <em>K axiom</em>.
+Perhaps surprisingly, this can’t be proved for all types. But it can be
+proved for quite a few types, including the booleans, natural numbers,
+and functions <code>ℕ → ℕ</code>, among many others.</p>
+<p>Hedberg’s Theorem, whose proof is short, but quite difficult to
+understand, even for experts in Martin-Löf type theory, is a main tool
+for establishing that some types are sets. Agda has the axiom
+<code>K</code> discussed above enabled by default. We are disabling it
+in all modules, including this. The reason is that towards the end of
+term we intend to give examples of types that are not sets, and explain
+why they are interesting.</p>
+<pre class="Agda"><a id="1138" class="Symbol">{-#</a> <a id="1142" class="Keyword">OPTIONS</a> <a id="1150" class="Pragma">--without-K</a> <a id="1162" class="Pragma">--safe</a> <a id="1169" class="Symbol">#-}</a>
+
+<a id="1174" class="Keyword">module</a> <a id="1181" href="Hedbergs-Theorem.html" class="Module">Hedbergs-Theorem</a> <a id="1198" class="Keyword">where</a>
+
+<a id="1205" class="Keyword">open</a> <a id="1210" class="Keyword">import</a> <a id="1217" href="prelude.html" class="Module">prelude</a>
+<a id="1225" class="Keyword">open</a> <a id="1230" class="Keyword">import</a> <a id="1237" href="negation.html" class="Module">negation</a>
+
+<a id="is-prop"></a><a id="1247" href="Hedbergs-Theorem.html#1247" data-type="Type → Type" class="Function">is-prop</a> <a id="1255" class="Symbol">:</a> <a id="1257" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a> <a id="1262" class="Symbol">→</a> <a id="1264" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a>
+<a id="1269" href="Hedbergs-Theorem.html#1247" data-type="Type → Type" class="Function">is-prop</a> <a id="1277" href="Hedbergs-Theorem.html#1277" class="Bound">X</a> <a id="1279" class="Symbol">=</a> <a id="1281" class="Symbol">(</a><a id="1282" href="Hedbergs-Theorem.html#1282" class="Bound">x</a> <a id="1284" href="Hedbergs-Theorem.html#1284" class="Bound">y</a> <a id="1286" class="Symbol">:</a> <a id="1288" href="Hedbergs-Theorem.html#1277" class="Bound">X</a><a id="1289" class="Symbol">)</a> <a id="1291" class="Symbol">→</a> <a id="1293" href="Hedbergs-Theorem.html#1282" class="Bound">x</a> <a id="1295" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="1297" href="Hedbergs-Theorem.html#1284" class="Bound">y</a>
+
+<a id="𝟘-is-prop"></a><a id="1300" href="Hedbergs-Theorem.html#1300" data-type="is-prop 𝟘" class="Function">𝟘-is-prop</a> <a id="1310" class="Symbol">:</a> <a id="1312" href="Hedbergs-Theorem.html#1247" data-type="Type → Type" class="Function">is-prop</a> <a id="1320" href="empty-type.html#523" data-type="Set" class="Datatype">𝟘</a>
+<a id="1322" href="Hedbergs-Theorem.html#1300" data-type="is-prop 𝟘" class="Function">𝟘-is-prop</a> <a id="1332" class="Symbol">()</a> <a id="1335" class="Symbol">()</a>
+
+<a id="𝟙-is-prop"></a><a id="1339" href="Hedbergs-Theorem.html#1339" data-type="is-prop 𝟙" class="Function">𝟙-is-prop</a> <a id="1349" class="Symbol">:</a> <a id="1351" href="Hedbergs-Theorem.html#1247" data-type="Type → Type" class="Function">is-prop</a> <a id="1359" href="unit-type.html#396" data-type="Type" class="Record">𝟙</a>
+<a id="1361" href="Hedbergs-Theorem.html#1339" data-type="is-prop 𝟙" class="Function">𝟙-is-prop</a> <a id="1371" href="unit-type.html#426" data-type="𝟙" class="InductiveConstructor">⋆</a> <a id="1373" href="unit-type.html#426" data-type="𝟙" class="InductiveConstructor">⋆</a> <a id="1375" class="Symbol">=</a> <a id="1377" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="1382" href="unit-type.html#426" data-type="𝟙" class="InductiveConstructor">⋆</a>
+
+<a id="is-set"></a><a id="1385" href="Hedbergs-Theorem.html#1385" data-type="Type → Type" class="Function">is-set</a> <a id="1392" class="Symbol">:</a> <a id="1394" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a> <a id="1399" class="Symbol">→</a> <a id="1401" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a>
+<a id="1406" href="Hedbergs-Theorem.html#1385" data-type="Type → Type" class="Function">is-set</a> <a id="1413" href="Hedbergs-Theorem.html#1413" class="Bound">X</a> <a id="1415" class="Symbol">=</a> <a id="1417" class="Symbol">(</a><a id="1418" href="Hedbergs-Theorem.html#1418" class="Bound">x</a> <a id="1420" href="Hedbergs-Theorem.html#1420" class="Bound">y</a> <a id="1422" class="Symbol">:</a> <a id="1424" href="Hedbergs-Theorem.html#1413" class="Bound">X</a><a id="1425" class="Symbol">)</a> <a id="1427" class="Symbol">→</a> <a id="1429" href="Hedbergs-Theorem.html#1247" data-type="Type → Type" class="Function">is-prop</a> <a id="1437" class="Symbol">(</a><a id="1438" href="Hedbergs-Theorem.html#1418" class="Bound">x</a> <a id="1440" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="1442" href="Hedbergs-Theorem.html#1420" class="Bound">y</a><a id="1443" class="Symbol">)</a>
+
+<a id="is-constant"></a><a id="1446" href="Hedbergs-Theorem.html#1446" data-type="(X → Y) → Type" class="Function">is-constant</a> <a id="1458" class="Symbol">:</a> <a id="1460" class="Symbol">{</a><a id="1461" href="Hedbergs-Theorem.html#1461" class="Bound">X</a> <a id="1463" href="Hedbergs-Theorem.html#1463" class="Bound">Y</a> <a id="1465" class="Symbol">:</a> <a id="1467" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="1471" class="Symbol">}</a> <a id="1473" class="Symbol">→</a> <a id="1475" class="Symbol">(</a><a id="1476" href="Hedbergs-Theorem.html#1461" class="Bound">X</a> <a id="1478" class="Symbol">→</a> <a id="1480" href="Hedbergs-Theorem.html#1463" class="Bound">Y</a><a id="1481" class="Symbol">)</a> <a id="1483" class="Symbol">→</a> <a id="1485" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a>
+<a id="1490" href="Hedbergs-Theorem.html#1446" data-type="(X → Y) → Type" class="Function">is-constant</a> <a id="1502" class="Symbol">{</a><a id="1503" href="Hedbergs-Theorem.html#1503" class="Bound">X</a><a id="1504" class="Symbol">}</a> <a id="1506" href="Hedbergs-Theorem.html#1506" class="Bound">f</a> <a id="1508" class="Symbol">=</a> <a id="1510" class="Symbol">(</a><a id="1511" href="Hedbergs-Theorem.html#1511" class="Bound">x</a> <a id="1513" href="Hedbergs-Theorem.html#1513" class="Bound">x&#39;</a> <a id="1516" class="Symbol">:</a> <a id="1518" href="Hedbergs-Theorem.html#1503" class="Bound">X</a><a id="1519" class="Symbol">)</a> <a id="1521" class="Symbol">→</a> <a id="1523" href="Hedbergs-Theorem.html#1506" class="Bound">f</a> <a id="1525" href="Hedbergs-Theorem.html#1511" class="Bound">x</a> <a id="1527" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="1529" href="Hedbergs-Theorem.html#1506" class="Bound">f</a> <a id="1531" href="Hedbergs-Theorem.html#1513" class="Bound">x&#39;</a>
+
+<a id="has-constant-endofunction"></a><a id="1535" href="Hedbergs-Theorem.html#1535" data-type="Type → Type" class="Function">has-constant-endofunction</a> <a id="1561" class="Symbol">:</a> <a id="1563" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a> <a id="1568" class="Symbol">→</a> <a id="1570" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a>
+<a id="1575" href="Hedbergs-Theorem.html#1535" data-type="Type → Type" class="Function">has-constant-endofunction</a> <a id="1601" href="Hedbergs-Theorem.html#1601" class="Bound">X</a> <a id="1603" class="Symbol">=</a> <a id="1605" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">Σ</a> <a id="1607" href="Hedbergs-Theorem.html#1607" class="Bound">f</a> <a id="1609" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">꞉</a> <a id="1611" class="Symbol">(</a><a id="1612" href="Hedbergs-Theorem.html#1601" class="Bound">X</a> <a id="1614" class="Symbol">→</a> <a id="1616" href="Hedbergs-Theorem.html#1601" class="Bound">X</a><a id="1617" class="Symbol">)</a><a id="1618" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">,</a> <a id="1620" href="Hedbergs-Theorem.html#1446" data-type="(X → Y) → Type" class="Function">is-constant</a> <a id="1632" href="Hedbergs-Theorem.html#1607" class="Bound">f</a>
+
+<a id="⁻¹-left∙"></a><a id="1635" href="Hedbergs-Theorem.html#1635" data-type="(p : x ≡ y) → p ⁻¹ ∙ p ≡ refl y" class="Function">⁻¹-left∙</a> <a id="1644" class="Symbol">:</a> <a id="1646" class="Symbol">{</a><a id="1647" href="Hedbergs-Theorem.html#1647" class="Bound">X</a> <a id="1649" class="Symbol">:</a> <a id="1651" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="1655" class="Symbol">}</a> <a id="1657" class="Symbol">{</a><a id="1658" href="Hedbergs-Theorem.html#1658" class="Bound">x</a> <a id="1660" href="Hedbergs-Theorem.html#1660" class="Bound">y</a> <a id="1662" class="Symbol">:</a> <a id="1664" href="Hedbergs-Theorem.html#1647" class="Bound">X</a><a id="1665" class="Symbol">}</a> <a id="1667" class="Symbol">(</a><a id="1668" href="Hedbergs-Theorem.html#1668" class="Bound">p</a> <a id="1670" class="Symbol">:</a> <a id="1672" href="Hedbergs-Theorem.html#1658" class="Bound">x</a> <a id="1674" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="1676" href="Hedbergs-Theorem.html#1660" class="Bound">y</a><a id="1677" class="Symbol">)</a>
+         <a id="1688" class="Symbol">→</a> <a id="1690" href="Hedbergs-Theorem.html#1668" class="Bound">p</a> <a id="1692" href="identity-type.html#3048" data-type="x ≡ y → y ≡ x" class="Function Operator">⁻¹</a> <a id="1695" href="identity-type.html#2968" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function Operator">∙</a> <a id="1697" href="Hedbergs-Theorem.html#1668" class="Bound">p</a> <a id="1699" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="1701" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="1706" href="Hedbergs-Theorem.html#1660" class="Bound">y</a>
+<a id="1708" href="Hedbergs-Theorem.html#1635" data-type="(p : x ≡ y) → p ⁻¹ ∙ p ≡ refl y" class="Function">⁻¹-left∙</a> <a id="1717" class="Symbol">(</a><a id="1718" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="1723" href="Hedbergs-Theorem.html#1723" class="Bound">x</a><a id="1724" class="Symbol">)</a> <a id="1726" class="Symbol">=</a> <a id="1728" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="1733" class="Symbol">(</a><a id="1734" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="1739" href="Hedbergs-Theorem.html#1723" class="Bound">x</a><a id="1740" class="Symbol">)</a>
+
+<a id="⁻¹-right∙"></a><a id="1743" href="Hedbergs-Theorem.html#1743" data-type="(p : x ≡ y) → p ∙ p ⁻¹ ≡ refl x" class="Function">⁻¹-right∙</a> <a id="1753" class="Symbol">:</a> <a id="1755" class="Symbol">{</a><a id="1756" href="Hedbergs-Theorem.html#1756" class="Bound">X</a> <a id="1758" class="Symbol">:</a> <a id="1760" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="1764" class="Symbol">}</a> <a id="1766" class="Symbol">{</a><a id="1767" href="Hedbergs-Theorem.html#1767" class="Bound">x</a> <a id="1769" href="Hedbergs-Theorem.html#1769" class="Bound">y</a> <a id="1771" class="Symbol">:</a> <a id="1773" href="Hedbergs-Theorem.html#1756" class="Bound">X</a><a id="1774" class="Symbol">}</a> <a id="1776" class="Symbol">(</a><a id="1777" href="Hedbergs-Theorem.html#1777" class="Bound">p</a> <a id="1779" class="Symbol">:</a> <a id="1781" href="Hedbergs-Theorem.html#1767" class="Bound">x</a> <a id="1783" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="1785" href="Hedbergs-Theorem.html#1769" class="Bound">y</a><a id="1786" class="Symbol">)</a>
+          <a id="1798" class="Symbol">→</a> <a id="1800" href="Hedbergs-Theorem.html#1777" class="Bound">p</a> <a id="1802" href="identity-type.html#2968" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function Operator">∙</a> <a id="1804" href="Hedbergs-Theorem.html#1777" class="Bound">p</a> <a id="1806" href="identity-type.html#3048" data-type="x ≡ y → y ≡ x" class="Function Operator">⁻¹</a> <a id="1809" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="1811" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="1816" href="Hedbergs-Theorem.html#1767" class="Bound">x</a>
+<a id="1818" href="Hedbergs-Theorem.html#1743" data-type="(p : x ≡ y) → p ∙ p ⁻¹ ≡ refl x" class="Function">⁻¹-right∙</a> <a id="1828" class="Symbol">(</a><a id="1829" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="1834" href="Hedbergs-Theorem.html#1834" class="Bound">x</a><a id="1835" class="Symbol">)</a> <a id="1837" class="Symbol">=</a> <a id="1839" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="1844" class="Symbol">(</a><a id="1845" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="1850" href="Hedbergs-Theorem.html#1834" class="Bound">x</a><a id="1851" class="Symbol">)</a>
+
+<a id="Hedbergs-Lemma"></a><a id="1854" href="Hedbergs-Theorem.html#1854" data-type="(x : X) →
+((y : X) → has-constant-endofunction (x ≡ y)) →
+(y : X) → is-prop (x ≡ y)" class="Function">Hedbergs-Lemma</a> <a id="1869" class="Symbol">:</a> <a id="1871" class="Symbol">{</a><a id="1872" href="Hedbergs-Theorem.html#1872" class="Bound">X</a> <a id="1874" class="Symbol">:</a> <a id="1876" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="1880" class="Symbol">}</a> <a id="1882" class="Symbol">(</a><a id="1883" href="Hedbergs-Theorem.html#1883" class="Bound">x</a> <a id="1885" class="Symbol">:</a> <a id="1887" href="Hedbergs-Theorem.html#1872" class="Bound">X</a><a id="1888" class="Symbol">)</a>
+               <a id="1905" class="Symbol">→</a> <a id="1907" class="Symbol">((</a><a id="1909" href="Hedbergs-Theorem.html#1909" class="Bound">y</a> <a id="1911" class="Symbol">:</a> <a id="1913" href="Hedbergs-Theorem.html#1872" class="Bound">X</a><a id="1914" class="Symbol">)</a> <a id="1916" class="Symbol">→</a> <a id="1918" href="Hedbergs-Theorem.html#1535" data-type="Type → Type" class="Function">has-constant-endofunction</a> <a id="1944" class="Symbol">(</a><a id="1945" href="Hedbergs-Theorem.html#1883" class="Bound">x</a> <a id="1947" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="1949" href="Hedbergs-Theorem.html#1909" class="Bound">y</a><a id="1950" class="Symbol">))</a>
+               <a id="1968" class="Symbol">→</a> <a id="1970" class="Symbol">(</a><a id="1971" href="Hedbergs-Theorem.html#1971" class="Bound">y</a> <a id="1973" class="Symbol">:</a> <a id="1975" href="Hedbergs-Theorem.html#1872" class="Bound">X</a><a id="1976" class="Symbol">)</a> <a id="1978" class="Symbol">→</a> <a id="1980" href="Hedbergs-Theorem.html#1247" data-type="Type → Type" class="Function">is-prop</a> <a id="1988" class="Symbol">(</a><a id="1989" href="Hedbergs-Theorem.html#1883" class="Bound">x</a> <a id="1991" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="1993" href="Hedbergs-Theorem.html#1971" class="Bound">y</a><a id="1994" class="Symbol">)</a>
+<a id="1996" href="Hedbergs-Theorem.html#1854" data-type="(x : X) →
+((y : X) → has-constant-endofunction (x ≡ y)) →
+(y : X) → is-prop (x ≡ y)" class="Function">Hedbergs-Lemma</a> <a id="2011" class="Symbol">{</a><a id="2012" href="Hedbergs-Theorem.html#2012" class="Bound">X</a><a id="2013" class="Symbol">}</a> <a id="2015" href="Hedbergs-Theorem.html#2015" class="Bound">x</a> <a id="2017" href="Hedbergs-Theorem.html#2017" class="Bound">c</a> <a id="2019" href="Hedbergs-Theorem.html#2019" class="Bound">y</a> <a id="2021" href="Hedbergs-Theorem.html#2021" class="Bound">p</a> <a id="2023" href="Hedbergs-Theorem.html#2023" class="Bound">q</a> <a id="2025" class="Symbol">=</a> <a id="2027" href="Hedbergs-Theorem.html#2319" data-type="(x : X) (c : (y : X) → has-constant-endofunction (x ≡ y)) (y : X)
+(p q : x ≡ y) →
+p ≡ q" class="Function">II</a>
+ <a id="2031" class="Keyword">where</a>
+  <a id="2039" href="Hedbergs-Theorem.html#2039" data-type="(x : X) →
+((y : X) → has-constant-endofunction (x ≡ y)) →
+(y : X) → x ≡ y → x ≡ y → (y₁ : X) → x ≡ y₁ → x ≡ y₁" class="Function">f</a> <a id="2041" class="Symbol">:</a> <a id="2043" class="Symbol">(</a><a id="2044" href="Hedbergs-Theorem.html#2044" class="Bound">y</a> <a id="2046" class="Symbol">:</a> <a id="2048" href="Hedbergs-Theorem.html#2012" class="Bound">X</a><a id="2049" class="Symbol">)</a> <a id="2051" class="Symbol">→</a> <a id="2053" href="Hedbergs-Theorem.html#2015" class="Bound">x</a> <a id="2055" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="2057" href="Hedbergs-Theorem.html#2044" class="Bound">y</a> <a id="2059" class="Symbol">→</a> <a id="2061" href="Hedbergs-Theorem.html#2015" class="Bound">x</a> <a id="2063" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="2065" href="Hedbergs-Theorem.html#2044" class="Bound">y</a>
+  <a id="2069" href="Hedbergs-Theorem.html#2039" data-type="(x : X) →
+((y : X) → has-constant-endofunction (x ≡ y)) →
+(y : X) → x ≡ y → x ≡ y → (y₁ : X) → x ≡ y₁ → x ≡ y₁" class="Function">f</a> <a id="2071" href="Hedbergs-Theorem.html#2071" class="Bound">y</a> <a id="2073" class="Symbol">=</a> <a id="2075" href="sums.html#2535" data-type="Σ B → A" class="Field">pr₁</a> <a id="2079" class="Symbol">(</a><a id="2080" href="Hedbergs-Theorem.html#2017" class="Bound">c</a> <a id="2082" href="Hedbergs-Theorem.html#2071" class="Bound">y</a><a id="2083" class="Symbol">)</a>
+
+  <a id="2088" href="Hedbergs-Theorem.html#2088" data-type="(x : X) (c : (y : X) → has-constant-endofunction (x ≡ y)) (y : X)
+(p q : x ≡ y) (y₁ : X) (p₁ q₁ : x ≡ y₁) →
+f x c y p q y₁ p₁ ≡ f x c y p q y₁ q₁" class="Function">κ</a> <a id="2090" class="Symbol">:</a> <a id="2092" class="Symbol">(</a><a id="2093" href="Hedbergs-Theorem.html#2093" class="Bound">y</a> <a id="2095" class="Symbol">:</a> <a id="2097" href="Hedbergs-Theorem.html#2012" class="Bound">X</a><a id="2098" class="Symbol">)</a> <a id="2100" class="Symbol">(</a><a id="2101" href="Hedbergs-Theorem.html#2101" class="Bound">p</a> <a id="2103" href="Hedbergs-Theorem.html#2103" class="Bound">q</a> <a id="2105" class="Symbol">:</a> <a id="2107" href="Hedbergs-Theorem.html#2015" class="Bound">x</a> <a id="2109" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="2111" href="Hedbergs-Theorem.html#2093" class="Bound">y</a><a id="2112" class="Symbol">)</a> <a id="2114" class="Symbol">→</a> <a id="2116" href="Hedbergs-Theorem.html#2039" data-type="(x : X) →
+((y : X) → has-constant-endofunction (x ≡ y)) →
+(y : X) → x ≡ y → x ≡ y → (y₁ : X) → x ≡ y₁ → x ≡ y₁" class="Function">f</a> <a id="2118" href="Hedbergs-Theorem.html#2093" class="Bound">y</a> <a id="2120" href="Hedbergs-Theorem.html#2101" class="Bound">p</a> <a id="2122" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="2124" href="Hedbergs-Theorem.html#2039" data-type="(x : X) →
+((y : X) → has-constant-endofunction (x ≡ y)) →
+(y : X) → x ≡ y → x ≡ y → (y₁ : X) → x ≡ y₁ → x ≡ y₁" class="Function">f</a> <a id="2126" href="Hedbergs-Theorem.html#2093" class="Bound">y</a> <a id="2128" href="Hedbergs-Theorem.html#2103" class="Bound">q</a>
+  <a id="2132" href="Hedbergs-Theorem.html#2088" data-type="(x : X) (c : (y : X) → has-constant-endofunction (x ≡ y)) (y : X)
+(p q : x ≡ y) (y₁ : X) (p₁ q₁ : x ≡ y₁) →
+f x c y p q y₁ p₁ ≡ f x c y p q y₁ q₁" class="Function">κ</a> <a id="2134" href="Hedbergs-Theorem.html#2134" class="Bound">y</a> <a id="2136" class="Symbol">=</a> <a id="2138" href="sums.html#2545" data-type="(r : Σ B) → B (pr₁ r)" class="Field">pr₂</a> <a id="2142" class="Symbol">(</a><a id="2143" href="Hedbergs-Theorem.html#2017" class="Bound">c</a> <a id="2145" href="Hedbergs-Theorem.html#2134" class="Bound">y</a><a id="2146" class="Symbol">)</a>
+
+  <a id="2151" href="Hedbergs-Theorem.html#2151" data-type="(x : X) (c : (y : X) → has-constant-endofunction (x ≡ y)) (y : X)
+(p q : x ≡ y) (y₁ : X) (p₁ : x ≡ y₁) →
+f x c y p q x (refl x) ⁻¹ ∙ f x c y p q y₁ p₁ ≡ p₁" class="Function">I</a> <a id="2153" class="Symbol">:</a> <a id="2155" class="Symbol">(</a><a id="2156" href="Hedbergs-Theorem.html#2156" class="Bound">y</a> <a id="2158" class="Symbol">:</a> <a id="2160" href="Hedbergs-Theorem.html#2012" class="Bound">X</a><a id="2161" class="Symbol">)</a> <a id="2163" class="Symbol">(</a><a id="2164" href="Hedbergs-Theorem.html#2164" class="Bound">p</a> <a id="2166" class="Symbol">:</a> <a id="2168" href="Hedbergs-Theorem.html#2015" class="Bound">x</a> <a id="2170" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="2172" href="Hedbergs-Theorem.html#2156" class="Bound">y</a><a id="2173" class="Symbol">)</a> <a id="2175" class="Symbol">→</a> <a id="2177" class="Symbol">(</a><a id="2178" href="Hedbergs-Theorem.html#2039" data-type="(x : X) →
+((y : X) → has-constant-endofunction (x ≡ y)) →
+(y : X) → x ≡ y → x ≡ y → (y₁ : X) → x ≡ y₁ → x ≡ y₁" class="Function">f</a> <a id="2180" href="Hedbergs-Theorem.html#2015" class="Bound">x</a> <a id="2182" class="Symbol">(</a><a id="2183" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="2188" href="Hedbergs-Theorem.html#2015" class="Bound">x</a><a id="2189" class="Symbol">))</a><a id="2191" href="identity-type.html#3048" data-type="x ≡ y → y ≡ x" class="Function Operator">⁻¹</a> <a id="2194" href="identity-type.html#2968" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function Operator">∙</a> <a id="2196" href="Hedbergs-Theorem.html#2039" data-type="(x : X) →
+((y : X) → has-constant-endofunction (x ≡ y)) →
+(y : X) → x ≡ y → x ≡ y → (y₁ : X) → x ≡ y₁ → x ≡ y₁" class="Function">f</a> <a id="2198" href="Hedbergs-Theorem.html#2156" class="Bound">y</a> <a id="2200" href="Hedbergs-Theorem.html#2164" class="Bound">p</a> <a id="2202" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="2204" href="Hedbergs-Theorem.html#2164" class="Bound">p</a>
+  <a id="2208" href="Hedbergs-Theorem.html#2151" data-type="(x : X) (c : (y : X) → has-constant-endofunction (x ≡ y)) (y : X)
+(p q : x ≡ y) (y₁ : X) (p₁ : x ≡ y₁) →
+f x c y p q x (refl x) ⁻¹ ∙ f x c y p q y₁ p₁ ≡ p₁" class="Function">I</a> <a id="2210" href="Hedbergs-Theorem.html#2210" class="Bound">x</a> <a id="2212" class="Symbol">(</a><a id="2213" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="2218" href="Hedbergs-Theorem.html#2210" class="Bound">x</a><a id="2219" class="Symbol">)</a> <a id="2221" class="Symbol">=</a> <a id="2223" href="Hedbergs-Theorem.html#2238" data-type="(y : X) (x : X) (c : (y₁ : X) → has-constant-endofunction (x ≡ y₁))
+(p q : x ≡ y) →
+f x c y p q x (refl x) ⁻¹ ∙ f x c y p q x (refl x) ≡ refl x" class="Function">r</a>
+   <a id="2228" class="Keyword">where</a>
+    <a id="2238" href="Hedbergs-Theorem.html#2238" data-type="(y : X) (x : X) (c : (y₁ : X) → has-constant-endofunction (x ≡ y₁))
+(p q : x ≡ y) →
+f x c y p q x (refl x) ⁻¹ ∙ f x c y p q x (refl x) ≡ refl x" class="Function">r</a> <a id="2240" class="Symbol">:</a> <a id="2242" class="Symbol">(</a><a id="2243" href="Hedbergs-Theorem.html#2039" data-type="(x : X) →
+((y : X) → has-constant-endofunction (x ≡ y)) →
+(y : X) → x ≡ y → x ≡ y → (y₁ : X) → x ≡ y₁ → x ≡ y₁" class="Function">f</a> <a id="2245" href="Hedbergs-Theorem.html#2210" class="Bound">x</a> <a id="2247" class="Symbol">(</a><a id="2248" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="2253" href="Hedbergs-Theorem.html#2210" class="Bound">x</a><a id="2254" class="Symbol">))</a> <a id="2257" href="identity-type.html#3048" data-type="x ≡ y → y ≡ x" class="Function Operator">⁻¹</a> <a id="2260" href="identity-type.html#2968" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function Operator">∙</a> <a id="2262" href="Hedbergs-Theorem.html#2039" data-type="(x : X) →
+((y : X) → has-constant-endofunction (x ≡ y)) →
+(y : X) → x ≡ y → x ≡ y → (y₁ : X) → x ≡ y₁ → x ≡ y₁" class="Function">f</a> <a id="2264" href="Hedbergs-Theorem.html#2210" class="Bound">x</a> <a id="2266" class="Symbol">(</a><a id="2267" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="2272" href="Hedbergs-Theorem.html#2210" class="Bound">x</a><a id="2273" class="Symbol">)</a> <a id="2275" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="2277" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="2282" href="Hedbergs-Theorem.html#2210" class="Bound">x</a>
+    <a id="2288" href="Hedbergs-Theorem.html#2238" data-type="(y : X) (x : X) (c : (y₁ : X) → has-constant-endofunction (x ≡ y₁))
+(p q : x ≡ y) →
+f x c y p q x (refl x) ⁻¹ ∙ f x c y p q x (refl x) ≡ refl x" class="Function">r</a> <a id="2290" class="Symbol">=</a> <a id="2292" href="Hedbergs-Theorem.html#1635" data-type="(p : x ≡ y) → p ⁻¹ ∙ p ≡ refl y" class="Function">⁻¹-left∙</a> <a id="2301" class="Symbol">(</a><a id="2302" href="Hedbergs-Theorem.html#2039" data-type="(x : X) →
+((y : X) → has-constant-endofunction (x ≡ y)) →
+(y : X) → x ≡ y → x ≡ y → (y₁ : X) → x ≡ y₁ → x ≡ y₁" class="Function">f</a> <a id="2304" href="Hedbergs-Theorem.html#2210" class="Bound">x</a> <a id="2306" class="Symbol">(</a><a id="2307" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="2312" href="Hedbergs-Theorem.html#2210" class="Bound">x</a><a id="2313" class="Symbol">))</a>
+
+  <a id="2319" href="Hedbergs-Theorem.html#2319" data-type="(x : X) (c : (y : X) → has-constant-endofunction (x ≡ y)) (y : X)
+(p q : x ≡ y) →
+p ≡ q" class="Function">II</a> <a id="2322" class="Symbol">=</a> <a id="2324" href="Hedbergs-Theorem.html#2021" class="Bound">p</a>                         <a id="2350" href="identity-type.html#4152" data-type="(x : X) → x ≡ y → y ≡ z → x ≡ z" class="Function Operator">≡⟨</a> <a id="2353" class="Symbol">(</a><a id="2354" href="Hedbergs-Theorem.html#2151" data-type="(x : X) (c : (y : X) → has-constant-endofunction (x ≡ y)) (y : X)
+(p q : x ≡ y) (y₁ : X) (p₁ : x ≡ y₁) →
+f x c y p q x (refl x) ⁻¹ ∙ f x c y p q y₁ p₁ ≡ p₁" class="Function">I</a> <a id="2356" href="Hedbergs-Theorem.html#2019" class="Bound">y</a> <a id="2358" href="Hedbergs-Theorem.html#2021" class="Bound">p</a><a id="2359" class="Symbol">)</a><a id="2360" href="identity-type.html#3048" data-type="x ≡ y → y ≡ x" class="Function Operator">⁻¹</a>                          <a id="2388" href="identity-type.html#4152" data-type="(x : X) → x ≡ y → y ≡ z → x ≡ z" class="Function Operator">⟩</a>
+       <a id="2397" class="Symbol">(</a><a id="2398" href="Hedbergs-Theorem.html#2039" data-type="(x : X) →
+((y : X) → has-constant-endofunction (x ≡ y)) →
+(y : X) → x ≡ y → x ≡ y → (y₁ : X) → x ≡ y₁ → x ≡ y₁" class="Function">f</a> <a id="2400" href="Hedbergs-Theorem.html#2015" class="Bound">x</a> <a id="2402" class="Symbol">(</a><a id="2403" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="2408" href="Hedbergs-Theorem.html#2015" class="Bound">x</a><a id="2409" class="Symbol">))</a><a id="2411" href="identity-type.html#3048" data-type="x ≡ y → y ≡ x" class="Function Operator">⁻¹</a> <a id="2414" href="identity-type.html#2968" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function Operator">∙</a> <a id="2416" href="Hedbergs-Theorem.html#2039" data-type="(x : X) →
+((y : X) → has-constant-endofunction (x ≡ y)) →
+(y : X) → x ≡ y → x ≡ y → (y₁ : X) → x ≡ y₁ → x ≡ y₁" class="Function">f</a> <a id="2418" href="Hedbergs-Theorem.html#2019" class="Bound">y</a> <a id="2420" href="Hedbergs-Theorem.html#2021" class="Bound">p</a>  <a id="2423" href="identity-type.html#4152" data-type="(x : X) → x ≡ y → y ≡ z → x ≡ z" class="Function Operator">≡⟨</a> <a id="2426" href="identity-type.html#2307" data-type="(f : A → B) → x ≡ y → f x ≡ f y" class="Function">ap</a> <a id="2429" class="Symbol">((</a><a id="2431" href="Hedbergs-Theorem.html#2039" data-type="(x : X) →
+((y : X) → has-constant-endofunction (x ≡ y)) →
+(y : X) → x ≡ y → x ≡ y → (y₁ : X) → x ≡ y₁ → x ≡ y₁" class="Function">f</a> <a id="2433" href="Hedbergs-Theorem.html#2015" class="Bound">x</a> <a id="2435" class="Symbol">(</a><a id="2436" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="2441" href="Hedbergs-Theorem.html#2015" class="Bound">x</a><a id="2442" class="Symbol">))</a><a id="2444" href="identity-type.html#3048" data-type="x ≡ y → y ≡ x" class="Function Operator">⁻¹</a> <a id="2447" href="identity-type.html#2968" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function Operator">∙_</a><a id="2449" class="Symbol">)</a> <a id="2451" class="Symbol">(</a><a id="2452" href="Hedbergs-Theorem.html#2088" data-type="(x : X) (c : (y : X) → has-constant-endofunction (x ≡ y)) (y : X)
+(p q : x ≡ y) (y₁ : X) (p₁ q₁ : x ≡ y₁) →
+f x c y p q y₁ p₁ ≡ f x c y p q y₁ q₁" class="Function">κ</a> <a id="2454" href="Hedbergs-Theorem.html#2019" class="Bound">y</a> <a id="2456" href="Hedbergs-Theorem.html#2021" class="Bound">p</a> <a id="2458" href="Hedbergs-Theorem.html#2023" class="Bound">q</a><a id="2459" class="Symbol">)</a> <a id="2461" href="identity-type.html#4152" data-type="(x : X) → x ≡ y → y ≡ z → x ≡ z" class="Function Operator">⟩</a>
+       <a id="2470" class="Symbol">(</a><a id="2471" href="Hedbergs-Theorem.html#2039" data-type="(x : X) →
+((y : X) → has-constant-endofunction (x ≡ y)) →
+(y : X) → x ≡ y → x ≡ y → (y₁ : X) → x ≡ y₁ → x ≡ y₁" class="Function">f</a> <a id="2473" href="Hedbergs-Theorem.html#2015" class="Bound">x</a> <a id="2475" class="Symbol">(</a><a id="2476" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="2481" href="Hedbergs-Theorem.html#2015" class="Bound">x</a><a id="2482" class="Symbol">))</a><a id="2484" href="identity-type.html#3048" data-type="x ≡ y → y ≡ x" class="Function Operator">⁻¹</a> <a id="2487" href="identity-type.html#2968" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function Operator">∙</a> <a id="2489" href="Hedbergs-Theorem.html#2039" data-type="(x : X) →
+((y : X) → has-constant-endofunction (x ≡ y)) →
+(y : X) → x ≡ y → x ≡ y → (y₁ : X) → x ≡ y₁ → x ≡ y₁" class="Function">f</a> <a id="2491" href="Hedbergs-Theorem.html#2019" class="Bound">y</a> <a id="2493" href="Hedbergs-Theorem.html#2023" class="Bound">q</a>  <a id="2496" href="identity-type.html#4152" data-type="(x : X) → x ≡ y → y ≡ z → x ≡ z" class="Function Operator">≡⟨</a> <a id="2499" href="Hedbergs-Theorem.html#2151" data-type="(x : X) (c : (y : X) → has-constant-endofunction (x ≡ y)) (y : X)
+(p q : x ≡ y) (y₁ : X) (p₁ : x ≡ y₁) →
+f x c y p q x (refl x) ⁻¹ ∙ f x c y p q y₁ p₁ ≡ p₁" class="Function">I</a> <a id="2501" href="Hedbergs-Theorem.html#2019" class="Bound">y</a> <a id="2503" href="Hedbergs-Theorem.html#2023" class="Bound">q</a>                              <a id="2534" href="identity-type.html#4152" data-type="(x : X) → x ≡ y → y ≡ z → x ≡ z" class="Function Operator">⟩</a>
+       <a id="2543" href="Hedbergs-Theorem.html#2023" class="Bound">q</a>                         <a id="2569" href="identity-type.html#4238" data-type="(x : X) → x ≡ x" class="Function Operator">∎</a>
+
+
+<a id="is-Hedberg-type"></a><a id="2573" href="Hedbergs-Theorem.html#2573" data-type="Type → Type" class="Function">is-Hedberg-type</a> <a id="2589" class="Symbol">:</a> <a id="2591" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a> <a id="2596" class="Symbol">→</a> <a id="2598" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a>
+<a id="2603" href="Hedbergs-Theorem.html#2573" data-type="Type → Type" class="Function">is-Hedberg-type</a> <a id="2619" href="Hedbergs-Theorem.html#2619" class="Bound">X</a> <a id="2621" class="Symbol">=</a> <a id="2623" class="Symbol">(</a><a id="2624" href="Hedbergs-Theorem.html#2624" class="Bound">x</a> <a id="2626" href="Hedbergs-Theorem.html#2626" class="Bound">y</a> <a id="2628" class="Symbol">:</a> <a id="2630" href="Hedbergs-Theorem.html#2619" class="Bound">X</a><a id="2631" class="Symbol">)</a> <a id="2633" class="Symbol">→</a> <a id="2635" href="Hedbergs-Theorem.html#1535" data-type="Type → Type" class="Function">has-constant-endofunction</a> <a id="2661" class="Symbol">(</a><a id="2662" href="Hedbergs-Theorem.html#2624" class="Bound">x</a> <a id="2664" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="2666" href="Hedbergs-Theorem.html#2626" class="Bound">y</a><a id="2667" class="Symbol">)</a>
+
+<a id="Hedberg-types-are-sets"></a><a id="2670" href="Hedbergs-Theorem.html#2670" data-type="(X : Type) → is-Hedberg-type X → is-set X" class="Function">Hedberg-types-are-sets</a> <a id="2693" class="Symbol">:</a> <a id="2695" class="Symbol">(</a><a id="2696" href="Hedbergs-Theorem.html#2696" class="Bound">X</a> <a id="2698" class="Symbol">:</a> <a id="2700" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="2704" class="Symbol">)</a>
+                       <a id="2729" class="Symbol">→</a> <a id="2731" href="Hedbergs-Theorem.html#2573" data-type="Type → Type" class="Function">is-Hedberg-type</a> <a id="2747" href="Hedbergs-Theorem.html#2696" class="Bound">X</a>
+                       <a id="2772" class="Symbol">→</a> <a id="2774" href="Hedbergs-Theorem.html#1385" data-type="Type → Type" class="Function">is-set</a> <a id="2781" href="Hedbergs-Theorem.html#2696" class="Bound">X</a>
+<a id="2783" href="Hedbergs-Theorem.html#2670" data-type="(X : Type) → is-Hedberg-type X → is-set X" class="Function">Hedberg-types-are-sets</a> <a id="2806" href="Hedbergs-Theorem.html#2806" class="Bound">X</a> <a id="2808" href="Hedbergs-Theorem.html#2808" class="Bound">c</a> <a id="2810" href="Hedbergs-Theorem.html#2810" class="Bound">x</a> <a id="2812" class="Symbol">=</a> <a id="2814" href="Hedbergs-Theorem.html#1854" data-type="(x : X) →
+((y : X) → has-constant-endofunction (x ≡ y)) →
+(y : X) → is-prop (x ≡ y)" class="Function">Hedbergs-Lemma</a> <a id="2829" href="Hedbergs-Theorem.html#2810" class="Bound">x</a>
+                                <a id="2863" class="Symbol">(λ</a> <a id="2866" href="Hedbergs-Theorem.html#2866" class="Bound">y</a> <a id="2868" class="Symbol">→</a> <a id="2870" href="sums.html#2535" data-type="Σ B → A" class="Field">pr₁</a> <a id="2874" class="Symbol">(</a><a id="2875" href="Hedbergs-Theorem.html#2808" class="Bound">c</a> <a id="2877" href="Hedbergs-Theorem.html#2810" class="Bound">x</a> <a id="2879" href="Hedbergs-Theorem.html#2866" class="Bound">y</a><a id="2880" class="Symbol">)</a> <a id="2882" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="2884" href="sums.html#2545" data-type="(r : Σ B) → B (pr₁ r)" class="Field">pr₂</a> <a id="2888" class="Symbol">(</a><a id="2889" href="Hedbergs-Theorem.html#2808" class="Bound">c</a> <a id="2891" href="Hedbergs-Theorem.html#2810" class="Bound">x</a> <a id="2893" href="Hedbergs-Theorem.html#2866" class="Bound">y</a><a id="2894" class="Symbol">))</a>
+
+<a id="pointed-types-have-constant-endofunction"></a><a id="2898" href="Hedbergs-Theorem.html#2898" data-type="X → has-constant-endofunction X" class="Function">pointed-types-have-constant-endofunction</a> <a id="2939" class="Symbol">:</a> <a id="2941" class="Symbol">{</a><a id="2942" href="Hedbergs-Theorem.html#2942" class="Bound">X</a> <a id="2944" class="Symbol">:</a> <a id="2946" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="2950" class="Symbol">}</a>
+                                         <a id="2993" class="Symbol">→</a> <a id="2995" href="Hedbergs-Theorem.html#2942" class="Bound">X</a>
+                                         <a id="3038" class="Symbol">→</a> <a id="3040" href="Hedbergs-Theorem.html#1535" data-type="Type → Type" class="Function">has-constant-endofunction</a> <a id="3066" href="Hedbergs-Theorem.html#2942" class="Bound">X</a>
+<a id="3068" href="Hedbergs-Theorem.html#2898" data-type="X → has-constant-endofunction X" class="Function">pointed-types-have-constant-endofunction</a> <a id="3109" href="Hedbergs-Theorem.html#3109" class="Bound">x</a> <a id="3111" class="Symbol">=</a> <a id="3113" class="Symbol">((λ</a> <a id="3117" href="Hedbergs-Theorem.html#3117" class="Bound">y</a> <a id="3119" class="Symbol">→</a> <a id="3121" href="Hedbergs-Theorem.html#3109" class="Bound">x</a><a id="3122" class="Symbol">)</a> <a id="3124" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="3126" class="Symbol">(λ</a> <a id="3129" href="Hedbergs-Theorem.html#3129" class="Bound">y</a> <a id="3131" href="Hedbergs-Theorem.html#3131" class="Bound">y&#39;</a> <a id="3134" class="Symbol">→</a> <a id="3136" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="3141" href="Hedbergs-Theorem.html#3109" class="Bound">x</a><a id="3142" class="Symbol">))</a>
+
+<a id="empty-types-have-constant-endofunction"></a><a id="3146" href="Hedbergs-Theorem.html#3146" data-type="is-empty X → has-constant-endofunction X" class="Function">empty-types-have-constant-endofunction</a> <a id="3185" class="Symbol">:</a> <a id="3187" class="Symbol">{</a><a id="3188" href="Hedbergs-Theorem.html#3188" class="Bound">X</a> <a id="3190" class="Symbol">:</a> <a id="3192" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="3196" class="Symbol">}</a>
+                                       <a id="3237" class="Symbol">→</a> <a id="3239" href="empty-type.html#3173" data-type="Type → Type" class="Function">is-empty</a> <a id="3248" href="Hedbergs-Theorem.html#3188" class="Bound">X</a>
+                                       <a id="3289" class="Symbol">→</a> <a id="3291" href="Hedbergs-Theorem.html#1535" data-type="Type → Type" class="Function">has-constant-endofunction</a> <a id="3317" href="Hedbergs-Theorem.html#3188" class="Bound">X</a>
+<a id="3319" href="Hedbergs-Theorem.html#3146" data-type="is-empty X → has-constant-endofunction X" class="Function">empty-types-have-constant-endofunction</a> <a id="3358" href="Hedbergs-Theorem.html#3358" class="Bound">e</a> <a id="3360" class="Symbol">=</a> <a id="3362" class="Symbol">(</a><a id="3363" href="products.html#1041" data-type="A → A" class="Function">id</a> <a id="3366" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="3368" class="Symbol">(λ</a> <a id="3371" href="Hedbergs-Theorem.html#3371" class="Bound">x</a> <a id="3373" href="Hedbergs-Theorem.html#3373" class="Bound">x&#39;</a> <a id="3376" class="Symbol">→</a> <a id="3378" href="empty-type.html#1769" data-type="(x : 𝟘) → A x" class="Function">𝟘-elim</a> <a id="3385" class="Symbol">(</a><a id="3386" href="Hedbergs-Theorem.html#3358" class="Bound">e</a> <a id="3388" href="Hedbergs-Theorem.html#3371" class="Bound">x</a><a id="3389" class="Symbol">)))</a>
+
+<a id="3394" class="Keyword">open</a> <a id="3399" class="Keyword">import</a> <a id="3406" href="decidability.html" class="Module">decidability</a>
+
+<a id="decidable-types-have-constant-endofunctions"></a><a id="3420" href="Hedbergs-Theorem.html#3420" data-type="is-decidable X → has-constant-endofunction X" class="Function">decidable-types-have-constant-endofunctions</a> <a id="3464" class="Symbol">:</a> <a id="3466" class="Symbol">{</a><a id="3467" href="Hedbergs-Theorem.html#3467" class="Bound">X</a> <a id="3469" class="Symbol">:</a> <a id="3471" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="3475" class="Symbol">}</a>
+                                            <a id="3521" class="Symbol">→</a> <a id="3523" href="decidability.html#2635" data-type="Type → Type" class="Function">is-decidable</a> <a id="3536" href="Hedbergs-Theorem.html#3467" class="Bound">X</a>
+                                            <a id="3582" class="Symbol">→</a> <a id="3584" href="Hedbergs-Theorem.html#1535" data-type="Type → Type" class="Function">has-constant-endofunction</a> <a id="3610" href="Hedbergs-Theorem.html#3467" class="Bound">X</a>
+<a id="3612" href="Hedbergs-Theorem.html#3420" data-type="is-decidable X → has-constant-endofunction X" class="Function">decidable-types-have-constant-endofunctions</a> <a id="3656" class="Symbol">(</a><a id="3657" href="binary-sums.html#703" data-type="A → A ∔ B" class="InductiveConstructor">inl</a> <a id="3661" href="Hedbergs-Theorem.html#3661" class="Bound">x</a><a id="3662" class="Symbol">)</a> <a id="3664" class="Symbol">=</a>
+ <a id="3667" href="Hedbergs-Theorem.html#2898" data-type="X → has-constant-endofunction X" class="Function">pointed-types-have-constant-endofunction</a> <a id="3708" href="Hedbergs-Theorem.html#3661" class="Bound">x</a>
+<a id="3710" href="Hedbergs-Theorem.html#3420" data-type="is-decidable X → has-constant-endofunction X" class="Function">decidable-types-have-constant-endofunctions</a> <a id="3754" class="Symbol">(</a><a id="3755" href="binary-sums.html#720" data-type="B → A ∔ B" class="InductiveConstructor">inr</a> <a id="3759" href="Hedbergs-Theorem.html#3759" class="Bound">e</a><a id="3760" class="Symbol">)</a> <a id="3762" class="Symbol">=</a>
+ <a id="3765" href="Hedbergs-Theorem.html#3146" data-type="is-empty X → has-constant-endofunction X" class="Function">empty-types-have-constant-endofunction</a> <a id="3804" href="Hedbergs-Theorem.html#3759" class="Bound">e</a>
+
+<a id="types-with-decidable-equality-are-Hedberg"></a><a id="3807" href="Hedbergs-Theorem.html#3807" data-type="has-decidable-equality X → is-Hedberg-type X" class="Function">types-with-decidable-equality-are-Hedberg</a> <a id="3849" class="Symbol">:</a> <a id="3851" class="Symbol">{</a><a id="3852" href="Hedbergs-Theorem.html#3852" class="Bound">X</a> <a id="3854" class="Symbol">:</a> <a id="3856" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="3860" class="Symbol">}</a>
+                                          <a id="3904" class="Symbol">→</a> <a id="3906" href="decidability.html#13403" data-type="Type → Type" class="Function">has-decidable-equality</a> <a id="3929" href="Hedbergs-Theorem.html#3852" class="Bound">X</a>
+                                          <a id="3973" class="Symbol">→</a> <a id="3975" href="Hedbergs-Theorem.html#2573" data-type="Type → Type" class="Function">is-Hedberg-type</a> <a id="3991" href="Hedbergs-Theorem.html#3852" class="Bound">X</a>
+<a id="3993" href="Hedbergs-Theorem.html#3807" data-type="has-decidable-equality X → is-Hedberg-type X" class="Function">types-with-decidable-equality-are-Hedberg</a> <a id="4035" href="Hedbergs-Theorem.html#4035" class="Bound">d</a> <a id="4037" href="Hedbergs-Theorem.html#4037" class="Bound">x</a> <a id="4039" href="Hedbergs-Theorem.html#4039" class="Bound">y</a> <a id="4041" class="Symbol">=</a>
+ <a id="4044" href="Hedbergs-Theorem.html#3420" data-type="is-decidable X → has-constant-endofunction X" class="Function">decidable-types-have-constant-endofunctions</a> <a id="4088" class="Symbol">(</a><a id="4089" href="Hedbergs-Theorem.html#4035" class="Bound">d</a> <a id="4091" href="Hedbergs-Theorem.html#4037" class="Bound">x</a> <a id="4093" href="Hedbergs-Theorem.html#4039" class="Bound">y</a><a id="4094" class="Symbol">)</a>
+
+<a id="Hedbergs-Theorem"></a><a id="4097" href="Hedbergs-Theorem.html#4097" data-type="has-decidable-equality X → is-set X" class="Function">Hedbergs-Theorem</a> <a id="4114" class="Symbol">:</a> <a id="4116" class="Symbol">{</a><a id="4117" href="Hedbergs-Theorem.html#4117" class="Bound">X</a> <a id="4119" class="Symbol">:</a> <a id="4121" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="4125" class="Symbol">}</a> <a id="4127" class="Symbol">→</a> <a id="4129" href="decidability.html#13403" data-type="Type → Type" class="Function">has-decidable-equality</a> <a id="4152" href="Hedbergs-Theorem.html#4117" class="Bound">X</a> <a id="4154" class="Symbol">→</a> <a id="4156" href="Hedbergs-Theorem.html#1385" data-type="Type → Type" class="Function">is-set</a> <a id="4163" href="Hedbergs-Theorem.html#4117" class="Bound">X</a>
+<a id="4165" href="Hedbergs-Theorem.html#4097" data-type="has-decidable-equality X → is-set X" class="Function">Hedbergs-Theorem</a> <a id="4182" class="Symbol">{</a><a id="4183" href="Hedbergs-Theorem.html#4183" class="Bound">X</a><a id="4184" class="Symbol">}</a> <a id="4186" href="Hedbergs-Theorem.html#4186" class="Bound">d</a> <a id="4188" class="Symbol">=</a> <a id="4190" href="Hedbergs-Theorem.html#2670" data-type="(X : Type) → is-Hedberg-type X → is-set X" class="Function">Hedberg-types-are-sets</a> <a id="4213" href="Hedbergs-Theorem.html#4183" class="Bound">X</a>
+                          <a id="4241" class="Symbol">(</a><a id="4242" href="Hedbergs-Theorem.html#3807" data-type="has-decidable-equality X → is-Hedberg-type X" class="Function">types-with-decidable-equality-are-Hedberg</a> <a id="4284" href="Hedbergs-Theorem.html#4186" class="Bound">d</a><a id="4285" class="Symbol">)</a>
+
+<a id="ℕ-is-set"></a><a id="4288" href="Hedbergs-Theorem.html#4288" data-type="is-set ℕ" class="Function">ℕ-is-set</a> <a id="4297" class="Symbol">:</a> <a id="4299" href="Hedbergs-Theorem.html#1385" data-type="Type → Type" class="Function">is-set</a> <a id="4306" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a>
+<a id="4308" href="Hedbergs-Theorem.html#4288" data-type="is-set ℕ" class="Function">ℕ-is-set</a> <a id="4317" class="Symbol">=</a> <a id="4319" href="Hedbergs-Theorem.html#4097" data-type="has-decidable-equality X → is-set X" class="Function">Hedbergs-Theorem</a> <a id="4336" href="decidability.html#14047" data-type="has-decidable-equality ℕ" class="Function">ℕ-has-decidable-equality</a>
+
+<a id="Bool-is-set"></a><a id="4362" href="Hedbergs-Theorem.html#4362" data-type="is-set Bool" class="Function">Bool-is-set</a> <a id="4374" class="Symbol">:</a> <a id="4376" href="Hedbergs-Theorem.html#1385" data-type="Type → Type" class="Function">is-set</a> <a id="4383" href="Bool.html#492" data-type="Set" class="Datatype">Bool</a>
+<a id="4388" href="Hedbergs-Theorem.html#4362" data-type="is-set Bool" class="Function">Bool-is-set</a> <a id="4400" class="Symbol">=</a> <a id="4402" href="Hedbergs-Theorem.html#4097" data-type="has-decidable-equality X → is-set X" class="Function">Hedbergs-Theorem</a> <a id="4419" href="decidability.html#13704" data-type="has-decidable-equality Bool" class="Function">Bool-has-decidable-equality</a>
+</pre>
+<p><a href="https://martinescardo.github.io/HoTTEST-Summer-School/">Go
+back to the table of contents</a></p>
+
+  </article>
+</div>
+</main>
+</body>
+<style>
+
+:root {
+  --text-bg: #fff;
+  --text-fg: #222;
+  --shadow: #000;
+  --primary: #0054F4;
+  --secondary: #9C1BD6;
+  --modal-bg: #ccccccaa;
+  --warning-bg: #fef08a;
+  --code-bg: var(--text-bg);
+  --code-fg: var(--text-fg);
+  --code-keyword: #BB3B13;
+  --code-string:  #d52753;
+  --code-number:  #8A1060;
+  --code-module:  #8A1060;
+  --code-field:   #9C1BD6;
+  --code-constructor: #207B1D;
+  --code-highlight: #F5DEB3;
+  --search-selected: #e2e8f0;
+  --details-summary: #b2ebf2;
+  --details-open:    #80deea;
+  --depgraph-edge: #eee;
+  --blockquote-bg: #d8b4fe; }
+
+.diagram-dark {
+  display: none !important; }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-bg: #282C34;
+    --text-fg: #bfbfbf;
+    --shadow: #475569;
+    --primary: #61AFEF;
+    --secondary: #C878DD;
+    --modal-bg: #282C34aa;
+    --warning-bg: #991b1b;
+    --code-keyword:     #E5C07B;
+    --code-string:      #E06C75;
+    --code-number:      #98C379;
+    --code-module:      #56B6C2;
+    --code-field:       #C878DD;
+    --code-constructor: #98C379;
+    --code-highlight: #ef444499;
+    --search-selected: #474e5e;
+    --details-summary: #5b21b6;
+    --details-open:    #4c1d95;
+    --depgraph-edge: #474e5e;
+    --blockquote-bg: #475569; }
+  div.warning {
+    --shadow: #7f1d1d
+  ; }
+  input {
+    background-color: #334155;
+    border: 1px solid #475569;
+    color: var(--text-fg); }
+  body {
+    scrollbar-color: #3b4454 #2b2e33; }
+  .diagram-dark {
+    display: block !important; }
+  .diagram-light {
+    display: none !important; } }
+
+table {
+  margin: auto;
+  border-collapse: collapse; }
+  table td, table th {
+    text-align: center;
+    padding: 0px 1em 0px 1em;
+    border: 1px solid black; }
+  table th {
+    border-bottom: 2px solid black; }
+  table td {
+    white-space: nowrap; }
+
+html { max-width: 100%; }
+
+body {
+  font-family: "Inria Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  width: 100%;
+  font-size: var(--font-size);
+  overflow-x: clip;
+  background-color: var(--text-bg);
+  color: var(--text-fg);
+}
+
+div#post-toc-container { max-width: 120ch; margin: auto; }
+
+article a[href], div#return > a[href], div#top > a[href], aside#toc > div#toc-container ul a[href] {
+  color: var(--primary);
+  text-decoration: none; }
+  article a[href]:hover, div#return > a[href]:hover, div#top > a[href]:hover, aside#toc > div#toc-container ul a[href]:hover {
+    text-decoration: 2px currentColor underline !important; }
+  article a[href]:visited, div#return > a[href]:visited, div#top > a[href]:visited, aside#toc > div#toc-container ul a[href]:visited {
+    color: var(--secondary); }
+
+/* Aspects. */
+.Agda {
+  /* NameKinds. */
+  /* OtherAspects. */
+  /* Standard attributes. */
+  font-family: 'iosevka', 'Iosevka', 'Fantasque Sans Mono', 'Roboto Mono', monospace;
+  font-weight: 400; }
+  .Agda .Comment {
+    color: var(--code-fg);
+    font-style: italic; }
+  .Agda .Background {
+    background-color: var(--code-bg); }
+  .Agda .Markup {
+    color: var(--code-fg); }
+  .Agda .Keyword {
+    color: var(--code-keyword); }
+  .Agda .String {
+    color: var(--code-string); }
+  .Agda .Number {
+    color: var(--code-number); }
+  .Agda .Symbol {
+    color: var(--code-fg); }
+  .Agda .PrimitiveType {
+    color: var(--primary); }
+  .Agda .Pragma {
+    color: var(--code-fg); }
+  .Agda .Bound {
+    color: var(--code-fg) !important; }
+  .Agda .Generalizable {
+    color: var(--code-fg) !important; }
+  .Agda .InductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .CoinductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .Datatype {
+    color: var(--primary) !important; }
+  .Agda .Field {
+    color: var(--code-field) !important; }
+  .Agda .Function {
+    color: var(--primary) !important; }
+  .Agda .Module {
+    color: var(--code-module) !important; }
+  .Agda .Postulate {
+    color: var(--primary) !important; }
+  .Agda .Primitive {
+    color: var(--primary) !important; }
+  .Agda .Record {
+    color: var(--primary) !important; }
+  .Agda .UnsolvedMeta {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .UnsolvedConstraint {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .TerminationProblem {
+    color: var(--code-fg);
+    background: #FFA07A; }
+  .Agda .IncompletePattern {
+    color: var(--code-fg);
+    background: #F5DEB3; }
+  .Agda .Error {
+    color: red;
+    text-decoration: underline; }
+  .Agda .TypeChecks {
+    color: var(--code-fg);
+    background: #ADD8E6; }
+  .Agda .ShadowingInTelescope {
+    color: var(--code-fg);
+    background: #808080; }
+  .Agda .Deadcode {
+    color: var(--code-keyword);
+    font-weight: bold; }
+  .Agda a {
+    text-decoration: none; }
+  .Agda a[href]:hover {
+    text-decoration: 2px var(--primary) underline; }
+  .Agda a[href]:target {
+    animation: highlight 2.5s; }
+  body.text-page .Agda {
+    font-size: var(--code-font-size); }
+
+pre.Agda, div.sourceCode, pre {
+  border-radius: 0;
+  box-shadow: none;
+  overflow-y: clip;
+  margin: 0;
+  padding: 1em;
+  padding-top: 0.25em;
+  padding-bottom: 0.25em;
+  background-color: var(--code-bg);
+  color: var(--code-fg);
+  font-size: var(--code-font-size);
+  max-width: 100%;
+  overflow-x: auto;
+}
+</style>
+</html>

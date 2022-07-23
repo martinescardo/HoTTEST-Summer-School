@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>HoTTEST Summer School 2022 Lecture Notes</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+</head>
+
+<body class="text-page">
+<main>
+<div id="post-toc-container" style="padding-left: 1em; padding-right: 1em;">
+
+  <article>
+
+<p><a href="Https://www.Cs.Bham.Ac.Uk/~mhe/">Martin Escardo</a>. Notes
+originally written for the module <em>Advanced Functional
+Programming</em> of the <a
+href="https://www.birmingham.ac.uk/index.aspx">University of
+Birmingham</a>, UK.</p>
+<!--
+<pre class="Agda"><a id="221" class="Symbol">{-#</a> <a id="225" class="Keyword">OPTIONS</a> <a id="233" class="Pragma">--without-K</a> <a id="245" class="Pragma">--safe</a> <a id="252" class="Symbol">#-}</a>
+
+<a id="257" class="Keyword">module</a> <a id="264" href="introduction.html" class="Module">introduction</a> <a id="277" class="Keyword">where</a>
+</pre>
+**Warning for maintainers of the lecture notes**. This module should not be imported from any module other than natural-numbers-type.lagda.md. The reason the import is needed there is that the pragma {-# BUILTIN NATURAL ℕ #-} cannot be used in two modules, but the build of these lecture notes requires importing all files.
+
+-->
+<h1 id="introduction-to-agda">Introduction to Agda</h1>
+<p>Everything defined and briefly discussed in this introduction will be
+redefined and discussed in more detail in other handouts.</p>
+<h2 id="initial-examples-of-types-in-agda">Initial examples of types in
+Agda</h2>
+<!--
+In Agda, types are called sets by default. For the purposes of HoTT/UF, we prefer to stick to "Type".
+<pre class="Agda"><a id="Type"></a><a id="923" href="introduction.html#923" data-type="Set₁" class="Function">Type</a> <a id="928" class="Symbol">=</a> <a id="930" href="Agda.Primitive.html#311" data-type="Set₁" class="Primitive">Set</a>
+</pre>-->
+<p>Here are some examples of types:</p>
+<pre class="Agda"><a id="986" class="Keyword">data</a> <a id="Bool"></a><a id="991" href="introduction.html#991" data-type="Set" class="Datatype">Bool</a> <a id="996" class="Symbol">:</a> <a id="998" href="introduction.html#923" data-type="Set₁" class="Function">Type</a> <a id="1003" class="Keyword">where</a>
+ <a id="Bool.true"></a><a id="1010" href="introduction.html#1010" data-type="Bool" class="InductiveConstructor">true</a> <a id="Bool.false"></a><a id="1015" href="introduction.html#1015" data-type="Bool" class="InductiveConstructor">false</a> <a id="1021" class="Symbol">:</a> <a id="1023" href="introduction.html#991" data-type="Set" class="Datatype">Bool</a>
+
+<a id="1029" class="Keyword">data</a> <a id="ℕ"></a><a id="1034" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a> <a id="1036" class="Symbol">:</a> <a id="1038" href="introduction.html#923" data-type="Set₁" class="Function">Type</a> <a id="1043" class="Keyword">where</a>
+ <a id="ℕ.zero"></a><a id="1050" href="introduction.html#1050" data-type="ℕ" class="InductiveConstructor">zero</a> <a id="1055" class="Symbol">:</a> <a id="1057" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a>
+ <a id="ℕ.suc"></a><a id="1060" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a>  <a id="1065" class="Symbol">:</a> <a id="1067" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a> <a id="1069" class="Symbol">→</a> <a id="1071" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a>
+
+<a id="1074" class="Symbol">{-#</a> <a id="1078" class="Keyword">BUILTIN</a> <a id="1086" class="Keyword">NATURAL</a> <a id="1094" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a> <a id="1096" class="Symbol">#-}</a>
+
+<a id="1101" class="Keyword">data</a> <a id="List"></a><a id="1106" href="introduction.html#1106" data-type="Type → Set" class="Datatype">List</a> <a id="1111" class="Symbol">(</a><a id="1112" href="introduction.html#1112" class="Bound">A</a> <a id="1114" class="Symbol">:</a> <a id="1116" href="introduction.html#923" data-type="Set₁" class="Function">Type</a><a id="1120" class="Symbol">)</a> <a id="1122" class="Symbol">:</a> <a id="1124" href="introduction.html#923" data-type="Set₁" class="Function">Type</a> <a id="1129" class="Keyword">where</a>
+ <a id="List.[]"></a><a id="1136" href="introduction.html#1136" data-type="List A" class="InductiveConstructor">[]</a>   <a id="1141" class="Symbol">:</a> <a id="1143" href="introduction.html#1106" data-type="Type → Set" class="Datatype">List</a> <a id="1148" href="introduction.html#1112" class="Bound">A</a>
+ <a id="List._::_"></a><a id="1151" href="introduction.html#1151" data-type="A → List A → List A" class="InductiveConstructor Operator">_::_</a> <a id="1156" class="Symbol">:</a> <a id="1158" href="introduction.html#1112" class="Bound">A</a> <a id="1160" class="Symbol">→</a> <a id="1162" href="introduction.html#1106" data-type="Type → Set" class="Datatype">List</a> <a id="1167" href="introduction.html#1112" class="Bound">A</a> <a id="1169" class="Symbol">→</a> <a id="1171" href="introduction.html#1106" data-type="Type → Set" class="Datatype">List</a> <a id="1176" href="introduction.html#1112" class="Bound">A</a>
+
+<a id="1179" class="Keyword">infixr</a> <a id="1186" class="Number">10</a> <a id="1189" href="introduction.html#2590" data-type="A → Vector A n → Vector A (suc n)" class="InductiveConstructor Operator">_::_</a>
+</pre>
+<p>The pragma <code>BUILTIN NATURAL</code> is to get syntax sugar to be
+able to write 0,1,2,3,… rather than the more verbose</p>
+<ul>
+<li>zero</li>
+<li>suc zero</li>
+<li>suc (suc zero)</li>
+<li>suc (suc (suc zero))</li>
+<li>⋯</li>
+</ul>
+<p>We pronounce <code>suc</code> as “successor”.</p>
+<h2 id="examples-of-definitions-using-the-above-types">Examples of
+definitions using the above types</h2>
+<pre class="Agda"><a id="not"></a><a id="1475" href="introduction.html#1475" data-type="Bool → Bool" class="Function">not</a> <a id="1479" class="Symbol">:</a> <a id="1481" href="introduction.html#991" data-type="Set" class="Datatype">Bool</a> <a id="1486" class="Symbol">→</a> <a id="1488" href="introduction.html#991" data-type="Set" class="Datatype">Bool</a>
+<a id="1493" href="introduction.html#1475" data-type="Bool → Bool" class="Function">not</a> <a id="1497" href="introduction.html#1010" data-type="Bool" class="InductiveConstructor">true</a>  <a id="1503" class="Symbol">=</a> <a id="1505" href="introduction.html#1015" data-type="Bool" class="InductiveConstructor">false</a>
+<a id="1511" href="introduction.html#1475" data-type="Bool → Bool" class="Function">not</a> <a id="1515" href="introduction.html#1015" data-type="Bool" class="InductiveConstructor">false</a> <a id="1521" class="Symbol">=</a> <a id="1523" href="introduction.html#1010" data-type="Bool" class="InductiveConstructor">true</a>
+
+<a id="_&amp;&amp;_"></a><a id="1529" href="introduction.html#1529" data-type="Bool → Bool → Bool" class="Function Operator">_&amp;&amp;_</a> <a id="1534" class="Symbol">:</a> <a id="1536" href="introduction.html#991" data-type="Set" class="Datatype">Bool</a> <a id="1541" class="Symbol">→</a> <a id="1543" href="introduction.html#991" data-type="Set" class="Datatype">Bool</a> <a id="1548" class="Symbol">→</a> <a id="1550" href="introduction.html#991" data-type="Set" class="Datatype">Bool</a>
+<a id="1555" href="introduction.html#1010" data-type="Bool" class="InductiveConstructor">true</a>  <a id="1561" href="introduction.html#1529" data-type="Bool → Bool → Bool" class="Function Operator">&amp;&amp;</a> <a id="1564" href="introduction.html#1564" class="Bound">y</a> <a id="1566" class="Symbol">=</a> <a id="1568" href="introduction.html#1564" class="Bound">y</a>
+<a id="1570" href="introduction.html#1015" data-type="Bool" class="InductiveConstructor">false</a> <a id="1576" href="introduction.html#1529" data-type="Bool → Bool → Bool" class="Function Operator">&amp;&amp;</a> <a id="1579" href="introduction.html#1579" class="Bound">y</a> <a id="1581" class="Symbol">=</a> <a id="1583" href="introduction.html#1015" data-type="Bool" class="InductiveConstructor">false</a>
+
+<a id="_||_"></a><a id="1590" href="introduction.html#1590" data-type="Bool → Bool → Bool" class="Function Operator">_||_</a> <a id="1595" class="Symbol">:</a> <a id="1597" href="introduction.html#991" data-type="Set" class="Datatype">Bool</a> <a id="1602" class="Symbol">→</a> <a id="1604" href="introduction.html#991" data-type="Set" class="Datatype">Bool</a> <a id="1609" class="Symbol">→</a> <a id="1611" href="introduction.html#991" data-type="Set" class="Datatype">Bool</a>
+<a id="1616" href="introduction.html#1010" data-type="Bool" class="InductiveConstructor">true</a>  <a id="1622" href="introduction.html#1590" data-type="Bool → Bool → Bool" class="Function Operator">||</a> <a id="1625" href="introduction.html#1625" class="Bound">y</a> <a id="1627" class="Symbol">=</a> <a id="1629" href="introduction.html#1010" data-type="Bool" class="InductiveConstructor">true</a>
+<a id="1634" href="introduction.html#1015" data-type="Bool" class="InductiveConstructor">false</a> <a id="1640" href="introduction.html#1590" data-type="Bool → Bool → Bool" class="Function Operator">||</a> <a id="1643" href="introduction.html#1643" class="Bound">y</a> <a id="1645" class="Symbol">=</a> <a id="1647" href="introduction.html#1643" class="Bound">y</a>
+
+<a id="1650" class="Keyword">infixr</a> <a id="1657" class="Number">20</a> <a id="1660" href="introduction.html#1590" data-type="Bool → Bool → Bool" class="Function Operator">_||_</a>
+<a id="1665" class="Keyword">infixr</a> <a id="1672" class="Number">30</a> <a id="1675" href="introduction.html#1529" data-type="Bool → Bool → Bool" class="Function Operator">_&amp;&amp;_</a>
+
+<a id="if_then_else_"></a><a id="1681" href="introduction.html#1681" data-type="Bool → A → A → A" class="Function Operator">if_then_else_</a> <a id="1695" class="Symbol">:</a> <a id="1697" class="Symbol">{</a><a id="1698" href="introduction.html#1698" class="Bound">A</a> <a id="1700" class="Symbol">:</a> <a id="1702" href="introduction.html#923" data-type="Set₁" class="Function">Type</a><a id="1706" class="Symbol">}</a> <a id="1708" class="Symbol">→</a> <a id="1710" href="introduction.html#991" data-type="Set" class="Datatype">Bool</a> <a id="1715" class="Symbol">→</a> <a id="1717" href="introduction.html#1698" class="Bound">A</a> <a id="1719" class="Symbol">→</a> <a id="1721" href="introduction.html#1698" class="Bound">A</a> <a id="1723" class="Symbol">→</a> <a id="1725" href="introduction.html#1698" class="Bound">A</a>
+<a id="1727" href="introduction.html#1681" data-type="Bool → A → A → A" class="Function Operator">if</a> <a id="1730" href="introduction.html#1010" data-type="Bool" class="InductiveConstructor">true</a>  <a id="1736" href="introduction.html#1681" data-type="Bool → A → A → A" class="Function Operator">then</a> <a id="1741" href="introduction.html#1741" class="Bound">x</a> <a id="1743" href="introduction.html#1681" data-type="Bool → A → A → A" class="Function Operator">else</a> <a id="1748" href="introduction.html#1748" class="Bound">y</a> <a id="1750" class="Symbol">=</a> <a id="1752" href="introduction.html#1741" class="Bound">x</a>
+<a id="1754" href="introduction.html#1681" data-type="Bool → A → A → A" class="Function Operator">if</a> <a id="1757" href="introduction.html#1015" data-type="Bool" class="InductiveConstructor">false</a> <a id="1763" href="introduction.html#1681" data-type="Bool → A → A → A" class="Function Operator">then</a> <a id="1768" href="introduction.html#1768" class="Bound">x</a> <a id="1770" href="introduction.html#1681" data-type="Bool → A → A → A" class="Function Operator">else</a> <a id="1775" href="introduction.html#1775" class="Bound">y</a> <a id="1777" class="Symbol">=</a> <a id="1779" href="introduction.html#1775" class="Bound">y</a>
+
+<a id="_+_"></a><a id="1782" href="introduction.html#1782" data-type="ℕ → ℕ → ℕ" class="Function Operator">_+_</a> <a id="1786" class="Symbol">:</a> <a id="1788" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a> <a id="1790" class="Symbol">→</a> <a id="1792" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a> <a id="1794" class="Symbol">→</a> <a id="1796" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a>
+<a id="1798" href="introduction.html#1050" data-type="ℕ" class="InductiveConstructor">zero</a>  <a id="1804" href="introduction.html#1782" data-type="ℕ → ℕ → ℕ" class="Function Operator">+</a> <a id="1806" href="introduction.html#1806" class="Bound">y</a> <a id="1808" class="Symbol">=</a> <a id="1810" href="introduction.html#1806" class="Bound">y</a>
+<a id="1812" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="1816" href="introduction.html#1816" class="Bound">x</a> <a id="1818" href="introduction.html#1782" data-type="ℕ → ℕ → ℕ" class="Function Operator">+</a> <a id="1820" href="introduction.html#1820" class="Bound">y</a> <a id="1822" class="Symbol">=</a> <a id="1824" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="1828" class="Symbol">(</a><a id="1829" href="introduction.html#1816" class="Bound">x</a> <a id="1831" href="introduction.html#1782" data-type="ℕ → ℕ → ℕ" class="Function Operator">+</a> <a id="1833" href="introduction.html#1820" class="Bound">y</a><a id="1834" class="Symbol">)</a>
+
+<a id="_*_"></a><a id="1837" href="introduction.html#1837" data-type="ℕ → ℕ → ℕ" class="Function Operator">_*_</a> <a id="1841" class="Symbol">:</a> <a id="1843" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a> <a id="1845" class="Symbol">→</a> <a id="1847" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a> <a id="1849" class="Symbol">→</a> <a id="1851" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a>
+<a id="1853" href="introduction.html#1050" data-type="ℕ" class="InductiveConstructor">zero</a>  <a id="1859" href="introduction.html#1837" data-type="ℕ → ℕ → ℕ" class="Function Operator">*</a> <a id="1861" href="introduction.html#1861" class="Bound">y</a> <a id="1863" class="Symbol">=</a> <a id="1865" class="Number">0</a>
+<a id="1867" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="1871" href="introduction.html#1871" class="Bound">x</a> <a id="1873" href="introduction.html#1837" data-type="ℕ → ℕ → ℕ" class="Function Operator">*</a> <a id="1875" href="introduction.html#1875" class="Bound">y</a> <a id="1877" class="Symbol">=</a> <a id="1879" href="introduction.html#1871" class="Bound">x</a> <a id="1881" href="introduction.html#1837" data-type="ℕ → ℕ → ℕ" class="Function Operator">*</a> <a id="1883" href="introduction.html#1875" class="Bound">y</a> <a id="1885" href="introduction.html#1782" data-type="ℕ → ℕ → ℕ" class="Function Operator">+</a> <a id="1887" href="introduction.html#1875" class="Bound">y</a>
+
+<a id="1890" class="Keyword">infixr</a> <a id="1897" class="Number">20</a> <a id="1900" href="introduction.html#1782" data-type="ℕ → ℕ → ℕ" class="Function Operator">_+_</a>
+<a id="1904" class="Keyword">infixr</a> <a id="1911" class="Number">30</a> <a id="1914" href="introduction.html#1837" data-type="ℕ → ℕ → ℕ" class="Function Operator">_*_</a>
+
+<a id="sample-list₀"></a><a id="1919" href="introduction.html#1919" data-type="List ℕ" class="Function">sample-list₀</a> <a id="1932" class="Symbol">:</a> <a id="1934" href="introduction.html#1106" data-type="Type → Set" class="Datatype">List</a> <a id="1939" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a>
+<a id="1941" href="introduction.html#1919" data-type="List ℕ" class="Function">sample-list₀</a> <a id="1954" class="Symbol">=</a> <a id="1956" class="Number">1</a> <a id="1958" href="introduction.html#1151" data-type="A → List A → List A" class="InductiveConstructor Operator">::</a> <a id="1961" class="Number">2</a> <a id="1963" href="introduction.html#1151" data-type="A → List A → List A" class="InductiveConstructor Operator">::</a> <a id="1966" class="Number">3</a> <a id="1968" href="introduction.html#1151" data-type="A → List A → List A" class="InductiveConstructor Operator">::</a> <a id="1971" href="introduction.html#1136" data-type="List A" class="InductiveConstructor">[]</a>
+
+<a id="sample-list₁"></a><a id="1975" href="introduction.html#1975" data-type="List Bool" class="Function">sample-list₁</a> <a id="1988" class="Symbol">:</a> <a id="1990" href="introduction.html#1106" data-type="Type → Set" class="Datatype">List</a> <a id="1995" href="introduction.html#991" data-type="Set" class="Datatype">Bool</a>
+<a id="2000" href="introduction.html#1975" data-type="List Bool" class="Function">sample-list₁</a> <a id="2013" class="Symbol">=</a> <a id="2015" href="introduction.html#1010" data-type="Bool" class="InductiveConstructor">true</a> <a id="2020" href="introduction.html#1590" data-type="Bool → Bool → Bool" class="Function Operator">||</a> <a id="2023" href="introduction.html#1015" data-type="Bool" class="InductiveConstructor">false</a> <a id="2029" href="introduction.html#1529" data-type="Bool → Bool → Bool" class="Function Operator">&amp;&amp;</a> <a id="2032" href="introduction.html#1010" data-type="Bool" class="InductiveConstructor">true</a> <a id="2037" href="introduction.html#1151" data-type="A → List A → List A" class="InductiveConstructor Operator">::</a> <a id="2040" href="introduction.html#1015" data-type="Bool" class="InductiveConstructor">false</a> <a id="2046" href="introduction.html#1151" data-type="A → List A → List A" class="InductiveConstructor Operator">::</a> <a id="2049" href="introduction.html#1010" data-type="Bool" class="InductiveConstructor">true</a> <a id="2054" href="introduction.html#1151" data-type="A → List A → List A" class="InductiveConstructor Operator">::</a> <a id="2057" href="introduction.html#1010" data-type="Bool" class="InductiveConstructor">true</a> <a id="2062" href="introduction.html#1151" data-type="A → List A → List A" class="InductiveConstructor Operator">::</a> <a id="2065" href="introduction.html#1136" data-type="List A" class="InductiveConstructor">[]</a>
+
+<a id="length"></a><a id="2069" href="introduction.html#2069" data-type="List A → ℕ" class="Function">length</a> <a id="2076" class="Symbol">:</a> <a id="2078" class="Symbol">{</a><a id="2079" href="introduction.html#2079" class="Bound">A</a> <a id="2081" class="Symbol">:</a> <a id="2083" href="introduction.html#923" data-type="Set₁" class="Function">Type</a><a id="2087" class="Symbol">}</a> <a id="2089" class="Symbol">→</a> <a id="2091" href="introduction.html#1106" data-type="Type → Set" class="Datatype">List</a> <a id="2096" href="introduction.html#2079" class="Bound">A</a> <a id="2098" class="Symbol">→</a> <a id="2100" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a>
+<a id="2102" href="introduction.html#2069" data-type="List A → ℕ" class="Function">length</a> <a id="2109" href="introduction.html#1136" data-type="List A" class="InductiveConstructor">[]</a>        <a id="2119" class="Symbol">=</a> <a id="2121" class="Number">0</a>
+<a id="2123" href="introduction.html#2069" data-type="List A → ℕ" class="Function">length</a> <a id="2130" class="Symbol">(</a><a id="2131" href="introduction.html#2131" class="Bound">x</a> <a id="2133" href="introduction.html#1151" data-type="A → List A → List A" class="InductiveConstructor Operator">::</a> <a id="2136" href="introduction.html#2136" class="Bound">xs</a><a id="2138" class="Symbol">)</a> <a id="2140" class="Symbol">=</a> <a id="2142" class="Number">1</a> <a id="2144" href="introduction.html#1782" data-type="ℕ → ℕ → ℕ" class="Function Operator">+</a> <a id="2146" href="introduction.html#2069" data-type="List A → ℕ" class="Function">length</a> <a id="2153" href="introduction.html#2136" class="Bound">xs</a>
+
+<a id="_++_"></a><a id="2157" href="introduction.html#2157" data-type="List A → List A → List A" class="Function Operator">_++_</a> <a id="2162" class="Symbol">:</a> <a id="2164" class="Symbol">{</a><a id="2165" href="introduction.html#2165" class="Bound">A</a> <a id="2167" class="Symbol">:</a> <a id="2169" href="introduction.html#923" data-type="Set₁" class="Function">Type</a><a id="2173" class="Symbol">}</a> <a id="2175" class="Symbol">→</a> <a id="2177" href="introduction.html#1106" data-type="Type → Set" class="Datatype">List</a> <a id="2182" href="introduction.html#2165" class="Bound">A</a> <a id="2184" class="Symbol">→</a> <a id="2186" href="introduction.html#1106" data-type="Type → Set" class="Datatype">List</a> <a id="2191" href="introduction.html#2165" class="Bound">A</a> <a id="2193" class="Symbol">→</a> <a id="2195" href="introduction.html#1106" data-type="Type → Set" class="Datatype">List</a> <a id="2200" href="introduction.html#2165" class="Bound">A</a>
+<a id="2202" href="introduction.html#1136" data-type="List A" class="InductiveConstructor">[]</a>        <a id="2212" href="introduction.html#2157" data-type="List A → List A → List A" class="Function Operator">++</a> <a id="2215" href="introduction.html#2215" class="Bound">ys</a> <a id="2218" class="Symbol">=</a> <a id="2220" href="introduction.html#2215" class="Bound">ys</a>
+<a id="2223" class="Symbol">(</a><a id="2224" href="introduction.html#2224" class="Bound">x</a> <a id="2226" href="introduction.html#1151" data-type="A → List A → List A" class="InductiveConstructor Operator">::</a> <a id="2229" href="introduction.html#2229" class="Bound">xs</a><a id="2231" class="Symbol">)</a> <a id="2233" href="introduction.html#2157" data-type="List A → List A → List A" class="Function Operator">++</a> <a id="2236" href="introduction.html#2236" class="Bound">ys</a> <a id="2239" class="Symbol">=</a> <a id="2241" href="introduction.html#2224" class="Bound">x</a> <a id="2243" href="introduction.html#1151" data-type="A → List A → List A" class="InductiveConstructor Operator">::</a> <a id="2246" class="Symbol">(</a><a id="2247" href="introduction.html#2229" class="Bound">xs</a> <a id="2250" href="introduction.html#2157" data-type="List A → List A → List A" class="Function Operator">++</a> <a id="2253" href="introduction.html#2236" class="Bound">ys</a><a id="2255" class="Symbol">)</a>
+
+<a id="2258" class="Keyword">infixr</a> <a id="2265" class="Number">20</a> <a id="2268" href="introduction.html#2157" data-type="List A → List A → List A" class="Function Operator">_++_</a>
+</pre>
+<h2 id="more-sophisticated-examples-of-types-in-agda">More sophisticated
+examples of types in Agda</h2>
+<p>Sometimes we may wish to consider lists over a type <code>A</code> of
+a given length <code>n : ℕ</code>. The elements of this type, written
+<code>Vector A n</code>, are called <em>vectors</em>, and the type can
+be defined as follows:</p>
+<pre class="Agda"><a id="2530" class="Keyword">data</a> <a id="Vector"></a><a id="2535" href="introduction.html#2535" data-type="Type → ℕ → Set" class="Datatype">Vector</a> <a id="2542" class="Symbol">(</a><a id="2543" href="introduction.html#2543" class="Bound">A</a> <a id="2545" class="Symbol">:</a> <a id="2547" href="introduction.html#923" data-type="Set₁" class="Function">Type</a><a id="2551" class="Symbol">)</a> <a id="2553" class="Symbol">:</a> <a id="2555" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a> <a id="2557" class="Symbol">→</a> <a id="2559" href="introduction.html#923" data-type="Set₁" class="Function">Type</a> <a id="2564" class="Keyword">where</a>
+ <a id="Vector.[]"></a><a id="2571" href="introduction.html#2571" data-type="Vector A 0" class="InductiveConstructor">[]</a>   <a id="2576" class="Symbol">:</a> <a id="2578" href="introduction.html#2535" data-type="Type → ℕ → Set" class="Datatype">Vector</a> <a id="2585" href="introduction.html#2543" class="Bound">A</a> <a id="2587" class="Number">0</a>
+ <a id="Vector._::_"></a><a id="2590" href="introduction.html#2590" data-type="A → Vector A n → Vector A (suc n)" class="InductiveConstructor Operator">_::_</a> <a id="2595" class="Symbol">:</a> <a id="2597" class="Symbol">{</a><a id="2598" href="introduction.html#2598" class="Bound">n</a> <a id="2600" class="Symbol">:</a> <a id="2602" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a><a id="2603" class="Symbol">}</a> <a id="2605" class="Symbol">→</a> <a id="2607" href="introduction.html#2543" class="Bound">A</a> <a id="2609" class="Symbol">→</a> <a id="2611" href="introduction.html#2535" data-type="Type → ℕ → Set" class="Datatype">Vector</a> <a id="2618" href="introduction.html#2543" class="Bound">A</a> <a id="2620" href="introduction.html#2598" class="Bound">n</a> <a id="2622" class="Symbol">→</a> <a id="2624" href="introduction.html#2535" data-type="Type → ℕ → Set" class="Datatype">Vector</a> <a id="2631" href="introduction.html#2543" class="Bound">A</a> <a id="2633" class="Symbol">(</a><a id="2634" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="2638" href="introduction.html#2598" class="Bound">n</a><a id="2639" class="Symbol">)</a>
+</pre>
+<p>This is called a <em>dependent type</em> because it is a type that
+depends on <em>elements</em> <code>n</code> of another type, namely
+<code>ℕ</code>.</p>
+<p>In Agda, we can’t define the <code>head</code> and <code>tail</code>
+functions on lists, because they are undefined for the empty list, and
+functions must be total in Agda. Vectors solve this problem:</p>
+<pre class="Agda"><a id="head"></a><a id="2949" href="introduction.html#2949" data-type="Vector A (suc n) → A" class="Function">head</a> <a id="2954" class="Symbol">:</a> <a id="2956" class="Symbol">{</a><a id="2957" href="introduction.html#2957" class="Bound">A</a> <a id="2959" class="Symbol">:</a> <a id="2961" href="introduction.html#923" data-type="Set₁" class="Function">Type</a><a id="2965" class="Symbol">}</a> <a id="2967" class="Symbol">{</a><a id="2968" href="introduction.html#2968" class="Bound">n</a> <a id="2970" class="Symbol">:</a> <a id="2972" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a><a id="2973" class="Symbol">}</a> <a id="2975" class="Symbol">→</a> <a id="2977" href="introduction.html#2535" data-type="Type → ℕ → Set" class="Datatype">Vector</a> <a id="2984" href="introduction.html#2957" class="Bound">A</a> <a id="2986" class="Symbol">(</a><a id="2987" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="2991" href="introduction.html#2968" class="Bound">n</a><a id="2992" class="Symbol">)</a> <a id="2994" class="Symbol">→</a> <a id="2996" href="introduction.html#2957" class="Bound">A</a>
+<a id="2998" href="introduction.html#2949" data-type="Vector A (suc n) → A" class="Function">head</a> <a id="3003" class="Symbol">(</a><a id="3004" href="introduction.html#3004" class="Bound">x</a> <a id="3006" href="introduction.html#2590" data-type="A → Vector A n → Vector A (suc n)" class="InductiveConstructor Operator">::</a> <a id="3009" href="introduction.html#3009" class="Bound">xs</a><a id="3011" class="Symbol">)</a> <a id="3013" class="Symbol">=</a> <a id="3015" href="introduction.html#3004" class="Bound">x</a>
+
+<a id="tail"></a><a id="3018" href="introduction.html#3018" data-type="Vector A (suc n) → Vector A n" class="Function">tail</a> <a id="3023" class="Symbol">:</a> <a id="3025" class="Symbol">{</a><a id="3026" href="introduction.html#3026" class="Bound">A</a> <a id="3028" class="Symbol">:</a> <a id="3030" href="introduction.html#923" data-type="Set₁" class="Function">Type</a><a id="3034" class="Symbol">}</a> <a id="3036" class="Symbol">{</a><a id="3037" href="introduction.html#3037" class="Bound">n</a> <a id="3039" class="Symbol">:</a> <a id="3041" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a><a id="3042" class="Symbol">}</a> <a id="3044" class="Symbol">→</a> <a id="3046" href="introduction.html#2535" data-type="Type → ℕ → Set" class="Datatype">Vector</a> <a id="3053" href="introduction.html#3026" class="Bound">A</a> <a id="3055" class="Symbol">(</a><a id="3056" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="3060" href="introduction.html#3037" class="Bound">n</a><a id="3061" class="Symbol">)</a> <a id="3063" class="Symbol">→</a> <a id="3065" href="introduction.html#2535" data-type="Type → ℕ → Set" class="Datatype">Vector</a> <a id="3072" href="introduction.html#3026" class="Bound">A</a> <a id="3074" href="introduction.html#3037" class="Bound">n</a>
+<a id="3076" href="introduction.html#3018" data-type="Vector A (suc n) → Vector A n" class="Function">tail</a> <a id="3081" class="Symbol">(</a><a id="3082" href="introduction.html#3082" class="Bound">x</a> <a id="3084" href="introduction.html#2590" data-type="A → Vector A n → Vector A (suc n)" class="InductiveConstructor Operator">::</a> <a id="3087" href="introduction.html#3087" class="Bound">xs</a><a id="3089" class="Symbol">)</a> <a id="3091" class="Symbol">=</a> <a id="3093" href="introduction.html#3087" class="Bound">xs</a>
+</pre>
+<p>Agda accepts the above definitions because it knows that the input
+vector has at least one element, and hence does have a head and a tail.
+Here is another example.</p>
+<p>Dependent types are pervasive in Agda.</p>
+<h2 id="the-empty-type-and-the-unit-type">The empty type and the unit
+type</h2>
+A type with no elements can be defined as follows:
+<pre class="Agda"><a id="3401" class="Keyword">data</a> <a id="𝟘"></a><a id="3406" href="introduction.html#3406" data-type="Set" class="Datatype">𝟘</a> <a id="3408" class="Symbol">:</a> <a id="3410" href="introduction.html#923" data-type="Set₁" class="Function">Type</a> <a id="3415" class="Keyword">where</a>
+</pre>
+We will also need the type with precisely one element, which we define
+as follows:
+<pre class="Agda"><a id="3516" class="Keyword">data</a> <a id="𝟙"></a><a id="3521" href="introduction.html#3521" data-type="Set" class="Datatype">𝟙</a> <a id="3523" class="Symbol">:</a> <a id="3525" href="introduction.html#923" data-type="Set₁" class="Function">Type</a> <a id="3530" class="Keyword">where</a>
+ <a id="𝟙.⋆"></a><a id="3537" href="introduction.html#3537" data-type="𝟙" class="InductiveConstructor">⋆</a> <a id="3539" class="Symbol">:</a> <a id="3541" href="introduction.html#3521" data-type="Set" class="Datatype">𝟙</a>
+</pre>
+Here is an example of a dependent type defined using the above types:
+<pre class="Agda"><a id="_≣_"></a><a id="3626" href="introduction.html#3626" data-type="ℕ → ℕ → Type" class="Function Operator">_≣_</a> <a id="3630" class="Symbol">:</a> <a id="3632" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a> <a id="3634" class="Symbol">→</a> <a id="3636" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a> <a id="3638" class="Symbol">→</a> <a id="3640" href="introduction.html#923" data-type="Set₁" class="Function">Type</a>
+<a id="3645" class="Number">0</a>     <a id="3651" href="introduction.html#3626" data-type="ℕ → ℕ → Type" class="Function Operator">≣</a> <a id="3653" class="Number">0</a>     <a id="3659" class="Symbol">=</a> <a id="3661" href="introduction.html#3521" data-type="Set" class="Datatype">𝟙</a>
+<a id="3663" class="Number">0</a>     <a id="3669" href="introduction.html#3626" data-type="ℕ → ℕ → Type" class="Function Operator">≣</a> <a id="3671" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="3675" href="introduction.html#3675" class="Bound">y</a> <a id="3677" class="Symbol">=</a> <a id="3679" href="introduction.html#3406" data-type="Set" class="Datatype">𝟘</a>
+<a id="3681" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="3685" href="introduction.html#3685" class="Bound">x</a> <a id="3687" href="introduction.html#3626" data-type="ℕ → ℕ → Type" class="Function Operator">≣</a> <a id="3689" class="Number">0</a>     <a id="3695" class="Symbol">=</a> <a id="3697" href="introduction.html#3406" data-type="Set" class="Datatype">𝟘</a>
+<a id="3699" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="3703" href="introduction.html#3703" class="Bound">x</a> <a id="3705" href="introduction.html#3626" data-type="ℕ → ℕ → Type" class="Function Operator">≣</a> <a id="3707" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="3711" href="introduction.html#3711" class="Bound">y</a> <a id="3713" class="Symbol">=</a> <a id="3715" href="introduction.html#3703" class="Bound">x</a> <a id="3717" href="introduction.html#3626" data-type="ℕ → ℕ → Type" class="Function Operator">≣</a> <a id="3719" href="introduction.html#3711" class="Bound">y</a>
+
+<a id="3722" class="Keyword">infix</a> <a id="3728" class="Number">0</a> <a id="3730" href="introduction.html#3626" data-type="ℕ → ℕ → Type" class="Function Operator">_≣_</a>
+</pre>
+The idea of the above definition is that <code>x ≣ y</code> is a type
+which either has precisely one element, if <code>x</code> and
+<code>y</code> are the same natural number, or else is empty, if
+<code>x</code> and <code>y</code> are different. The following
+definition says that for any natural number <code>x</code> we can find
+an element of the type <code>x ≣ x</code>.
+<pre class="Agda"><a id="ℕ-refl"></a><a id="4043" href="introduction.html#4043" data-type="(x : ℕ) → x ≣ x" class="Function">ℕ-refl</a> <a id="4050" class="Symbol">:</a> <a id="4052" class="Symbol">(</a><a id="4053" href="introduction.html#4053" class="Bound">x</a> <a id="4055" class="Symbol">:</a> <a id="4057" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a><a id="4058" class="Symbol">)</a> <a id="4060" class="Symbol">→</a> <a id="4062" href="introduction.html#4053" class="Bound">x</a> <a id="4064" href="introduction.html#3626" data-type="ℕ → ℕ → Type" class="Function Operator">≣</a> <a id="4066" href="introduction.html#4053" class="Bound">x</a>
+<a id="4068" href="introduction.html#4043" data-type="(x : ℕ) → x ≣ x" class="Function">ℕ-refl</a> <a id="4075" class="Number">0</a>       <a id="4083" class="Symbol">=</a> <a id="4085" href="introduction.html#3537" data-type="𝟙" class="InductiveConstructor">⋆</a>
+<a id="4087" href="introduction.html#4043" data-type="(x : ℕ) → x ≣ x" class="Function">ℕ-refl</a> <a id="4094" class="Symbol">(</a><a id="4095" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="4099" href="introduction.html#4099" class="Bound">x</a><a id="4100" class="Symbol">)</a> <a id="4102" class="Symbol">=</a> <a id="4104" href="introduction.html#4043" data-type="(x : ℕ) → x ≣ x" class="Function">ℕ-refl</a> <a id="4111" href="introduction.html#4099" class="Bound">x</a>
+</pre>
+<h2 id="the-identity-type-former-__">The identity type former
+<code>_≡_</code></h2>
+It is possible to generalize the above definition for any type in place
+of that of natural numbers as follows:
+<pre class="Agda"><a id="4271" class="Keyword">data</a> <a id="_≡_"></a><a id="4276" href="introduction.html#4276" data-type="A → A → Set" class="Datatype Operator">_≡_</a> <a id="4280" class="Symbol">{</a><a id="4281" href="introduction.html#4281" class="Bound">A</a> <a id="4283" class="Symbol">:</a> <a id="4285" href="introduction.html#923" data-type="Set₁" class="Function">Type</a><a id="4289" class="Symbol">}</a> <a id="4291" class="Symbol">:</a> <a id="4293" href="introduction.html#4281" class="Bound">A</a> <a id="4295" class="Symbol">→</a> <a id="4297" href="introduction.html#4281" class="Bound">A</a> <a id="4299" class="Symbol">→</a> <a id="4301" href="introduction.html#923" data-type="Set₁" class="Function">Type</a> <a id="4306" class="Keyword">where</a>
+ <a id="_≡_.refl"></a><a id="4313" href="introduction.html#4313" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="4318" class="Symbol">:</a> <a id="4320" class="Symbol">(</a><a id="4321" href="introduction.html#4321" class="Bound">x</a> <a id="4323" class="Symbol">:</a> <a id="4325" href="introduction.html#4281" class="Bound">A</a><a id="4326" class="Symbol">)</a> <a id="4328" class="Symbol">→</a> <a id="4330" href="introduction.html#4321" class="Bound">x</a> <a id="4332" href="introduction.html#4276" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="4334" href="introduction.html#4321" class="Bound">x</a>
+
+<a id="4337" class="Keyword">infix</a> <a id="4343" class="Number">0</a> <a id="4345" href="introduction.html#4276" data-type="A → A → Set" class="Datatype Operator">_≡_</a>
+</pre>
+Here are some functions we can define with the identity type:
+<pre class="Agda"><a id="trans"></a><a id="4423" href="introduction.html#4423" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function">trans</a> <a id="4429" class="Symbol">:</a> <a id="4431" class="Symbol">{</a><a id="4432" href="introduction.html#4432" class="Bound">A</a> <a id="4434" class="Symbol">:</a> <a id="4436" href="introduction.html#923" data-type="Set₁" class="Function">Type</a><a id="4440" class="Symbol">}</a> <a id="4442" class="Symbol">{</a><a id="4443" href="introduction.html#4443" class="Bound">x</a> <a id="4445" href="introduction.html#4445" class="Bound">y</a> <a id="4447" href="introduction.html#4447" class="Bound">z</a> <a id="4449" class="Symbol">:</a> <a id="4451" href="introduction.html#4432" class="Bound">A</a><a id="4452" class="Symbol">}</a> <a id="4454" class="Symbol">→</a> <a id="4456" href="introduction.html#4443" class="Bound">x</a> <a id="4458" href="introduction.html#4276" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="4460" href="introduction.html#4445" class="Bound">y</a> <a id="4462" class="Symbol">→</a> <a id="4464" href="introduction.html#4445" class="Bound">y</a> <a id="4466" href="introduction.html#4276" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="4468" href="introduction.html#4447" class="Bound">z</a> <a id="4470" class="Symbol">→</a> <a id="4472" href="introduction.html#4443" class="Bound">x</a> <a id="4474" href="introduction.html#4276" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="4476" href="introduction.html#4447" class="Bound">z</a>
+<a id="4478" href="introduction.html#4423" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function">trans</a> <a id="4484" class="Symbol">(</a><a id="4485" href="introduction.html#4313" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="4490" href="introduction.html#4490" class="Bound">x</a><a id="4491" class="Symbol">)</a> <a id="4493" class="Symbol">(</a><a id="4494" href="introduction.html#4313" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="4499" href="introduction.html#4490" class="Bound">x</a><a id="4500" class="Symbol">)</a> <a id="4502" class="Symbol">=</a> <a id="4504" href="introduction.html#4313" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="4509" href="introduction.html#4490" class="Bound">x</a>
+
+<a id="sym"></a><a id="4512" href="introduction.html#4512" data-type="x ≡ y → y ≡ x" class="Function">sym</a> <a id="4516" class="Symbol">:</a> <a id="4518" class="Symbol">{</a><a id="4519" href="introduction.html#4519" class="Bound">A</a> <a id="4521" class="Symbol">:</a> <a id="4523" href="introduction.html#923" data-type="Set₁" class="Function">Type</a><a id="4527" class="Symbol">}</a> <a id="4529" class="Symbol">{</a><a id="4530" href="introduction.html#4530" class="Bound">x</a> <a id="4532" href="introduction.html#4532" class="Bound">y</a> <a id="4534" class="Symbol">:</a> <a id="4536" href="introduction.html#4519" class="Bound">A</a><a id="4537" class="Symbol">}</a> <a id="4539" class="Symbol">→</a> <a id="4541" href="introduction.html#4530" class="Bound">x</a> <a id="4543" href="introduction.html#4276" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="4545" href="introduction.html#4532" class="Bound">y</a> <a id="4547" class="Symbol">→</a> <a id="4549" href="introduction.html#4532" class="Bound">y</a> <a id="4551" href="introduction.html#4276" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="4553" href="introduction.html#4530" class="Bound">x</a>
+<a id="4555" href="introduction.html#4512" data-type="x ≡ y → y ≡ x" class="Function">sym</a> <a id="4559" class="Symbol">(</a><a id="4560" href="introduction.html#4313" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="4565" href="introduction.html#4565" class="Bound">x</a><a id="4566" class="Symbol">)</a> <a id="4568" class="Symbol">=</a> <a id="4570" href="introduction.html#4313" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="4575" href="introduction.html#4565" class="Bound">x</a>
+
+<a id="ap"></a><a id="4578" href="introduction.html#4578" data-type="(f : A → B) → x ≡ y → f x ≡ f y" class="Function">ap</a> <a id="4581" class="Symbol">:</a> <a id="4583" class="Symbol">{</a><a id="4584" href="introduction.html#4584" class="Bound">A</a> <a id="4586" href="introduction.html#4586" class="Bound">B</a> <a id="4588" class="Symbol">:</a> <a id="4590" href="introduction.html#923" data-type="Set₁" class="Function">Type</a><a id="4594" class="Symbol">}</a> <a id="4596" class="Symbol">(</a><a id="4597" href="introduction.html#4597" class="Bound">f</a> <a id="4599" class="Symbol">:</a> <a id="4601" href="introduction.html#4584" class="Bound">A</a> <a id="4603" class="Symbol">→</a> <a id="4605" href="introduction.html#4586" class="Bound">B</a><a id="4606" class="Symbol">)</a> <a id="4608" class="Symbol">{</a><a id="4609" href="introduction.html#4609" class="Bound">x</a> <a id="4611" href="introduction.html#4611" class="Bound">y</a> <a id="4613" class="Symbol">:</a> <a id="4615" href="introduction.html#4584" class="Bound">A</a><a id="4616" class="Symbol">}</a> <a id="4618" class="Symbol">→</a> <a id="4620" href="introduction.html#4609" class="Bound">x</a> <a id="4622" href="introduction.html#4276" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="4624" href="introduction.html#4611" class="Bound">y</a> <a id="4626" class="Symbol">→</a> <a id="4628" href="introduction.html#4597" class="Bound">f</a> <a id="4630" href="introduction.html#4609" class="Bound">x</a> <a id="4632" href="introduction.html#4276" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="4634" href="introduction.html#4597" class="Bound">f</a> <a id="4636" href="introduction.html#4611" class="Bound">y</a>
+<a id="4638" href="introduction.html#4578" data-type="(f : A → B) → x ≡ y → f x ≡ f y" class="Function">ap</a> <a id="4641" href="introduction.html#4641" class="Bound">f</a> <a id="4643" class="Symbol">(</a><a id="4644" href="introduction.html#4313" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="4649" href="introduction.html#4649" class="Bound">x</a><a id="4650" class="Symbol">)</a> <a id="4652" class="Symbol">=</a> <a id="4654" href="introduction.html#4313" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="4659" class="Symbol">(</a><a id="4660" href="introduction.html#4641" class="Bound">f</a> <a id="4662" href="introduction.html#4649" class="Bound">x</a><a id="4663" class="Symbol">)</a>
+</pre>
+<p>The identity type is a little bit subtle and there is a lot to say
+about it. For the moment, let’s convince ourselves that we can convert
+back and forth between the types <code>x ≡ y</code> and
+<code>x ≣ y</code>, in the case that <code>A</code> is the type of
+natural numbers, as follows:</p>
+<pre class="Agda"><a id="back"></a><a id="4936" href="introduction.html#4936" data-type="(x y : ℕ) → x ≡ y → x ≣ y" class="Function">back</a> <a id="4941" class="Symbol">:</a> <a id="4943" class="Symbol">(</a><a id="4944" href="introduction.html#4944" class="Bound">x</a> <a id="4946" href="introduction.html#4946" class="Bound">y</a> <a id="4948" class="Symbol">:</a> <a id="4950" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a><a id="4951" class="Symbol">)</a> <a id="4953" class="Symbol">→</a> <a id="4955" href="introduction.html#4944" class="Bound">x</a> <a id="4957" href="introduction.html#4276" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="4959" href="introduction.html#4946" class="Bound">y</a> <a id="4961" class="Symbol">→</a> <a id="4963" href="introduction.html#4944" class="Bound">x</a> <a id="4965" href="introduction.html#3626" data-type="ℕ → ℕ → Type" class="Function Operator">≣</a> <a id="4967" href="introduction.html#4946" class="Bound">y</a>
+<a id="4969" href="introduction.html#4936" data-type="(x y : ℕ) → x ≡ y → x ≣ y" class="Function">back</a> <a id="4974" href="introduction.html#4974" class="Bound">x</a> <a id="4976" href="introduction.html#4974" class="Bound">x</a> <a id="4978" class="Symbol">(</a><a id="4979" href="introduction.html#4313" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="4984" href="introduction.html#4974" class="Bound">x</a><a id="4985" class="Symbol">)</a> <a id="4987" class="Symbol">=</a> <a id="4989" href="introduction.html#4043" data-type="(x : ℕ) → x ≣ x" class="Function">ℕ-refl</a> <a id="4996" href="introduction.html#4974" class="Bound">x</a>
+
+<a id="forth"></a><a id="4999" href="introduction.html#4999" data-type="(x y : ℕ) → x ≣ y → x ≡ y" class="Function">forth</a> <a id="5005" class="Symbol">:</a> <a id="5007" class="Symbol">(</a><a id="5008" href="introduction.html#5008" class="Bound">x</a> <a id="5010" href="introduction.html#5010" class="Bound">y</a> <a id="5012" class="Symbol">:</a> <a id="5014" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a><a id="5015" class="Symbol">)</a> <a id="5017" class="Symbol">→</a> <a id="5019" href="introduction.html#5008" class="Bound">x</a> <a id="5021" href="introduction.html#3626" data-type="ℕ → ℕ → Type" class="Function Operator">≣</a> <a id="5023" href="introduction.html#5010" class="Bound">y</a> <a id="5025" class="Symbol">→</a> <a id="5027" href="introduction.html#5008" class="Bound">x</a> <a id="5029" href="introduction.html#4276" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="5031" href="introduction.html#5010" class="Bound">y</a>
+<a id="5033" href="introduction.html#4999" data-type="(x y : ℕ) → x ≣ y → x ≡ y" class="Function">forth</a> <a id="5039" class="Number">0</a>       <a id="5047" class="Number">0</a>       <a id="5055" href="introduction.html#3537" data-type="𝟙" class="InductiveConstructor">⋆</a> <a id="5057" class="Symbol">=</a> <a id="5059" href="introduction.html#4313" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="5064" class="Number">0</a>
+<a id="5066" href="introduction.html#4999" data-type="(x y : ℕ) → x ≣ y → x ≡ y" class="Function">forth</a> <a id="5072" class="Symbol">(</a><a id="5073" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="5077" href="introduction.html#5077" class="Bound">x</a><a id="5078" class="Symbol">)</a> <a id="5080" class="Symbol">(</a><a id="5081" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="5085" href="introduction.html#5085" class="Bound">y</a><a id="5086" class="Symbol">)</a> <a id="5088" href="introduction.html#5088" class="Bound">p</a> <a id="5090" class="Symbol">=</a> <a id="5092" href="introduction.html#5136" data-type="(x y : ℕ) (p : suc x ≣ suc y) → suc x ≡ suc y" class="Function">I</a>
+ <a id="5095" class="Keyword">where</a>
+  <a id="5103" href="introduction.html#5103" data-type="(x y : ℕ) (p : suc x ≣ suc y) → x ≡ y" class="Function">IH</a> <a id="5106" class="Symbol">:</a> <a id="5108" href="introduction.html#5077" class="Bound">x</a> <a id="5110" href="introduction.html#4276" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="5112" href="introduction.html#5085" class="Bound">y</a>
+  <a id="5116" href="introduction.html#5103" data-type="(x y : ℕ) (p : suc x ≣ suc y) → x ≡ y" class="Function">IH</a> <a id="5119" class="Symbol">=</a> <a id="5121" href="introduction.html#4999" data-type="(x y : ℕ) → x ≣ y → x ≡ y" class="Function">forth</a> <a id="5127" href="introduction.html#5077" class="Bound">x</a> <a id="5129" href="introduction.html#5085" class="Bound">y</a> <a id="5131" href="introduction.html#5088" class="Bound">p</a>
+
+  <a id="5136" href="introduction.html#5136" data-type="(x y : ℕ) (p : suc x ≣ suc y) → suc x ≡ suc y" class="Function">I</a> <a id="5138" class="Symbol">:</a> <a id="5140" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="5144" href="introduction.html#5077" class="Bound">x</a> <a id="5146" href="introduction.html#4276" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="5148" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="5152" href="introduction.html#5085" class="Bound">y</a>
+  <a id="5156" href="introduction.html#5136" data-type="(x y : ℕ) (p : suc x ≣ suc y) → suc x ≡ suc y" class="Function">I</a> <a id="5158" class="Symbol">=</a> <a id="5160" href="introduction.html#4578" data-type="(f : A → B) → x ≡ y → f x ≡ f y" class="Function">ap</a> <a id="5163" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="5167" href="introduction.html#5103" data-type="(x y : ℕ) (p : suc x ≣ suc y) → x ≡ y" class="Function">IH</a>
+</pre>
+<h2 id="propositions-as-types">Propositions as types</h2>
+<p>The <a
+href="https://en.wikipedia.org/wiki/Curry%E2%80%93Howard_correspondence">CurryHoward
+interpretation of logic</a>, after <a
+href="https://en.wikipedia.org/wiki/Haskell_Curry">Haskell Curry</a> and
+<a href="https://en.wikipedia.org/wiki/William_Alvin_Howard">William
+Howard</a>, interprets logical statements, also known as propositions,
+as <em>types</em>. <a
+href="https://en.wikipedia.org/wiki/Per_Martin-L%C3%B6f">Per
+Martin-Löf</a> extended this interpretation of propositions as types
+with equality, by introducing the identity type discussed above.</p>
+<p>An incomplete table of the CurryHoward–Martin-Löf interpretation of
+logical propositions is the following:</p>
+<div style="overflow-x: auto">
+<table>
+<thead>
+<tr class="header">
+<th>Proposition</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A implies B</td>
+<td>function type A → B</td>
+</tr>
+<tr class="even">
+<td>∀ x : A, B x</td>
+<td>dependent function type (x : A) → B x</td>
+</tr>
+<tr class="odd">
+<td>equality</td>
+<td>identity type <code>_≡_</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>This was enough for our examples above.</p>
+<p>For more complex examples of reasoning about programs, we need to
+complete the following table:</p>
+<div style="overflow-x: auto">
+<table>
+<thead>
+<tr class="header">
+<th>Logic</th>
+<th>English</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>¬ A</td>
+<td>not A</td>
+<td>?</td>
+</tr>
+<tr class="even">
+<td>A ∧ B</td>
+<td>A and B</td>
+<td>?</td>
+</tr>
+<tr class="odd">
+<td>A ∨ B</td>
+<td>A or B</td>
+<td>?</td>
+</tr>
+<tr class="even">
+<td>A → B</td>
+<td>A implies B</td>
+<td>A → B</td>
+</tr>
+<tr class="odd">
+<td>∀ x : A, B x</td>
+<td>for all x:A, B x</td>
+<td>(x : A) → B x</td>
+</tr>
+<tr class="even">
+<td>∃ x : A, B x</td>
+<td>there is x:A such that B x</td>
+<td>?</td>
+</tr>
+<tr class="odd">
+<td>x = y</td>
+<td>x equals y</td>
+<td>x ≡ y</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>This will be the subject of future handouts.</p>
+<h2 id="agda-manual">Agda manual</h2>
+<p>Please study the <a
+href="https://agda.readthedocs.io/en/latest/">Agda manual</a> as a
+complement to these lecture notes.</p>
+<p><a href="https://martinescardo.github.io/HoTTEST-Summer-School/">Go
+back to the table of contents</a></p>
+
+  </article>
+</div>
+</main>
+</body>
+<style>
+
+:root {
+  --text-bg: #fff;
+  --text-fg: #222;
+  --shadow: #000;
+  --primary: #0054F4;
+  --secondary: #9C1BD6;
+  --modal-bg: #ccccccaa;
+  --warning-bg: #fef08a;
+  --code-bg: var(--text-bg);
+  --code-fg: var(--text-fg);
+  --code-keyword: #BB3B13;
+  --code-string:  #d52753;
+  --code-number:  #8A1060;
+  --code-module:  #8A1060;
+  --code-field:   #9C1BD6;
+  --code-constructor: #207B1D;
+  --code-highlight: #F5DEB3;
+  --search-selected: #e2e8f0;
+  --details-summary: #b2ebf2;
+  --details-open:    #80deea;
+  --depgraph-edge: #eee;
+  --blockquote-bg: #d8b4fe; }
+
+.diagram-dark {
+  display: none !important; }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-bg: #282C34;
+    --text-fg: #bfbfbf;
+    --shadow: #475569;
+    --primary: #61AFEF;
+    --secondary: #C878DD;
+    --modal-bg: #282C34aa;
+    --warning-bg: #991b1b;
+    --code-keyword:     #E5C07B;
+    --code-string:      #E06C75;
+    --code-number:      #98C379;
+    --code-module:      #56B6C2;
+    --code-field:       #C878DD;
+    --code-constructor: #98C379;
+    --code-highlight: #ef444499;
+    --search-selected: #474e5e;
+    --details-summary: #5b21b6;
+    --details-open:    #4c1d95;
+    --depgraph-edge: #474e5e;
+    --blockquote-bg: #475569; }
+  div.warning {
+    --shadow: #7f1d1d
+  ; }
+  input {
+    background-color: #334155;
+    border: 1px solid #475569;
+    color: var(--text-fg); }
+  body {
+    scrollbar-color: #3b4454 #2b2e33; }
+  .diagram-dark {
+    display: block !important; }
+  .diagram-light {
+    display: none !important; } }
+
+table {
+  margin: auto;
+  border-collapse: collapse; }
+  table td, table th {
+    text-align: center;
+    padding: 0px 1em 0px 1em;
+    border: 1px solid black; }
+  table th {
+    border-bottom: 2px solid black; }
+  table td {
+    white-space: nowrap; }
+
+html { max-width: 100%; }
+
+body {
+  font-family: "Inria Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  width: 100%;
+  font-size: var(--font-size);
+  overflow-x: clip;
+  background-color: var(--text-bg);
+  color: var(--text-fg);
+}
+
+div#post-toc-container { max-width: 120ch; margin: auto; }
+
+article a[href], div#return > a[href], div#top > a[href], aside#toc > div#toc-container ul a[href] {
+  color: var(--primary);
+  text-decoration: none; }
+  article a[href]:hover, div#return > a[href]:hover, div#top > a[href]:hover, aside#toc > div#toc-container ul a[href]:hover {
+    text-decoration: 2px currentColor underline !important; }
+  article a[href]:visited, div#return > a[href]:visited, div#top > a[href]:visited, aside#toc > div#toc-container ul a[href]:visited {
+    color: var(--secondary); }
+
+/* Aspects. */
+.Agda {
+  /* NameKinds. */
+  /* OtherAspects. */
+  /* Standard attributes. */
+  font-family: 'iosevka', 'Iosevka', 'Fantasque Sans Mono', 'Roboto Mono', monospace;
+  font-weight: 400; }
+  .Agda .Comment {
+    color: var(--code-fg);
+    font-style: italic; }
+  .Agda .Background {
+    background-color: var(--code-bg); }
+  .Agda .Markup {
+    color: var(--code-fg); }
+  .Agda .Keyword {
+    color: var(--code-keyword); }
+  .Agda .String {
+    color: var(--code-string); }
+  .Agda .Number {
+    color: var(--code-number); }
+  .Agda .Symbol {
+    color: var(--code-fg); }
+  .Agda .PrimitiveType {
+    color: var(--primary); }
+  .Agda .Pragma {
+    color: var(--code-fg); }
+  .Agda .Bound {
+    color: var(--code-fg) !important; }
+  .Agda .Generalizable {
+    color: var(--code-fg) !important; }
+  .Agda .InductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .CoinductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .Datatype {
+    color: var(--primary) !important; }
+  .Agda .Field {
+    color: var(--code-field) !important; }
+  .Agda .Function {
+    color: var(--primary) !important; }
+  .Agda .Module {
+    color: var(--code-module) !important; }
+  .Agda .Postulate {
+    color: var(--primary) !important; }
+  .Agda .Primitive {
+    color: var(--primary) !important; }
+  .Agda .Record {
+    color: var(--primary) !important; }
+  .Agda .UnsolvedMeta {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .UnsolvedConstraint {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .TerminationProblem {
+    color: var(--code-fg);
+    background: #FFA07A; }
+  .Agda .IncompletePattern {
+    color: var(--code-fg);
+    background: #F5DEB3; }
+  .Agda .Error {
+    color: red;
+    text-decoration: underline; }
+  .Agda .TypeChecks {
+    color: var(--code-fg);
+    background: #ADD8E6; }
+  .Agda .ShadowingInTelescope {
+    color: var(--code-fg);
+    background: #808080; }
+  .Agda .Deadcode {
+    color: var(--code-keyword);
+    font-weight: bold; }
+  .Agda a {
+    text-decoration: none; }
+  .Agda a[href]:hover {
+    text-decoration: 2px var(--primary) underline; }
+  .Agda a[href]:target {
+    animation: highlight 2.5s; }
+  body.text-page .Agda {
+    font-size: var(--code-font-size); }
+
+pre.Agda, div.sourceCode, pre {
+  border-radius: 0;
+  box-shadow: none;
+  overflow-y: clip;
+  margin: 0;
+  padding: 1em;
+  padding-top: 0.25em;
+  padding-bottom: 0.25em;
+  background-color: var(--code-bg);
+  color: var(--code-fg);
+  font-size: var(--code-font-size);
+  max-width: 100%;
+  overflow-x: auto;
+}
+</style>
+</html>
