@@ -152,7 +152,7 @@ bool-≡-char₁ = {!!}
 Using ex. 2, concldude that
 ```agda
 true≢false : ¬ (true ≡ false)
-true≢false = {!!}
+true≢false ()
 ```
 You can actually prove this much easier! How?
 
@@ -173,8 +173,30 @@ Consider the following predicate on types:
 has-bool-dec-fct : Type → Type
 has-bool-dec-fct A = Σ f ꞉ (A → A → Bool) , (∀ x y → x ≡ y ⇔ (f x y) ≡ true)
 ```
+
 Prove that
+
 ```agda
 decidable-equality-char : (A : Type) → has-decidable-equality A ⇔ has-bool-dec-fct A
-decidable-equality-char = {!!}
+decidable-equality-char A = dir1 , dir2 where
+  dir1 : has-decidable-equality A → has-bool-dec-fct A
+  dir1 dec-eq = (λ x y → discrim x y (dec-eq x y)) , λ x y →
+    (≡-elim (λ x y v → discrim x y (dec-eq x y) ≡ true)
+      (λ x → ∔-elim (λ arg → discrim x x arg ≡ true)
+        (λ _ → refl true)
+        (λ ¬refl → 𝟘-nondep-elim (¬refl (refl x)))
+        (dec-eq x x))
+      x y)
+    , ∔-elim (λ c → discrim x y c ≡ true → x ≡ y) (λ x _ → x) (λ { y () }) (dec-eq x y)
+    where
+      discrim : (x y : A) → is-decidable (x ≡ y) → Bool
+      discrim x y = ∔-nondep-elim (λ _ → true) (λ _ → false)
+
+  inspect : {A : Set} (x : A) → Σ y ꞉ A , x ≡ y
+  inspect x = x , refl x
+
+  dir2 : has-bool-dec-fct A → has-decidable-equality A
+  dir2 rel x y with inspect (rel .pr₁ x y)
+  ... | true  , rel-x-y≡true  = inl (rel .pr₂ x y .pr₂ rel-x-y≡true)
+  ... | false , rel-x-y≡false = inr λ x≡y → true≢false (sym (rel .pr₂ x y .pr₁ x≡y) ∙ rel-x-y≡false)
 ```

@@ -1,5 +1,5 @@
 ```agda
-{-# OPTIONS --without-K --rewriting #-}
+{-# OPTIONS --without-K --rewriting --allow-unsolved-metas #-}
 
 open import new-prelude
 open import Lecture4-notes
