@@ -54,7 +54,7 @@ module Lecture4-live where
             (((loop ∙ ! loop) ∙ loop) ∙ ! loop) ∙ loop ≡⟨  ap (\ H → H ∙ loop ∙ ! loop ∙ loop) (!-inv-r loop) ⟩
             ((refl _          ∙ loop) ∙ ! loop) ∙ loop ≡⟨ ap (λ H → H ∙ ! loop ∙ loop) (∙unit-l loop) ⟩
             ((loop ∙ ! loop) ∙ loop)                   ≡⟨  ! (∙assoc _ _ loop) ⟩
-            (loop ∙ (! loop ∙ loop))                   ≡⟨  ap (\ H → loop ∙ H) (!-inv-l loop) ⟩
+            (loop ∙ (! loop ∙ loop))                   ≡⟨ ap (\ H → loop ∙ H) (!-inv-l loop) ⟩ 
             (loop ∙ refl _)                            ≡⟨ ∙unit-r loop ⟩
             loop ∎
 
