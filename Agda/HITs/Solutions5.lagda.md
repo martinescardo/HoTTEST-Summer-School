@@ -8,9 +8,15 @@ open import Solutions4 using (ap-!; to-from-base; to-from-loop; s2c; c2s; susp-f
 module Solutions5 where
 ```
 
-# 1 point and 2 point circles are equivalent
+# 1 point and 2 point circles are equivalent (⋆)
 
-Hint: use to-from-base and to-from-loop from the Lecture 4 exercises.
+In lecture, we defined maps between the one point circle (S1) and the
+two point circle (Circle2) and checked that the round-trip on Circle2 is
+the identity.
+
+Prove that the round-trip on S1 is the identity (use to-from-base
+and to-from-loop from the Lecture 4 exercises), and package all of
+these items up as an equivalence S1 ≃ Circle2.  
 
 ```
 to-from : (x : S1) → from (to x) ≡ x
@@ -22,9 +28,16 @@ circles-equivalent : S1 ≃ Circle2
 circles-equivalent = improve (Isomorphism to (Inverse from to-from from-to))
 ```
 
-# Circles to torus
+# Circles to torus (⋆⋆)
 
-Hint: will be a lot like the multiplication on the circle example.  
+In the Lecture 4 exercises, you defined a map from the Torus to S1 × S1.
+In this problem, you will define a converse map.  The goal is for these
+two maps to be part of an equivalence, but we won't prove that in these
+exercises.  
+
+You will need to state and prove a lemma characterizing a path over a
+path in a path fibration.  Then, to define the map S1 × S1 → Torus, you
+will want to curry it and use S1-rec and/or S1-elim on each circle.  
 
 ```
 PathOver-path≡ : ∀ {A B : Type} {g : A → B} {f : A → B}
@@ -47,12 +60,22 @@ circles-to-torus' : S1 × S1 → Torus
 circles-to-torus' (x , y) = circles-to-torus x y
 ```
 
-# H space
+# H space 
 
+The multiplication operation on the circle discussed in lecture is part
+of what is called an "H space" structure on the circle.  One part of
+this structure is that the circle's basepoint is a unit element for
+multiplication.
+
+(⋆) Show that base is a left unit.
 ```
 mult-unit-l : (y : S1) → mult base y ≡ y
 mult-unit-l y = refl _
+```
 
+(⋆⋆⋆) Show that base is a right unit.
+
+```
 PathOver-endo≡ : ∀ {A : Type} {f : A → A}
                  {a a' : A} {p : a ≡ a'}
                  {q : (f a) ≡ a}
@@ -80,9 +103,10 @@ mult-unit-r : (x : S1) → mult x base ≡ x
 mult-unit-r = S1-elim _ (refl _) (PathOver-endo≡ ((∙unit-l _) ∙ (S1-rec-loop-1 ∙ (λ≡β _ _ ∙ refl _)) ))
 ```
 
-# Rest of suspensions
+# Suspensions and the 2-point circle
 
-Postulate the computation rules for the non-dependent susp-rec
+(⋆) Postulate the computation rules for the non-dependent susp-rec and
+declare rewrites for the point reduction rules on the point constructors.  
 ```
 postulate
   Susp-rec-north : {l : Level} {A : Type} {X : Type l}
@@ -99,7 +123,7 @@ postulate
                  → (x : A) → ap (Susp-rec n s m) (merid x) ≡ m x
 ```
 
-Postulate the dependent elimination rule for suspensions:
+(⋆) Postulate the dependent elimination rule for suspensions:
 
 ```
 postulate 
@@ -110,7 +134,7 @@ postulate
             → (x : Susp A) → P x
 ```
 
-Show that the maps s2c and c2s from the Lecture 4 exercises are mutually inverse:
+(⋆⋆) Show that the maps s2c and c2s from the Lecture 4 exercises are mutually inverse:
 
 ```
 c2s2c : (x : Circle2) → s2c (c2s x) ≡ x
@@ -131,15 +155,19 @@ s2c2s = Susp-elim _ (refl _) (refl _) \ { true → PathOver-roundtrip≡ c2s s2c
                                                   ∙ Circle2-rec-east _ _ _ _))}
 ```
 
-Conclude that Circle2 is equivalent to Susp Bool:
+(⋆) Conclude that Circle2 is equivalent to Susp Bool:
 
 ```
 Circle2-Susp-Bool : Circle2 ≃ Susp Bool
 Circle2-Susp-Bool = improve (Isomorphism c2s (Inverse s2c c2s2c s2c2s)) 
 ```
 
-# Functoriality of suspension
+# Functoriality of suspension (⋆⋆)
 
+In the Lecture 4 exercises, we defined functoriality for the suspension
+type, which given a function X → Y gives a function Σ X → Σ Y.  Show
+that this operation is functorial, meaning that it preserves identity
+and composition of functions:
 ```
 susp-func-id : ∀ {X : Type} → susp-func {X} id ∼ id
 susp-func-id = Susp-elim _ (refl _) (refl _)
