@@ -1,4 +1,4 @@
-```
+```agda
 {-# OPTIONS --rewriting --without-K #-}
 
 open import new-prelude
@@ -11,7 +11,15 @@ open import Lecture4-notes hiding (to; from; from-to-north; from-to-south; from-
 
 # Equivalences
 
-```
+In this lecture, we will start proving some type equivalences, so we
+need to code a definition of equivalence.  In the Lecture 3 exercies, we
+saw the definition of a bijection/isomorphism/quasi-equivalence in Agda:
+a record consisting of maps back and forth with homotopies showing that
+they compose to the identity.  In the HoTT track, we saw the definition
+of equivalence of types as a bi-invertible map.  We can code this
+similarly in Agda:
+
+```agda
 record is-equiv {l1 l2 : Level} {A : Type l1} {B : Type l2} (f : A → B) : Type (l1 ⊔ l2) where
   constructor Inverse
   field
@@ -26,13 +34,23 @@ record _≃_ {l1 l2 : Level} (A : Type l1) (B : Type l2) : Type (l1 ⊔ l2) wher
   field
     map : A → B
     is-equivalence : is-equiv map
+```
 
-fwd : ∀ {A B : Type} → A ≃ B → A → B
+Here are some short names for projecting the the forward and (one of
+the) backward maps:
+
+```agda
+fwd : ∀ {l1 l2 : Level} {A : Type l1} {B : Type l2} → A ≃ B → A → B
 fwd e = _≃_.map e
 
-bwd : ∀ {A B : Type} → A ≃ B → B → A
+bwd : ∀ {l1 l2 : Level} {A : Type l1} {B : Type l2} → A ≃ B → B → A
 bwd e = is-equiv.post-inverse (_≃_.is-equivalence e)
+```
 
+An isomorphism can be improved to an equivalence by using the same
+function as the pre-inverse and post-inverse:
+
+```agda
 improve : ∀ {l1 l2 : Level} {A : Type l1} {B : Type l2} → A ≅ B → A ≃ B
 improve (Isomorphism f (Inverse g gf fg)) = Equivalence f (Inverse g gf g fg)
 
@@ -40,13 +58,53 @@ improve (Isomorphism f (Inverse g gf fg)) = Equivalence f (Inverse g gf g fg)
 
 # Path over a path
 
-```
+Next, we will work towards stating the dependent elimination rules /
+induction principles for HITs.  To do this, we will need the notion of a
+"dependent path" or "path over a path".
 
-data PathOver {l1 l2 : Level} {A : Type l1} (B : A → Type l2) : {a1 a2 : A} (p : a1 ≡ a2) (b1 : B a1) (b2 : B a2) → Type (l1 ⊔ l2) where
+Suppose you have a type A with elements a1 and a2 and a type family B :
+A → Type with elements b1 : B a1 and b2 : B a2.  It doesn't type check
+to ask if b1 ≡ b2 because b1 and b2 have different types.  But if we
+also have a path p : a1 ≡ a2 then we can ask whether b1 ≡ b2 "up to"
+that path.
+
+Using topological terminology, we can think about the *total space* of
+B, type Σ x ∶ A , B, which has a map pr₁ : (Σ x ∶ A , B) → A.  When b :
+B x, we say that b is "in the fiber over x", because the element (x , b)
+: (Σ x ∶ A , B) projects to x by pr₁.  One way to compare elements in
+different fibres is to ask for a path in the total space, i.e. a path
+(a1 , b1) ≡ (a2 , b2) [ Σ x ∶ A , B ].  Using the characterization of
+paths in Σ types from Lecture 3 as pairs of paths, such a path has a
+first component path a1 ≡ a2 [ A ].  We are often interested in paths in
+the total space whose first component is a specified path p : a1 ≡ a2 [
+A ].  This can be represented by a pair of a path q : (a1 , b1) ≡ (a2 ,
+b2) [ Σ x ∶ A , B ] with a path fst (from-Σ-≡ q) ≡ p [ a1 ≡ a2 ].
+However, there are a couple of more direct ways to represent this in
+type theory.
+
+The first way to represent a path over p is with a new inductive definition:
+
+```agda
+data PathOver {l1 l2 : Level} {A : Type l1} (B : A → Type l2) :
+              {a1 a2 : A} (p : a1 ≡ a2)
+              (b1 : B a1) (b2 : B a2) → Type (l1 ⊔ l2) where
   reflo : {x : A} {y : B x} → PathOver B (refl x) y y 
 
 syntax PathOver B p b1 b2 = b1 ≡ b2 [ B ↓ p ]
+```
 
+This is an "inductive family" with one constructor that says that any y
+: B x is equal to itself over reflexivity.  
+
+Another way to represent a path over p is as a homogeneous path
+transport B p b1 ≡ b2 [ B a2 ].  Semantically, this is because dependent
+types are fibrations, which includes that any path-over b1 ≡ b2 [ B ↓ p
+] factors uniquely into a heterogeneous path b1 ≡ transport B p b1 [ B ↓
+p ] composed with a homogeneous path transport B p b1 ≡ b2 [ B a2 ].
+
+In type theory, we can prove that these are equivalent by path induction:
+
+```
 transport-to-pathover : {l1 l2 : Level} {A : Type l1} (B : A → Type l2)
                         {a1 a2 : A} (p : a1 ≡ a2)
                         (b1 : B a1) (b2 : B a2)
@@ -63,9 +121,24 @@ path-to-pathover : ∀ {A : Type} {B : A → Type}
 path-to-pathover p = fwd (transport-to-pathover _ (refl _) _ _) p
 ```
 
+ap of a dependent function naturally creates a path-over:
+```agda
+apd : {l1 l2 : Level} {A : Type l1} {B : A → Type l2}
+      (f : (x : A) → B x) {a1 a2 : A} (p : a1 ≡ a2)
+    → f a1 ≡ f a2 [ B ↓ p ]
+apd f (refl _) = reflo
+```
+
+We'll use the inductive family definition mainly because it will be
+closer to what you'll see in Lectures 7,8,9 on Cubical Agda.
+
 # Dependent elims/induction for HITs
 
-```
+We're finally in a position to state the dependent elimination rules for
+HITs.  Let's start with Circle2 because it's a little easier to see
+what's going on.
+
+```agda
 postulate
   Circle2-elim : (X : Circle2 → Type)
                  (n : X north)
@@ -73,16 +146,29 @@ postulate
                  (w : n ≡ s [ X ↓ west ])
                  (e : n ≡ s [ X ↓ east ])
                → (x : Circle2) → X x
-  Circle2-elim-north : (X : Circle2 → Type) (n : X north) (s : X south) (w : n ≡ s [ X ↓ west ]) (e : n ≡ s [ X ↓ east ])
+  Circle2-elim-north : (X : Circle2 → Type) (n : X north) (s : X south)
+                       (w : n ≡ s [ X ↓ west ]) (e : n ≡ s [ X ↓ east ])
                      → Circle2-elim X n s w e north ≡ n 
-  Circle2-elim-south : (X : Circle2 → Type) (n : X north) (s : X south) (w : n ≡ s [ X ↓ west ]) (e : n ≡ s [ X ↓ east ])
+  Circle2-elim-south : (X : Circle2 → Type) (n : X north) (s : X south)
+                       (w : n ≡ s [ X ↓ west ]) (e : n ≡ s [ X ↓ east ])
                      → Circle2-elim X n s w e south ≡ s
-  -- also need that dependent ap on west/east reduces to w/e 
+{-# REWRITE Circle2-elim-north #-}
+{-# REWRITE Circle2-elim-south #-}
+postulate
+  Circle2-elim-west : (X : Circle2 → Type) (n : X north) (s : X south)
+                      (w : n ≡ s [ X ↓ west ]) (e : n ≡ s [ X ↓ east ])
+                    → apd (Circle2-elim X n s w e) west ≡ w
+  Circle2-elim-east : (X : Circle2 → Type) (n : X north) (s : X south)
+                      (w : n ≡ s [ X ↓ west ]) (e : n ≡ s [ X ↓ east ])
+                    → apd (Circle2-elim X n s w e) east ≡ e
 ```
 
 # Proving equivalences
 
-```
+One common reason dependent elims get used is to prove that functions
+are mutually inverse.
+
+```agda
 module RememberTheseFromLastTime where
 
   to : S1 → Circle2
@@ -111,7 +197,7 @@ module RememberTheseFromLastTime where
 open RememberTheseFromLastTime public
 ```
 
-```
+```agda
 PathOver-roundtrip≡ : ∀ {A B : Type} (g : B → A) (f : A → B)
                         {a a' : A} (p : a ≡ a')
                         {q : g (f a) ≡ a}
@@ -120,9 +206,9 @@ PathOver-roundtrip≡ : ∀ {A B : Type} (g : B → A) (f : A → B)
                       → q ≡ r [ (\ x → g (f x) ≡ x) ↓ p ]
 PathOver-roundtrip≡ g f  (refl _) {q = q} {r} h =
   path-to-pathover (ap (\ H → q ∙ H) (! h) ∙
-                       ( ∙assoc _ _ (refl _ ∙ r) ∙
-                        (ap (\ H → H ∙ (refl _ ∙ r)) (!-inv-r q) ∙
-                         (∙unit-l (refl _ ∙ r) ∙  ∙unit-l r )) ))
+                    ( ∙assoc _ _ (refl _ ∙ r) ∙
+                    (ap (\ H → H ∙ (refl _ ∙ r)) (!-inv-r q) ∙
+                    (∙unit-l (refl _ ∙ r) ∙  ∙unit-l r )) ))
 
 from-to : (y : Circle2) → to (from y) ≡ y
 from-to = Circle2-elim _
@@ -147,33 +233,124 @@ postulate
                → S1-elim X x p base ≡ x
 
 {-# REWRITE S1-elim-base #-}
--- also need a reduction for dependent ap of S1-elim on loop
+postulate
+  S1-elim-loop : (X : S1 → Type)
+                 (x : X base)
+                 (p : x ≡ x [ X ↓ loop ])
+               → apd (S1-elim X x p) loop ≡ p
 ```
 
-# Multiplication by angle x
+# Multiplication on the circle
 
-```
+Classically, if you think of the points on the circle as complex
+numbers, you can multiply two points, and the result will represent a
+point on the circle.  There is a synthetic version of this operation in
+type theory.  Defining it uses S1-elim and *function extensionality*,
+which says that paths between functions are homotopies.  
+
+```agda
 PathOver-path-loop : ∀ {A : Type} 
-                   {a a' : A} {p : a ≡ a'}
-                   {q : a ≡ a}
-                   {r : a' ≡ a'}
-                 → q ∙ p ≡ p ∙ r
-                 → q ≡ r [ (\ x → x ≡ x) ↓ p ]
-PathOver-path-loop {p = (refl _)} h =  path-to-pathover (h ∙ (∙unit-l _)) 
+                     {a a' : A} {p : a ≡ a'}
+                     {q : a ≡ a}
+                     {r : a' ≡ a'}
+                   → q ∙ p ≡ p ∙ r
+                   → q ≡ r [ (\ x → x ≡ x) ↓ p ]
+PathOver-path-loop {p = (refl _)} h = path-to-pathover (h ∙ (∙unit-l _)) 
 
 mult : S1 → S1 → S1
 mult = S1-rec ((\ x → x)) (λ≡ (S1-elim _ loop (PathOver-path-loop (refl _))))
 ```
 
-Rest of funext
 
-```
+Above, we used the main part of function extensionality: a homotopy
+induces a path between functions.  The full form of the function
+extensionality axiom (mentioned briefly in HoTT Lecture 5) is that
+homotopies are equivalent to paths between functions, and in particular
+that the map from paths to homotopies that you can define by path
+induction is an equivalence.
+
+```agda
 app≡ : {l1 l2 : Level} {A : Type l1} {B : A → Type l2} {f g : (x : A) → B x} → f ≡ g → f ∼ g
 app≡ p x = ap (\ f → f x) p 
 
 postulate
-  λ≡β : {l1 l2 : Level} {A : Type l1} {B : A → Type l2} {f g : (x : A) → B x} → (h : f ∼ g) (a : A)
-      → app≡ (λ≡ h) a ≡ h a
-  -- really should be an equivalence but this is all we'll need for now 
+  λ≡β : {l1 l2 : Level} {A : Type l1} {B : A → Type l2} {f g : (x : A) → B x} → (h : f ∼ g) 
+      → app≡ (λ≡ h) ≡ h
+
+full-funext : {l1 l2 : Level} {A : Type l1} {B : A → Type l2} {f g : (x : A) → B x}
+            → is-equiv {A = f ≡ g} {B = f ∼ g} app≡
+full-funext = Inverse λ≡' λ≡η λ≡ λ≡β where
+  postulate
+    λ≡' : _
+    λ≡η : _
 ```
 
+# Univalence and the universal cover of the circle
+
+Similarly, univalence says that paths in the universe are equivalences.
+We'll start with just the ability to turn an equivalence into a path.
+
+```agda
+postulate 
+  ua  : ∀ {l : Level} {X Y : Type l} → X ≃ Y → X ≡ Y
+```
+
+Next we will work towards characterizing the fundamental group of the
+circle.  The homotopy groups of a space are (roughly) the groups of
+paths, paths-between-paths, etc. with path concatenation as the group
+operation.  The homotopy groups are almost iterated identity types,
+except you also need to use truncations (which we haven't talked about
+yet).  The iterated identity types represent what is called the n-fold
+loop space of a type, Ω^n A, which is the whole space of loops,
+loops-between-refls, etc.  E.g.
+
+```
+Ω¹S1 : Type
+Ω¹S1 = base ≡ base
+
+Ω²S1 : Type
+Ω²S1 = refl base ≡ refl base [ base ≡ base ] 
+```
+
+"Calculating a loops space (or homotopy group)" means proving an
+equivalence between the specified loop space and some more explicit
+description of a group.  E.g. Ω¹S1 turns out to be the integers ℤ.  
+
+To prove this, we will use the universal cover of the circle, which is a
+fibration (type family) over the circle whose fiber over each point is
+ℤ, and where going around the loop in the base goes up one level.  This
+can be pictured as a helix.  But in type theory we just define it by
+saying what the fibers are and what happens when you go around the loop.
+
+```
+module AssumeInts (ℤ : Type)
+                  (0ℤ : ℤ)
+                  (succℤ : ℤ ≃ ℤ) where
+
+  Cover : S1 → Type
+  Cover = S1-rec ℤ (ua succℤ)
+```
+
+To check that going around the loop in the base adds one, we need
+another bit of the univalence axiom:
+
+```
+  postulate
+    uaβ : ∀{l : Level} {X Y : Type l} (e : X ≃ Y) {x : X} → transport (\ X → X) (ua e) x ≡ fwd e x
+```
+
+Then we can calculate
+
+```
+  transport-ap-assoc : {A : Type} (C : A → Type) {a a' : A} (p : a ≡ a') {x : C a}
+                       → transport C p x ≡ transport (\ X → X) (ap C p) x
+  transport-ap-assoc C (refl _) = refl _
+
+  transport-Cover-loop : (x : ℤ) → transport Cover loop x ≡ fwd succℤ x
+  transport-Cover-loop x = transport-ap-assoc Cover loop ∙
+                           ap (\ H → transport id H x) (S1-rec-loop _ _) ∙
+                           (uaβ  succℤ)
+
+  PathOver-Cover-loop : (x : ℤ) → x ≡ fwd succℤ x [ Cover ↓ loop ]
+  PathOver-Cover-loop x = fwd (transport-to-pathover _ _ _ _) (transport-Cover-loop x)
+```
