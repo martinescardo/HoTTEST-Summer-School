@@ -311,7 +311,7 @@ yet).  The iterated identity types represent what is called the n-fold
 loop space of a type, Ω^n A, which is the whole space of loops,
 loops-between-refls, etc.  E.g.
 
-```
+```agda
 Ω¹S1 : Type
 Ω¹S1 = base ≡ base
 
@@ -329,7 +329,7 @@ fibration (type family) over the circle whose fiber over each point is
 can be pictured as a helix.  But in type theory we just define it by
 saying what the fibers are and what happens when you go around the loop.
 
-```
+```agda
 module AssumeInts (ℤ : Type)
                   (0ℤ : ℤ)
                   (succℤ : ℤ ≃ ℤ) where
@@ -341,14 +341,14 @@ module AssumeInts (ℤ : Type)
 To check that going around the loop in the base adds one, we need
 another bit of the univalence axiom:
 
-```
+```agda
   postulate
     uaβ : ∀{l : Level} {X Y : Type l} (e : X ≃ Y) {x : X} → transport (\ X → X) (ua e) x ≡ fwd e x
 ```
 
 Then we can calculate
 
-```
+```agda
   transport-ap-assoc : {A : Type} (C : A → Type) {a a' : A} (p : a ≡ a') {x : C a}
                        → transport C p x ≡ transport (\ X → X) (ap C p) x
   transport-ap-assoc C (refl _) = refl _
