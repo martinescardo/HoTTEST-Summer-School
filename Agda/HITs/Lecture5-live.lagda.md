@@ -91,8 +91,8 @@ module RememberTheseFromLastTime where
   
   from-to-east : ap to (ap from east) ∙ from-to-south ≡ east
   from-to-east =  ap to (ap from east) ∙ from-to-south ≡⟨ ap (\ H → ap to H ∙ from-to-south) (Circle2-rec-east _ _ _ _) ⟩
-                  ap to loop           ∙ from-to-south           ≡⟨ ap (\ H → H ∙ from-to-south) (S1-rec-loop _ _) ⟩
-                  east ∙ ! west        ∙ from-to-south        ≡⟨ ! (∙assoc _ (! west) from-to-south) ⟩
+                  ap to loop           ∙ from-to-south ≡⟨ ap (\ H → H ∙ from-to-south) (S1-rec-loop _ _) ⟩
+                  east ∙ ! west        ∙ from-to-south ≡⟨ ! (∙assoc _ (! west) from-to-south) ⟩
                   east ∙ (! west ∙ from-to-south)      ≡⟨ ap (\ H → east ∙ H) {!!} ⟩
                   east ∎ 
                     
