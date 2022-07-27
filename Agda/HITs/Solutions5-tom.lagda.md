@@ -155,7 +155,7 @@ mult-unit-r = S1-elim (\ x → mult x base ≡ x) (mult-unit-l base) p
 
 (⋆) Postulate the computation rules for the non-dependent susp-rec and
 declare rewrites for the point reduction rules on the point constructors.
-```
+```agda
 postulate
   Susp-rec-north : {l : Level} {A : Type} {X : Type l}
                  (n : X) (s : X) (m : A → n ≡ s)
