@@ -40,7 +40,7 @@ rev = {!!}
 Prove that rev is an equivalence.  Hint: you will need to state and prove
 one new generalized "path algebra" lemma and to use one of the lemmas from
 the "Functions are group homomorphism" section of Lecture 4's exercises.  
-```
+```agda
 rev-equiv : is-equiv rev
 rev-equiv = {!!}
 ```
@@ -73,7 +73,7 @@ circles-to-torus' : S1 × S1 → Torus
 circles-to-torus' (x , y) = circles-to-torus x y
 ```
 
-**Below are some "extra credit" exercies if you want more to do.  These
+**Below are some "extra credit" exercise if you want more to do.  These
 are (even more) optional: nothing in the next lecture will depend on you
 understanding them.  The next section (H space) is harder code but uses
 only the circle, whereas the following sections are a bit easier code

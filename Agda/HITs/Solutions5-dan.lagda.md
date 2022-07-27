@@ -105,7 +105,7 @@ circles-to-torus' : S1 × S1 → Torus
 circles-to-torus' (x , y) = circles-to-torus x y
 ```
 
-**Below are some "extra credit" exercies if you want more to do.  These
+**Below are some "extra credit" exercises if you want more to do.  These
 are (even more) optional: nothing in the next lecture will depend on you
 understanding them.  The next section (H space) is harder code but uses
 only the circle, whereas the following sections are a bit easier code
