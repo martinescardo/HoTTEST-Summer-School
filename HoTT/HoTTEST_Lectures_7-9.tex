@@ -1,0 +1,996 @@
+% !TEX program = lualatex
+% The following code introduces a new \if macro which we use to switch
+% compilation between the published and internet versions of the book
+%
+\newif\ifmine
+%
+% The default is false, which means we compile the internet version.
+% Un-comment the next line to compile the published version:
+%
+%\minetrue
+%
+\documentclass{amsart}
+\usepackage[hidelinks]{hyperref}
+\usepackage{tensor}
+\usepackage{comment}
+\usepackage{enumitem}
+\usepackage{moreenum}
+\usepackage{graphicx}
+\usepackage{ifthen}
+\usepackage{stmaryrd}
+\usepackage[svgnames]{xcolor}
+ \usepackage{fullpage}
+ \hypersetup{
+    colorlinks,
+    linkcolor={red!50!black},
+    citecolor={blue!50!black},
+    urlcolor={blue!80!black}
+}
+\usepackage{mathpartir}%I think for \inferrule
+
+% AMS Packages
+\usepackage{amsmath}
+\usepackage{amsxtra}
+\usepackage{amsthm}
+
+% Font packages
+\usepackage[no-math]{fontspec}
+\usepackage{realscripts}
+
+% Unicode mathematics fonts
+\usepackage{unicode-math}
+
+\setmathfont{Garamond-Math.otf}[StylisticSet={7,9}]
+
+%\setmathfont{Asana Math}[Alternate = 2]
+
+% Font imports, for some reason this has to be after
+% the unicode-math stuff.
+
+\setmainfont{CormorantGaramond}[
+Scale=1.1,
+Numbers = Lining,
+Ligatures = NoCommon,
+Kerning = On,
+UprightFont = *-Medium,
+ItalicFont = *-MediumItalic,
+BoldFont = *-Bold,
+BoldItalicFont = *-BoldItalic
+]
+
+
+
+% We use TikZ for diagrams
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usepackage{makebox}%to try and fix the spacing in some diagrams with wildly divergent node sizes
+
+\renewcommand{\theenumi}{\roman{enumi}} %roman numerals in enumerate
+
+% Adjust list environments.
+
+\setlist{}
+\setenumerate{leftmargin=*,labelindent=0\parindent}
+\setitemize{leftmargin=\parindent}%,labelindent=0.5\parindent}
+%\setdescription{leftmargin=1em}
+
+\newcommand{\todo}[1]
+{ {\bfseries \color{blue} #1 }}
+
+
+\newcommand{\lecture}[1]{\vspace{.1cm}\centerline{\fbox{\textbf{#1}}}\vspace{.1cm}}
+
+\theoremstyle{theorem}
+\newtheorem*{thm}{Theorem}
+\newtheorem*{lem}{Lemma}
+\newtheorem*{fact}{Fact}
+\newtheorem*{cor}{Corollary}
+\newtheorem*{prop}{Proposition}
+
+\theoremstyle{definition}
+\newtheorem*{defn}{defn}
+\newtheorem*{ntn}{Notation}
+\newtheorem*{post}{Postulate}
+\newtheorem*{ax}{Axiom}
+\newtheorem*{ex}{ex}
+\newtheorem*{nex}{non-ex}
+\newtheorem*{exc}{Exercise}
+\newtheorem*{exnex}{Example/Non-Example}
+\newtheorem*{tf}{T/F}
+\newtheorem*{q}{Q}
+\newtheorem*{rQ}{rhetorialQ}
+\newtheorem*{rev}{Review}
+
+
+\theoremstyle{remark}
+\newtheorem*{rmk}{Remark}
+\newtheorem*{war}{Warning}
+\newtheorem*{dig}{Digression}
+
+%\makeatletter
+%\let\c@equation\c@thm
+%\makeatother
+%\numberwithin{equation}{section}
+
+\newcommand{\cat}[1]{\textup{\textsf{#1}}}% for categories
+\newcommand{\fun}[1]{\textup{#1}}%for functors
+
+
+%math operators
+\DeclareMathOperator{\dom}{\mathrm{dom}}
+\DeclareMathOperator{\cod}{\mathrm{cod}}
+\DeclareMathOperator{\ob}{\mathrm{ob}}
+\DeclareMathOperator{\mor}{\mathrm{mor}}
+\DeclareMathOperator*{\colim}{\mathrm{colim}}
+\newcommand{\hocolim}{\mathrm{hocolim}}
+\newcommand{\wcolim}{\mathrm{wcolim}}
+\newcommand{\holim}{\mathrm{holim}}
+
+
+\newcommand{\op}{\mathrm{op}}
+\newcommand{\co}{\mathrm{co}}
+\newcommand{\Nat}{\mathrm{Nat}}
+\newcommand{\End}{\mathrm{End}}
+\newcommand{\Aut}{\mathrm{Aut}}
+\newcommand{\Sym}{\mathrm{Sym}}
+
+\newcommand{\coim}{\mathrm{coim}}
+\newcommand{\To}{\Rightarrow}
+\newcommand{\coker}{\mathrm{coker}}
+
+\newcommand{\Map}{\mathord{\text{\normalfont{\textsf{Map}}}}}
+\newcommand{\Fun}{\mathord{\text{\normalfont{\textsf{Fun}}}}}
+\newcommand{\Hom}{\mathord{\text{\normalfont{\textsf{Hom}}}}}
+\newcommand{\Ho}{\mathord{\text{\normalfont{\textsf{Ho}}}}}
+\newcommand{\h}{\cat{h}}
+\DeclareMathOperator{\Lan}{\fun{Lan}}
+\DeclareMathOperator{\Ran}{\fun{Ran}}
+\newcommand{\comma}{\!\downarrow\!}
+
+%special blackboard bold characters
+\newcommand{\bbefamily}{\fontencoding{U}\fontfamily{bbold}\selectfont}
+\newcommand{\textbbe}[1]{{\bbefamily #1}}
+\DeclareMathAlphabet{\mathbbe}{U}{bbold}{m}{n}
+
+
+\def\DDelta{{\mbfDelta}}
+
+%categories?
+\newcommand{\cA}{\mathsf{A}}
+\newcommand{\cB}{\mathsf{B}}
+\newcommand{\cC}{\mathsf{C}}
+\newcommand{\cD}{\mathsf{D}}
+\newcommand{\cE}{\mathsf{E}}
+\newcommand{\cF}{\mathsf{F}}
+\newcommand{\cG}{\mathsf{G}}
+\newcommand{\cI}{\mathsf{I}}
+\newcommand{\cJ}{\mathsf{J}}
+\newcommand{\cK}{\mathsf{K}}
+\newcommand{\cL}{\mathsf{L}}
+\newcommand{\cM}{\mathsf{M}}
+\newcommand{\cN}{\mathsf{N}}
+\newcommand{\cP}{\mathsf{P}}
+\newcommand{\cS}{\mathsf{S}}
+\newcommand{\cT}{\mathsf{T}}
+\newcommand{\cV}{\mathsf{V}}
+
+\newcommand{\0}{\mathbbe{0}}
+\newcommand{\1}{\mathbbe{1}}
+\newcommand{\2}{\mathbbe{2}}
+\newcommand{\3}{\mathbbe{3}}
+\newcommand{\4}{\mathbbe{4}}
+\newcommand{\iso}{\mathbbe{I}}
+
+%blackboard bold
+\renewcommand{\AA}{\mathbb{A}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\FF}{\mathbb{F}}
+\newcommand{\LL}{\mathbb{L}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\kk}{\mathbbe{k}}
+
+\newcommand{\sA}{\mathcal{A}}
+\newcommand{\sB}{\mathcal{B}}
+\newcommand{\sC}{\mathcal{C}}
+\newcommand{\sJ}{\mathcal{J}}
+\newcommand{\sL}{\mathcal{L}}
+\newcommand{\sR}{\mathcal{R}}
+
+
+
+%type theory stuff
+\newcommand{\univ}{{~\textup{type}~}}
+\newcommand{\judgment}{\mathcal{J}}
+\newcommand{\term}[1]{{\textup{#1}}}
+\newcommand{\type}[1]{{\textup{#1}}}
+
+\newcommand{\comp}{\term{comp}}
+\newcommand{\id}{\term{id}}
+
+\newcommand{\bN}{{\mathbb{N}}}
+\newcommand{\bT}{{\mathbb{T}}}
+\newcommand{\suc}{\term{succ}_{\bN}}
+
+\newcommand{\ind}{\term{ind}}
+\newcommand{\inl}{\term{inl}}
+\newcommand{\inr}{\term{inr}}
+\newcommand{\pair}{\term{pair}}
+\newcommand{\pr}{\term{pr}}
+
+\newcommand{\bZ}{{\mathbb{Z}}}
+
+\newcommand{\refl}{\term{refl}}
+\newcommand{\pathind}{\term{path}\text{-}\term{ind}}
+\newcommand{\concat}{\term{concat}}
+\newcommand{\inv}{\term{inv}}
+\newcommand{\assoc}{\term{assoc}}
+\newcommand{\ap}{\term{ap}}
+\newcommand{\apcoh}[1]{\term{ap}\text{-}\term{#1}}
+\newcommand{\tr}{\term{tr}}
+\newcommand{\apd}{\term{apd}}
+
+\newcommand{\const}{\term{const}}
+\newcommand{\glue}{\term{glue}}
+
+\newcommand{\UU}{{\mathcal{U}}}
+\newcommand{\sT}{\mathcal{T}}
+\newcommand{\Id}{\mathrm{Id}}
+\newcommand{\Eq}{\mathrm{Eq}}
+
+
+\newcommand{\bool}{\type{bool}}
+\newcommand{\true}{\term{true}}
+\newcommand{\false}{\term{false}}
+
+\newcommand{\is}[1]{\type{is-{#1}}}
+\newcommand{\iscontr}{\type{is-contr}}
+\newcommand{\isprop}{\type{is-prop}}
+\newcommand{\isequiv}{\type{is-equiv}}
+
+\newcommand{\fib}{\type{fib}}
+
+\newcommand{\Prop}{\type{Prop}_{\UU}}
+\newcommand{\Set}{\type{Set}_{\UU}}
+\renewcommand{\iff}{\leftrightarrow}
+
+\newcommand{\mere}[1]{\|{#1}\|}
+\newcommand{\set}[1]{\|{#1}\|_0}
+\newcommand{\im}[1]{\type{im}(#1)}
+\newcommand{\ev}{\term{ev}}
+
+\newcommand{\Fin}{\type{Fin}}
+
+\newcommand{\Sone}{\mathbf{S}^1}
+\newcommand{\Sn}[1]{\mathbf{S}^{#1}}
+\newcommand{\base}{\term{base}}
+\newcommand{\lloop}{\term{loop}}
+
+\newcommand{\mul}{\term{mul}}
+
+\begin{document}
+
+\title{HoTTEST Summer School}
+\author{Emily Riehl}
+\date{Summer 2022}
+
+\thanks{The author is grateful to receive support from the National Science Foundation via the grant DMS-1652600 for various activities involving the HoTTEST Summer School, including the preparation of these notes.}
+
+\begin{comment}
+\begin{abstract}
+{The fundamental theorem of identity types and applications (Section 11)}
+
+Preliminary plan is to cover as much as I can from \S11.1-\S11.5 but skip \S11.6 (and possibly \S11.4).
+\begin{itemize}
+    \item preliminaries on families of equivalences
+    \item statement and sketch proof of the fundamental theorem of the identity types and applications
+    \item review of characterization of identity types of $\Sigma$-types.
+    \item observational equality for $\mathbb{N}$ and proof that its identity types are propositions (in language to be introduced)
+    \item disjointness of coproducts
+    \item if time: proof that equivalences are embeddings
+\end{itemize}
+{Propositions/sets/truncated types (Section 12)}
+
+All of section 12, though perhaps in a permuted order:
+\begin{itemize}
+    \item propositions
+    \item sets and axiom K
+    \item higher truncation levels
+    \item generalization of theorems about equivalences and contractibility
+    \item subtypes
+\end{itemize}
+{Function extensionality/universal properties (Section 13) + preview of univalence}
+
+\S 13.1-\S13.3; skipping \S13.5 on strong induction and \S13.4 on composing with equivalences
+\begin{itemize}
+    \item equivalent forms of function extensionality
+    \item type theoretic axiom of choice
+    \item universal properties
+    \item preview of univalence and connection to function extensionality
+\end{itemize}
+\end{abstract}
+\end{comment}
+
+\address{Dept.~of Mathematics\\Johns Hopkins University\\3400 N Charles St\\Baltimore, MD 21218}
+\email{eriehl@jhu.edu}
+
+\maketitle
+
+\setcounter{tocdepth}{1}
+\tableofcontents
+
+\part*{July 29: The fundamental theorem of identity types}
+
+\section*{What are identity types really?}
+
+On the one hand we have Per Martin-L\"{o}f's rules, which characterize the identity type family for \emph{any} type in any context. These rules are summarized as follows: given a type $A$ in context $\Gamma$, the identity type family $=_A : A \to A \to \UU$ is freely generated by the reflexivity terms $\Gamma, x : A \vdash \refl_x : x=_A x$.
+
+On the other hand, for a \emph{particular} type, we might know what we want the identity type family should be. We might call these \emph{observational equality} type families to distinguish them from Martin-L\"{o}f's identity types.
+
+\begin{ex} In the empty context we have the type $\bN$ of natural numbers. By induction, we may define the
+observational equality type family $\Eq_\bN : \bN \to \bN \to \UU$ by
+\[ \Eq_\bN(0_\bN,0_\bN) \doteq \1 \quad \Eq_\bN(\suc(n),0_\bN) \doteq \emptyset \quad \Eq_\bN(0,\suc(n)) \doteq \emptyset \quad \Eq_\bN(\suc(m), \suc(n)) \doteq \Eq_\bN(m,n).\]
+\end{ex}
+
+\begin{ex} Given types $A$ and $B$ in context $\Gamma$ we may define the observational equality type family $\type{Eq+}_{A,B} : (A+B) \to (A+B) \to \UU$ for the coproduct type $\Gamma \vdash A + B \univ$
+by induction by
+\begin{align*} \type{Eq+}_{A,B}(\inl(a),\inl(a')) &\doteq  (a = a')  \\ \type{Eq+}_{A,B}(\inl(a),\inr(b)) &\doteq \emptyset \\ \type{Eq+}_{A,B}(\inr(b),\inr(a)) &\doteq \emptyset \\ \type{Eq+}_{A,B} (\inr(b), \inr(b')) &\doteq (b = b')
+\end{align*}
+\end{ex}
+
+Our goal today will be to introduce a general strategy for showing that an observational equality type family for a given type is equivalent to the identity type family. Before stating the theorem that describes the universal property of identity type families, we firstly consider equivalences between type families more generally.
+
+
+ \section*{Families of equivalences}
+
+For any family of maps $f \colon \prod_{x:A} B(x) \to C(x)$ there is a map
+\[ \term{tot}(f) : \sum_{x:A} B(x) \to \sum_{x:A}C(x)\]
+defined by $\lambda(x,y).(x,f(x,y))$.
+
+\begin{thm} For any  family of maps $f \colon \prod_{x:A} B(x) \to C(x)$ the following are logically equivalent:
+\begin{enumerate}
+\item The family $f$ is a \textbf{family of equivalences}: for each $x :A$ the map $f(x) : B(x) \to C(x)$ is an equivalence.
+\item The map $\term{tot}(f)$ is an equivalence.
+\end{enumerate}
+\end{thm}
+\begin{proof}
+Recall equivalences are contractible maps: meaning maps whose fibers are all contractible. So it suffices to show that $f(x)$ is a contractible map for each $x$ if and only if $\term{tot}(f)$ is a contractible map. For this, we must show for each $x :A$ and $c : C(x)$ that $\fib_{f(x)}(c)$ is contractible if and only if $\fib_{\type{tot}(f)}(x,c)$ is contractible. But in fact these fibers are always equivalent, as the following lemma shows.
+\end{proof}
+
+\begin{lem} For any  family of maps $f \colon \prod_{x:A} B(x) \to C(x)$ and any term $t : \sum_{x:A}C(x)$ there is an equivalence
+\[
+\fib_{\term{tot}(f)}(t) \simeq \fib_{f(\pr_1(t))}\pr_2(t).\]
+\end{lem}
+\begin{proof}
+Define $\phi \colon \prod_{t: \sum_{x:A}C(x)}  \fib_{\term{tot}(f)}(t) \to \fib_{f(\pr_1(t))}\pr_2(t)$ by pattern matching by taking
+\[((x,y), \refl) : \sum_{s : \sum_{x:A} B(x)} \type{tot}(f) s = (x, f(x,y))\]
+ to $(y,\refl) : \sum_{z : B(x)} f(x,z) = f(x,y)$. We construct an inverse $\psi \colon \prod_{t: \sum_{x:A}C(x)}   \fib_{f(\pr_1(t))}\pr_2(t) \to \fib_{\term{tot}(f)}(t) $ by pattern matching \[ \psi(x,f(x,y),y, \refl) \coloneq ((x,y),\refl)\] and homotopies by pattern matching in which case both homotopies reduce to $\refl$.
+\end{proof}
+
+\begin{rmk} More generally, we might consider a map $f \colon A \to B$, a family of types $C$ over $A$, a family of types $D$ over $B$, and a family of maps  $g : \prod_{x:A}C(x) \to D(f(x))$. When $f$ is an equivalence, then $g$ defines a family of equivalences over $f$ if and only if the map
+\[ \term{tot}_f(g) : \sum_{x:A}C(x) \to \sum_{y:B}D(y)\] defined by $\term{tot}_f(g)(x,z) \coloneq (f(x),g(x,z))$ is an equivalence. This result, together with others in this section, can be used to show that equivalent types have equivalent identity types, for instance. See \cite[\S11.1]{Rijke} for more.
+\end{rmk}
+
+\begin{comment}
+Now consider a closely related situation where we are given a map $f \colon A \to B$ and a family $C \colon B \to \UU$. We have a map
+\[ \lambda(x,z).(f(x),z): \sum_{x:A} C(f(x)) \to \sum_{y :B}C(y).\]
+Again, by the same style of argument, if $f$ is an equivalence then this map is an equivalence (because the fibers are equivalent), but in this case the converse does not hold: consider $\true : \1 \to \bool$ and the type family $\lambda b. \false = b : \bool \to \UU$.
+
+Nevertheless we can use the one-sided implication to extend the previous theorem as follows. Given $f \colon A \to B$ and a family of maps $g : \prod_{x:A}C(x) \to D(f(x))$ where $C$ is a type family over $A$ and $D$ is a type family over $B$, we say that $g$ is a \textbf{family of maps over} $f$. Define
+\[ \term{tot}_f(g) : \sum_{x:A}C(x) \to \sum_{y:B}D(y)\] by $\term{tot}_f(g)(x,z) \coloneq (f(x),g(x,z))$.
+
+\begin{thm} Suppose $g$ is a family of maps over $f$ and $f$ is an equivalence. Then the following are logically equivalent:
+\begin{enumerate}
+\item The family of maps $g$ over $f$ is a family of equivalences.
+\item The map $\term{tot}_f(g)$ is an equivalence.
+\end{enumerate}
+\end{thm}
+\begin{proof}
+We have a commuting triangle of maps
+\[
+\begin{tikzcd} \sum_{x:A}C(x) \arrow[rr, "\term{tot}_f(g)"] \arrow[dr, "\term{tot}(g)"'] & & \sum_{y:B}D(y) \\ & \sum_{x:A}D(f(x)) \arrow[ur, "{\lambda(x,z).(f(x),z)}"']
+\end{tikzcd}
+\]
+Since $f$ is an equivalence, the bottom right map is an equivalence. The equivalences are closed under the 2-of-3 property (meaning if any two of a composable pair and their composite are equivalences so is the third map). Thus $\term{tot}(g)$ is an equivalence if and only if $\term{tot}_f(g)$ is an equivalence. And by the previous theorem, the first condition asserts that $g$ is a family of equivalences.
+\end{proof}
+\end{comment}
+
+\section*{The fundamental theorem}
+
+The fundamental theorem of identity types characterizes the ``one-sided'' identity types up to equivalence, where one of the variables is moved into the context:
+\[
+\inferrule{ \Gamma \vdash a : A}{ \Gamma, x : A \vdash a =_A x \univ} \qquad
+\inferrule{\Gamma \vdash a : A}{\Gamma \vdash \refl_a : a =_A a}\]
+\[
+\inferrule{\Gamma \vdash a : A \\ \Gamma, x : A, p: a=_A x \vdash P(x,p) \univ}{\Gamma \vdash \pathind_a : P(a,\refl_a) \to \prod_{x :A}\prod_{p : a =_A x}P(x,p)} \qquad
+\inferrule{\Gamma \vdash a : A \\ \Gamma, x : A, p: a=_A x \vdash P(x,p) \univ}{\Gamma \vdash \pathind_a(q,a, \refl_a) \doteq q : P(a,\refl_a)}
+\]
+These rules are summarized as follows: given a type $A$ and a term $a : A$ in any context $\Gamma$, the identity type family $\Gamma, x :A \vdash a =_A x \univ$ is freely generated by the reflexivity term $\Gamma \vdash \refl_a : a =_A a$.
+
+Given a type $A$ and a term $a : A$ in context $\Gamma$, the identity type provides a type family $\lambda x. a=_A x : A \to \UU$ in context $\Gamma$ equipped with a special term $\refl_a : a =_A a$. The fundamental theorem of identity types provides necessary and sufficient conditions for a type family $E \colon A \to \UU$ and term $r : E(a)$ to define a family of equivalences $\prod_{x:A}(a=x) \simeq E(x)$ by $(a,\refl)\mapsto r$.
+
+\begin{defn} Given a type $A$ and a term $a:A$ a \textbf{(unary) identity system} on $A$ at $a$ is given by a type family $E : A \to \UU$ and a term $r : E(a)$ so that for any family of types $P \colon \sum_{x:A}E(x) \to \UU$ the function
+\[ \ev_{a,r} \colon \prod_{x:A} \prod_{y:E(x)}P(x,y) \to P(a,r)\] has a section.
+\end{defn}
+
+That is, if $(E,r)$ is an identity system at $(A,a)$ and $P$ is a family of types over $x:A$ and $y:E(x)$ then for each $p : P(a,r)$ there is a dependent function $f :\prod_{x:A} \prod_{y:E(x)} P(x,y)$ with an identification $h : f(a,r) = p$. This is a variant of the path induction principal where the computation rule is given by an identification rather than by a definitional equality.
+
+\begin{thm}[fundamental theorem of identity types] Let $A$ be a type, let $a :A$, and let $E : A \to \UU$ with $r : E(a)$. Define a family of maps  \[ \term{path-ind}_a r : \prod_{x:A}(a=x) \to E(x)\] by $(a,\refl_a) \mapsto r$. Then the following are logically equivalent:
+\begin{enumerate}
+\item $\term{path-ind}_ar$ is a family of equivalences.
+\item The total space $\sum_{x:A}E(x)$ is contractible with $(a,r)$ as its center of contraction.
+\item The family $E$ is an identity system.
+\end{enumerate}
+\end{thm}
+\begin{proof}
+By our theorem characterizing families of equivalences, $\term{path-ind}_ar$ is a family of equivalences iff and only if it induces an equivalence on total spaces
+\[ \left(\sum_{x:A}a=x \right) \simeq \left(\sum_{x:A}E(x)\right).\]
+The left-hand type is contractible so this is the case if and only if $\sum_{x:A}E(x)$ is contractible. This proves the equivalence of (i) and (ii).
+
+For the equivalence of (ii) and (iii) consider the commutative triangle:
+\[
+\begin{tikzcd} \prod_{t : \sum_{x:A}E(x)} P(t) \arrow[rr, "\term{ev-pair}"] \arrow[dr, "\term{ev-pt}_{(a,r)}"'] & & \prod_{x:A} \prod_{y : E(x)} P(x,y) \arrow[dl, "\ev_{(a,r)}"] \\ & P(a,r)
+\end{tikzcd}
+\]
+By $\Sigma$-induction, the top map has a section. It follows that the left map has a section if and only if the right map has a section. The left-hand section is the universal property called singleton induction that is satisfied if and only if the type $\sum_{x:A}E(x)$ is contractible, while the right-hand section is the universal property of an identity system. This proves the equivalence of  (ii) and (iii).
+\end{proof}
+
+\section*{Equality on \texorpdfstring{$\bN$}{N}}
+
+As our first application recall the observational equality type family $\Eq_\bN : \bN \to \bN \to \UU$ satisfying
+\[ \Eq_\bN(0_\bN,0_\bN) \doteq \1 \quad \Eq_\bN(\suc(n),0_\bN) \doteq \emptyset \quad \Eq_\bN(0,\suc(n)) \doteq \emptyset \quad \Eq_\bN(\suc(m), \suc(n)) \doteq \Eq_\bN(m,n).\] We previously showed that this type family is logically equivalent to the identity type family for the natural numbers, but we can do better. Using the reflexivity term $\term{refl-Eq}_\bN : \prod_{n :\bN} \Eq_{\bN}(n,n)$ defined by induction on $n : \bN$, there is a canonical map $\term{eq-id} : \prod_{m, n : \bN} (m=n) \to \Eq_\bN(m,n)$ defined by path induction.
+
+\begin{thm} For all $m,n : \bN$ the canonical map
+\[ \term{eq-id} : (m=n) \to \Eq_\bN(m,n)\] is an equivalence.
+\end{thm}
+\begin{proof}
+It suffices to show for each $m : \bN$ that the type \[ \sum_{n : \bN} \Eq_\bN(m,n)\] is contractible with $(m,\term{refl-Eq}_\bN(m))$ as the center of contraction.
+
+The contracting homotopy
+\[ \gamma(m) : \prod_{n :\bN} \prod_{e :\Eq_\bN(m,n)} (m,\term{refl-Eq}_\bN(m)) = (n,e)\]
+is defined by induction on $m,n : \bN$ from the base case $\gamma(0,0, \star) \coloneq \refl$. If either $m$ or $n$ is 0 and the other is a successor we can define this using ex-falso.
+
+In the inductive step we seek an identification $\gamma(m+1,n+1,e) : (m+1, \term{refl-Eq}_\bN(m+1)) = (n+1,e)$. To define this we use the map
+\[ \lambda(n,e).(n+1,e) : \sum_{n:\bN}\Eq_\bN(m,n) \to \sum_{n : \bN}\Eq_\bN(m+1,n).\]
+Since this map carries $(m,\term{refl-Eq}_\bN(m))$ to $(m+1,\term{refl-Eq}_\bN(m+1))$ we can apply the map to the identification $(m,n,e)$ to get the identification we seek.
+\end{proof}
+
+\begin{exc} Peano's axioms for the natural numbers assert that:
+\begin{itemize}
+\item Zero is not the successor of any natural number.
+\item The successor function is injective.
+\end{itemize}
+Prove that these hold for the type $\bN$.
+\end{exc}
+
+It it interesting to compare the set-theoretic axiomatization of the natural numbers, via Peano's postulates, with the type-theoretic axiomatization, using the rules for inductive types. The type theoretic induction principle is manifestly stronger than the set theoretic principle of maximal induction, since the latter considers only predicates $P : \bN \to \Prop$---valued in the \emph{universe of propositions}, to be defined in the next lecture---while the latter allows arbitrary families of types $P \colon \bN \to \UU$. In particular, this strengthened induction principle allows us to define the observational equality type family, which can be used to prove the properties of the successor function mentioned above.
+
+\section*{Disjointness of coproducts}
+
+For a second application, we characterize the identity types of coproducts.
+
+\begin{thm} Let $A$ and $B$ be types. Then for any $a,a' :A$ and $b,b': B$ there are equivalences
+\begin{align*} (\inl(a) = \inl(a')) &\simeq (a = a')  \\ (\inl(a) = \inr(b)) &\simeq \emptyset \\ (\inr(b) = \inl(a)) &\simeq \emptyset \\ (\inr(b) = \inr(b')) &\simeq (b = b')
+\end{align*}
+\end{thm}
+
+We follow our usual strategy first defining a type family
+\[ \type{Eq+}_{A,B} : (A+B) \to (A+B) \to \UU\]
+by induction by
+\begin{align*} \type{Eq+}_{A,B}(\inl(a),\inl(a')) &\doteq (a = a')  \\ \type{Eq+}_{A,B}(\inl(a),\inr(b)) &\doteq \emptyset \\ \type{Eq+}_{A,B}(\inr(b),\inr(a)) &\doteq \emptyset \\ \type{Eq+}_{A,B} (\inr(b), \inr(b')) &\doteq (b = b')
+\end{align*}
+
+Again by induction there is a term $\term{Eq+-refl} : \prod_{z:A+B} \type{Eq+}_{A,B}(z,z)$ defined by $\refl$ in both cases. Thus there is a map
+\[ \term{eq-id}: \prod_{s,t:A+B} (s=t) \to \type{Eq+}_{A,B}(s,t)\]
+defined by path induction.
+
+\begin{prop} For any $s : A +B$ the total space
+\[ \sum_{t:A+B}\type{Eq+}_{A,B}(s,t)\]
+is contractible with $(s, \term{Eq+-refl}_s)$ as its center of contraction.
+\end{prop}
+\begin{proof}
+By induction on $s$ we have to consider two cases, of which we prove just one: that
+\[ \sum_{t:A+B}\type{Eq+}_{A,B}(\inl(a),t)\]
+is contractible. From distributivity of dependent pairs of coproducts we have
+\[ \sum_{t:A+B}\type{Eq+}_{A,B}(\inl(a),t) \simeq \left(\sum_{x:A} \type{Eq+}_{A,B}(\inl(a),\inl(x)) \right)+ \left(\sum_{y:B} \type{Eq+}_{A,B}(\inl(a),\inr(y)) \right)\]\[\simeq \left(\sum_{x:A} a = x\right) + \left(\sum_{y:B} \emptyset\right) \simeq  \left(\sum_{x:A} a = x\right) + \emptyset \simeq  \sum_{x:A} a = x.  \]
+This last type is contractible so the first type is as claimed. Chasing through the equivalences, the center of contraction $(a,\refl_a)$ maps to the claimed center of contraction.
+\end{proof}
+
+By the fundamental theorem of identity types, this establishes the desired family of equivalences of types.
+
+\subsection*{Embeddings}
+
+Our next application will show that equivalences are embeddings, defined as follows:
+
+\begin{defn} An \textbf{embedding} is a map $f \colon A \to B$ that satisfies the property that
+\[ \ap_f : (x=y) \to (f(x)=f(y))\]
+is an equivalence for every $x,y :A$.
+\end{defn}
+
+Write
+\[ \is{emb}(f) \coloneq \prod_{x,y:A} \is{equiv}(\ap_f : (x=y) \to (f(x)=f(y))).\]
+
+\begin{thm} Equivalences are embeddings.
+\end{thm}
+\begin{proof}
+Suppose $e : A \simeq B$ is an equivalence and $x:A$. We wish to show that
+\[ \ap_e : (x=y) \to (e(x)=e(y))\] is an equivalence for every $y :A$. For this it suffices to show that $\sum_{y:A}e(x) =e(y)$ is contractible with center of contraction $\ap_e(\refl_x) \doteq \refl_{e(x)}$. We have an equivalence
+\[ \sum_{y:A}e(x)=e(y) \simeq \sum_{y:A} e(y) = e(x)\]
+and the latter type is the fiber $\fib_e(e(x))$. Since $e$ is an equivalence this fiber is contractible so the result follows.
+\end{proof}
+
+\section*{Identity types of contractible types}
+
+We suggest a final exercise, a repeat of an exercise that appeared on a previous worksheet, proving a result that we will make use of in the next lecture:
+
+\begin{exc} Let $\1$ be the unit type. Show that its identity types are contractible.
+\end{exc}
+
+\part*{August 1: Propositions, sets, and general truncation levels}
+
+We now formally study propositions in homotopy type theory.
+
+\section*{Propositions}
+
+\begin{defn} A type $A$ is a \textbf{proposition} if all of its identity types are contractible: i.e., if it comes with a term of type
+\[ \is{prop}(A) \coloneq \prod_{x,y:A} \is{contr}(x=y).\]
+\end{defn}
+
+Given a universe $\UU$ we define $\Prop$ to be the type of all small propositions:
+\[ \Prop \coloneq \sum_{X: \UU}\isprop(X).\]
+
+\begin{ex} We have shown that identity types of contractible types are contractible. Thus contractible types are propositions.
+\end{ex}
+
+\begin{ex} The empty type is also a proposition, for ex-falso inhabits
+\[ \prod_{x,y: \emptyset} \iscontr(x=y).\]
+\end{ex}
+
+There are many equivalent ways to assert that a type is a proposition.
+
+\begin{prop} For a type $A$, the following are logically equivalent:
+\begin{enumerate}
+\item $A$ is a proposition.
+\item Any two terms of type $A$ can be identified: i.e., there is a dependent function in the type
+\[ \prod_{x,y:A} x=y.\]
+\item The type $A$ is contractible as soon as it is inhabited: i.e., there is a term of type $A \to \iscontr(A)$.
+\item The map $\term{const}_\star : A \to \1$ is an embedding.
+\end{enumerate}
+\end{prop}
+\begin{proof}
+(i) clearly implies (ii), by using the center of contraction. Assuming (ii) we have $p : \prod_{x,y:A} x= y$. Note for any $x$ that $p(x) : \prod_{y :A} x=y$ is a contracting homotopy onto $x$. Thus, we have a function
+\[ \lambda x. (x,p(x)) : A \to \iscontr(A).\]
+
+Next assume (iii) and consider a function $c : A\to \iscontr(A)$. To prove
+\[ \prod_{x,y :A} \isequiv (\ap_{\term{const}_\star} : (x=y) \to (\star = \star))\] it suffices to prove
+\[ A \to \left(\prod_{x,y :A} \isequiv (\ap_{\term{const}_\star} : (x=y) \to (\star = \star))\right)\]
+because then we can use this function $f$ applied to one of the two terms $x,y : A$ to get the data we want. But now our new goal allows us to assume we have a term $a:A$ and so it follows from our assumption that $A$ is contractible. Thus $\term{const}_\star : A \to \1$ is an equivalence and in particular an embedding. This proves (iv).
+
+Finally, if $\term{const}_\star : A \to \1$ is an embedding, then the types $(x=y)$ and $(\star=\star)$ are equivalent. The latter type is contractible so the former must be as well. This proves that (iv) implies (i).
+\end{proof}
+
+A useful feature of propositions is that logical equivalences become equivalences:
+
+\begin{prop} For propositions $P$ and $Q$
+\[ (P \simeq Q) \iff (P \iff Q).\]
+\end{prop}
+\begin{proof}
+Clearly we have $(P \simeq Q) \to (P \iff Q)$ so the content is in the converse. Given $f : P \to Q$ and $g : Q \to P$ we obtain homotopies $f \circ g \sim \id$ and $g \circ f \sim \id$ using the fact that any two elements in $P$ and $Q$ can be identified. Thus, $f$ and $g$ are equivalence inverses.
+\end{proof}
+
+Furthermore, the property of being a proposition is equivalence invariant:
+
+\begin{lem} Suppose $e : A\simeq B$. Then
+\[ \isprop{A} \iff \isprop{B}.\]
+\end{lem}
+
+\begin{proof}
+Since $e$ is an equivalence, $e$ is an embedding, meaning that $\ap_e : (x=_Ay) \to (e(x)=_B e(y))$ is an equivalence. Now if $B$ is a proposition then $(e(x)=_Be(y))$ is contractible which then implies that $(x=_Ay)$ is contractible. Thus $\isprop(B) \to \isprop(A)$. The converse is proven similarly using the inverse equivalence to $e$.
+\end{proof}
+
+
+\section*{Sets}
+
+\begin{defn} A type $A$ is a \textbf{set} if its identity types are propositions:
+\[ \is{set}(A) \coloneq \prod_{x,y:A} \isprop(x=y).\]
+\end{defn}
+
+\begin{ex} The type of natural numbers is a set, since we have $(m=n) \simeq \Eq_\bN(m,n)$ and, by induction, the latter types are propositions.
+\end{ex}
+
+\begin{thm} For a type $A$ the following are logically equivalent:
+\begin{enumerate}
+\item $A$ is a set.
+\item $A$ satisfies \textbf{axiom K}: that is, $A$ comes with a term in the type
+\[ \type{axiom-K}(A) \coloneq \prod_{x:A} \prod_{p : x =x} \refl_x = p.\]
+\end{enumerate}
+\end{thm}
+\begin{proof}
+If $A$ is a set then $x=x$ is a proposition so any two terms in it can be identified.
+
+Conversely, if axiom-K holds then for any $p,q : x =y$ we can identify $p \cdot q^{-1}$ and $\refl_x$ and it follows that $p=q$ by composing identifications:
+\[ p = p \cdot \refl_y = p \cdot (q^{-1} \cdot q) = (p \cdot q^{-1}) \cdot q = \refl_x \cdot q = q.\] This proves that $x=y$ is a proposition so $A$ must be a set.
+\end{proof}
+
+The following result can be used to prove that a type $A$ is a set.
+
+\begin{thm} Let $A$ be a type and suppose $R \colon A \to A \to \UU$ satisifes:
+\begin{enumerate}
+\item Each $R(x,y)$ is a proposition.
+\item $R$ is reflexive, witnessed by $\rho : \prod_{x:A} R(x,x)$.
+\item There is a map $R(x,y) \to (x=y)$ for all $x,y:A$.
+\end{enumerate}
+Then any family of maps $\prod_{x,y:A} (x=y) \to R(x,y)$ is a family of equivalences and $A$ must be a set.
+\end{thm}
+\begin{proof}
+By hypothesis we have terms $f : \prod_{x,y:A} R(x,y) \to (x=y)$ and also $\term{path-ind}(\rho) : \prod_{x,y} (x=y) \to R(x,y)$. Since each $R(x,y)$ is a proposition we have a homotopy $\term{path-ind}(\rho)(x,y) \circ f(x,y) \sim \id_{R(x,y)}$ proving that $R(x,y)$ is a retract of $x=y$. Thus, $\sum_{y:A} R(x,y)$ is a retract of $\sum_{y:A} x=y$. Since the latter type is contractible the former must be too. Thus any family of maps $\prod_{y:A}(x=y) \to R(x,y)$ is a family of equivalences (since its totalization is a map between contractible types and thus an equivalence).
+
+But now we know that the identity types of $A$ are propositions so $A$ must be a set.
+\end{proof}
+
+Recall a type $A$ has decidable equality  if the identity type $x=_Ay$ is decidable for every $x, y : A$, meaning
+\[ \prod_{x,y:A} (x=y) + \neg (x=y).\]
+
+\begin{thm}[Hedberg] Any type with decidable equality is a set.
+\end{thm}
+\begin{proof} Let $d : \prod_{x,y:A} (x=y) + \neg (x=y)$ be a witness to the fact that $A$ has decidable equality and let $\UU$ be a universe containing $A$.
+
+Define a type family $R'(x,y) : ((x=y) +\neg(x=y)) \to \UU$ by
+\[ R'(x,y, \inl(p)) \coloneq \1 \quad R'(x,y, \inr(p)) \coloneq \emptyset.\]
+Note that this is a family of propositions. Now define $R(x,y) \coloneq R'(x,y,d(x,y))$. This defines a family of propositions $R : A \to A \to \UU$. This is a reflexive binary relation so the apply the previous theorem to conclude that $A$ is a set we must only show that $R$ implies identity.
+
+Since $R$ is defined to be an instance of $R'$ it suffices to construct a function for each $q : (x=y) + \neg(x=y)$ that proves $f(q) : R'(x,y,q) \to (x=y)$. We have this by
+\[ f(\inl(p),r) \coloneq p \qquad f(\inr(p),r) \coloneq \term{ex-falso}(r). \qedhere\]
+\end{proof}
+
+\section*{General truncation levels}
+
+So far we have defined:
+\begin{align*}
+\iscontr(A) &\coloneq \sum_{a:A} \prod_{x:A} a=x\\
+\isprop(A) &\coloneq \prod_{x,y:A} \iscontr(x=y) \\
+\is{set}(A) &\coloneq \prod_{x,y:A} \isprop(x=y)
+\end{align*}
+These define the first few layers of the hierarchy of truncation levels. This hierarchy starts at level -2 with the contractible types and continues at level -1 with the propositions. This makes level 0 the sets, which are typically thought of as ``0-dimensional.''
+
+Let $\bT$ be the inductive type with constructors $-2_\bT : \bT$ and $\term{succ}_\bT : \bT \to \bT$. The natural inclusion $i \colon \bN \to \bT$ is defined recursively by $i(0_\bN) \coloneq \term{succ}_\bT (\term{succ}_\bT (-2_\bT))$ and $i(\suc(n)) \coloneq \term{succ}_\bT (i(n))$. We abbreviate by writing $-2,-1,0,1,2,\ldots$ for the first few terms of $\bT$ when the context is clear.
+
+\begin{defn} Define $\is{trunc} : \bT \to \UU \to \UU$ recursively by
+\[ \is{trunc}_{-2}(A) \coloneq \iscontr(A) \qquad \is{trunc}_{k+1}(A) \coloneq \prod_{x,y:A} \is{trunc}_k(x=_Ay).\]
+When $\is{trunc}_k(A)$ holds we say $A$ is \textbf{$k$-truncated} or is a \textbf{$k$-type}. You can prove, inductively in $k : \bT$, that this is logically independent of the universe being used to define $\is{trunc}_k(A)$.
+\end{defn}
+
+
+
+For $k \geq 0$, we may also say that $A$ is a \textbf{proper $k$-type} if $\is{trunk}_k(A)$ holds but $\is{trunk}_{k-1}(A)$ does not.
+
+
+
+Given a universe $\UU$, we may also define a universe of $k$-truncated types by
+\[ \UU^k \coloneq \sum_{X:\UU} \is{trunc}_k(X).\]
+
+
+The truncation levels are successively contained in one another:
+
+\begin{prop} If $A$ is a $k$-type then $A$ is also a $k+1$-type.
+\end{prop}
+\begin{proof}
+We use induction on $k : \bT$. In the base case, we have shown already that contractible types are propositions. For the inductive step, note that if any $k$-type is a $k+1$-type then this applies to show that the identity types of a $k+1$-type, which are known to be $k$-types, are also $k+1$-types. This proves that any $k+1$-type is a $k+2$-type.
+\end{proof}
+
+In particular:
+
+\begin{cor} If $A$ is a $k$-type its identity types are also $k$-types.
+\end{cor}
+
+General truncation levels are stable under equivalence:
+
+\begin{prop} If $e : A \simeq B$ and $B$ is a $k$-type so is $A$.
+\end{prop}
+\begin{proof}
+We know this for contractible types, which is the base case. For the inductive step, $e: A \simeq B$ provides an equivalence $\ap_e :(x=y) \to (e(x)=e(y))$ for any $x,y:A$. If $B$ is a $k+1$-type its identity types are $k$-types so the inductive hypothesis implies that $(x=y)$ is also a $k$-type. This proves that $A$ is a $k+1$-type.
+\end{proof}
+
+A similar argument shows:
+
+\begin{cor} If $f \colon A \to B$ is an embedding and $B$ is a $k+1$-type, then so is $A$.
+\end{cor}
+
+Our contractible types came with an analogous notion of contractible maps, aka equivalences, whose fibers are contractible types. We'll now extend these notions to the higher truncation levels, paying particular attention to level -1 where contractible types are replaced by propositions.
+
+
+\section*{Subtypes}
+
+Now that we know about propositions we can say that a type family $P \colon A \to \UU$ is a ``predicate'' if for each $a :A$, $P(a)$ is a proposition. In other words, predicates are type families $P \colon A \to \Prop$. Other terminology is commonly in use in this situation.
+
+\begin{defn} A type family $B$ over $A$ is a \textbf{subtype} of $A$ if for each $x:A$, $B(x)$ is a proposition. In this situation we say that $B(x)$ is a \textbf{property} of $x:A$.
+\end{defn}
+
+We'll show that for subtypes $B$ over $A$ the map $\pr_1 \colon \sum_{x:A} B(x) \to A$ is an embedding. It follows, then, that $(x,y) = (x',y')$ if and only if $x=_Ax'$.
+
+\begin{thm} For $f : A \to B$ the following are logically equivalent:
+\begin{enumerate}
+\item $f$ is an embedding.
+\item $\fib_f(b)$ is a proposition for all $b : B$
+\end{enumerate}
+\end{thm}
+\begin{proof}
+By the fundamental theorem of identity types, $f$ is an embedding if and only if $\sum_{x:A}f(x)=_B f(y)$ is contractible for each $y :A$. Thus $f$ is an embedding iff $\fib_f(f(y))$ is contractible for each $y : A$. If $b:B$ and $p : f(y) = b$ then transport defines an equivalence
+\[ \fib_f(f(y)) \simeq \fib_f(b).\]
+Thus $f$ is an embedding iff $\fib_f(b)$ is contractible for each $b : B$ equipped with $p : f(y) = b$ for some $y:A$. This latter condition may be re-expressed as \[ \fib_f(b) \to \iscontr(\fib_f(b)),\]
+which asserts that each $\fib_f(b)$ is a proposition.
+\end{proof}
+
+\begin{cor} For any family $B : A \to \UU$ the following are logically equivalent:
+\begin{enumerate}
+\item $\pr_1 \colon \sum_{x:A} B(x) \to A$ is an embedding.
+\item $B(x)$ is a proposition for each $x:A$.
+\end{enumerate}
+\end{cor}
+\begin{proof}
+Since $\fib_{\pr_1}(x) \simeq B(x)$ this follows immediately from the previous theorem.
+\end{proof}
+
+\section*{Truncated maps}
+
+\begin{defn} A map $f \colon A \to B$ is \textbf{$k$-truncated} if its fibers are $k$-truncated.
+\end{defn}
+
+We have seen that the -2-truncated maps are the equivalences, while the -1-truncated maps are the embeddings. Our final theorem generalizes this to higher truncation levels.
+
+\begin{thm} For $f \colon A \to B$ the following are logically equivalent:
+\begin{enumerate}
+\item $f$ is $(k+1)$-truncated.
+\item For each $x,y:A$, $\ap_f :(x=y) \to (f(x)=f(y))$ is $k$-truncated.
+\end{enumerate}
+\end{thm}
+\begin{proof}
+Both directions use the characterization of identity types of fibers:
+\[ ((x,p) =_{\fib_f(b)}(y,q) ) \simeq \sum_{\alpha: x=y} p = \ap_f(\alpha) \cdot q.\]
+
+The first statement is about identity types of fibers so consider $s,t : \fib_f(b)$.  We claim there is an equivalence \[ (s=t) \simeq \fib_{\ap_f}(\pr_2(s)\cdot \pr_2(t)^{-1}).\] By $\Sigma$-induction we can construct this for pairs $(x,p), (y,q) : \fib_f(b)$ for which we calculate
+\begin{align*} ((x,p)=(y,q)) &\simeq \sum_{\alpha : x= y} p = \ap_f(\alpha)\cdot q  \\ &\simeq \sum_{\alpha:x=y} \ap_f(\alpha)\cdot q = p \\ &\simeq \sum_{\alpha :x=y} \ap_f(\alpha) = p \cdot q^{-1} \\
+&\eqcolon \fib_{\ap_f}(p\cdot q{^{-1}}).
+\end{align*}
+It follows that if $\ap_f$ is $k$-truncated then each identity type $(s=t)$ of $\fib_f(b)$ is equivalent to a $k$-truncated type and thus the fibers $\fib_f(b)$ are $k+1$-types, which means that the map $f$ is $k+1$-truncated.
+
+For the converse, we have an equivalence between $\fib_{\ap_f}(p)$ and the identity type $(x,p) =_{\fib_f(f(y))}(y,\refl_{f(y)})$. So if $f$ is $(k+1)$-truncated these fibers are $k+1$-truncated and thus  their identity types are $k$-types. This proves that the fiber $\fib_{\ap_f}(p)$ is $k$-truncated so the map $\ap_f$ is $k$-truncated.
+\end{proof}
+
+
+\part*{August 5: Function extensionality \& Universal properties}
+
+
+\section*{Function extensionality}
+
+The function extensionality principle characterizes the identity type of an arbitrary dependent function type, asserting that the type $f=g$ of identifications between dependent functions $f,g : \prod_{x:A} B(x)$ is equivalent to the type of homotopies $f \sim g$. It has several equivalent forms:
+
+\begin{prop} For a type family $B : A \to \UU$ the following are logically equivalent:
+\begin{enumerate}
+\item The \textbf{function extensionality principle holds} for $f,g : \prod_{x:A}B(x)$: the family of maps
+\[ \term{htpy-id} : (f=g) \to (f \sim g)\]
+defined by sending $\refl$ to $\term{refl-htpy}$ is a family of equivalences.
+\item For any $f : \prod_{x:A}B(x)$, the total space
+\[ \sum_{g : \prod_{x:A}B(x)} f \sim g\]
+is contractible with $(f, \term{refl-htpy}_f)$ as its center of contraction.
+\item The principle of \textbf{homotopy induction} holds: for any family of types $P$ depending on $f,g : \prod_{x:A}B(x)$ and $H : f \sim g$ the evaluation function
+\[ \ev\colon \left( \prod_{f,g : \prod_{x:A}B(x)} \prod_{H : f \sim g} P(f,g,H) \right) \to \prod_{f : \prod_{x:A}B(x)} P(f,f, \term{refl-htpy}_f)\]
+has a section.
+\end{enumerate}
+\end{prop}
+\begin{proof}
+This follows by applying the fundamental theorem of identity types to the type $\prod_{x:A}B(x)$, term $f : \prod_{x:A}B(x)$, and type family $g : \prod_{x:A}B(x) \vdash f \sim g \univ$.
+\end{proof}
+
+A fourth equivalent condition is more surprising because it appears to express only a weak function extensionality principle.
+
+\begin{thm} For any universe $\UU$ the following are logically equivalent:
+\begin{enumerate}
+\item The \textbf{function extensionality principle} holds in $\UU$: for any type family $B$ over $A$ and dependent functions the map
+\[ \term{htpy-id} : (f=g) \to (f \sim g)\]
+is an equivalence.
+\item The \textbf{weak function extensionality principle} holds in $\UU$:  for any type family $B$ over $A$ one has
+\[ \left( \prod_{x:A} \is{contr}(B(x)) \right) \to \is{contr}\left( \prod_{x:A}B(x)\right).\]
+\end{enumerate}
+\end{thm}
+\begin{proof}
+Assume (i) and suppose each fiber $B(x)$ is contractible with center of contraction $c(x)$ and contracting homotopy $C_x : \prod_{y : B(x)} c(x) = y$. Define $c = \lambda x. c(x)$ to be the center of contraction of $\prod_{x:A}B(x)$. For the contraction we require a term of type
+\[ \prod_{f : \prod_{x : A}B(x)} c =f.\] By function extensionality,  $(c \sim f) \to (c=f)$ so it suffices to construct a term of type $c \sim f \coloneq \prod_{x:A} c(x)= f(x)$ and $\lambda x. C_x(f(x))$ is just such a term.
+
+For the converse, assume (ii). By the previous result it suffices to show that the type
+\[ \sum_{g : \prod_{x:A}B(x)} f \sim g\]
+is contractible. Note we have a section-retraction pair:
+\[ \left(\sum_{g : \prod_{x:A}B(x)} f \sim g \right) \xrightarrow{s} \left( \prod_{x:A}\sum_{y:B(x)} f(x) = y\right) \xrightarrow{r}
+\left(\sum_{g : \prod_{x:A}B(x)} f \sim g \right) \]
+defined by
+\[ s \coloneq \lambda (g,H). \lambda x.(g(x),H(x)) \quad \text{and} \quad r \coloneq \lambda p. (\lambda x. \pr_1(p(x)), \lambda x. \pr_2(p(x))).\]
+The composite is homotopic to the identity function by the computation rules for $\Sigma$ and $\Pi$-types. Here the central type is a product of contractible types so must be contractible by (ii). Since retracts of contractible types are contractible, the claim follows.
+\end{proof}
+
+Henceforth, we will assume the function extensionality principle as an axiom:
+
+\begin{ax}[function extensionality] For any type family $B$ over $A$ and any pair of dependent functions $f,g : \prod_{x:A}B(x)$ the map
+\[ \term{htpy-id} : (f=g) \to (f \sim g)\]
+is an equivalence, with inverse $\term{id-htpy}$.
+\end{ax}
+
+That is, we add the following rule to type theory:
+\[
+\inferrule{ \Gamma, x:A \vdash B(x)\univ \\ \Gamma \vdash f : \prod_{x:A}B(x) \\ \Gamma \vdash g : \prod_{x:A}B(x)}
+{ \Gamma \vdash \term{funext} : \is{equiv}(\term{htpy-id}_{f,g})}
+\]
+
+There are myriad consequences of the function extensionality axiom. Firstly:
+
+\begin{thm} For any type family $B$ over $A$ one has
+\[ \left( \prod_{x:A} \is{trunc}_k(B(x)) \right) \to \is{trunc}_k\left( \prod_{x:A}B(x)\right).\]
+\end{thm}
+\begin{proof}
+The theorem states that $k$-types are closed under arbitrary dependent products. We prove this by induction on $k \geq -2$. The base case is the weak function extensionality principle.
+
+For the inductive step assume $k$-types are closed under products and consider a family $B$ of $(k+1)$-types. To show that $\prod_{x:A}B(x)$ is $(k+1)$-truncated we must show that $f=g$ is $k$-truncated for every $f,g : \prod_{x:A}B(x)$. By function extensionality this is equivalent to the type $f \sim g \coloneq \prod_{x:A} f(x)=g(x)$ which is defined to be a dependent product of $k$-truncated types and thus is $k$-truncated by hypothesis. Since $k$-truncated types are closed under equivalence, the result follows.
+\end{proof}
+
+For a non-dependent family we conclude that:
+\begin{cor} Suppose $B$ is a $k$-type. Then for any type $A$, the type of functions $A \to B$ is a $k$-type.
+\end{cor}
+
+In particular, $\neg A$ is a proposition for any type $A$!
+
+
+\section*{The type theoretic axiom of choice}
+
+There's a result that's sometimes called the ``type theoretic axiom of choice'' that is just true, asserting that $\Pi$-types distribute over $\Sigma$-types. We'll now give a proof.
+
+\begin{thm} For any family of types $x :A, y : B(x) \vdash C(x,y) \univ$ the map
+\[ \term{choice} : \left(\prod_{x:A}\sum_{y:B(x)}C(x,y) \right) \to \left( \sum_{f: \prod_{x:A}B(x)} \prod_{x:A} C(x,f(x))\right)\]
+defined by
+\[ \term{choice}(h) \coloneq (\lambda x. \pr_1(h(x)), \lambda x.\pr_2(h(x)))\]
+is an equivalence.
+\end{thm}
+
+Consequently, whenever we have types $A$ and $B$ and a type family $C$ over $B$ there is an equivalence
+\[ \left( A \to \sum_{y:B}C(y) \right) \simeq \left( \sum_{f:A \to B} \prod_{x:A} C(f(x))\right)\]
+
+\begin{proof}
+Define the inverse map $\term{choice}^{-1}$ by
+\[ \term{choice}^{-1}(f,g) \coloneq \lambda x.(f(x).g(x)).\]
+For the first homotopy it suffices to define an identification $\term{choice}(\term{choice}^{-1}(f,g)) = (f,g)$. The left-hand side computes to
+\[ \term{choice}(\term{choice}^{-1}(f,g))  \doteq \term{choice}(\lambda x.(f(x).g(x))) \doteq (\lambda x.f(x),\lambda x.g(x))\]
+which is definitely equal to the right-hand side by the computation rules for function types.
+
+For the second homotopy, we require an identification $\term{choice}^{-1}(\term{choice}(h)) = h$. The left-hand side computes to
+\[ \term{choice}^{-1} (\lambda x. \pr_1(h(x)), \lambda x.\pr_2(h(x))) \doteq \lambda x.(\pr_1(h(x)), \pr_2(h(x))).\]
+We do not have a definitional equality relating $h(x)$ and $(\pr_1(h(x)), \pr_2(h(x)))$ but in our characterization of the identity type of $\Sigma$-types we do have an identification between them called $\term{eq-pair}(\refl,\refl)$. By function extensionality, the homotopy $\lambda x. \term{eq-pair}(\refl,\refl) : \term{choice}^{-1}(\term{choice}(h))\sim h$ can be turned into an identification and thus a homotopy $\term{choice}^{-1} \circ \term{choice} \sim \id$.
+\end{proof}
+
+\section*{Universal properties}
+
+More generally, the function extensionality axiom allows us to prove universal properties, which characterize maps out of or into a given type, and characterize that type up to equivalence. Some examples follow.
+
+In our first example, we consider the maps out of $\Sigma$-types. The universal property states that the map
+\[ \term{ev-pair} : \left( \left( \sum_{x:A}B(x)\right) \to C \right) \to \left( \prod_{x:A}B(x) \to C \right)\]
+given by $f \mapsto \lambda x.\lambda y. f(x,y)$ is an equivalence for any type $C$. More generally, the type $C$ might depend on the type $\sum_{x:A}B(x)$, so we prove the result in that form.
+
+\begin{thm}[universal property of \texorpdfstring{$\Sigma$}{Sigma}-types]
+Let $B$ be a type family over $A$ and let $C$ be a type family over $\sum_{x:A}B(x)$. Then the map
+\[ \term{ev-pair} : \left( \sum_{z: \sum_{x:A}B(x)} C(z) \right) \to \left( \prod_{x:A}\prod_{y:B(x)} C(x,y) \right)\]
+given by $f \mapsto \lambda x.\lambda y. f(x,y)$ is an equivalence
+\end{thm}
+\begin{proof}
+The inverse map is given by the induction principle for $\Sigma$-types:
+\[ \ind_\Sigma : \left( \prod_{x:A}\prod_{y:B(x)} C(x,y) \right) \to \left( \sum_{z: \sum_{x:A}B(x)} C(z) \right) .\]
+By the computation rule for $\Sigma$ types, we have the homotopy
+\[ \term{refl-htpy} : \term{ev-pair} \circ\ind_\Sigma \sim \id,\]
+which shows that $\ind_\Sigma$ is a section of $\term{ev-pair}$.
+
+Function extensionality is used to construct the other homotopy. To define a homotopy $\ind_\Sigma \circ \term{ev-pair} \sim \id$ requires identifications $\ind_\Sigma(\lambda x. \lambda y. f(x,y)) = f$. By function extensionality it suffices to show that
+\[ \prod_{z: \sum_{x:A}B(x)} \ind_\Sigma(\lambda x. \lambda y. f(x,y))(t) = f(t).\] By $\Sigma$-induction it suffices to prove this for pairs in which case we require identifications
+\[ \ind_\Sigma(\lambda x. \lambda y. f(x,y)(a,b) = f(a,b),\]
+but this holds definitionally by the computation rule for $\Sigma$ types.
+\end{proof}
+
+In the non-dependent case we have as a corollary:
+
+\begin{cor} For types $A$ and $B$ and $C$,
+\[ \term{ev-pair} : (A \times B \to C) \to (A \to B \to C)\]
+given by $f \mapsto \lambda a. \lambda b. f(a,b)$ is an equivalence. \qed
+\end{cor}
+
+\subsection*{The universal property of identity types}
+
+The universal property for identity types can be understood as an (undirected) type theoretic version of the Yoneda lemma. In the most familiar case, when $B$ is a type family over $A$, it says that the map
+\[ \term{ev-refl} : \left( \prod_{x:A}(a=x) \to B(x) \right) \to B(a)\]
+given by $f \mapsto f(a,\refl_a)$ is an equivalence. As before, though, it generalizes to a dependent version of the undirected Yoneda lemma, where the type family $B$ is allowed to depend on $x :A$ and $p: a =x$.
+
+\begin{thm} Consider a type $A$, a term $a :A$, and a type family $B(x,p)$ over $x:A$ and $p: a=x$. Then the map
+\[ \term{ev-refl} : \left( \prod_{x:A}\prod_{p:a=x} B(x,p) \right) \to B(a,\refl_a)\]
+defined by $f \mapsto f(a,\refl_a)$ is an equivalence.
+\end{thm}
+\begin{proof}
+The inverse map is
+\[ \pathind_a : B(a,\refl_a) \to \left( \prod_{x:A}\prod_{p:a=x} B(x,p) \right),\]
+which is a section by the computation rule of the path induction principle.
+
+For the other homotopy $\pathind_a \circ \term{ev-refl} \simeq \id$ let $f : \prod_{x:A} \prod_{p:a=x}B(x,p)$. To prove that
+$\pathind_a(f(a,\refl_a)) = f$ we apply function extensionality twice so that it suffices to show that
+\[ \prod_{x:A} \prod_{p:a=x} \pathind_a(f(a,\refl_a),x,p) = f(x,p).\] This follows from path induction on $p$ since $\pathind_a(f(a,\refl_a),a,\refl_a) \doteq f(a,\refl_a)$ by the computation rule for path induction.
+\end{proof}
+
+\begin{comment}
+\subsection*{Composing with equivalences}
+
+Another useful consequence is the fact that $f : A \to B$ is an equivalence if and only if precomposing with $f$ is an equivalence.
+
+\begin{thm} For any map $f \colon A \to B$ the following are logically equivalent:
+\begin{enumerate}
+\item $f$ is an equivalence
+\item For any type family $P$ over $B$ the map
+\[ \left( \prod_{b:B} P(b) \right) \to \left( \prod_{a:A} P(f(a))\right)\]
+given by $h \mapsto h \circ f$ is an equivalence.
+\item For any type $C$ the map
+\[ (B \to C) \to (A \to C)\]
+given by $g \mapsto g \circ f$ is an equivalence.
+\end{enumerate}
+\end{thm}
+\begin{proof}
+(ii) immediately implies (iii) by choosing a constant family.
+
+Assuming (iii) we can take $C=A$ and use the fact that the fibers of the equivalence
+\[ - \circ f : (B \to A) \to (A \to A)\]
+are contractible to find a point $(h, H) : \fib_{-\circ f}(\id_A) \doteq \sum_{h:B \to A} h \circ f = \id_A$.
+To see that $h$ is also a section of $f$ we choose $C=B$ and use the fiber of the equivalence
+\[ -\circ f : (B \to B) \to (A \to B)\]
+over $f$. We have $(\id_B,\refl_f)$ in this fiber but also the point $(f \circ h, fH)$ where $fH$ is the name for the identification derived from the whiskered homotopy $f \cdot H : f \circ h \circ f \sim f$. Since the fiber is contractible, we must have an identification $f \circ h = \id_B$ as desired.
+
+Thus, it remains to prove that (i) implies (ii) which is the hard part. The first step is to promote the equivalence $f$ to a coherently invertible equivalence, involving $g : B \to A$, homopies $G$ and $H$, and a higher homotopy $K : G \cdot f \sim f \cdot H$. We leave the details to \cite[13.4.1]{Rijke}.
+\end{proof}
+
+\subsection*{The strong induction principle of \texorpdfstring{$\bN$}{the natural numbers}}
+
+A final application of function extensionality is to prove the strong induction principle for the natural numbers. We give the statement and leave the proof to \cite[\S13.5]{Rijke}. Function extensionality is needed to give the computation rules.
+
+\begin{thm} Consider a type family $P$ over $\bN$ with $p_0 : P(0)$ and
+\[ p_S : \prod_{n: \bN} \left( \prod_{m: \bN}(m \leq n) \to P(m)\right) \to P(n+1).\]
+Then there is a dependent function
+\[ \term{strong-ind}_\bN(p_0,p_S) : \prod_{n : \bN}P(n) \]
+so that $\term{strong-ind}_\bN(p_0,p_S,0)  = 0$ and
+\[ \term{strong-ind}_\bN(p_0,p_S, n+1) = p_S(n, \lambda m.\lambda p.\term{strong-ind}_\bN(p_0,p_s,m)).\]
+\end{thm}
+\end{comment}
+
+\subsection*{Univalence}
+
+We have now characterized the identity types of every family of types that we have introduced with a single exception. It remains to identify the identity types of the universe $\UU$. As with the case of identity types of dependent function types, we cannot prove a characterization in type theory. Instead, we need an axiom. What differentiates \emph{homotopy} type theory from Martin-L\"{o}f's dependent type theory is our adoption of Voevodsky's \emph{univalence axiom} for this purpose.
+
+\begin{defn} A universe
+$\UU$ is \textbf{univalent} if for any $A, B : \UU$, the map
+\[ \term{equiv-eq} : (A = B) \to (A \simeq B)\]
+\end{defn}
+
+In other words, univalence asserts that the family $\lambda A,\lambda B, A \simeq B : \UU \to \UU \to \UU$ with the identity equivalences gives an identity system for $\UU$.
+
+\begin{exc} Apply the fundamental theorem of identity types, to obtain various equivalent forms of the univalence axiom.
+\end{exc}
+
+As Voevodsky first observed, univalence implies function extensionality, through a non-obvious proof. So the applications we've seen of function extensionality, to prove various universal properties, can also be understood as consequence of the univalence axiom.
+
+
+\bibliographystyle{alpha}
+\begin{thebibliography}{UF}
+
+
+\bibitem[R]{Rijke} Egbert Rijke, \emph{Introduction to Homotopy Type Theory}, 2022.
+
+
+\end{thebibliography}
+
+
+\end{document}
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% TeX-master: t
+%%% End:
