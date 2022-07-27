@@ -5,7 +5,7 @@ open import new-prelude
 open import Lecture5-notes
 open import Solutions4 using (ap-!; to-from-base; to-from-loop; s2c; c2s; susp-func)
 
-module Solutions5-Tom where
+module Solutions5-tom where
 ```
 
 # 1 point and 2 point circles are equivalent (⋆)
@@ -35,6 +35,43 @@ to-from = S1-elim (\x → from (to x) ≡ x) to-from-base p
 
 circles-equivalent : S1 ≃ Circle2
 circles-equivalent = improve (Isomorphism to (Inverse from to-from from-to))
+```
+
+# Reversing the circle (⋆⋆)
+
+Define a map S1 → S1 that "reverses the orientation of the circle",
+i.e. sends loop to ! loop.
+
+```agda
+rev : S1 → S1
+rev = S1-rec base (! loop)
+```
+
+Prove that rev is an equivalence.  Hint: you will need to state and prove
+one new generalized "path algebra" lemma and to use one of the lemmas from
+the "Functions are group homomorphism" section of Lecture 4's exercises.
+```agda
+rev-loop : ap rev loop ≡ ! loop
+rev-loop = S1-rec-loop base (! loop)
+
+!-involutive : {X : Type} {x y : X} (p : x ≡ y) → ! (! p) ≡ p
+!-involutive (refl _) = refl _
+
+rev-equiv : is-equiv rev
+rev-equiv = Inverse rev h rev h
+ where
+  h : rev ∘ rev ∼ id
+  h = S1-elim (\ x → rev (rev x) ≡ x) (refl base) p
+   where
+    p : refl base ≡ refl base [ (\x -> rev (rev x) ≡ x) ↓ loop ]
+    p = PathOver-roundtrip≡ rev rev loop q
+     where
+      q = refl base ∙ ap rev (ap rev loop) ≡⟨ ∙unit-l _ ⟩
+          ap rev (ap rev loop)             ≡⟨ ap (ap rev) rev-loop ⟩
+          ap rev (! loop)                  ≡⟨ ap-! loop ⟩
+          ! (ap rev loop)                  ≡⟨ ap ! rev-loop ⟩
+          ! (! loop)                       ≡⟨ !-involutive loop ⟩
+          loop                             ∎
 ```
 
 # Circles to torus (⋆⋆)
@@ -83,6 +120,13 @@ circles-to-torus' : S1 × S1 → Torus
 circles-to-torus' (x , y) = circles-to-torus x y
 ```
 
+**Below are some "extra credit" exercise if you want more to do.  These
+are (even more) optional: nothing in the next lecture will depend on you
+understanding them.  The next section (H space) is harder code but uses
+only the circle, whereas the following sections are a bit easier code
+but require understanding the suspension type, which we haven't talked
+about too much yet.**
+
 # H space
 
 The multiplication operation on the circle discussed in lecture is part
@@ -96,8 +140,8 @@ mult-unit-l : (y : S1) → mult base y ≡ y
 mult-unit-l y = refl _ -- Choosing (refl _) here helps later on.
 ```
 
-(⋆⋆) Showing that base is a right unit is more involved and requires a two simpler lemmas.
-
+(⋆) Because we'll need it in a second, show that ap distributes over
+function composition:
 ```agda
 ap-∘ : ∀ {l1 l2 l3 : Level} {A : Type l1} {B : Type l2} {C : Type l3}
        (f : A → B) (g : B → C)
@@ -105,7 +149,22 @@ ap-∘ : ∀ {l1 l2 l3 : Level} {A : Type l1} {B : Type l2} {C : Type l3}
        (p : a ≡ a')
      → ap (g ∘ f) p ≡ ap g (ap f p)
 ap-∘ _ _ (refl _) = refl _
+```
 
+(⋆⋆) Suppose we have a curried function f : S1 → A → B.  Under the
+equivalence between paths in S1 × A and pairs of paths discussed in
+Lecture 3, we can then "apply" (the uncurried version of) f to a pair of
+paths (p : x ≡ y [ S1 ] , q : z ≡ w [ A ]) to get a path (f x z ≡ f y w
+[ B ]).  In the special case where q is reflexivity on a, this
+application to p and q can be simplified to ap (\ x → f x a) p : f x a ≡
+f y a [ B ].
+
+Now, suppose that f is defined by circle recursion.  We would expect
+some kind of reduction for applying f to the pair of paths (loop , q) ---
+i.e. we should have reductions for *nested* pattern matching on HITs.
+In the case where q is reflexivity, applying f to the pair (loop , refl)
+can reduce like this:
+```agda
 S1-rec-loop-1 : ∀ {A B : Type} {f : A → B} {h : f ≡ f} {a : A}
                      →  ap (\ x → S1-rec f h x a) loop ≡ app≡ h a
 S1-rec-loop-1 {f = f} {h} {a} = ap (\ x → S1-rec f h x a) loop        ≡⟨ ap-∘ (S1-rec f h) (\ f → f a) loop ⟩
@@ -113,9 +172,10 @@ S1-rec-loop-1 {f = f} {h} {a} = ap (\ x → S1-rec f h x a) loop        ≡⟨ a
                                 ap (\ f → f a) h                      ≡⟨ refl _ ⟩
                                 app≡ h a                              ∎
 ```
+Prove this reduction using ap-∘ and the reduction rule for S1-rec on the loop.
 
-(⋆⋆⋆) Show that base is a right unit using the following PathOver lemma.
-
+(⋆⋆⋆) Show that base is a right unit for multiplication.  You will need
+a slightly different path-over lemma than before.
 ```agda
 PathOver-endo≡ : ∀ {A : Type} {f : A → A}
                  {a a' : A} {p : a ≡ a'}
