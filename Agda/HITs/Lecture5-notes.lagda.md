@@ -274,16 +274,23 @@ app≡ : {l1 l2 : Level} {A : Type l1} {B : A → Type l2} {f g : (x : A) → B 
 app≡ p x = ap (\ f → f x) p 
 
 postulate
-  λ≡β : {l1 l2 : Level} {A : Type l1} {B : A → Type l2} {f g : (x : A) → B x} → (h : f ∼ g) 
+  λ≡βinv : {l1 l2 : Level} {A : Type l1} {B : A → Type l2} {f g : (x : A) → B x} → (h : f ∼ g) 
       → app≡ (λ≡ h) ≡ h
+
+-- it's often more useful to have this as a homotopy
+λ≡β : {l1 l2 : Level} {A : Type l1} {B : A → Type l2} {f g : (x : A) → B x} → (h : f ∼ g) 
+      → app≡ (λ≡ h) ∼ h
+λ≡β h = app≡ (λ≡βinv h)
 
 full-funext : {l1 l2 : Level} {A : Type l1} {B : A → Type l2} {f g : (x : A) → B x}
             → is-equiv {A = f ≡ g} {B = f ∼ g} app≡
-full-funext = Inverse λ≡' λ≡η λ≡ λ≡β where
+full-funext = Inverse λ≡' λ≡η λ≡ λ≡βinv where
   postulate
     λ≡' : _
     λ≡η : _
 ```
+
+(If there is time.)
 
 # Univalence and the universal cover of the circle
 
