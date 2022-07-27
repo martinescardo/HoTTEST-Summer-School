@@ -1,6 +1,10 @@
-
 [Martin Escardo](Https://www.Cs.Bham.Ac.Uk/~mhe/).
 Notes originally written for the module *Advanced Functional Programming* of the [University of Birmingham](https://www.birmingham.ac.uk/index.aspx), UK.
+
+```agda
+{-# OPTIONS --without-K #-}
+module curry-howard where
+```
 
 
 # Propositions as types and basic Martin-Löf type theory

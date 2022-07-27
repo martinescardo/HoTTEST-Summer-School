@@ -152,7 +152,7 @@ bool-≡-char₁ = {!!}
 Using ex. 2, concldude that
 ```agda
 true≢false : ¬ (true ≡ false)
-true≢false = {!!}
+true≢false ()
 ```
 You can actually prove this much easier! How?
 
@@ -173,8 +173,10 @@ Consider the following predicate on types:
 has-bool-dec-fct : Type → Type
 has-bool-dec-fct A = Σ f ꞉ (A → A → Bool) , (∀ x y → x ≡ y ⇔ (f x y) ≡ true)
 ```
+
 Prove that
+
 ```agda
 decidable-equality-char : (A : Type) → has-decidable-equality A ⇔ has-bool-dec-fct A
-decidable-equality-char = {!!}
+decidable-equality-char = ?
 ```
