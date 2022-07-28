@@ -32,7 +32,7 @@ paradox.</p>
 <pre class="Agda"><a id="577" class="Symbol">{-#</a>  <a id="582" class="Keyword">OPTIONS</a> <a id="590" class="Pragma">--without-K</a> <a id="602" class="Pragma">--type-in-type</a> <a id="617" class="Symbol">#-}</a>
 <a id="621" class="Keyword">module</a> <a id="628" href="Russell.html" class="Module">Russell</a> <a id="636" class="Keyword">where</a>
 
-<a id="Type"></a><a id="643" href="Russell.html#643" data-type="Set₁" class="Function">Type</a> <a id="648" class="Symbol">=</a> <a id="650" href="Agda.Primitive.html#311" data-type="Set₁" class="Primitive">Set</a>
+<a id="Type"></a><a id="643" href="Russell.html#643" data-type="Set₁" class="Function">Type</a> <a id="648" class="Symbol">=</a> <a id="650" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Set</a>
 </pre>
 <p>We need some standard inductive types: Σ, ∅, and identity types.</p>
 <pre class="Agda"><a id="735" class="Keyword">data</a> <a id="Σ"></a><a id="740" href="Russell.html#740" data-type="(A : Type) → (A → Type) → Set" class="Datatype">Σ</a> <a id="742" class="Symbol">(</a><a id="743" href="Russell.html#743" class="Bound">A</a> <a id="745" class="Symbol">:</a> <a id="747" href="Russell.html#643" data-type="Set₁" class="Function">Type</a><a id="751" class="Symbol">)</a> <a id="753" class="Symbol">(</a><a id="754" href="Russell.html#754" class="Bound">B</a> <a id="756" class="Symbol">:</a> <a id="758" href="Russell.html#743" class="Bound">A</a> <a id="760" class="Symbol">→</a> <a id="762" href="Russell.html#643" data-type="Set₁" class="Function">Type</a><a id="766" class="Symbol">)</a> <a id="768" class="Symbol">:</a> <a id="770" href="Russell.html#643" data-type="Set₁" class="Function">Type</a> <a id="775" class="Keyword">where</a>

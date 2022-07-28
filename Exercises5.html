@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>HoTTEST Summer School 2022 Lecture Notes</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+</head>
+
+<body class="text-page">
+<main>
+<div id="post-toc-container" style="padding-left: 1em; padding-right: 1em;">
+
+  <article>
+
+<pre class="Agda"><a id="10" class="Symbol">{-#</a> <a id="14" class="Keyword">OPTIONS</a> <a id="22" class="Pragma">--rewriting</a> <a id="34" class="Pragma">--without-K</a> <a id="46" class="Pragma">--allow-unsolved-metas</a> <a id="69" class="Symbol">#-}</a>
+
+<a id="74" class="Keyword">open</a> <a id="79" class="Keyword">import</a> <a id="86" href="new-prelude.html" class="Module">new-prelude</a>
+<a id="98" class="Keyword">open</a> <a id="103" class="Keyword">import</a> <a id="110" href="Lecture5-notes.html" class="Module">Lecture5-notes</a>
+<a id="125" class="Keyword">open</a> <a id="130" class="Keyword">import</a> <a id="137" href="Solutions4.html" class="Module">Solutions4</a> <a id="148" class="Keyword">using</a> <a id="154" class="Symbol">(</a><a id="155" href="Solutions4.html#2239" data-type="(p : x ≡ y) → ap f (! p) ≡ ! (ap f p)" class="Function">ap-!</a><a id="159" class="Symbol">;</a> <a id="161" href="Solutions4.html#2862" data-type="from (to base) ≡ base" class="Function">to-from-base</a><a id="173" class="Symbol">;</a> <a id="175" href="Solutions4.html#2922" data-type="ap from (ap to loop) ≡ loop" class="Function">to-from-loop</a><a id="187" class="Symbol">;</a> <a id="189" href="Solutions4.html#5005" data-type="Susp Bool → Circle2" class="Function">s2c</a><a id="192" class="Symbol">;</a> <a id="194" href="Solutions4.html#4919" data-type="Circle2 → Susp Bool" class="Function">c2s</a><a id="197" class="Symbol">;</a> <a id="199" href="Solutions4.html#5241" data-type="(X → Y) → Susp X → Susp Y" class="Function">susp-func</a><a id="208" class="Symbol">)</a>
+
+<a id="211" class="Keyword">module</a> <a id="218" href="Exercises5.html" class="Module">Exercises5</a> <a id="229" class="Keyword">where</a>
+</pre>
+<h1 id="point-and-2-point-circles-are-equivalent">1 point and 2 point
+circles are equivalent (⋆)</h1>
+<p>In lecture, we defined maps between the one point circle (S1) and the
+two point circle (Circle2) and checked that the round-trip on Circle2 is
+the identity.</p>
+<p>Prove that the round-trip on S1 is the identity (use to-from-base and
+to-from-loop from the Lecture 4 exercises), and package all of these
+items up as an equivalence S1 ≃ Circle2.</p>
+<pre class="Agda"><a id="to-from"></a><a id="639" href="Exercises5.html#639" data-type="(x : S1) → from (to x) ≡ x" class="Function">to-from</a> <a id="647" class="Symbol">:</a> <a id="649" class="Symbol">(</a><a id="650" href="Exercises5.html#650" class="Bound">x</a> <a id="652" class="Symbol">:</a> <a id="654" href="Lecture4-notes.html#745" data-type="Set" class="Postulate">S1</a><a id="656" class="Symbol">)</a> <a id="658" class="Symbol">→</a> <a id="660" href="Lecture5-notes.html#6720" data-type="Circle2 → S1" class="Function">from</a> <a id="665" class="Symbol">(</a><a id="666" href="Lecture5-notes.html#6661" data-type="S1 → Circle2" class="Function">to</a> <a id="669" href="Exercises5.html#650" class="Bound">x</a><a id="670" class="Symbol">)</a> <a id="672" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="674" href="Exercises5.html#650" class="Bound">x</a>
+<a id="676" href="Exercises5.html#639" data-type="(x : S1) → from (to x) ≡ x" class="Function">to-from</a> <a id="684" class="Symbol">=</a> <a id="686" class="Hole">{!!}</a>
+
+<a id="circles-equivalent"></a><a id="692" href="Exercises5.html#692" data-type="S1 ≃ Circle2" class="Function">circles-equivalent</a> <a id="711" class="Symbol">:</a> <a id="713" href="Lecture4-notes.html#745" data-type="Set" class="Postulate">S1</a> <a id="716" href="Lecture5-notes.html#968" data-type="(A : Set l1) (B : Set l2) → Set (l1 ⊔ l2)" class="Record Operator">≃</a> <a id="718" href="Lecture4-notes.html#7873" data-type="Set" class="Postulate">Circle2</a>
+<a id="726" href="Exercises5.html#692" data-type="S1 ≃ Circle2" class="Function">circles-equivalent</a> <a id="745" class="Symbol">=</a> <a id="747" class="Hole">{!!}</a>
+</pre>
+<h1 id="reversing-the-circle">Reversing the circle (⋆⋆)</h1>
+<p>Define a map S1 → S1 that “reverses the orientation of the circle”,
+i.e. sends loop to ! loop.</p>
+<pre class="Agda"><a id="rev"></a><a id="891" href="Exercises5.html#891" data-type="S1 → S1" class="Function">rev</a> <a id="895" class="Symbol">:</a> <a id="897" href="Lecture4-notes.html#745" data-type="Set" class="Postulate">S1</a> <a id="900" class="Symbol">→</a> <a id="902" href="Lecture4-notes.html#745" data-type="Set" class="Postulate">S1</a>
+<a id="905" href="Exercises5.html#891" data-type="S1 → S1" class="Function">rev</a> <a id="909" class="Symbol">=</a> <a id="911" class="Hole">{!!}</a>
+</pre>
+Prove that rev is an equivalence. Hint: you will need to state and prove
+one new generalized “path algebra” lemma and to use one of the lemmas
+from the “Functions are group homomorphism” section of Lecture 4’s
+exercises.<br />
+<pre class="Agda"><a id="rev-equiv"></a><a id="1153" href="Exercises5.html#1153" data-type="is-equiv rev" class="Function">rev-equiv</a> <a id="1163" class="Symbol">:</a> <a id="1165" href="Lecture5-notes.html#699" data-type="(f : A → B) → Set (l1 ⊔ l2)" class="Record">is-equiv</a> <a id="1174" href="Exercises5.html#891" data-type="S1 → S1" class="Function">rev</a>
+<a id="1178" href="Exercises5.html#1153" data-type="is-equiv rev" class="Function">rev-equiv</a> <a id="1188" class="Symbol">=</a> <a id="1190" class="Hole">{!!}</a>
+</pre>
+<h1 id="circles-to-torus">Circles to torus (⋆⋆)</h1>
+<p>In the Lecture 4 exercises, you defined a map from the Torus to S1 ×
+S1. In this problem, you will define a converse map. The goal is for
+these two maps to be part of an equivalence, but we won’t prove that in
+these exercises.</p>
+<p>You will need to state and prove a lemma characterizing a path over a
+path in a path fibration. Then, to define the map S1 × S1 → Torus, you
+will want to curry it and use S1-rec and/or S1-elim on each circle.</p>
+<pre class="Agda"><a id="PathOver-path≡"></a><a id="1678" href="Exercises5.html#1678" data-type="unsolved#meta.33 → PathOver (λ x → f x ≡ g x) p q r" class="Function">PathOver-path≡</a> <a id="1693" class="Symbol">:</a> <a id="1695" class="Symbol">∀</a> <a id="1697" class="Symbol">{</a><a id="1698" href="Exercises5.html#1698" class="Bound">A</a> <a id="1700" href="Exercises5.html#1700" class="Bound">B</a> <a id="1702" class="Symbol">:</a> <a id="1704" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a><a id="1708" class="Symbol">}</a> <a id="1710" class="Symbol">{</a><a id="1711" href="Exercises5.html#1711" class="Bound">g</a> <a id="1713" class="Symbol">:</a> <a id="1715" href="Exercises5.html#1698" class="Bound">A</a> <a id="1717" class="Symbol">→</a> <a id="1719" href="Exercises5.html#1700" class="Bound">B</a><a id="1720" class="Symbol">}</a> <a id="1722" class="Symbol">{</a><a id="1723" href="Exercises5.html#1723" class="Bound">f</a> <a id="1725" class="Symbol">:</a> <a id="1727" href="Exercises5.html#1698" class="Bound">A</a> <a id="1729" class="Symbol">→</a> <a id="1731" href="Exercises5.html#1700" class="Bound">B</a><a id="1732" class="Symbol">}</a>
+                          <a id="1760" class="Symbol">{</a><a id="1761" href="Exercises5.html#1761" class="Bound">a</a> <a id="1763" href="Exercises5.html#1763" class="Bound">a&#39;</a> <a id="1766" class="Symbol">:</a> <a id="1768" href="Exercises5.html#1698" class="Bound">A</a><a id="1769" class="Symbol">}</a> <a id="1771" class="Symbol">{</a><a id="1772" href="Exercises5.html#1772" class="Bound">p</a> <a id="1774" class="Symbol">:</a> <a id="1776" href="Exercises5.html#1761" class="Bound">a</a> <a id="1778" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="1780" href="Exercises5.html#1763" class="Bound">a&#39;</a><a id="1782" class="Symbol">}</a>
+                          <a id="1810" class="Symbol">{</a><a id="1811" href="Exercises5.html#1811" class="Bound">q</a> <a id="1813" class="Symbol">:</a> <a id="1815" class="Symbol">(</a><a id="1816" href="Exercises5.html#1723" class="Bound">f</a> <a id="1818" href="Exercises5.html#1761" class="Bound">a</a><a id="1819" class="Symbol">)</a> <a id="1821" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="1823" class="Symbol">(</a><a id="1824" href="Exercises5.html#1711" class="Bound">g</a> <a id="1826" href="Exercises5.html#1761" class="Bound">a</a><a id="1827" class="Symbol">)}</a>
+                          <a id="1856" class="Symbol">{</a><a id="1857" href="Exercises5.html#1857" class="Bound">r</a> <a id="1859" class="Symbol">:</a> <a id="1861" class="Symbol">(</a><a id="1862" href="Exercises5.html#1723" class="Bound">f</a> <a id="1864" href="Exercises5.html#1763" class="Bound">a&#39;</a><a id="1866" class="Symbol">)</a> <a id="1868" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="1870" class="Symbol">(</a><a id="1871" href="Exercises5.html#1711" class="Bound">g</a> <a id="1873" href="Exercises5.html#1763" class="Bound">a&#39;</a><a id="1875" class="Symbol">)}</a>
+                        <a id="1902" class="Symbol">→</a> <a id="1904" class="UnsolvedMeta Hole">{!!}</a>
+                        <a id="1933" class="Symbol">→</a> <a id="1935" href="Exercises5.html#1811" class="Bound">q</a> <a id="1937" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">≡</a> <a id="1939" href="Exercises5.html#1857" class="Bound">r</a> <a id="1941" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">[</a> <a id="1943" class="Symbol">(\</a> <a id="1946" href="Exercises5.html#1946" class="Bound">x</a> <a id="1948" class="Symbol">→</a> <a id="1950" class="Symbol">(</a><a id="1951" href="Exercises5.html#1723" class="Bound">f</a> <a id="1953" href="Exercises5.html#1946" class="Bound">x</a><a id="1954" class="Symbol">)</a> <a id="1956" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="1958" class="Symbol">(</a><a id="1959" href="Exercises5.html#1711" class="Bound">g</a> <a id="1961" href="Exercises5.html#1946" class="Bound">x</a><a id="1962" class="Symbol">))</a> <a id="1965" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">↓</a> <a id="1967" href="Exercises5.html#1772" class="Bound">p</a> <a id="1969" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">]</a>
+<a id="1971" href="Exercises5.html#1678" data-type="unsolved#meta.33 → PathOver (λ x → f x ≡ g x) p q r" class="Function">PathOver-path≡</a> <a id="1986" class="Symbol">{</a><a id="1987" href="Exercises5.html#1987" class="Bound">A</a><a id="1988" class="Symbol">}{</a><a id="1990" href="Exercises5.html#1990" class="Bound">B</a><a id="1991" class="Symbol">}{</a><a id="1993" href="Exercises5.html#1993" class="Bound">g</a><a id="1994" class="Symbol">}{</a><a id="1996" href="Exercises5.html#1996" class="Bound">f</a><a id="1997" class="Symbol">}{</a><a id="1999" href="Exercises5.html#1999" class="Bound">a</a><a id="2000" class="Symbol">}{</a><a id="2002" href="Exercises5.html#2002" class="Bound">a&#39;</a><a id="2004" class="Symbol">}{</a><a id="2006" href="Exercises5.html#2006" class="Bound">p</a><a id="2007" class="Symbol">}{</a><a id="2009" href="Exercises5.html#2009" class="Bound">q</a><a id="2010" class="Symbol">}{</a><a id="2012" href="Exercises5.html#2012" class="Bound">r</a><a id="2013" class="Symbol">}</a> <a id="2015" href="Exercises5.html#2015" class="Bound">h</a> <a id="2017" class="Symbol">=</a> <a id="2019" class="Hole">{!!}</a>
+
+<a id="circles-to-torus"></a><a id="2025" href="Exercises5.html#2025" data-type="S1 → S1 → Torus" class="Function">circles-to-torus</a> <a id="2042" class="Symbol">:</a> <a id="2044" href="Lecture4-notes.html#745" data-type="Set" class="Postulate">S1</a> <a id="2047" class="Symbol">→</a> <a id="2049" class="Symbol">(</a><a id="2050" href="Lecture4-notes.html#745" data-type="Set" class="Postulate">S1</a> <a id="2053" class="Symbol">→</a> <a id="2055" href="Lecture4-notes.html#10700" data-type="Set" class="Postulate">Torus</a><a id="2060" class="Symbol">)</a>
+<a id="2062" href="Exercises5.html#2025" data-type="S1 → S1 → Torus" class="Function">circles-to-torus</a> <a id="2079" class="Symbol">=</a> <a id="2081" class="Hole">{!!}</a>
+
+<a id="circles-to-torus&#39;"></a><a id="2087" href="Exercises5.html#2087" data-type="S1 × S1 → Torus" class="Function">circles-to-torus&#39;</a> <a id="2105" class="Symbol">:</a> <a id="2107" href="Lecture4-notes.html#745" data-type="Set" class="Postulate">S1</a> <a id="2110" href="new-prelude.html#2217" data-type="Set l1 → Set l2 → Set (l1 ⊔ l2)" class="Function Operator">×</a> <a id="2112" href="Lecture4-notes.html#745" data-type="Set" class="Postulate">S1</a> <a id="2115" class="Symbol">→</a> <a id="2117" href="Lecture4-notes.html#10700" data-type="Set" class="Postulate">Torus</a>
+<a id="2123" href="Exercises5.html#2087" data-type="S1 × S1 → Torus" class="Function">circles-to-torus&#39;</a> <a id="2141" class="Symbol">(</a><a id="2142" href="Exercises5.html#2142" class="Bound">x</a> <a id="2144" href="new-prelude.html#1801" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="2146" href="Exercises5.html#2146" class="Bound">y</a><a id="2147" class="Symbol">)</a> <a id="2149" class="Symbol">=</a> <a id="2151" href="Exercises5.html#2025" data-type="S1 → S1 → Torus" class="Function">circles-to-torus</a> <a id="2168" href="Exercises5.html#2142" class="Bound">x</a> <a id="2170" href="Exercises5.html#2146" class="Bound">y</a>
+</pre>
+<p><strong>Below are some “extra credit” exercise if you want more to
+do. These are (even more) optional: nothing in the next lecture will
+depend on you understanding them. The next section (H space) is harder
+code but uses only the circle, whereas the following sections are a bit
+easier code but require understanding the suspension type, which we
+haven’t talked about too much yet.</strong></p>
+<h1 id="h-space">H space</h1>
+<p>The multiplication operation on the circle discussed in lecture is
+part of what is called an “H space” structure on the circle. One part of
+this structure is that the circle’s basepoint is a unit element for
+multiplication.</p>
+(⋆) Show that base is a left unit.
+<pre class="Agda"><a id="mult-unit-l"></a><a id="2839" href="Exercises5.html#2839" data-type="(y : S1) → mult base y ≡ y" class="Function">mult-unit-l</a> <a id="2851" class="Symbol">:</a> <a id="2853" class="Symbol">(</a><a id="2854" href="Exercises5.html#2854" class="Bound">y</a> <a id="2856" class="Symbol">:</a> <a id="2858" href="Lecture4-notes.html#745" data-type="Set" class="Postulate">S1</a><a id="2860" class="Symbol">)</a> <a id="2862" class="Symbol">→</a> <a id="2864" href="Lecture5-notes.html#9766" data-type="S1 → S1 → S1" class="Function">mult</a> <a id="2869" href="Lecture4-notes.html#757" data-type="S1" class="Postulate">base</a> <a id="2874" href="Exercises5.html#2854" class="Bound">y</a> <a id="2876" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="2878" href="Exercises5.html#2854" class="Bound">y</a>
+<a id="2880" href="Exercises5.html#2839" data-type="(y : S1) → mult base y ≡ y" class="Function">mult-unit-l</a> <a id="2892" href="Exercises5.html#2892" class="Bound">y</a> <a id="2894" class="Symbol">=</a> <a id="2896" class="Hole">{!!}</a>
+</pre>
+(⋆) Because we’ll need it in a second, show that ap distributes over
+function composition:
+<pre class="Agda"><a id="ap-∘"></a><a id="3005" href="Exercises5.html#3005" data-type="(f : A → B) (g : B → C) (p : a ≡ a&#39;) → ap (g ∘ f) p ≡ ap g (ap f p)" class="Function">ap-∘</a> <a id="3010" class="Symbol">:</a> <a id="3012" class="Symbol">∀</a> <a id="3014" class="Symbol">{</a><a id="3015" href="Exercises5.html#3015" class="Bound">l1</a> <a id="3018" href="Exercises5.html#3018" class="Bound">l2</a> <a id="3021" href="Exercises5.html#3021" class="Bound">l3</a> <a id="3024" class="Symbol">:</a> <a id="3026" href="Agda.Primitive.html#597" data-type="Set" class="Postulate">Level</a><a id="3031" class="Symbol">}</a> <a id="3033" class="Symbol">{</a><a id="3034" href="Exercises5.html#3034" class="Bound">A</a> <a id="3036" class="Symbol">:</a> <a id="3038" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="3043" href="Exercises5.html#3015" class="Bound">l1</a><a id="3045" class="Symbol">}</a> <a id="3047" class="Symbol">{</a><a id="3048" href="Exercises5.html#3048" class="Bound">B</a> <a id="3050" class="Symbol">:</a> <a id="3052" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="3057" href="Exercises5.html#3018" class="Bound">l2</a><a id="3059" class="Symbol">}</a> <a id="3061" class="Symbol">{</a><a id="3062" href="Exercises5.html#3062" class="Bound">C</a> <a id="3064" class="Symbol">:</a> <a id="3066" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="3071" href="Exercises5.html#3021" class="Bound">l3</a><a id="3073" class="Symbol">}</a>
+       <a id="3082" class="Symbol">(</a><a id="3083" href="Exercises5.html#3083" class="Bound">f</a> <a id="3085" class="Symbol">:</a> <a id="3087" href="Exercises5.html#3034" class="Bound">A</a> <a id="3089" class="Symbol">→</a> <a id="3091" href="Exercises5.html#3048" class="Bound">B</a><a id="3092" class="Symbol">)</a> <a id="3094" class="Symbol">(</a><a id="3095" href="Exercises5.html#3095" class="Bound">g</a> <a id="3097" class="Symbol">:</a> <a id="3099" href="Exercises5.html#3048" class="Bound">B</a> <a id="3101" class="Symbol">→</a> <a id="3103" href="Exercises5.html#3062" class="Bound">C</a><a id="3104" class="Symbol">)</a>
+       <a id="3113" class="Symbol">{</a><a id="3114" href="Exercises5.html#3114" class="Bound">a</a> <a id="3116" href="Exercises5.html#3116" class="Bound">a&#39;</a> <a id="3119" class="Symbol">:</a> <a id="3121" href="Exercises5.html#3034" class="Bound">A</a><a id="3122" class="Symbol">}</a>
+       <a id="3131" class="Symbol">(</a><a id="3132" href="Exercises5.html#3132" class="Bound">p</a> <a id="3134" class="Symbol">:</a> <a id="3136" href="Exercises5.html#3114" class="Bound">a</a> <a id="3138" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="3140" href="Exercises5.html#3116" class="Bound">a&#39;</a><a id="3142" class="Symbol">)</a>
+     <a id="3149" class="Symbol">→</a> <a id="3151" href="new-prelude.html#937" data-type="(f : A → B) → x ≡ y → f x ≡ f y" class="Function">ap</a> <a id="3154" class="Symbol">(</a><a id="3155" href="Exercises5.html#3095" class="Bound">g</a> <a id="3157" href="new-prelude.html#2059" data-type="((y : B) → C y) → (f : A → B) (x : A) → C (f x)" class="Function Operator">∘</a> <a id="3159" href="Exercises5.html#3083" class="Bound">f</a><a id="3160" class="Symbol">)</a> <a id="3162" href="Exercises5.html#3132" class="Bound">p</a> <a id="3164" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="3166" href="new-prelude.html#937" data-type="(f : A → B) → x ≡ y → f x ≡ f y" class="Function">ap</a> <a id="3169" href="Exercises5.html#3095" class="Bound">g</a> <a id="3171" class="Symbol">(</a><a id="3172" href="new-prelude.html#937" data-type="(f : A → B) → x ≡ y → f x ≡ f y" class="Function">ap</a> <a id="3175" href="Exercises5.html#3083" class="Bound">f</a> <a id="3177" href="Exercises5.html#3132" class="Bound">p</a><a id="3178" class="Symbol">)</a>
+<a id="3180" href="Exercises5.html#3005" data-type="(f : A → B) (g : B → C) (p : a ≡ a&#39;) → ap (g ∘ f) p ≡ ap g (ap f p)" class="Function">ap-∘</a> <a id="3185" class="Symbol">=</a> <a id="3187" class="Hole">{!!}</a>
+</pre>
+<p>(⋆⋆) Suppose we have a curried function f : S1 → A → B. Under the
+equivalence between paths in S1 × A and pairs of paths discussed in
+Lecture 3, we can then “apply” (the uncurried version of) f to a pair of
+paths (p : x ≡ y [ S1 ] , q : z ≡ w [ A ]) to get a path (f x z ≡ f y w
+[ B ]). In the special case where q is reflexivity on a, this
+application to p and q can be simplified to ap ( x → f x a) p : f x a ≡
+f y a [ B ].</p>
+Now, suppose that f is defined by circle recursion. We would expect some
+kind of reduction for applying f to the pair of paths (loop , q) —
+i.e. we should have reductions for <em>nested</em> pattern matching on
+HITs. In the case where q is reflexivity, applying f to the pair (loop ,
+refl) can reduce like this:
+<pre class="Agda"><a id="S1-rec-loop-1"></a><a id="3943" href="Exercises5.html#3943" data-type="ap (λ x → S1-rec f h x a) loop ≡ app≡ h a" class="Function">S1-rec-loop-1</a> <a id="3957" class="Symbol">:</a> <a id="3959" class="Symbol">∀</a> <a id="3961" class="Symbol">{</a><a id="3962" href="Exercises5.html#3962" class="Bound">A</a> <a id="3964" href="Exercises5.html#3964" class="Bound">B</a> <a id="3966" class="Symbol">:</a> <a id="3968" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a><a id="3972" class="Symbol">}</a> <a id="3974" class="Symbol">{</a><a id="3975" href="Exercises5.html#3975" class="Bound">f</a> <a id="3977" class="Symbol">:</a> <a id="3979" href="Exercises5.html#3962" class="Bound">A</a> <a id="3981" class="Symbol">→</a> <a id="3983" href="Exercises5.html#3964" class="Bound">B</a><a id="3984" class="Symbol">}</a> <a id="3986" class="Symbol">{</a><a id="3987" href="Exercises5.html#3987" class="Bound">h</a> <a id="3989" class="Symbol">:</a> <a id="3991" href="Exercises5.html#3975" class="Bound">f</a> <a id="3993" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="3995" href="Exercises5.html#3975" class="Bound">f</a><a id="3996" class="Symbol">}</a> <a id="3998" class="Symbol">{</a><a id="3999" href="Exercises5.html#3999" class="Bound">a</a> <a id="4001" class="Symbol">:</a> <a id="4003" href="Exercises5.html#3962" class="Bound">A</a><a id="4004" class="Symbol">}</a>
+                     <a id="4027" class="Symbol">→</a>  <a id="4030" href="new-prelude.html#937" data-type="(f : A → B) → x ≡ y → f x ≡ f y" class="Function">ap</a> <a id="4033" class="Symbol">(\</a> <a id="4036" href="Exercises5.html#4036" class="Bound">x</a> <a id="4038" class="Symbol">→</a> <a id="4040" href="Lecture4-notes.html#5544" data-type="(x : X) → x ≡ x → S1 → X" class="Postulate">S1-rec</a> <a id="4047" href="Exercises5.html#3975" class="Bound">f</a> <a id="4049" href="Exercises5.html#3987" class="Bound">h</a> <a id="4051" href="Exercises5.html#4036" class="Bound">x</a> <a id="4053" href="Exercises5.html#3999" class="Bound">a</a><a id="4054" class="Symbol">)</a> <a id="4056" href="Lecture4-notes.html#769" data-type="base ≡ base" class="Postulate">loop</a> <a id="4061" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="4063" href="Lecture5-notes.html#10246" data-type="f ≡ g → f ∼ g" class="Function">app≡</a> <a id="4068" href="Exercises5.html#3987" class="Bound">h</a> <a id="4070" href="Exercises5.html#3999" class="Bound">a</a>
+<a id="4072" href="Exercises5.html#3943" data-type="ap (λ x → S1-rec f h x a) loop ≡ app≡ h a" class="Function">S1-rec-loop-1</a> <a id="4086" class="Symbol">{</a><a id="4087" href="Exercises5.html#4087" class="Bound">A</a><a id="4088" class="Symbol">}{</a><a id="4090" href="Exercises5.html#4090" class="Bound">B</a><a id="4091" class="Symbol">}{</a><a id="4093" href="Exercises5.html#4093" class="Bound">f</a><a id="4094" class="Symbol">}{</a><a id="4096" href="Exercises5.html#4096" class="Bound">h</a><a id="4097" class="Symbol">}{</a><a id="4099" href="Exercises5.html#4099" class="Bound">a</a><a id="4100" class="Symbol">}</a> <a id="4102" class="Symbol">=</a> <a id="4104" class="Hole">{!!}</a>
+</pre>
+<p>Prove this reduction using ap-∘ and the reduction rule for S1-rec on
+the loop.</p>
+<p>(⋆⋆⋆) Show that base is a right unit for multiplication. You will
+need a slightly different path-over lemma than before.</p>
+<pre class="Agda"><a id="PathOver-endo≡"></a><a id="4326" href="Exercises5.html#4326" data-type="unsolved#meta.130 → PathOver (λ x → f x ≡ x) p q r" class="Function">PathOver-endo≡</a> <a id="4341" class="Symbol">:</a> <a id="4343" class="Symbol">∀</a> <a id="4345" class="Symbol">{</a><a id="4346" href="Exercises5.html#4346" class="Bound">A</a> <a id="4348" class="Symbol">:</a> <a id="4350" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a><a id="4354" class="Symbol">}</a> <a id="4356" class="Symbol">{</a><a id="4357" href="Exercises5.html#4357" class="Bound">f</a> <a id="4359" class="Symbol">:</a> <a id="4361" href="Exercises5.html#4346" class="Bound">A</a> <a id="4363" class="Symbol">→</a> <a id="4365" href="Exercises5.html#4346" class="Bound">A</a><a id="4366" class="Symbol">}</a>
+                 <a id="4385" class="Symbol">{</a><a id="4386" href="Exercises5.html#4386" class="Bound">a</a> <a id="4388" href="Exercises5.html#4388" class="Bound">a&#39;</a> <a id="4391" class="Symbol">:</a> <a id="4393" href="Exercises5.html#4346" class="Bound">A</a><a id="4394" class="Symbol">}</a> <a id="4396" class="Symbol">{</a><a id="4397" href="Exercises5.html#4397" class="Bound">p</a> <a id="4399" class="Symbol">:</a> <a id="4401" href="Exercises5.html#4386" class="Bound">a</a> <a id="4403" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="4405" href="Exercises5.html#4388" class="Bound">a&#39;</a><a id="4407" class="Symbol">}</a>
+                 <a id="4426" class="Symbol">{</a><a id="4427" href="Exercises5.html#4427" class="Bound">q</a> <a id="4429" class="Symbol">:</a> <a id="4431" class="Symbol">(</a><a id="4432" href="Exercises5.html#4357" class="Bound">f</a> <a id="4434" href="Exercises5.html#4386" class="Bound">a</a><a id="4435" class="Symbol">)</a> <a id="4437" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="4439" href="Exercises5.html#4386" class="Bound">a</a><a id="4440" class="Symbol">}</a>
+                 <a id="4459" class="Symbol">{</a><a id="4460" href="Exercises5.html#4460" class="Bound">r</a> <a id="4462" class="Symbol">:</a> <a id="4464" class="Symbol">(</a><a id="4465" href="Exercises5.html#4357" class="Bound">f</a> <a id="4467" href="Exercises5.html#4388" class="Bound">a&#39;</a><a id="4469" class="Symbol">)</a> <a id="4471" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="4473" href="Exercises5.html#4388" class="Bound">a&#39;</a><a id="4475" class="Symbol">}</a>
+               <a id="4492" class="Symbol">→</a> <a id="4494" class="UnsolvedMeta Hole">{!!}</a>
+               <a id="4514" class="Symbol">→</a> <a id="4516" href="Exercises5.html#4427" class="Bound">q</a> <a id="4518" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">≡</a> <a id="4520" href="Exercises5.html#4460" class="Bound">r</a> <a id="4522" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">[</a> <a id="4524" class="Symbol">(\</a> <a id="4527" href="Exercises5.html#4527" class="Bound">x</a> <a id="4529" class="Symbol">→</a> <a id="4531" href="Exercises5.html#4357" class="Bound">f</a> <a id="4533" href="Exercises5.html#4527" class="Bound">x</a> <a id="4535" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="4537" href="Exercises5.html#4527" class="Bound">x</a><a id="4538" class="Symbol">)</a> <a id="4540" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">↓</a> <a id="4542" href="Exercises5.html#4397" class="Bound">p</a> <a id="4544" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">]</a>
+<a id="4546" href="Exercises5.html#4326" data-type="unsolved#meta.130 → PathOver (λ x → f x ≡ x) p q r" class="Function">PathOver-endo≡</a> <a id="4561" class="Symbol">{</a><a id="4562" class="Argument">p</a> <a id="4564" class="Symbol">=</a> <a id="4566" class="Symbol">(</a><a id="4567" href="new-prelude.html#502" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="4572" class="Symbol">_)}</a> <a id="4576" class="Symbol">{</a><a id="4577" class="Argument">q</a> <a id="4579" class="Symbol">=</a> <a id="4581" href="Exercises5.html#4581" class="Bound">q</a><a id="4582" class="Symbol">}</a> <a id="4584" class="Symbol">{</a><a id="4585" href="Exercises5.html#4585" class="Bound">r</a><a id="4586" class="Symbol">}</a> <a id="4588" href="Exercises5.html#4588" class="Bound">h</a> <a id="4590" class="Symbol">=</a> <a id="4592" class="Hole">{!!}</a>
+
+<a id="mult-unit-r"></a><a id="4598" href="Exercises5.html#4598" data-type="(x : S1) → mult x base ≡ x" class="Function">mult-unit-r</a> <a id="4610" class="Symbol">:</a> <a id="4612" class="Symbol">(</a><a id="4613" href="Exercises5.html#4613" class="Bound">x</a> <a id="4615" class="Symbol">:</a> <a id="4617" href="Lecture4-notes.html#745" data-type="Set" class="Postulate">S1</a><a id="4619" class="Symbol">)</a> <a id="4621" class="Symbol">→</a> <a id="4623" href="Lecture5-notes.html#9766" data-type="S1 → S1 → S1" class="Function">mult</a> <a id="4628" href="Exercises5.html#4613" class="Bound">x</a> <a id="4630" href="Lecture4-notes.html#757" data-type="S1" class="Postulate">base</a> <a id="4635" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="4637" href="Exercises5.html#4613" class="Bound">x</a>
+<a id="4639" href="Exercises5.html#4598" data-type="(x : S1) → mult x base ≡ x" class="Function">mult-unit-r</a> <a id="4651" class="Symbol">=</a> <a id="4653" class="Hole">{!!}</a>
+</pre>
+<h1 id="suspensions-and-the-2-point-circle">Suspensions and the 2-point
+circle</h1>
+(⋆) Postulate the computation rules for the non-dependent susp-rec and
+declare rewrites for the reduction rules on the point
+constructors.<br />
+<pre class="Agda"><a id="4850" class="Keyword">postulate</a>
+  <a id="Susp-rec-north"></a><a id="4862" href="Exercises5.html#4862" data-type="(n s : X) (m : A → n ≡ s) →
+Susp-rec n s m northS ≡ unsolved#meta.159 n s m" class="Postulate">Susp-rec-north</a> <a id="4877" class="Symbol">:</a> <a id="4879" class="Symbol">{</a><a id="4880" href="Exercises5.html#4880" class="Bound">l</a> <a id="4882" class="Symbol">:</a> <a id="4884" href="Agda.Primitive.html#597" data-type="Set" class="Postulate">Level</a><a id="4889" class="Symbol">}</a> <a id="4891" class="Symbol">{</a><a id="4892" href="Exercises5.html#4892" class="Bound">A</a> <a id="4894" class="Symbol">:</a> <a id="4896" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a><a id="4900" class="Symbol">}</a> <a id="4902" class="Symbol">{</a><a id="4903" href="Exercises5.html#4903" class="Bound">X</a> <a id="4905" class="Symbol">:</a> <a id="4907" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="4912" href="Exercises5.html#4880" class="Bound">l</a><a id="4913" class="Symbol">}</a>
+                 <a id="4932" class="Symbol">(</a><a id="4933" href="Exercises5.html#4933" class="Bound">n</a> <a id="4935" class="Symbol">:</a> <a id="4937" href="Exercises5.html#4903" class="Bound">X</a><a id="4938" class="Symbol">)</a> <a id="4940" class="Symbol">(</a><a id="4941" href="Exercises5.html#4941" class="Bound">s</a> <a id="4943" class="Symbol">:</a> <a id="4945" href="Exercises5.html#4903" class="Bound">X</a><a id="4946" class="Symbol">)</a> <a id="4948" class="Symbol">(</a><a id="4949" href="Exercises5.html#4949" class="Bound">m</a> <a id="4951" class="Symbol">:</a> <a id="4953" href="Exercises5.html#4892" class="Bound">A</a> <a id="4955" class="Symbol">→</a> <a id="4957" href="Exercises5.html#4933" class="Bound">n</a> <a id="4959" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="4961" href="Exercises5.html#4941" class="Bound">s</a><a id="4962" class="Symbol">)</a>
+                 <a id="4981" class="Symbol">→</a> <a id="4983" href="Lecture4-notes.html#11753" data-type="(n s : X) → (A → n ≡ s) → Susp A → X" class="Postulate">Susp-rec</a> <a id="4992" href="Exercises5.html#4933" class="Bound">n</a> <a id="4994" href="Exercises5.html#4941" class="Bound">s</a> <a id="4996" href="Exercises5.html#4949" class="Bound">m</a> <a id="4998" href="Lecture4-notes.html#11636" data-type="Susp A" class="Postulate">northS</a> <a id="5005" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="5007" class="Hole">{!!}</a>
+  <a id="Susp-rec-south"></a><a id="5014" href="Exercises5.html#5014" data-type="(n s : X) (m : A → n ≡ s) →
+Susp-rec n s m southS ≡ unsolved#meta.174 n s m" class="Postulate">Susp-rec-south</a> <a id="5029" class="Symbol">:</a> <a id="5031" class="Symbol">{</a><a id="5032" href="Exercises5.html#5032" class="Bound">l</a> <a id="5034" class="Symbol">:</a> <a id="5036" href="Agda.Primitive.html#597" data-type="Set" class="Postulate">Level</a><a id="5041" class="Symbol">}</a> <a id="5043" class="Symbol">{</a><a id="5044" href="Exercises5.html#5044" class="Bound">A</a> <a id="5046" class="Symbol">:</a> <a id="5048" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a><a id="5052" class="Symbol">}</a> <a id="5054" class="Symbol">{</a><a id="5055" href="Exercises5.html#5055" class="Bound">X</a> <a id="5057" class="Symbol">:</a> <a id="5059" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="5064" href="Exercises5.html#5032" class="Bound">l</a><a id="5065" class="Symbol">}</a>
+                   <a id="5086" class="Symbol">(</a><a id="5087" href="Exercises5.html#5087" class="Bound">n</a> <a id="5089" class="Symbol">:</a> <a id="5091" href="Exercises5.html#5055" class="Bound">X</a><a id="5092" class="Symbol">)</a> <a id="5094" class="Symbol">(</a><a id="5095" href="Exercises5.html#5095" class="Bound">s</a> <a id="5097" class="Symbol">:</a> <a id="5099" href="Exercises5.html#5055" class="Bound">X</a><a id="5100" class="Symbol">)</a> <a id="5102" class="Symbol">(</a><a id="5103" href="Exercises5.html#5103" class="Bound">m</a> <a id="5105" class="Symbol">:</a> <a id="5107" href="Exercises5.html#5044" class="Bound">A</a> <a id="5109" class="Symbol">→</a> <a id="5111" href="Exercises5.html#5087" class="Bound">n</a> <a id="5113" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="5115" href="Exercises5.html#5095" class="Bound">s</a><a id="5116" class="Symbol">)</a>
+                   <a id="5137" class="Symbol">→</a> <a id="5139" href="Lecture4-notes.html#11753" data-type="(n s : X) → (A → n ≡ s) → Susp A → X" class="Postulate">Susp-rec</a> <a id="5148" href="Exercises5.html#5087" class="Bound">n</a> <a id="5150" href="Exercises5.html#5095" class="Bound">s</a> <a id="5152" href="Exercises5.html#5103" class="Bound">m</a> <a id="5154" href="Lecture4-notes.html#11667" data-type="Susp A" class="Postulate">southS</a> <a id="5161" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="5163" class="Hole">{!!}</a>
+<a id="5168" class="Comment">-- {-# REWRITE Susp-rec-north #-}</a>
+<a id="5202" class="Comment">-- {-# REWRITE Susp-rec-south #-}</a>
+<a id="5236" class="Keyword">postulate</a>
+  <a id="Susp-rec-merid"></a><a id="5248" href="Exercises5.html#5248" data-type="(n s : X) (m : A → n ≡ s) (x : A) →
+ap (Susp-rec n s m) (merid x) ≡ unsolved#meta.196 n s m x" class="Postulate">Susp-rec-merid</a> <a id="5263" class="Symbol">:</a> <a id="5265" class="Symbol">{</a><a id="5266" href="Exercises5.html#5266" class="Bound">l</a> <a id="5268" class="Symbol">:</a> <a id="5270" href="Agda.Primitive.html#597" data-type="Set" class="Postulate">Level</a><a id="5275" class="Symbol">}</a> <a id="5277" class="Symbol">{</a><a id="5278" href="Exercises5.html#5278" class="Bound">A</a> <a id="5280" class="Symbol">:</a> <a id="5282" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a><a id="5286" class="Symbol">}</a> <a id="5288" class="Symbol">{</a><a id="5289" href="Exercises5.html#5289" class="Bound">X</a> <a id="5291" class="Symbol">:</a> <a id="5293" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="5298" href="Exercises5.html#5266" class="Bound">l</a><a id="5299" class="Symbol">}</a>
+                   <a id="5320" class="Symbol">(</a><a id="5321" href="Exercises5.html#5321" class="Bound">n</a> <a id="5323" class="Symbol">:</a> <a id="5325" href="Exercises5.html#5289" class="Bound">X</a><a id="5326" class="Symbol">)</a> <a id="5328" class="Symbol">(</a><a id="5329" href="Exercises5.html#5329" class="Bound">s</a> <a id="5331" class="Symbol">:</a> <a id="5333" href="Exercises5.html#5289" class="Bound">X</a><a id="5334" class="Symbol">)</a> <a id="5336" class="Symbol">(</a><a id="5337" href="Exercises5.html#5337" class="Bound">m</a> <a id="5339" class="Symbol">:</a> <a id="5341" href="Exercises5.html#5278" class="Bound">A</a> <a id="5343" class="Symbol">→</a> <a id="5345" href="Exercises5.html#5321" class="Bound">n</a> <a id="5347" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="5349" href="Exercises5.html#5329" class="Bound">s</a><a id="5350" class="Symbol">)</a>
+                 <a id="5369" class="Symbol">→</a> <a id="5371" class="Symbol">(</a><a id="5372" href="Exercises5.html#5372" class="Bound">x</a> <a id="5374" class="Symbol">:</a> <a id="5376" href="Exercises5.html#5278" class="Bound">A</a><a id="5377" class="Symbol">)</a> <a id="5379" class="Symbol">→</a> <a id="5381" href="new-prelude.html#937" data-type="(f : A → B) → x ≡ y → f x ≡ f y" class="Function">ap</a> <a id="5384" class="Symbol">(</a><a id="5385" href="Lecture4-notes.html#11753" data-type="(n s : X) → (A → n ≡ s) → Susp A → X" class="Postulate">Susp-rec</a> <a id="5394" href="Exercises5.html#5321" class="Bound">n</a> <a id="5396" href="Exercises5.html#5329" class="Bound">s</a> <a id="5398" href="Exercises5.html#5337" class="Bound">m</a><a id="5399" class="Symbol">)</a> <a id="5401" class="Symbol">(</a><a id="5402" href="Lecture4-notes.html#11698" data-type="A → Path (Susp A) northS southS" class="Postulate">merid</a> <a id="5408" href="Exercises5.html#5372" class="Bound">x</a><a id="5409" class="Symbol">)</a> <a id="5411" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="5413" class="Hole">{!!}</a>
+</pre>
+<p>(⋆) Postulate the dependent elimination rule for suspensions:</p>
+<pre class="Agda"><a id="5494" class="Keyword">postulate</a> 
+  <a id="Susp-elim"></a><a id="5507" href="Exercises5.html#5507" data-type="(P : Susp A → Set l) (n : unsolved#meta.200 P)
+(s : unsolved#meta.202 P n) →
+unsolved#meta.204 P n s → (x : Susp A) → P x" class="Postulate">Susp-elim</a> <a id="5517" class="Symbol">:</a> <a id="5519" class="Symbol">{</a><a id="5520" href="Exercises5.html#5520" class="Bound">l</a> <a id="5522" class="Symbol">:</a> <a id="5524" href="Agda.Primitive.html#597" data-type="Set" class="Postulate">Level</a><a id="5529" class="Symbol">}</a> <a id="5531" class="Symbol">{</a><a id="5532" href="Exercises5.html#5532" class="Bound">A</a> <a id="5534" class="Symbol">:</a> <a id="5536" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a><a id="5540" class="Symbol">}</a> <a id="5542" class="Symbol">(</a><a id="5543" href="Exercises5.html#5543" class="Bound">P</a> <a id="5545" class="Symbol">:</a> <a id="5547" href="Lecture4-notes.html#11615" data-type="Set → Set" class="Postulate">Susp</a> <a id="5552" href="Exercises5.html#5532" class="Bound">A</a> <a id="5554" class="Symbol">→</a> <a id="5556" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="5561" href="Exercises5.html#5520" class="Bound">l</a><a id="5562" class="Symbol">)</a>
+            <a id="5576" class="Symbol">→</a> <a id="5578" class="Symbol">(</a><a id="5579" href="Exercises5.html#5579" class="Bound">n</a> <a id="5581" class="Symbol">:</a> <a id="5583" class="UnsolvedMeta Hole">{!!}</a><a id="5587" class="Symbol">)</a>
+            <a id="5601" class="Symbol">→</a> <a id="5603" class="Symbol">(</a><a id="5604" href="Exercises5.html#5604" class="Bound">s</a> <a id="5606" class="Symbol">:</a> <a id="5608" class="UnsolvedMeta Hole">{!!}</a><a id="5612" class="Symbol">)</a>
+            <a id="5626" class="Symbol">→</a> <a id="5628" class="Symbol">(</a><a id="5629" href="Exercises5.html#5629" class="Bound">m</a> <a id="5631" class="Symbol">:</a> <a id="5633" class="UnsolvedMeta Hole">{!!}</a><a id="5637" class="Symbol">)</a>
+            <a id="5651" class="Symbol">→</a> <a id="5653" class="Symbol">(</a><a id="5654" href="Exercises5.html#5654" class="Bound">x</a> <a id="5656" class="Symbol">:</a> <a id="5658" href="Lecture4-notes.html#11615" data-type="Set → Set" class="Postulate">Susp</a> <a id="5663" href="Exercises5.html#5532" class="Bound">A</a><a id="5664" class="Symbol">)</a> <a id="5666" class="Symbol">→</a> <a id="5668" href="Exercises5.html#5543" class="Bound">P</a> <a id="5670" href="Exercises5.html#5654" class="Bound">x</a>
+</pre>
+<p>(⋆⋆) Show that the maps s2c and c2s from the Lecture 4 exercises are
+mutually inverse:</p>
+<pre class="Agda"><a id="c2s2c"></a><a id="5773" href="Exercises5.html#5773" data-type="(x : Circle2) → s2c (c2s x) ≡ x" class="Function">c2s2c</a> <a id="5779" class="Symbol">:</a> <a id="5781" class="Symbol">(</a><a id="5782" href="Exercises5.html#5782" class="Bound">x</a> <a id="5784" class="Symbol">:</a> <a id="5786" href="Lecture4-notes.html#7873" data-type="Set" class="Postulate">Circle2</a><a id="5793" class="Symbol">)</a> <a id="5795" class="Symbol">→</a> <a id="5797" href="Solutions4.html#5005" data-type="Susp Bool → Circle2" class="Function">s2c</a> <a id="5801" class="Symbol">(</a><a id="5802" href="Solutions4.html#4919" data-type="Circle2 → Susp Bool" class="Function">c2s</a> <a id="5806" href="Exercises5.html#5782" class="Bound">x</a><a id="5807" class="Symbol">)</a> <a id="5809" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="5811" href="Exercises5.html#5782" class="Bound">x</a>
+<a id="5813" href="Exercises5.html#5773" data-type="(x : Circle2) → s2c (c2s x) ≡ x" class="Function">c2s2c</a> <a id="5819" class="Symbol">=</a> <a id="5821" class="Hole">{!!}</a>
+
+<a id="s2c2s"></a><a id="5827" href="Exercises5.html#5827" data-type="(x : Susp Bool) → c2s (s2c x) ≡ x" class="Function">s2c2s</a> <a id="5833" class="Symbol">:</a> <a id="5835" class="Symbol">(</a><a id="5836" href="Exercises5.html#5836" class="Bound">x</a> <a id="5838" class="Symbol">:</a> <a id="5840" href="Lecture4-notes.html#11615" data-type="Set → Set" class="Postulate">Susp</a> <a id="5845" href="new-prelude.html#3253" data-type="Set" class="Function">Bool</a><a id="5849" class="Symbol">)</a> <a id="5851" class="Symbol">→</a> <a id="5853" href="Solutions4.html#4919" data-type="Circle2 → Susp Bool" class="Function">c2s</a> <a id="5857" class="Symbol">(</a><a id="5858" href="Solutions4.html#5005" data-type="Susp Bool → Circle2" class="Function">s2c</a> <a id="5862" href="Exercises5.html#5836" class="Bound">x</a><a id="5863" class="Symbol">)</a> <a id="5865" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="5867" href="Exercises5.html#5836" class="Bound">x</a>
+<a id="5869" href="Exercises5.html#5827" data-type="(x : Susp Bool) → c2s (s2c x) ≡ x" class="Function">s2c2s</a> <a id="5875" class="Symbol">=</a> <a id="5877" class="Hole">{!!}</a>
+</pre>
+<p>(⋆) Conclude that Circle2 is equivalent to Susp Bool:</p>
+<pre class="Agda"><a id="Circle2-Susp-Bool"></a><a id="5950" href="Exercises5.html#5950" data-type="Circle2 ≃ Susp Bool" class="Function">Circle2-Susp-Bool</a> <a id="5968" class="Symbol">:</a> <a id="5970" href="Lecture4-notes.html#7873" data-type="Set" class="Postulate">Circle2</a> <a id="5978" href="Lecture5-notes.html#968" data-type="(A : Set l1) (B : Set l2) → Set (l1 ⊔ l2)" class="Record Operator">≃</a> <a id="5980" href="Lecture4-notes.html#11615" data-type="Set → Set" class="Postulate">Susp</a> <a id="5985" href="new-prelude.html#3253" data-type="Set" class="Function">Bool</a>
+<a id="5990" href="Exercises5.html#5950" data-type="Circle2 ≃ Susp Bool" class="Function">Circle2-Susp-Bool</a> <a id="6008" class="Symbol">=</a> <a id="6010" class="Hole">{!!}</a>
+</pre>
+<h1 id="functoriality-of-suspension">Functoriality of suspension
+(⋆⋆)</h1>
+In the Lecture 4 exercises, we defined functoriality for the suspension
+type, which given a function X → Y gives a function Σ X → Σ Y. Show that
+this operation is functorial, meaning that it preserves identity and
+composition of functions:
+<pre class="Agda"><a id="susp-func-id"></a><a id="6305" href="Exercises5.html#6305" data-type="susp-func id ∼ id" class="Function">susp-func-id</a> <a id="6318" class="Symbol">:</a> <a id="6320" class="Symbol">∀</a> <a id="6322" class="Symbol">{</a><a id="6323" href="Exercises5.html#6323" class="Bound">X</a> <a id="6325" class="Symbol">:</a> <a id="6327" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a><a id="6331" class="Symbol">}</a> <a id="6333" class="Symbol">→</a> <a id="6335" href="Solutions4.html#5241" data-type="(X → Y) → Susp X → Susp Y" class="Function">susp-func</a> <a id="6345" class="Symbol">{</a><a id="6346" href="Exercises5.html#6323" class="Bound">X</a><a id="6347" class="Symbol">}</a> <a id="6349" href="new-prelude.html#2011" data-type="A → A" class="Function">id</a> <a id="6352" href="new-prelude.html#1372" data-type="((x : A) → B x) → ((x : A) → B x) → Set (l1 ⊔ l2)" class="Function Operator">∼</a> <a id="6354" href="new-prelude.html#2011" data-type="A → A" class="Function">id</a>
+<a id="6357" href="Exercises5.html#6305" data-type="susp-func id ∼ id" class="Function">susp-func-id</a> <a id="6370" class="Symbol">=</a> <a id="6372" class="Hole">{!!}</a>
+
+<a id="susp-func-∘"></a><a id="6378" href="Exercises5.html#6378" data-type="(f : X → Y) (g : Y → Z) →
+susp-func (g ∘ f) ∼ (susp-func g ∘ susp-func f)" class="Function">susp-func-∘</a> <a id="6390" class="Symbol">:</a> <a id="6392" class="Symbol">∀</a> <a id="6394" class="Symbol">{</a><a id="6395" href="Exercises5.html#6395" class="Bound">X</a> <a id="6397" href="Exercises5.html#6397" class="Bound">Y</a> <a id="6399" href="Exercises5.html#6399" class="Bound">Z</a> <a id="6401" class="Symbol">:</a> <a id="6403" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a><a id="6407" class="Symbol">}</a> <a id="6409" class="Symbol">(</a><a id="6410" href="Exercises5.html#6410" class="Bound">f</a> <a id="6412" class="Symbol">:</a> <a id="6414" href="Exercises5.html#6395" class="Bound">X</a> <a id="6416" class="Symbol">→</a> <a id="6418" href="Exercises5.html#6397" class="Bound">Y</a><a id="6419" class="Symbol">)</a> <a id="6421" class="Symbol">(</a><a id="6422" href="Exercises5.html#6422" class="Bound">g</a> <a id="6424" class="Symbol">:</a> <a id="6426" href="Exercises5.html#6397" class="Bound">Y</a> <a id="6428" class="Symbol">→</a> <a id="6430" href="Exercises5.html#6399" class="Bound">Z</a><a id="6431" class="Symbol">)</a>
+            <a id="6445" class="Symbol">→</a> <a id="6447" href="Solutions4.html#5241" data-type="(X → Y) → Susp X → Susp Y" class="Function">susp-func</a> <a id="6457" class="Symbol">{</a><a id="6458" href="Exercises5.html#6395" class="Bound">X</a><a id="6459" class="Symbol">}</a> <a id="6461" class="Symbol">(</a><a id="6462" href="Exercises5.html#6422" class="Bound">g</a> <a id="6464" href="new-prelude.html#2059" data-type="((y : B) → C y) → (f : A → B) (x : A) → C (f x)" class="Function Operator">∘</a> <a id="6466" href="Exercises5.html#6410" class="Bound">f</a><a id="6467" class="Symbol">)</a> <a id="6469" href="new-prelude.html#1372" data-type="((x : A) → B x) → ((x : A) → B x) → Set (l1 ⊔ l2)" class="Function Operator">∼</a> <a id="6471" href="Solutions4.html#5241" data-type="(X → Y) → Susp X → Susp Y" class="Function">susp-func</a> <a id="6481" href="Exercises5.html#6422" class="Bound">g</a> <a id="6483" href="new-prelude.html#2059" data-type="((y : B) → C y) → (f : A → B) (x : A) → C (f x)" class="Function Operator">∘</a> <a id="6485" href="Solutions4.html#5241" data-type="(X → Y) → Susp X → Susp Y" class="Function">susp-func</a> <a id="6495" href="Exercises5.html#6410" class="Bound">f</a>
+<a id="6497" href="Exercises5.html#6378" data-type="(f : X → Y) (g : Y → Z) →
+susp-func (g ∘ f) ∼ (susp-func g ∘ susp-func f)" class="Function">susp-func-∘</a> <a id="6509" href="Exercises5.html#6509" class="Bound">f</a> <a id="6511" href="Exercises5.html#6511" class="Bound">g</a> <a id="6513" class="Symbol">=</a> <a id="6515" class="Hole">{!!}</a>
+</pre>
+
+  </article>
+</div>
+</main>
+</body>
+<style>
+
+:root {
+  --text-bg: #fff;
+  --text-fg: #222;
+  --shadow: #000;
+  --primary: #0054F4;
+  --secondary: #9C1BD6;
+  --modal-bg: #ccccccaa;
+  --warning-bg: #fef08a;
+  --code-bg: var(--text-bg);
+  --code-fg: var(--text-fg);
+  --code-keyword: #BB3B13;
+  --code-string:  #d52753;
+  --code-number:  #8A1060;
+  --code-module:  #8A1060;
+  --code-field:   #9C1BD6;
+  --code-constructor: #207B1D;
+  --code-highlight: #F5DEB3;
+  --search-selected: #e2e8f0;
+  --details-summary: #b2ebf2;
+  --details-open:    #80deea;
+  --depgraph-edge: #eee;
+  --blockquote-bg: #d8b4fe; }
+
+.diagram-dark {
+  display: none !important; }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-bg: #282C34;
+    --text-fg: #bfbfbf;
+    --shadow: #475569;
+    --primary: #61AFEF;
+    --secondary: #C878DD;
+    --modal-bg: #282C34aa;
+    --warning-bg: #991b1b;
+    --code-keyword:     #E5C07B;
+    --code-string:      #E06C75;
+    --code-number:      #98C379;
+    --code-module:      #56B6C2;
+    --code-field:       #C878DD;
+    --code-constructor: #98C379;
+    --code-highlight: #ef444499;
+    --search-selected: #474e5e;
+    --details-summary: #5b21b6;
+    --details-open:    #4c1d95;
+    --depgraph-edge: #474e5e;
+    --blockquote-bg: #475569; }
+  div.warning {
+    --shadow: #7f1d1d
+  ; }
+  input {
+    background-color: #334155;
+    border: 1px solid #475569;
+    color: var(--text-fg); }
+  body {
+    scrollbar-color: #3b4454 #2b2e33; }
+  .diagram-dark {
+    display: block !important; }
+  .diagram-light {
+    display: none !important; } }
+
+table {
+  margin: auto;
+  border-collapse: collapse; }
+  table td, table th {
+    text-align: center;
+    padding: 0px 1em 0px 1em;
+    border: 1px solid black; }
+  table th {
+    border-bottom: 2px solid black; }
+  table td {
+    white-space: nowrap; }
+
+html { max-width: 100%; }
+
+body {
+  font-family: "Inria Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  width: 100%;
+  font-size: var(--font-size);
+  overflow-x: clip;
+  background-color: var(--text-bg);
+  color: var(--text-fg);
+}
+
+div#post-toc-container { max-width: 120ch; margin: auto; }
+
+article a[href], div#return > a[href], div#top > a[href], aside#toc > div#toc-container ul a[href] {
+  color: var(--primary);
+  text-decoration: none; }
+  article a[href]:hover, div#return > a[href]:hover, div#top > a[href]:hover, aside#toc > div#toc-container ul a[href]:hover {
+    text-decoration: 2px currentColor underline !important; }
+  article a[href]:visited, div#return > a[href]:visited, div#top > a[href]:visited, aside#toc > div#toc-container ul a[href]:visited {
+    color: var(--secondary); }
+
+/* Aspects. */
+.Agda {
+  /* NameKinds. */
+  /* OtherAspects. */
+  /* Standard attributes. */
+  font-family: 'iosevka', 'Iosevka', 'Fantasque Sans Mono', 'Roboto Mono', monospace;
+  font-weight: 400; }
+  .Agda .Comment {
+    color: var(--code-fg);
+    font-style: italic; }
+  .Agda .Background {
+    background-color: var(--code-bg); }
+  .Agda .Markup {
+    color: var(--code-fg); }
+  .Agda .Keyword {
+    color: var(--code-keyword); }
+  .Agda .String {
+    color: var(--code-string); }
+  .Agda .Number {
+    color: var(--code-number); }
+  .Agda .Symbol {
+    color: var(--code-fg); }
+  .Agda .PrimitiveType {
+    color: var(--primary); }
+  .Agda .Pragma {
+    color: var(--code-fg); }
+  .Agda .Bound {
+    color: var(--code-fg) !important; }
+  .Agda .Generalizable {
+    color: var(--code-fg) !important; }
+  .Agda .InductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .CoinductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .Datatype {
+    color: var(--primary) !important; }
+  .Agda .Field {
+    color: var(--code-field) !important; }
+  .Agda .Function {
+    color: var(--primary) !important; }
+  .Agda .Module {
+    color: var(--code-module) !important; }
+  .Agda .Postulate {
+    color: var(--primary) !important; }
+  .Agda .Primitive {
+    color: var(--primary) !important; }
+  .Agda .Record {
+    color: var(--primary) !important; }
+  .Agda .UnsolvedMeta {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .UnsolvedConstraint {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .TerminationProblem {
+    color: var(--code-fg);
+    background: #FFA07A; }
+  .Agda .IncompletePattern {
+    color: var(--code-fg);
+    background: #F5DEB3; }
+  .Agda .Error {
+    color: red;
+    text-decoration: underline; }
+  .Agda .TypeChecks {
+    color: var(--code-fg);
+    background: #ADD8E6; }
+  .Agda .ShadowingInTelescope {
+    color: var(--code-fg);
+    background: #808080; }
+  .Agda .Deadcode {
+    color: var(--code-keyword);
+    font-weight: bold; }
+  .Agda a {
+    text-decoration: none; }
+  .Agda a[href]:hover {
+    text-decoration: 2px var(--primary) underline; }
+  .Agda a[href]:target {
+    animation: highlight 2.5s; }
+  body.text-page .Agda {
+    font-size: var(--code-font-size); }
+
+pre.Agda, div.sourceCode, pre {
+  border-radius: 0;
+  box-shadow: none;
+  overflow-y: clip;
+  margin: 0;
+  padding: 1em;
+  padding-top: 0.25em;
+  padding-bottom: 0.25em;
+  background-color: var(--code-bg);
+  color: var(--code-fg);
+  font-size: var(--code-font-size);
+  max-width: 100%;
+  overflow-x: auto;
+}
+</style>
+</html>
