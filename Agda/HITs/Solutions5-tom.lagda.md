@@ -1,3 +1,5 @@
+**To make this file typecheck, you will need to uncomment two REWRITE rules, see (†) below. (They are commented because of idiosyncrasies in building corresponding GitHub pages.)**
+
 ```agda
 {-# OPTIONS --rewriting --without-K #-}
 
@@ -223,8 +225,15 @@ postulate
   Susp-rec-south : {l : Level} {A : Type} {X : Type l}
                    (n : X) (s : X) (m : A → n ≡ s)
                    → Susp-rec n s m southS ≡ s
-{-# REWRITE Susp-rec-north #-}
-{-# REWRITE Susp-rec-south #-}
+```
+
+**(†) Uncomment these REWRITE rules to make the file typecheck.
+      (They are commented because of idiosyncrasies in building corresponding
+      GitHub pages.)**
+```
+-- {-# REWRITE Susp-rec-north #-}
+-- {-# REWRITE Susp-rec-south #-}
+
 postulate
   Susp-rec-merid : {l : Level} {A : Type} {X : Type l}
                    (n : X) (s : X) (m : A → n ≡ s)

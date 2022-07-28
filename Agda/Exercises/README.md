@@ -8,3 +8,6 @@
    	    [Solutions](03-Solutions.lagda.md).
 1. Week 04: [Exercises](../HITs/Exercises4.lagda.md);
    	    [Solutions](../HITs/Solutions4.lagda.md);
+1. Week 05: [Exercises](../HITs/Exercises5.lagda.md);
+   	    [Solutions (by Dan Licata)](../HITs/Solutions5-dan.lagda.md);
+   	    [Solutions (by Tom de Jong)](../HITs/Solutions5-tom.lagda.md);
