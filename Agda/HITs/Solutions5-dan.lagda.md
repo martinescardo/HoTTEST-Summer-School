@@ -101,6 +101,15 @@ circles-to-torus = S1-rec (S1-rec baseT qT)
                                                         sT ∙
                                                         ap (\ H → H ∙ pT) (! (S1-rec-loop _ _))))))
 
+circles-to-torus-nofunext : S1 → (S1 → Torus)
+circles-to-torus-nofunext x y = S1-rec (S1-rec baseT qT y)
+                                       ( (S1-elim (\ y → S1-rec baseT qT y ≡ S1-rec baseT qT y)
+                                            pT
+                                            (PathOver-path≡ (ap (\ H → pT ∙ H) (S1-rec-loop _ _) ∙
+                                                             sT ∙
+                                                             ap (\ H → H ∙ pT) (! (S1-rec-loop _ _))))) y )
+                                       x
+
 circles-to-torus' : S1 × S1 → Torus
 circles-to-torus' (x , y) = circles-to-torus x y
 ```
