@@ -223,8 +223,8 @@ postulate
   Susp-rec-south : {l : Level} {A : Type} {X : Type l}
                    (n : X) (s : X) (m : A → n ≡ s)
                    → Susp-rec n s m southS ≡ s
-{-# REWRITE Susp-rec-north #-}
-{-# REWRITE Susp-rec-south #-}
+-- {-# REWRITE Susp-rec-north #-}
+-- {-# REWRITE Susp-rec-south #-}
 postulate
   Susp-rec-merid : {l : Level} {A : Type} {X : Type l}
                    (n : X) (s : X) (m : A → n ≡ s)
