@@ -1,16 +1,25 @@
 
-Note: for this week we have two solution files for the exercises.  My
-(Dan Licata) solutions are below.  The TA Tom de Jong wrote up his own
-solutions in Solutions5-tom.lagda.md.  We are providing both to
-illustrate slightly different ways of using Agda.  Tom's are a little
-more verbose and easier for a person to read non-interactively.  Mine
-are a little more inlined and meant to show you roughly the minimum text
-you need to get Agda to check the proofs, but are harder to read unless
-you do so interactively (by putting holes around sub-expressions and
-getting Agda to tell you what the types are supposed to be).  When I am
-coding for myself to see if something is true, I will often use this
-terse style, and then clean it up more like Tom's solution when writing
-it up for other people.
+Note: for this week we have two solution files for the exercises.  Dan
+Licata's solutions are below.  Tom de Jong's solutions in are in
+Solutions5-tom.lagda.md.  We are providing both to illustrate slightly
+different ways of using Agda.  Tom's are a little more verbose and
+easier for a person to read non-interactively.  Dan's are a little more
+inlined and meant to show you roughly the minimum text you need to get
+Agda to check the proofs, but are harder to read unless you do so
+interactively (by putting holes around sub-expressions and getting Agda
+to tell you what the types are supposed to be).  It's sometimes nice to
+code in the terse style when you are coding for yourself, and then to
+clean it up more like the more verbose solution when writing it up for
+other people.
+
+Note: Agda will get confused if you make a single file that imports both
+our solutions and your solutions in Exercises5.  The reason is that
+rewrite rules are installed globally, and both files declare rewrites
+for the reduction rules for suspension types (if you get that far), and
+Agda won't let you install a rewrite for something that already reduces.
+(For a similar reason, Solutions5-tom has the rewrites commented out to
+make our build scripts for github work, so you will need to uncomment
+those in your copy to load the file.)
 
 ```agda
 {-# OPTIONS --rewriting --without-K #-}

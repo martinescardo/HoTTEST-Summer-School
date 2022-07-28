@@ -220,7 +220,7 @@ from-to = Circle2-elim _
 
 To do the other direction you'll need 
 
-```
+```agda
 postulate
   S1-elim : (X : S1 → Type)
             (x : X base)
@@ -263,7 +263,7 @@ mult = S1-rec ((\ y → y)) (λ≡ (S1-elim (λ z → z ≡ z) loop (PathOver-pa
 
 Note that it is also possible to do this without funext by binding the
 second input before doing the S1-rec on the first input (thanks Ulrik!):
-```
+```agda
 mult-nofunext : S1 → S1 → S1
 mult-nofunext x y = S1-rec y (S1-elim (λ z → z ≡ z) loop (PathOver-path-loop (refl _)) y) x
 ```

@@ -1,4 +1,31 @@
-**To make this file typecheck, you will need to uncomment two REWRITE rules, see (†) below. (They are commented because of idiosyncrasies in building corresponding GitHub pages.)**
+
+
+**To make this file typecheck, you will need to uncomment two REWRITE
+  rules, see (†) below. (They are commented because of idiosyncrasies in
+  building corresponding GitHub pages.)**
+
+For this week we have two solution files for the exercises.  Tom de
+Jong's solutions below.  Dan Licata's solutions are in
+Solutions5-dan.lagda.md.  We are providing both to illustrate slightly
+different ways of using Agda.  Tom's are a little more verbose and
+easier for a person to read non-interactively.  Dan's are a little more
+inlined and meant to show you roughly the minimum text you need to get
+Agda to check the proofs, but are harder to read unless you do so
+interactively (by putting holes around sub-expressions and getting Agda
+to tell you what the types are supposed to be).  It's sometimes nice to
+code in the terse style when you are coding for yourself, and then to
+clean it up more like the more verbose solution when writing it up for
+other people.
+
+Note: Agda will get confused if you make a single file that imports both
+our solutions and your solutions in Exercises5.  The reason is that
+rewrite rules are installed globally, and both files declare rewrites
+for the reduction rules for suspension types (if you get that far), and
+Agda won't let you install a rewrite for something that already reduces.
+(For a similar reason, Solutions5-tom has the rewrites commented out to
+make our build scripts for github work, so you will need to uncomment
+those in your copy to load the file.)
+
 
 ```agda
 {-# OPTIONS --rewriting --without-K #-}
