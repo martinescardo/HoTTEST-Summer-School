@@ -876,19 +876,19 @@ given by $f \mapsto \lambda x.\lambda y. f(x,y)$ is an equivalence for any type 
 
 \begin{thm}[universal property of \texorpdfstring{$\Sigma$}{Sigma}-types]
 Let $B$ be a type family over $A$ and let $C$ be a type family over $\sum_{x:A}B(x)$. Then the map
-\[ \term{ev-pair} : \left( \sum_{z: \sum_{x:A}B(x)} C(z) \right) \to \left( \prod_{x:A}\prod_{y:B(x)} C(x,y) \right)\]
+\[ \term{ev-pair} : \left( \prod_{z: \sum_{x:A}B(x)} C(z) \right) \to \left( \prod_{x:A}\prod_{y:B(x)} C(x,y) \right)\]
 given by $f \mapsto \lambda x.\lambda y. f(x,y)$ is an equivalence
 \end{thm}
 \begin{proof}
 The inverse map is given by the induction principle for $\Sigma$-types:
-\[ \ind_\Sigma : \left( \prod_{x:A}\prod_{y:B(x)} C(x,y) \right) \to \left( \sum_{z: \sum_{x:A}B(x)} C(z) \right) .\]
+\[ \ind_\Sigma : \left( \prod_{x:A}\prod_{y:B(x)} C(x,y) \right) \to \left( \prod_{z: \sum_{x:A}B(x)} C(z) \right) .\]
 By the computation rule for $\Sigma$ types, we have the homotopy
 \[ \term{refl-htpy} : \term{ev-pair} \circ\ind_\Sigma \sim \id,\]
 which shows that $\ind_\Sigma$ is a section of $\term{ev-pair}$.
 
 Function extensionality is used to construct the other homotopy. To define a homotopy $\ind_\Sigma \circ \term{ev-pair} \sim \id$ requires identifications $\ind_\Sigma(\lambda x. \lambda y. f(x,y)) = f$. By function extensionality it suffices to show that
 \[ \prod_{z: \sum_{x:A}B(x)} \ind_\Sigma(\lambda x. \lambda y. f(x,y))(t) = f(t).\] By $\Sigma$-induction it suffices to prove this for pairs in which case we require identifications
-\[ \ind_\Sigma(\lambda x. \lambda y. f(x,y)(a,b) = f(a,b),\]
+\[ \ind_\Sigma(\lambda x. \lambda y. f(x,y))(a,b) = f(a,b),\]
 but this holds definitionally by the computation rule for $\Sigma$ types.
 \end{proof}
 
