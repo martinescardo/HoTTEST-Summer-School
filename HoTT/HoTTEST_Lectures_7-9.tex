@@ -417,7 +417,7 @@ Given a type $A$ and a term $a : A$ in context $\Gamma$, the identity type provi
 
 That is, if $(E,r)$ is an identity system at $(A,a)$ and $P$ is a family of types over $x:A$ and $y:E(x)$ then for each $p : P(a,r)$ there is a dependent function $f :\prod_{x:A} \prod_{y:E(x)} P(x,y)$ with an identification $h : f(a,r) = p$. This is a variant of the path induction principal where the computation rule is given by an identification rather than by a definitional equality.
 
-\begin{thm}[fundamental theorem of identity types] Let $A$ be a type, let $a :A$, and let $E : A \to \UU$ with $r : E(a)$. Define a family of maps  \[ \term{path-ind}_a r : \prod_{x:A}(a=x) \to E(x)\] by $(a,\refl_a) \mapsto r$. Then the following are logically equivalent:
+\begin{thm}[fundamental theorem of identity types] Let $A$ be a type, let $a :A$, and let $E : A \to \UU$ with $r : E(a)$. Define a family of maps  \[ \term{path-ind}_a r : \prod_{x:A}(a=x) \to E(x)\] by $\refl_a \mapsto r$. Then the following are logically equivalent:
 \begin{enumerate}
 \item $\term{path-ind}_ar$ is a family of equivalences.
 \item The total space $\sum_{x:A}E(x)$ is contractible with $(a,r)$ as its center of contraction.
@@ -465,7 +465,7 @@ Since this map carries $(m,\term{refl-Eq}_\bN(m))$ to $(m+1,\term{refl-Eq}_\bN(m
 Prove that these hold for the type $\bN$.
 \end{exc}
 
-It it interesting to compare the set-theoretic axiomatization of the natural numbers, via Peano's postulates, with the type-theoretic axiomatization, using the rules for inductive types. The type theoretic induction principle is manifestly stronger than the set theoretic principle of maximal induction, since the latter considers only predicates $P : \bN \to \Prop$---valued in the \emph{universe of propositions}, to be defined in the next lecture---while the latter allows arbitrary families of types $P \colon \bN \to \UU$. In particular, this strengthened induction principle allows us to define the observational equality type family, which can be used to prove the properties of the successor function mentioned above.
+It it interesting to compare the set-theoretic axiomatization of the natural numbers, via Peano's postulates, with the type-theoretic axiomatization, using the rules for inductive types. The type theoretic induction principle is manifestly stronger than the set theoretic principle of mathematical induction, since the latter considers only predicates $P : \bN \to \Prop$---valued in the \emph{universe of propositions}, to be defined in the next lecture---while the latter allows arbitrary families of types $P \colon \bN \to \UU$. In particular, this strengthened induction principle allows us to define the observational equality type family, which can be used to prove the properties of the successor function mentioned above.
 
 \section*{Disjointness of coproducts}
 
