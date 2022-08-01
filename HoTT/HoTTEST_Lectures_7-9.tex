@@ -454,7 +454,7 @@ is defined by induction on $m,n : \bN$ from the base case $\gamma(0,0, \star) \c
 
 In the inductive step we seek an identification $\gamma(m+1,n+1,e) : (m+1, \term{refl-Eq}_\bN(m+1)) = (n+1,e)$. To define this we use the map
 \[ \lambda(n,e).(n+1,e) : \sum_{n:\bN}\Eq_\bN(m,n) \to \sum_{n : \bN}\Eq_\bN(m+1,n).\]
-Since this map carries $(m,\term{refl-Eq}_\bN(m))$ to $(m+1,\term{refl-Eq}_\bN(m+1))$ we can apply the map to the identification $(m,n,e)$ to get the identification we seek.
+Since this map carries $(m,\term{refl-Eq}_\bN(m))$ to $(m+1,\term{refl-Eq}_\bN(m+1))$, $\ap_{ \lambda(n,e).(n+1,e)}\gamma(m,n,e)$ provides the identification we seek.
 \end{proof}
 
 \begin{exc} Peano's axioms for the natural numbers assert that:
@@ -571,6 +571,16 @@ because then we can use this function $f$ applied to one of the two terms $x,y :
 Finally, if $\term{const}_\star : A \to \1$ is an embedding, then the types $(x=y)$ and $(\star=\star)$ are equivalent. The latter type is contractible so the former must be as well. This proves that (iv) implies (i).
 \end{proof}
 
+The final step of the proof relied on the fact that the notion of contractibility is invariant under equivalence of types. The same is true for the propositions:
+
+\begin{lem} Suppose $e : A\simeq B$. Then
+\[ \isprop{A} \iff \isprop{B}.\]
+\end{lem}
+
+\begin{proof}
+Since $e$ is an equivalence, $e$ is an embedding, meaning that $\ap_e : (x=_Ay) \to (e(x)=_B e(y))$ is an equivalence. Now if $B$ is a proposition then $(e(x)=_Be(y))$ is contractible which then implies that $(x=_Ay)$ is contractible. Thus $\isprop(B) \to \isprop(A)$. The converse is proven similarly using the inverse equivalence to $e$.
+\end{proof}
+
 A useful feature of propositions is that logical equivalences become equivalences:
 
 \begin{prop} For propositions $P$ and $Q$
@@ -580,15 +590,7 @@ A useful feature of propositions is that logical equivalences become equivalence
 Clearly we have $(P \simeq Q) \to (P \iff Q)$ so the content is in the converse. Given $f : P \to Q$ and $g : Q \to P$ we obtain homotopies $f \circ g \sim \id$ and $g \circ f \sim \id$ using the fact that any two elements in $P$ and $Q$ can be identified. Thus, $f$ and $g$ are equivalence inverses.
 \end{proof}
 
-Furthermore, the property of being a proposition is equivalence invariant:
 
-\begin{lem} Suppose $e : A\simeq B$. Then
-\[ \isprop{A} \iff \isprop{B}.\]
-\end{lem}
-
-\begin{proof}
-Since $e$ is an equivalence, $e$ is an embedding, meaning that $\ap_e : (x=_Ay) \to (e(x)=_B e(y))$ is an equivalence. Now if $B$ is a proposition then $(e(x)=_Be(y))$ is contractible which then implies that $(x=_Ay)$ is contractible. Thus $\isprop(B) \to \isprop(A)$. The converse is proven similarly using the inverse equivalence to $e$.
-\end{proof}
 
 
 \section*{Sets}
@@ -653,7 +655,10 @@ So far we have defined:
 \isprop(A) &\coloneq \prod_{x,y:A} \iscontr(x=y) \\
 \is{set}(A) &\coloneq \prod_{x,y:A} \isprop(x=y)
 \end{align*}
-These define the first few layers of the hierarchy of truncation levels. This hierarchy starts at level -2 with the contractible types and continues at level -1 with the propositions. This makes level 0 the sets, which are typically thought of as ``0-dimensional.''
+The is an obvious pattern here that we might continue, with the next definition being $\prod_{x,y:A} \is{set}(x=y)$. But what do we call this?
+
+These predicates define the first few layers of the hierarchy of truncation levels. Sets, are often thought of as ``0-dimensional,'' so they form level 0 of the hierarchy. The propositions then live at level -1 and contractible types are at level -2. The next level in the hierarchy defines the 1-types $\is{1-type}(A) \coloneq\prod_{x,y:A} \is{set}(x=y)$.
+
 
 Let $\bT$ be the inductive type with constructors $-2_\bT : \bT$ and $\term{succ}_\bT : \bT \to \bT$. The natural inclusion $i \colon \bN \to \bT$ is defined recursively by $i(0_\bN) \coloneq \term{succ}_\bT (\term{succ}_\bT (-2_\bT))$ and $i(\suc(n)) \coloneq \term{succ}_\bT (i(n))$. We abbreviate by writing $-2,-1,0,1,2,\ldots$ for the first few terms of $\bT$ when the context is clear.
 
@@ -687,9 +692,11 @@ In particular:
 
 General truncation levels are stable under equivalence:
 
-\begin{prop} If $e : A \simeq B$ and $B$ is a $k$-type so is $A$.
-\end{prop}
+\begin{lem} If $e : A \simeq B$ then $\is{trunc}_k A \iff \is{trunc}_kB$.
+\end{lem}
 \begin{proof}
+As before we show that if $B$ is a $k$-type then so is $A$. The converse follows by using $(A \simeq B) \to (B \simeq A)$. We prove this by induction on $k : \bT$.
+
 We know this for contractible types, which is the base case. For the inductive step, $e: A \simeq B$ provides an equivalence $\ap_e :(x=y) \to (e(x)=e(y))$ for any $x,y:A$. If $B$ is a $k+1$-type its identity types are $k$-types so the inductive hypothesis implies that $(x=y)$ is also a $k$-type. This proves that $A$ is a $k+1$-type.
 \end{proof}
 
@@ -840,9 +847,9 @@ For a non-dependent family we conclude that:
 In particular, $\neg A$ is a proposition for any type $A$!
 
 
-\section*{The type theoretic axiom of choice}
+\section*{The type theoretic principle of choice}
 
-There's a result that's sometimes called the ``type theoretic axiom of choice'' that is just true, asserting that $\Pi$-types distribute over $\Sigma$-types. We'll now give a proof.
+There's a result that's sometimes called the ``type theoretic principle of choice'' that is just true, asserting that $\Pi$-types distribute over $\Sigma$-types. We'll now give a proof.
 
 \begin{thm} For any family of types $x :A, y : B(x) \vdash C(x,y) \univ$ the map
 \[ \term{choice} : \left(\prod_{x:A}\sum_{y:B(x)}C(x,y) \right) \to \left( \sum_{f: \prod_{x:A}B(x)} \prod_{x:A} C(x,f(x))\right)\]
