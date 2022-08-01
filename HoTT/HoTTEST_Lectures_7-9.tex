@@ -530,9 +530,26 @@ We suggest a final exercise, a repeat of an exercise that appeared on a previous
 
 \part*{August 1: Propositions, sets, and general truncation levels}
 
-We now formally study propositions in homotopy type theory.
+Topologists are familiar with various spaces built by attaching cells. These cell complexes can also be described in homotopy type theory as higher inductive types.
+
+For instance, we have types like $\emptyset$, $\1$, and $\1+\1$, which are built by freely adding points.
+
+The circle $S^1$ can be built by freely attaching a basepoint and then a loop identifying the basepoint with itself. 
+
+Higher dimensional spheres can be built analogously: the 2-sphere is defined by attaching a free 2-dimensional loop from $\refl_\base$ to itself, while the 3-sphere is defined by attaching a free 3-dimensional loop from $\refl_{\refl_\base}$ to itself, and so on.
+
+Other spaces that can be formed as cell complexes include the torus $T$, which is built from one point, two loops $a$ and $b$, and a 2-dimensional path from $a \cdot b \cdot a^{-1} \cdot b^{-1}$ to $\refl$. Certain spaces, like $\mathbb{R}P^\infty$ and $\mathbb{C}P^\infty$, require cells in arbitrarily large dimensions.
+
+Today we will introduce a hierarchy that classifies all types according to their truncation level, which recovers the topological characterization of ``homotopy $n$-types.'' Note that being truncated at level $n$ does \emph{not} correspond to the naive notion of having ``dimension $n$.'' While the types $\emptyset$, $\1$, and $\1+\1$ are all 0-types, as one might expect, the types $S^1$, $T$, and $\mathbb{R}P^\infty$ are all 1-types, even though the latter are built using higher cells. The type $\mathbb{C}P^\infty$ is a 2-type, but $S^2$ is not. Indeed, only the lowest dimensional spheres $S^0$ and $S^1$ have finite truncation levels.
+
+Finally, as we will learn, homotopy type theory extends this hierarchy downwards: $\emptyset$ and $\1$ are both -1-types, aka \emph{propositions}, while $\1$ is also a -2-type, aka contractible.  
 
 \section*{Propositions}
+
+Recall a type $A$ is \textbf{contractible} if it has a term of type
+\[ \iscontr{A} \coloneq \Sigma_{c :A}\Pi_{x:A} c =x.\]
+
+We now formally study propositions in homotopy type theory.
 
 \begin{defn} A type $A$ is a \textbf{proposition} if all of its identity types are contractible: i.e., if it comes with a term of type
 \[ \is{prop}(A) \coloneq \prod_{x,y:A} \is{contr}(x=y).\]
@@ -724,10 +741,18 @@ We'll show that for subtypes $B$ over $A$ the map $\pr_1 \colon \sum_{x:A} B(x) 
 \end{enumerate}
 \end{thm}
 \begin{proof}
-By the fundamental theorem of identity types, $f$ is an embedding if and only if $\sum_{x:A}f(x)=_B f(y)$ is contractible for each $y :A$. Thus $f$ is an embedding iff $\fib_f(f(y))$ is contractible for each $y : A$. If $b:B$ and $p : f(y) = b$ then transport defines an equivalence
-\[ \fib_f(f(y)) \simeq \fib_f(b).\]
-Thus $f$ is an embedding iff $\fib_f(b)$ is contractible for each $b : B$ equipped with $p : f(y) = b$ for some $y:A$. This latter condition may be re-expressed as \[ \fib_f(b) \to \iscontr(\fib_f(b)),\]
-which asserts that each $\fib_f(b)$ is a proposition.
+By the fundamental theorem of identity types, $f$ is an embedding if and only if $\sum_{x:A}f(x)=_B f(y)$ is contractible for each $y :A$. This is the fiber of $f$ over the point $f(y) : B$. Thus condition (i) is logically equivalent to:\\
+\indent {\em (i')} $\fib_f(f(a))$ is contractible for each $a : A$.\\
+At the same time, by our logically equivalent ways of characterizing the propositions, (ii) is logically equivalent to:
+\\
+\indent {\em (ii')} $\fib_f(b) \to \iscontr{(\fib_f(b))}$ for all $b : B$.\\
+We'll prove that (i') and (ii') are logically equivalent.
+
+Assume (i'). let $b : B$, and suppose $\fib_f(b)$ holds, which by $\Sigma$-induction provides terms $x:A$ and $p : f(x) = b$. By (i'), $\fib_ff(x)$ is contractible and transport along $p$ then defines an equivalence
+\[ \fib_f(f(x)) \simeq \fib_f(b).\]
+Thus $\fib_f(b)$ must be contractible as well, proving (ii').
+
+Now assume (ii') and let $a : A$. By our assumption (ii'), to show that $\fib_f(f(a))$ is contractible it suffices to show that it is inhabited, which we do with the pair $(a, \refl_{f(a)})$.
 \end{proof}
 
 \begin{cor} For any family $B : A \to \UU$ the following are logically equivalent:
