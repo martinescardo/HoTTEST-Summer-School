@@ -234,7 +234,7 @@ For this problem, we will simply assume the nice universal property for
 this type: that it maps uniquely into any other type with a point and
 two equivalences, and that it is a set.
 
-```
+```agda
 module AssumeF2 
     (F2 : Type)
     (1F : F2)
@@ -275,7 +275,7 @@ module AssumeF2
 (⋆⋆⋆) Prove that the loop space of the Bowtie is F2.  Each bit of the
 proof will be analogous to the corresponding part of the Circle proof.
 
-```
+```agda
     Cover : Bowtie → Type
     Cover = {!!}
                   
