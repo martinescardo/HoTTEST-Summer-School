@@ -1,6 +1,6 @@
 ```agda
 
-{-# OPTIONS --rewriting --without-K --allow-unsolved-metas #-}
+{-# OPTIONS --rewriting --without-K #-}
 
 open import new-prelude
 
@@ -11,6 +11,11 @@ open import Solutions5-dan using (PathOver-path≡)
 module Lecture6-notes where
 
 ```
+
+In this class, we will go over the proof that the fundamental group of
+the circle is the integers.  Mike Shulman first proved this theorem in
+HoTT; the proof below is my simplified version of his proof.
+
 # Univalence
 
 Univalence says that paths in the universe are equivalences.  We'll
@@ -304,10 +309,8 @@ finish the final goal:
   transport-Cover-then-loop (refl _) y = ap (\ Z → transport Cover (Z) y) (∙unit-l loop) ∙
                                          transport-Cover-loop _
   
-  decode-encode : (x : S1) (p : Cover x) → encode x (decode x p) ≡ p
-  decode-encode = S1-elim _
-                          (\ x → endo-ℤ-is-id encode-loop^ encode-loop^-zero encode-loop^-succ x)
-                          (PathOver-Π \ aa' → fwd (transport-to-pathover _ _ _ _) (hSetℤ _ _ _ _)) where
+  decode-encode-base : (x : ℤ) → encode base (loop^ x) ≡ x
+  decode-encode-base x = endo-ℤ-is-id encode-loop^ encode-loop^-zero encode-loop^-succ x where
     encode-loop^ : ℤ → ℤ
     encode-loop^ x = encode base (loop^ x)
   
@@ -317,6 +320,12 @@ finish the final goal:
     encode-loop^-succ : (encode-loop^ ∘ fwd succℤ) ∼ (fwd succℤ ∘ encode-loop^)
     encode-loop^-succ x = ap (\ H → encode base H) (ℤ-rec-succℤ _ _ x) ∙
                           transport-Cover-then-loop (loop^ x) 0ℤ 
+
+
+  decode-encode : (x : S1) (p : Cover x) → encode x (decode x p) ≡ p
+  decode-encode = S1-elim _
+                          decode-encode-base 
+                          (PathOver-Π \ aa' → fwd (transport-to-pathover _ _ _ _) (hSetℤ _ _ _ _)) 
 ```
 
 Here's most of an implementation of integers:
