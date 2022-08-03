@@ -144,6 +144,4 @@ data ℕ : Type where
  zero : ℕ
  suc  : ℕ → ℕ
 
-{-# BUILTIN NATURAL ℕ #-}
-
 ```
