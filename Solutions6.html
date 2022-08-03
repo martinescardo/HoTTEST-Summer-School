@@ -1,0 +1,1487 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>HoTTEST Summer School 2022 Lecture Notes</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+</head>
+
+<body class="text-page">
+<main>
+<div id="post-toc-container" style="padding-left: 1em; padding-right: 1em;">
+
+  <article>
+
+<pre class="Agda">
+<a id="11" class="Symbol">{-#</a> <a id="15" class="Keyword">OPTIONS</a> <a id="23" class="Pragma">--rewriting</a> <a id="35" class="Pragma">--without-K</a> <a id="47" class="Symbol">#-}</a>
+
+<a id="52" class="Keyword">open</a> <a id="57" class="Keyword">import</a> <a id="64" href="new-prelude.html" class="Module">new-prelude</a>
+
+<a id="77" class="Keyword">open</a> <a id="82" class="Keyword">import</a> <a id="89" href="Lecture6-notes.html" class="Module">Lecture6-notes</a>
+<a id="104" class="Keyword">open</a> <a id="109" class="Keyword">import</a> <a id="116" href="Lecture5-notes.html" class="Module">Lecture5-notes</a>
+
+<a id="132" class="Keyword">module</a> <a id="139" href="Solutions6.html" class="Module">Solutions6</a> <a id="150" class="Keyword">where</a>
+</pre>
+<p>In this problem set, you will look at a variation on the circle, a
+higher inductive type for a “bowtie”, i.e. two loops at a point.
+(Unscaffolded harder exercise: do these problems for a “wedge of k
+circles” for any natural number k.)</p>
+<h1 id="hit-recursion-from-induction">HIT recursion from induction</h1>
+<p>In general, the dependent elimination rule for a higher inductive
+type implies the simple/non-dependent elimination rule. In this problem,
+you will show this for the bowtie. We could have done this for the
+circles in the past lectures, but I wanted to introduce the
+non-dependent elimination rule first, and then left both as
+postulates.</p>
+<p>Note that this problem has a bit of a “metamathematical” flavor
+(showing that a set of axioms is implied by a shorter set). If you
+prefer to jump right to the more “mathematical” problem of
+characterizing the loop space of the bowtie below, I recommend turning
+Bowtie-rec and its associated reductions into postulates like we have
+done for previous higher inductive types, and adding a rewrite for the
+reduction on the base point. This will make Agda display things in a
+more easy to read way (otherwise, it will display Bowtie-rec as a
+meta-variable).</p>
+<p>Here is the definition of the bowtie and its dependent elimination
+rule:</p>
+<pre class="Agda"><a id="1411" class="Keyword">postulate</a>
+  <a id="Bowtie"></a><a id="1423" href="Solutions6.html#1423" data-type="Set" class="Postulate">Bowtie</a> <a id="1430" class="Symbol">:</a> <a id="1432" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Set</a>
+  <a id="baseB"></a><a id="1438" href="Solutions6.html#1438" data-type="Bowtie" class="Postulate">baseB</a> <a id="1444" class="Symbol">:</a> <a id="1446" href="Solutions6.html#1423" data-type="Set" class="Postulate">Bowtie</a>
+  <a id="loop1"></a><a id="1455" href="Solutions6.html#1455" data-type="baseB ≡ baseB" class="Postulate">loop1</a> <a id="1461" class="Symbol">:</a> <a id="1463" href="Solutions6.html#1438" data-type="Bowtie" class="Postulate">baseB</a> <a id="1469" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="1471" href="Solutions6.html#1438" data-type="Bowtie" class="Postulate">baseB</a>
+  <a id="loop2"></a><a id="1479" href="Solutions6.html#1479" data-type="baseB ≡ baseB" class="Postulate">loop2</a> <a id="1485" class="Symbol">:</a> <a id="1487" href="Solutions6.html#1438" data-type="Bowtie" class="Postulate">baseB</a> <a id="1493" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="1495" href="Solutions6.html#1438" data-type="Bowtie" class="Postulate">baseB</a>
+  <a id="Bowtie-elim"></a><a id="1503" href="Solutions6.html#1503" data-type="(X : Bowtie → Set l) (x : X baseB) →
+PathOver X loop1 x x → PathOver X loop2 x x → (x₁ : Bowtie) → X x₁" class="Postulate">Bowtie-elim</a> <a id="1515" class="Symbol">:</a> <a id="1517" class="Symbol">{</a><a id="1518" href="Solutions6.html#1518" class="Bound">l</a> <a id="1520" class="Symbol">:</a> <a id="1522" href="Agda.Primitive.html#597" data-type="Set" class="Postulate">Level</a><a id="1527" class="Symbol">}</a> <a id="1529" class="Symbol">(</a><a id="1530" href="Solutions6.html#1530" class="Bound">X</a> <a id="1532" class="Symbol">:</a> <a id="1534" href="Solutions6.html#1423" data-type="Set" class="Postulate">Bowtie</a> <a id="1541" class="Symbol">→</a> <a id="1543" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="1548" href="Solutions6.html#1518" class="Bound">l</a><a id="1549" class="Symbol">)</a>
+                <a id="1567" class="Symbol">(</a><a id="1568" href="Solutions6.html#1568" class="Bound">x</a> <a id="1570" class="Symbol">:</a> <a id="1572" href="Solutions6.html#1530" class="Bound">X</a> <a id="1574" href="Solutions6.html#1438" data-type="Bowtie" class="Postulate">baseB</a><a id="1579" class="Symbol">)</a>
+                <a id="1597" class="Symbol">(</a><a id="1598" href="Solutions6.html#1598" class="Bound">p</a> <a id="1600" class="Symbol">:</a> <a id="1602" href="Solutions6.html#1568" class="Bound">x</a> <a id="1604" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">≡</a> <a id="1606" href="Solutions6.html#1568" class="Bound">x</a> <a id="1608" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">[</a> <a id="1610" href="Solutions6.html#1530" class="Bound">X</a> <a id="1612" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">↓</a> <a id="1614" href="Solutions6.html#1455" data-type="baseB ≡ baseB" class="Postulate">loop1</a> <a id="1620" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">]</a><a id="1621" class="Symbol">)</a>
+                <a id="1639" class="Symbol">(</a><a id="1640" href="Solutions6.html#1640" class="Bound">q</a> <a id="1642" class="Symbol">:</a> <a id="1644" href="Solutions6.html#1568" class="Bound">x</a> <a id="1646" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">≡</a> <a id="1648" href="Solutions6.html#1568" class="Bound">x</a> <a id="1650" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">[</a> <a id="1652" href="Solutions6.html#1530" class="Bound">X</a> <a id="1654" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">↓</a> <a id="1656" href="Solutions6.html#1479" data-type="baseB ≡ baseB" class="Postulate">loop2</a> <a id="1662" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">]</a><a id="1663" class="Symbol">)</a>
+                <a id="1681" class="Symbol">→</a> <a id="1683" class="Symbol">(</a><a id="1684" href="Solutions6.html#1684" class="Bound">x</a> <a id="1686" class="Symbol">:</a> <a id="1688" href="Solutions6.html#1423" data-type="Set" class="Postulate">Bowtie</a><a id="1694" class="Symbol">)</a> <a id="1696" class="Symbol">→</a> <a id="1698" href="Solutions6.html#1530" class="Bound">X</a> <a id="1700" href="Solutions6.html#1684" class="Bound">x</a>
+  <a id="Bowtie-elim-base"></a><a id="1704" href="Solutions6.html#1704" data-type="(X : Bowtie → Set l) (x : X baseB) (p : PathOver X loop1 x x)
+(q : PathOver X loop2 x x) →
+Bowtie-elim X x p q baseB ≡ x" class="Postulate">Bowtie-elim-base</a> <a id="1721" class="Symbol">:</a> <a id="1723" class="Symbol">{</a><a id="1724" href="Solutions6.html#1724" class="Bound">l</a> <a id="1726" class="Symbol">:</a> <a id="1728" href="Agda.Primitive.html#597" data-type="Set" class="Postulate">Level</a><a id="1733" class="Symbol">}</a> <a id="1735" class="Symbol">(</a><a id="1736" href="Solutions6.html#1736" class="Bound">X</a> <a id="1738" class="Symbol">:</a> <a id="1740" href="Solutions6.html#1423" data-type="Set" class="Postulate">Bowtie</a> <a id="1747" class="Symbol">→</a> <a id="1749" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="1754" href="Solutions6.html#1724" class="Bound">l</a><a id="1755" class="Symbol">)</a>
+                     <a id="1778" class="Symbol">(</a><a id="1779" href="Solutions6.html#1779" class="Bound">x</a> <a id="1781" class="Symbol">:</a> <a id="1783" href="Solutions6.html#1736" class="Bound">X</a> <a id="1785" href="Solutions6.html#1438" data-type="Bowtie" class="Postulate">baseB</a><a id="1790" class="Symbol">)</a>
+                     <a id="1813" class="Symbol">(</a><a id="1814" href="Solutions6.html#1814" class="Bound">p</a> <a id="1816" class="Symbol">:</a> <a id="1818" href="Solutions6.html#1779" class="Bound">x</a> <a id="1820" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">≡</a> <a id="1822" href="Solutions6.html#1779" class="Bound">x</a> <a id="1824" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">[</a> <a id="1826" href="Solutions6.html#1736" class="Bound">X</a> <a id="1828" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">↓</a> <a id="1830" href="Solutions6.html#1455" data-type="baseB ≡ baseB" class="Postulate">loop1</a> <a id="1836" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">]</a><a id="1837" class="Symbol">)</a>
+                     <a id="1860" class="Symbol">(</a><a id="1861" href="Solutions6.html#1861" class="Bound">q</a> <a id="1863" class="Symbol">:</a> <a id="1865" href="Solutions6.html#1779" class="Bound">x</a> <a id="1867" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">≡</a> <a id="1869" href="Solutions6.html#1779" class="Bound">x</a> <a id="1871" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">[</a> <a id="1873" href="Solutions6.html#1736" class="Bound">X</a> <a id="1875" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">↓</a> <a id="1877" href="Solutions6.html#1479" data-type="baseB ≡ baseB" class="Postulate">loop2</a> <a id="1883" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">]</a><a id="1884" class="Symbol">)</a>
+                  <a id="1904" class="Symbol">→</a> <a id="1906" href="Solutions6.html#1503" data-type="(X : Bowtie → Set l) (x : X baseB) →
+PathOver X loop1 x x → PathOver X loop2 x x → (x₁ : Bowtie) → X x₁" class="Postulate">Bowtie-elim</a> <a id="1918" href="Solutions6.html#1736" class="Bound">X</a> <a id="1920" href="Solutions6.html#1779" class="Bound">x</a> <a id="1922" href="Solutions6.html#1814" class="Bound">p</a> <a id="1924" href="Solutions6.html#1861" class="Bound">q</a> <a id="1926" href="Solutions6.html#1438" data-type="Bowtie" class="Postulate">baseB</a> <a id="1932" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="1934" href="Solutions6.html#1779" class="Bound">x</a>
+<a id="1936" class="Symbol">{-#</a> <a id="1940" class="Keyword">REWRITE</a> <a id="1948" href="Solutions6.html#1704" data-type="(X : Bowtie → Set l) (x : X baseB) (p : PathOver X loop1 x x)
+(q : PathOver X loop2 x x) →
+Bowtie-elim X x p q baseB ≡ x" class="Postulate">Bowtie-elim-base</a> <a id="1965" class="Symbol">#-}</a>
+
+<a id="1970" class="Keyword">postulate</a>
+  <a id="Bowtie-elim-loop1"></a><a id="1982" href="Solutions6.html#1982" data-type="(X : Bowtie → Set l) (x : X baseB) (p : PathOver X loop1 x x)
+(q : PathOver X loop2 x x) →
+apd (Bowtie-elim X x p q) loop1 ≡ p" class="Postulate">Bowtie-elim-loop1</a> <a id="2000" class="Symbol">:</a> <a id="2002" class="Symbol">{</a><a id="2003" href="Solutions6.html#2003" class="Bound">l</a> <a id="2005" class="Symbol">:</a> <a id="2007" href="Agda.Primitive.html#597" data-type="Set" class="Postulate">Level</a><a id="2012" class="Symbol">}</a> <a id="2014" class="Symbol">(</a><a id="2015" href="Solutions6.html#2015" class="Bound">X</a> <a id="2017" class="Symbol">:</a> <a id="2019" href="Solutions6.html#1423" data-type="Set" class="Postulate">Bowtie</a> <a id="2026" class="Symbol">→</a> <a id="2028" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="2033" href="Solutions6.html#2003" class="Bound">l</a><a id="2034" class="Symbol">)</a>
+                      <a id="2058" class="Symbol">(</a><a id="2059" href="Solutions6.html#2059" class="Bound">x</a> <a id="2061" class="Symbol">:</a> <a id="2063" href="Solutions6.html#2015" class="Bound">X</a> <a id="2065" href="Solutions6.html#1438" data-type="Bowtie" class="Postulate">baseB</a><a id="2070" class="Symbol">)</a>
+                      <a id="2094" class="Symbol">(</a><a id="2095" href="Solutions6.html#2095" class="Bound">p</a> <a id="2097" class="Symbol">:</a> <a id="2099" href="Solutions6.html#2059" class="Bound">x</a> <a id="2101" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">≡</a> <a id="2103" href="Solutions6.html#2059" class="Bound">x</a> <a id="2105" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">[</a> <a id="2107" href="Solutions6.html#2015" class="Bound">X</a> <a id="2109" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">↓</a> <a id="2111" href="Solutions6.html#1455" data-type="baseB ≡ baseB" class="Postulate">loop1</a> <a id="2117" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">]</a><a id="2118" class="Symbol">)</a>
+                      <a id="2142" class="Symbol">(</a><a id="2143" href="Solutions6.html#2143" class="Bound">q</a> <a id="2145" class="Symbol">:</a> <a id="2147" href="Solutions6.html#2059" class="Bound">x</a> <a id="2149" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">≡</a> <a id="2151" href="Solutions6.html#2059" class="Bound">x</a> <a id="2153" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">[</a> <a id="2155" href="Solutions6.html#2015" class="Bound">X</a> <a id="2157" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">↓</a> <a id="2159" href="Solutions6.html#1479" data-type="baseB ≡ baseB" class="Postulate">loop2</a> <a id="2165" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">]</a><a id="2166" class="Symbol">)</a>
+                    <a id="2188" class="Symbol">→</a> <a id="2190" href="Lecture5-notes.html#4872" data-type="(f : (x : A) → B x) (p : a1 ≡ a2) → PathOver B p (f a1) (f a2)" class="Function">apd</a> <a id="2194" class="Symbol">(</a><a id="2195" href="Solutions6.html#1503" data-type="(X : Bowtie → Set l) (x : X baseB) →
+PathOver X loop1 x x → PathOver X loop2 x x → (x₁ : Bowtie) → X x₁" class="Postulate">Bowtie-elim</a> <a id="2207" href="Solutions6.html#2015" class="Bound">X</a> <a id="2209" href="Solutions6.html#2059" class="Bound">x</a> <a id="2211" href="Solutions6.html#2095" class="Bound">p</a> <a id="2213" href="Solutions6.html#2143" class="Bound">q</a><a id="2214" class="Symbol">)</a> <a id="2216" href="Solutions6.html#1455" data-type="baseB ≡ baseB" class="Postulate">loop1</a> <a id="2222" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="2224" href="Solutions6.html#2095" class="Bound">p</a>
+  <a id="Bowtie-elim-loop2"></a><a id="2228" href="Solutions6.html#2228" data-type="(X : Bowtie → Set l) (x : X baseB) (p : PathOver X loop1 x x)
+(q : PathOver X loop2 x x) →
+apd (Bowtie-elim X x p q) loop2 ≡ q" class="Postulate">Bowtie-elim-loop2</a> <a id="2246" class="Symbol">:</a> <a id="2248" class="Symbol">{</a><a id="2249" href="Solutions6.html#2249" class="Bound">l</a> <a id="2251" class="Symbol">:</a> <a id="2253" href="Agda.Primitive.html#597" data-type="Set" class="Postulate">Level</a><a id="2258" class="Symbol">}</a> <a id="2260" class="Symbol">(</a><a id="2261" href="Solutions6.html#2261" class="Bound">X</a> <a id="2263" class="Symbol">:</a> <a id="2265" href="Solutions6.html#1423" data-type="Set" class="Postulate">Bowtie</a> <a id="2272" class="Symbol">→</a> <a id="2274" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="2279" href="Solutions6.html#2249" class="Bound">l</a><a id="2280" class="Symbol">)</a>
+                      <a id="2304" class="Symbol">(</a><a id="2305" href="Solutions6.html#2305" class="Bound">x</a> <a id="2307" class="Symbol">:</a> <a id="2309" href="Solutions6.html#2261" class="Bound">X</a> <a id="2311" href="Solutions6.html#1438" data-type="Bowtie" class="Postulate">baseB</a><a id="2316" class="Symbol">)</a>
+                      <a id="2340" class="Symbol">(</a><a id="2341" href="Solutions6.html#2341" class="Bound">p</a> <a id="2343" class="Symbol">:</a> <a id="2345" href="Solutions6.html#2305" class="Bound">x</a> <a id="2347" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">≡</a> <a id="2349" href="Solutions6.html#2305" class="Bound">x</a> <a id="2351" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">[</a> <a id="2353" href="Solutions6.html#2261" class="Bound">X</a> <a id="2355" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">↓</a> <a id="2357" href="Solutions6.html#1455" data-type="baseB ≡ baseB" class="Postulate">loop1</a> <a id="2363" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">]</a><a id="2364" class="Symbol">)</a>
+                      <a id="2388" class="Symbol">(</a><a id="2389" href="Solutions6.html#2389" class="Bound">q</a> <a id="2391" class="Symbol">:</a> <a id="2393" href="Solutions6.html#2305" class="Bound">x</a> <a id="2395" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">≡</a> <a id="2397" href="Solutions6.html#2305" class="Bound">x</a> <a id="2399" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">[</a> <a id="2401" href="Solutions6.html#2261" class="Bound">X</a> <a id="2403" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">↓</a> <a id="2405" href="Solutions6.html#1479" data-type="baseB ≡ baseB" class="Postulate">loop2</a> <a id="2411" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">]</a><a id="2412" class="Symbol">)</a>
+                    <a id="2434" class="Symbol">→</a> <a id="2436" href="Lecture5-notes.html#4872" data-type="(f : (x : A) → B x) (p : a1 ≡ a2) → PathOver B p (f a1) (f a2)" class="Function">apd</a> <a id="2440" class="Symbol">(</a><a id="2441" href="Solutions6.html#1503" data-type="(X : Bowtie → Set l) (x : X baseB) →
+PathOver X loop1 x x → PathOver X loop2 x x → (x₁ : Bowtie) → X x₁" class="Postulate">Bowtie-elim</a> <a id="2453" href="Solutions6.html#2261" class="Bound">X</a> <a id="2455" href="Solutions6.html#2305" class="Bound">x</a> <a id="2457" href="Solutions6.html#2341" class="Bound">p</a> <a id="2459" href="Solutions6.html#2389" class="Bound">q</a><a id="2460" class="Symbol">)</a> <a id="2462" href="Solutions6.html#1479" data-type="baseB ≡ baseB" class="Postulate">loop2</a> <a id="2468" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="2470" href="Solutions6.html#2389" class="Bound">q</a>
+</pre>
+<p>Next, we will prove the non-dependent elim/“recursion principle” from
+these. First, we need some lemmas.</p>
+<p>(⋆) Paths over a path in a constant fibration are equivalent to
+paths. It is simple to prove this by</p>
+<pre class="Agda"><a id="PathOver-constant"></a><a id="2697" href="Solutions6.html#2697" data-type="(p : a1 ≡ a2) → b1 ≡ b2 → PathOver (λ _ → B) p b1 b2" class="Function">PathOver-constant</a> <a id="2715" class="Symbol">:</a> <a id="2717" class="Symbol">{</a><a id="2718" href="Solutions6.html#2718" class="Bound">l1</a> <a id="2721" href="Solutions6.html#2721" class="Bound">l2</a> <a id="2724" class="Symbol">:</a> <a id="2726" href="Agda.Primitive.html#597" data-type="Set" class="Postulate">Level</a><a id="2731" class="Symbol">}</a> <a id="2733" class="Symbol">{</a><a id="2734" href="Solutions6.html#2734" class="Bound">A</a> <a id="2736" class="Symbol">:</a> <a id="2738" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="2743" href="Solutions6.html#2718" class="Bound">l1</a><a id="2745" class="Symbol">}</a> <a id="2747" class="Symbol">{</a><a id="2748" href="Solutions6.html#2748" class="Bound">B</a> <a id="2750" class="Symbol">:</a> <a id="2752" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="2757" href="Solutions6.html#2721" class="Bound">l2</a><a id="2759" class="Symbol">}</a>
+                  <a id="2779" class="Symbol">→</a> <a id="2781" class="Symbol">{</a><a id="2782" href="Solutions6.html#2782" class="Bound">a1</a> <a id="2785" href="Solutions6.html#2785" class="Bound">a2</a> <a id="2788" class="Symbol">:</a> <a id="2790" href="Solutions6.html#2734" class="Bound">A</a><a id="2791" class="Symbol">}</a>
+                  <a id="2811" class="Symbol">→</a> <a id="2813" class="Symbol">(</a><a id="2814" href="Solutions6.html#2814" class="Bound">p</a> <a id="2816" class="Symbol">:</a> <a id="2818" href="Solutions6.html#2782" class="Bound">a1</a> <a id="2821" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="2823" href="Solutions6.html#2785" class="Bound">a2</a><a id="2825" class="Symbol">)</a>
+                  <a id="2845" class="Symbol">→</a> <a id="2847" class="Symbol">{</a><a id="2848" href="Solutions6.html#2848" class="Bound">b1</a> <a id="2851" href="Solutions6.html#2851" class="Bound">b2</a> <a id="2854" class="Symbol">:</a> <a id="2856" href="Solutions6.html#2748" class="Bound">B</a><a id="2857" class="Symbol">}</a>
+                  <a id="2877" class="Symbol">→</a> <a id="2879" href="Solutions6.html#2848" class="Bound">b1</a> <a id="2882" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="2884" href="Solutions6.html#2851" class="Bound">b2</a>
+                  <a id="2905" class="Symbol">→</a> <a id="2907" href="Solutions6.html#2848" class="Bound">b1</a> <a id="2910" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">≡</a> <a id="2912" href="Solutions6.html#2851" class="Bound">b2</a> <a id="2915" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">[</a> <a id="2917" class="Symbol">(\</a> <a id="2920" href="Solutions6.html#2920" class="Bound">_</a> <a id="2922" class="Symbol">→</a> <a id="2924" href="Solutions6.html#2748" class="Bound">B</a><a id="2925" class="Symbol">)</a> <a id="2927" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">↓</a> <a id="2929" href="Solutions6.html#2814" class="Bound">p</a> <a id="2931" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">]</a>
+<a id="2933" href="Solutions6.html#2697" data-type="(p : a1 ≡ a2) → b1 ≡ b2 → PathOver (λ _ → B) p b1 b2" class="Function">PathOver-constant</a> <a id="2951" class="Symbol">(</a><a id="2952" href="new-prelude.html#502" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="2957" class="Symbol">_)</a> <a id="2960" class="Symbol">(</a><a id="2961" href="new-prelude.html#502" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="2966" class="Symbol">_)</a> <a id="2969" class="Symbol">=</a> <a id="2971" href="Lecture5-notes.html#3331" data-type="PathOver B (refl x) y y" class="InductiveConstructor">reflo</a>
+
+<a id="PathOver-constant-inverse"></a><a id="2978" href="Solutions6.html#2978" data-type="(p : a1 ≡ a2) → PathOver (λ _ → B) p b1 b2 → b1 ≡ b2" class="Function">PathOver-constant-inverse</a> <a id="3004" class="Symbol">:</a> <a id="3006" class="Symbol">{</a><a id="3007" href="Solutions6.html#3007" class="Bound">l1</a> <a id="3010" href="Solutions6.html#3010" class="Bound">l2</a> <a id="3013" class="Symbol">:</a> <a id="3015" href="Agda.Primitive.html#597" data-type="Set" class="Postulate">Level</a><a id="3020" class="Symbol">}</a> <a id="3022" class="Symbol">{</a><a id="3023" href="Solutions6.html#3023" class="Bound">A</a> <a id="3025" class="Symbol">:</a> <a id="3027" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="3032" href="Solutions6.html#3007" class="Bound">l1</a><a id="3034" class="Symbol">}</a> <a id="3036" class="Symbol">{</a><a id="3037" href="Solutions6.html#3037" class="Bound">B</a> <a id="3039" class="Symbol">:</a> <a id="3041" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="3046" href="Solutions6.html#3010" class="Bound">l2</a><a id="3048" class="Symbol">}</a>
+                          <a id="3076" class="Symbol">→</a> <a id="3078" class="Symbol">{</a><a id="3079" href="Solutions6.html#3079" class="Bound">a1</a> <a id="3082" href="Solutions6.html#3082" class="Bound">a2</a> <a id="3085" class="Symbol">:</a> <a id="3087" href="Solutions6.html#3023" class="Bound">A</a><a id="3088" class="Symbol">}</a>
+                          <a id="3116" class="Symbol">→</a> <a id="3118" class="Symbol">(</a><a id="3119" href="Solutions6.html#3119" class="Bound">p</a> <a id="3121" class="Symbol">:</a> <a id="3123" href="Solutions6.html#3079" class="Bound">a1</a> <a id="3126" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="3128" href="Solutions6.html#3082" class="Bound">a2</a><a id="3130" class="Symbol">)</a>
+                          <a id="3158" class="Symbol">→</a> <a id="3160" class="Symbol">{</a><a id="3161" href="Solutions6.html#3161" class="Bound">b1</a> <a id="3164" href="Solutions6.html#3164" class="Bound">b2</a> <a id="3167" class="Symbol">:</a> <a id="3169" href="Solutions6.html#3037" class="Bound">B</a><a id="3170" class="Symbol">}</a>
+                          <a id="3198" class="Symbol">→</a> <a id="3200" href="Solutions6.html#3161" class="Bound">b1</a> <a id="3203" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">≡</a> <a id="3205" href="Solutions6.html#3164" class="Bound">b2</a> <a id="3208" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">[</a> <a id="3210" class="Symbol">(\</a> <a id="3213" href="Solutions6.html#3213" class="Bound">_</a> <a id="3215" class="Symbol">→</a> <a id="3217" href="Solutions6.html#3037" class="Bound">B</a><a id="3218" class="Symbol">)</a> <a id="3220" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">↓</a> <a id="3222" href="Solutions6.html#3119" class="Bound">p</a> <a id="3224" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">]</a>
+                          <a id="3252" class="Symbol">→</a> <a id="3254" href="Solutions6.html#3161" class="Bound">b1</a> <a id="3257" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="3259" href="Solutions6.html#3164" class="Bound">b2</a>
+<a id="3262" href="Solutions6.html#2978" data-type="(p : a1 ≡ a2) → PathOver (λ _ → B) p b1 b2 → b1 ≡ b2" class="Function">PathOver-constant-inverse</a> <a id="3288" class="DottedPattern Symbol">.(</a><a id="3290" href="new-prelude.html#502" data-type="(x : A) → x ≡ x" class="DottedPattern InductiveConstructor">refl</a> <a id="3295" class="DottedPattern Symbol">_)</a> <a id="3298" href="Lecture5-notes.html#3331" data-type="PathOver B (refl x) y y" class="InductiveConstructor">reflo</a> <a id="3304" class="Symbol">=</a> <a id="3306" href="new-prelude.html#502" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="3311" class="Symbol">_</a>
+
+<a id="PathOver-constant-inverse-cancel1"></a><a id="3314" href="Solutions6.html#3314" data-type="(p : a1 ≡ a2) (q : b1 ≡ b2) →
+PathOver-constant-inverse p (PathOver-constant p q) ≡ q" class="Function">PathOver-constant-inverse-cancel1</a> <a id="3348" class="Symbol">:</a> <a id="3350" class="Symbol">{</a><a id="3351" href="Solutions6.html#3351" class="Bound">l1</a> <a id="3354" href="Solutions6.html#3354" class="Bound">l2</a> <a id="3357" class="Symbol">:</a> <a id="3359" href="Agda.Primitive.html#597" data-type="Set" class="Postulate">Level</a><a id="3364" class="Symbol">}</a> <a id="3366" class="Symbol">{</a><a id="3367" href="Solutions6.html#3367" class="Bound">A</a> <a id="3369" class="Symbol">:</a> <a id="3371" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="3376" href="Solutions6.html#3351" class="Bound">l1</a><a id="3378" class="Symbol">}</a> <a id="3380" class="Symbol">{</a><a id="3381" href="Solutions6.html#3381" class="Bound">B</a> <a id="3383" class="Symbol">:</a> <a id="3385" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="3390" href="Solutions6.html#3354" class="Bound">l2</a><a id="3392" class="Symbol">}</a>
+                          <a id="3420" class="Symbol">→</a> <a id="3422" class="Symbol">{</a><a id="3423" href="Solutions6.html#3423" class="Bound">a1</a> <a id="3426" href="Solutions6.html#3426" class="Bound">a2</a> <a id="3429" class="Symbol">:</a> <a id="3431" href="Solutions6.html#3367" class="Bound">A</a><a id="3432" class="Symbol">}</a>
+                          <a id="3460" class="Symbol">→</a> <a id="3462" class="Symbol">(</a><a id="3463" href="Solutions6.html#3463" class="Bound">p</a> <a id="3465" class="Symbol">:</a> <a id="3467" href="Solutions6.html#3423" class="Bound">a1</a> <a id="3470" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="3472" href="Solutions6.html#3426" class="Bound">a2</a><a id="3474" class="Symbol">)</a>
+                          <a id="3502" class="Symbol">→</a> <a id="3504" class="Symbol">{</a><a id="3505" href="Solutions6.html#3505" class="Bound">b1</a> <a id="3508" href="Solutions6.html#3508" class="Bound">b2</a> <a id="3511" class="Symbol">:</a> <a id="3513" href="Solutions6.html#3381" class="Bound">B</a><a id="3514" class="Symbol">}</a>
+                          <a id="3542" class="Symbol">→</a> <a id="3544" class="Symbol">(</a><a id="3545" href="Solutions6.html#3545" class="Bound">q</a> <a id="3547" class="Symbol">:</a> <a id="3549" href="Solutions6.html#3505" class="Bound">b1</a> <a id="3552" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="3554" href="Solutions6.html#3508" class="Bound">b2</a><a id="3556" class="Symbol">)</a>
+                          <a id="3584" class="Symbol">→</a> <a id="3586" href="Solutions6.html#2978" data-type="(p : a1 ≡ a2) → PathOver (λ _ → B) p b1 b2 → b1 ≡ b2" class="Function">PathOver-constant-inverse</a> <a id="3612" href="Solutions6.html#3463" class="Bound">p</a> <a id="3614" class="Symbol">(</a><a id="3615" href="Solutions6.html#2697" data-type="(p : a1 ≡ a2) → b1 ≡ b2 → PathOver (λ _ → B) p b1 b2" class="Function">PathOver-constant</a> <a id="3633" href="Solutions6.html#3463" class="Bound">p</a> <a id="3635" href="Solutions6.html#3545" class="Bound">q</a><a id="3636" class="Symbol">)</a> <a id="3638" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="3640" href="Solutions6.html#3545" class="Bound">q</a>
+<a id="3642" href="Solutions6.html#3314" data-type="(p : a1 ≡ a2) (q : b1 ≡ b2) →
+PathOver-constant-inverse p (PathOver-constant p q) ≡ q" class="Function">PathOver-constant-inverse-cancel1</a> <a id="3676" class="Symbol">(</a><a id="3677" href="new-prelude.html#502" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="3682" class="Symbol">_)</a> <a id="3685" class="Symbol">(</a><a id="3686" href="new-prelude.html#502" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="3691" class="Symbol">_)</a> <a id="3694" class="Symbol">=</a> <a id="3696" href="new-prelude.html#502" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="3701" class="Symbol">_</a>
+
+<a id="PathOver-constant-inverse-cancel2"></a><a id="3704" href="Solutions6.html#3704" data-type="(p : a1 ≡ a2) (q : PathOver (λ v → B) p b1 b2) →
+PathOver-constant p (PathOver-constant-inverse p q) ≡ q" class="Function">PathOver-constant-inverse-cancel2</a> <a id="3738" class="Symbol">:</a> <a id="3740" class="Symbol">{</a><a id="3741" href="Solutions6.html#3741" class="Bound">l1</a> <a id="3744" href="Solutions6.html#3744" class="Bound">l2</a> <a id="3747" class="Symbol">:</a> <a id="3749" href="Agda.Primitive.html#597" data-type="Set" class="Postulate">Level</a><a id="3754" class="Symbol">}</a> <a id="3756" class="Symbol">{</a><a id="3757" href="Solutions6.html#3757" class="Bound">A</a> <a id="3759" class="Symbol">:</a> <a id="3761" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="3766" href="Solutions6.html#3741" class="Bound">l1</a><a id="3768" class="Symbol">}</a> <a id="3770" class="Symbol">{</a><a id="3771" href="Solutions6.html#3771" class="Bound">B</a> <a id="3773" class="Symbol">:</a> <a id="3775" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="3780" href="Solutions6.html#3744" class="Bound">l2</a><a id="3782" class="Symbol">}</a>
+                          <a id="3810" class="Symbol">→</a> <a id="3812" class="Symbol">{</a><a id="3813" href="Solutions6.html#3813" class="Bound">a1</a> <a id="3816" href="Solutions6.html#3816" class="Bound">a2</a> <a id="3819" class="Symbol">:</a> <a id="3821" href="Solutions6.html#3757" class="Bound">A</a><a id="3822" class="Symbol">}</a>
+                          <a id="3850" class="Symbol">→</a> <a id="3852" class="Symbol">(</a><a id="3853" href="Solutions6.html#3853" class="Bound">p</a> <a id="3855" class="Symbol">:</a> <a id="3857" href="Solutions6.html#3813" class="Bound">a1</a> <a id="3860" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="3862" href="Solutions6.html#3816" class="Bound">a2</a><a id="3864" class="Symbol">)</a>
+                          <a id="3892" class="Symbol">→</a> <a id="3894" class="Symbol">{</a><a id="3895" href="Solutions6.html#3895" class="Bound">b1</a> <a id="3898" href="Solutions6.html#3898" class="Bound">b2</a> <a id="3901" class="Symbol">:</a> <a id="3903" href="Solutions6.html#3771" class="Bound">B</a><a id="3904" class="Symbol">}</a>
+                          <a id="3932" class="Symbol">→</a> <a id="3934" class="Symbol">(</a><a id="3935" href="Solutions6.html#3935" class="Bound">q</a> <a id="3937" class="Symbol">:</a> <a id="3939" href="Solutions6.html#3895" class="Bound">b1</a> <a id="3942" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">≡</a> <a id="3944" href="Solutions6.html#3898" class="Bound">b2</a> <a id="3947" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">[</a> <a id="3949" class="Symbol">_</a> <a id="3951" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">↓</a> <a id="3953" href="Solutions6.html#3853" class="Bound">p</a> <a id="3955" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">]</a><a id="3956" class="Symbol">)</a>
+                          <a id="3984" class="Symbol">→</a> <a id="3986" href="Solutions6.html#2697" data-type="(p : a1 ≡ a2) → b1 ≡ b2 → PathOver (λ _ → B) p b1 b2" class="Function">PathOver-constant</a> <a id="4004" href="Solutions6.html#3853" class="Bound">p</a> <a id="4006" class="Symbol">(</a><a id="4007" href="Solutions6.html#2978" data-type="(p : a1 ≡ a2) → PathOver (λ _ → B) p b1 b2 → b1 ≡ b2" class="Function">PathOver-constant-inverse</a> <a id="4033" href="Solutions6.html#3853" class="Bound">p</a> <a id="4035" href="Solutions6.html#3935" class="Bound">q</a><a id="4036" class="Symbol">)</a> <a id="4038" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="4040" href="Solutions6.html#3935" class="Bound">q</a>
+<a id="4042" href="Solutions6.html#3704" data-type="(p : a1 ≡ a2) (q : PathOver (λ v → B) p b1 b2) →
+PathOver-constant p (PathOver-constant-inverse p q) ≡ q" class="Function">PathOver-constant-inverse-cancel2</a> <a id="4076" class="Symbol">(</a><a id="4077" href="new-prelude.html#502" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="4082" class="Symbol">_)</a> <a id="4085" class="Symbol">(</a><a id="4086" href="Lecture5-notes.html#3331" data-type="PathOver B (refl x) y y" class="InductiveConstructor">reflo</a><a id="4091" class="Symbol">)</a> <a id="4093" class="Symbol">=</a> <a id="4095" href="new-prelude.html#502" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="4100" class="Symbol">_</a>
+
+<a id="PathOver-constant-equiv"></a><a id="4103" href="Solutions6.html#4103" data-type="(p : a1 ≡ a2) → (b1 ≡ b2) ≃ PathOver (λ _ → B) p b1 b2" class="Function">PathOver-constant-equiv</a> <a id="4127" class="Symbol">:</a> <a id="4129" class="Symbol">{</a><a id="4130" href="Solutions6.html#4130" class="Bound">l1</a> <a id="4133" href="Solutions6.html#4133" class="Bound">l2</a> <a id="4136" class="Symbol">:</a> <a id="4138" href="Agda.Primitive.html#597" data-type="Set" class="Postulate">Level</a><a id="4143" class="Symbol">}</a> <a id="4145" class="Symbol">{</a><a id="4146" href="Solutions6.html#4146" class="Bound">A</a> <a id="4148" class="Symbol">:</a> <a id="4150" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="4155" href="Solutions6.html#4130" class="Bound">l1</a><a id="4157" class="Symbol">}</a> <a id="4159" class="Symbol">{</a><a id="4160" href="Solutions6.html#4160" class="Bound">B</a> <a id="4162" class="Symbol">:</a> <a id="4164" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="4169" href="Solutions6.html#4133" class="Bound">l2</a><a id="4171" class="Symbol">}</a>
+                          <a id="4199" class="Symbol">→</a> <a id="4201" class="Symbol">{</a><a id="4202" href="Solutions6.html#4202" class="Bound">a1</a> <a id="4205" href="Solutions6.html#4205" class="Bound">a2</a> <a id="4208" class="Symbol">:</a> <a id="4210" href="Solutions6.html#4146" class="Bound">A</a><a id="4211" class="Symbol">}</a>
+                          <a id="4239" class="Symbol">→</a> <a id="4241" class="Symbol">(</a><a id="4242" href="Solutions6.html#4242" class="Bound">p</a> <a id="4244" class="Symbol">:</a> <a id="4246" href="Solutions6.html#4202" class="Bound">a1</a> <a id="4249" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="4251" href="Solutions6.html#4205" class="Bound">a2</a><a id="4253" class="Symbol">)</a>
+                          <a id="4281" class="Symbol">→</a> <a id="4283" class="Symbol">{</a><a id="4284" href="Solutions6.html#4284" class="Bound">b1</a> <a id="4287" href="Solutions6.html#4287" class="Bound">b2</a> <a id="4290" class="Symbol">:</a> <a id="4292" href="Solutions6.html#4160" class="Bound">B</a><a id="4293" class="Symbol">}</a>
+                          <a id="4321" class="Symbol">→</a> <a id="4323" class="Symbol">(</a><a id="4324" href="Solutions6.html#4284" class="Bound">b1</a> <a id="4327" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="4329" href="Solutions6.html#4287" class="Bound">b2</a><a id="4331" class="Symbol">)</a> <a id="4333" href="Lecture5-notes.html#968" data-type="(A : Set l1) (B : Set l2) → Set (l1 ⊔ l2)" class="Record Operator">≃</a> <a id="4335" class="Symbol">(</a><a id="4336" href="Solutions6.html#4284" class="Bound">b1</a> <a id="4339" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">≡</a> <a id="4341" href="Solutions6.html#4287" class="Bound">b2</a> <a id="4344" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">[</a> <a id="4346" class="Symbol">(\</a> <a id="4349" href="Solutions6.html#4349" class="Bound">_</a> <a id="4351" class="Symbol">→</a> <a id="4353" href="Solutions6.html#4160" class="Bound">B</a><a id="4354" class="Symbol">)</a> <a id="4356" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">↓</a> <a id="4358" href="Solutions6.html#4242" class="Bound">p</a> <a id="4360" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">]</a><a id="4361" class="Symbol">)</a>
+<a id="4363" href="Solutions6.html#4103" data-type="(p : a1 ≡ a2) → (b1 ≡ b2) ≃ PathOver (λ _ → B) p b1 b2" class="Function">PathOver-constant-equiv</a> <a id="4387" href="Solutions6.html#4387" class="Bound">p</a> <a id="4389" class="Symbol">=</a> <a id="4391" href="Lecture5-notes.html#1565" data-type="A ≅ B → A ≃ B" class="Function">improve</a> <a id="4399" class="Symbol">(</a><a id="4400" href="new-prelude.html#2950" data-type="(bijection : A → B) (bijectivity : is-bijection bijection) → A ≅ B" class="InductiveConstructor">Isomorphism</a> <a id="4412" class="Symbol">(</a><a id="4413" href="Solutions6.html#2697" data-type="(p : a1 ≡ a2) → b1 ≡ b2 → PathOver (λ _ → B) p b1 b2" class="Function">PathOver-constant</a> <a id="4431" href="Solutions6.html#4387" class="Bound">p</a><a id="4432" class="Symbol">)</a>
+                                    <a id="4470" class="Symbol">(</a><a id="4471" href="new-prelude.html#2765" data-type="(inverse : B → A) (η : (inverse ∘ f) ∼ id)
+(ε : (f ∘ inverse) ∼ id) →
+is-bijection f" class="InductiveConstructor">Inverse</a> <a id="4479" class="Symbol">(</a><a id="4480" href="Solutions6.html#2978" data-type="(p : a1 ≡ a2) → PathOver (λ _ → B) p b1 b2 → b1 ≡ b2" class="Function">PathOver-constant-inverse</a> <a id="4506" href="Solutions6.html#4387" class="Bound">p</a><a id="4507" class="Symbol">)</a>
+                                             <a id="4554" class="Symbol">(</a><a id="4555" href="Solutions6.html#3314" data-type="(p : a1 ≡ a2) (q : b1 ≡ b2) →
+PathOver-constant-inverse p (PathOver-constant p q) ≡ q" class="Function">PathOver-constant-inverse-cancel1</a> <a id="4589" href="Solutions6.html#4387" class="Bound">p</a><a id="4590" class="Symbol">)</a>
+                                             <a id="4637" class="Symbol">(</a><a id="4638" href="Solutions6.html#3704" data-type="(p : a1 ≡ a2) (q : PathOver (λ v → B) p b1 b2) →
+PathOver-constant p (PathOver-constant-inverse p q) ≡ q" class="Function">PathOver-constant-inverse-cancel2</a> <a id="4672" href="Solutions6.html#4387" class="Bound">p</a><a id="4673" class="Symbol">)))</a>
+
+</pre>
+<p>(⋆) Next, for a non-dependent function f, there is an annoying
+mismatch between ap f and apd f, which we can reconcile as follows:</p>
+<pre class="Agda"><a id="ap-apd-constant"></a><a id="4823" href="Solutions6.html#4823" data-type="(p : a1 ≡ a2) (f : A → B) →
+ap f p ≡ PathOver-constant-inverse p (apd f p)" class="Function">ap-apd-constant</a> <a id="4839" class="Symbol">:</a> <a id="4841" class="Symbol">{</a><a id="4842" href="Solutions6.html#4842" class="Bound">l1</a> <a id="4845" href="Solutions6.html#4845" class="Bound">l2</a> <a id="4848" class="Symbol">:</a> <a id="4850" href="Agda.Primitive.html#597" data-type="Set" class="Postulate">Level</a><a id="4855" class="Symbol">}</a> <a id="4857" class="Symbol">{</a><a id="4858" href="Solutions6.html#4858" class="Bound">A</a> <a id="4860" class="Symbol">:</a> <a id="4862" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="4867" href="Solutions6.html#4842" class="Bound">l1</a><a id="4869" class="Symbol">}</a> <a id="4871" class="Symbol">{</a><a id="4872" href="Solutions6.html#4872" class="Bound">B</a> <a id="4874" class="Symbol">:</a> <a id="4876" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="4881" href="Solutions6.html#4845" class="Bound">l2</a><a id="4883" class="Symbol">}</a>
+                <a id="4901" class="Symbol">→</a> <a id="4903" class="Symbol">{</a><a id="4904" href="Solutions6.html#4904" class="Bound">a1</a> <a id="4907" href="Solutions6.html#4907" class="Bound">a2</a> <a id="4910" class="Symbol">:</a> <a id="4912" href="Solutions6.html#4858" class="Bound">A</a><a id="4913" class="Symbol">}</a>
+                <a id="4931" class="Symbol">→</a> <a id="4933" class="Symbol">(</a><a id="4934" href="Solutions6.html#4934" class="Bound">p</a> <a id="4936" class="Symbol">:</a> <a id="4938" href="Solutions6.html#4904" class="Bound">a1</a> <a id="4941" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="4943" href="Solutions6.html#4907" class="Bound">a2</a><a id="4945" class="Symbol">)</a>
+                <a id="4963" class="Symbol">→</a> <a id="4965" class="Symbol">(</a><a id="4966" href="Solutions6.html#4966" class="Bound">f</a> <a id="4968" class="Symbol">:</a> <a id="4970" href="Solutions6.html#4858" class="Bound">A</a> <a id="4972" class="Symbol">→</a> <a id="4974" href="Solutions6.html#4872" class="Bound">B</a><a id="4975" class="Symbol">)</a>
+                <a id="4993" class="Symbol">→</a> <a id="4995" href="new-prelude.html#937" data-type="(f : A → B) → x ≡ y → f x ≡ f y" class="Function">ap</a> <a id="4998" href="Solutions6.html#4966" class="Bound">f</a> <a id="5000" href="Solutions6.html#4934" class="Bound">p</a> <a id="5002" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="5004" href="Solutions6.html#2978" data-type="(p : a1 ≡ a2) → PathOver (λ _ → B) p b1 b2 → b1 ≡ b2" class="Function">PathOver-constant-inverse</a> <a id="5030" class="Symbol">_</a> <a id="5032" class="Symbol">(</a><a id="5033" href="Lecture5-notes.html#4872" data-type="(f : (x : A) → B x) (p : a1 ≡ a2) → PathOver B p (f a1) (f a2)" class="Function">apd</a> <a id="5037" href="Solutions6.html#4966" class="Bound">f</a> <a id="5039" href="Solutions6.html#4934" class="Bound">p</a><a id="5040" class="Symbol">)</a>
+<a id="5042" href="Solutions6.html#4823" data-type="(p : a1 ≡ a2) (f : A → B) →
+ap f p ≡ PathOver-constant-inverse p (apd f p)" class="Function">ap-apd-constant</a> <a id="5058" class="Symbol">(</a><a id="5059" href="new-prelude.html#502" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="5064" class="Symbol">_)</a> <a id="5067" href="Solutions6.html#5067" class="Bound">f</a> <a id="5069" class="Symbol">=</a> <a id="5071" href="new-prelude.html#502" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="5076" class="Symbol">_</a>
+</pre>
+<p>(⋆) Define Bowtie-rec and prove the reduction for base:</p>
+<pre class="Agda"><a id="Bowtie-rec"></a><a id="5148" href="Solutions6.html#5148" data-type="(x : X) → Path X x x → Path X x x → Bowtie → X" class="Function">Bowtie-rec</a> <a id="5159" class="Symbol">:</a> <a id="5161" class="Symbol">{</a><a id="5162" href="Solutions6.html#5162" class="Bound">l</a> <a id="5164" class="Symbol">:</a> <a id="5166" href="Agda.Primitive.html#597" data-type="Set" class="Postulate">Level</a><a id="5171" class="Symbol">}</a> <a id="5173" class="Symbol">{</a><a id="5174" href="Solutions6.html#5174" class="Bound">X</a> <a id="5176" class="Symbol">:</a> <a id="5178" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="5183" href="Solutions6.html#5162" class="Bound">l</a><a id="5184" class="Symbol">}</a>
+             <a id="5199" class="Symbol">(</a><a id="5200" href="Solutions6.html#5200" class="Bound">x</a> <a id="5202" class="Symbol">:</a> <a id="5204" href="Solutions6.html#5174" class="Bound">X</a><a id="5205" class="Symbol">)</a>
+             <a id="5220" class="Symbol">(</a><a id="5221" href="Solutions6.html#5221" class="Bound">p</a> <a id="5223" class="Symbol">:</a> <a id="5225" href="Solutions6.html#5200" class="Bound">x</a> <a id="5227" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">≡</a> <a id="5229" href="Solutions6.html#5200" class="Bound">x</a> <a id="5231" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">[</a> <a id="5233" href="Solutions6.html#5174" class="Bound">X</a> <a id="5235" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">]</a><a id="5236" class="Symbol">)</a>
+             <a id="5251" class="Symbol">(</a><a id="5252" href="Solutions6.html#5252" class="Bound">q</a> <a id="5254" class="Symbol">:</a> <a id="5256" href="Solutions6.html#5200" class="Bound">x</a> <a id="5258" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">≡</a> <a id="5260" href="Solutions6.html#5200" class="Bound">x</a> <a id="5262" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">[</a> <a id="5264" href="Solutions6.html#5174" class="Bound">X</a> <a id="5266" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">]</a><a id="5267" class="Symbol">)</a>
+           <a id="5280" class="Symbol">→</a> <a id="5282" class="Symbol">(</a><a id="5283" href="Solutions6.html#1423" data-type="Set" class="Postulate">Bowtie</a><a id="5289" class="Symbol">)</a> <a id="5291" class="Symbol">→</a> <a id="5293" href="Solutions6.html#5174" class="Bound">X</a>
+<a id="5295" href="Solutions6.html#5148" data-type="(x : X) → Path X x x → Path X x x → Bowtie → X" class="Function">Bowtie-rec</a> <a id="5306" class="Symbol">{_}</a> <a id="5310" class="Symbol">{</a><a id="5311" href="Solutions6.html#5311" class="Bound">X</a><a id="5312" class="Symbol">}</a> <a id="5314" href="Solutions6.html#5314" class="Bound">x</a> <a id="5316" href="Solutions6.html#5316" class="Bound">p</a> <a id="5318" href="Solutions6.html#5318" class="Bound">q</a> <a id="5320" class="Symbol">=</a> <a id="5322" href="Solutions6.html#1503" data-type="(X : Bowtie → Set l) (x : X baseB) →
+PathOver X loop1 x x → PathOver X loop2 x x → (x₁ : Bowtie) → X x₁" class="Postulate">Bowtie-elim</a> <a id="5334" class="Symbol">(\</a> <a id="5337" href="Solutions6.html#5337" class="Bound">_</a> <a id="5339" class="Symbol">→</a> <a id="5341" href="Solutions6.html#5311" class="Bound">X</a><a id="5342" class="Symbol">)</a> <a id="5344" href="Solutions6.html#5314" class="Bound">x</a> <a id="5346" class="Symbol">(</a><a id="5347" href="Solutions6.html#2697" data-type="(p : a1 ≡ a2) → b1 ≡ b2 → PathOver (λ _ → B) p b1 b2" class="Function">PathOver-constant</a> <a id="5365" class="Symbol">_</a> <a id="5367" href="Solutions6.html#5316" class="Bound">p</a><a id="5368" class="Symbol">)</a> <a id="5370" class="Symbol">(</a><a id="5371" href="Solutions6.html#2697" data-type="(p : a1 ≡ a2) → b1 ≡ b2 → PathOver (λ _ → B) p b1 b2" class="Function">PathOver-constant</a> <a id="5389" class="Symbol">_</a> <a id="5391" href="Solutions6.html#5318" class="Bound">q</a><a id="5392" class="Symbol">)</a>
+
+<a id="Bowtie-rec-base"></a><a id="5395" href="Solutions6.html#5395" data-type="(x : X) (p q : Path X x x) → Bowtie-rec x p q baseB ≡ x" class="Function">Bowtie-rec-base</a> <a id="5411" class="Symbol">:</a> <a id="5413" class="Symbol">{</a><a id="5414" href="Solutions6.html#5414" class="Bound">l</a> <a id="5416" class="Symbol">:</a> <a id="5418" href="Agda.Primitive.html#597" data-type="Set" class="Postulate">Level</a><a id="5423" class="Symbol">}</a> <a id="5425" class="Symbol">{</a><a id="5426" href="Solutions6.html#5426" class="Bound">X</a> <a id="5428" class="Symbol">:</a> <a id="5430" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="5435" href="Solutions6.html#5414" class="Bound">l</a><a id="5436" class="Symbol">}</a>
+             <a id="5451" class="Symbol">(</a><a id="5452" href="Solutions6.html#5452" class="Bound">x</a> <a id="5454" class="Symbol">:</a> <a id="5456" href="Solutions6.html#5426" class="Bound">X</a><a id="5457" class="Symbol">)</a>
+             <a id="5472" class="Symbol">(</a><a id="5473" href="Solutions6.html#5473" class="Bound">p</a> <a id="5475" class="Symbol">:</a> <a id="5477" href="Solutions6.html#5452" class="Bound">x</a> <a id="5479" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">≡</a> <a id="5481" href="Solutions6.html#5452" class="Bound">x</a> <a id="5483" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">[</a> <a id="5485" href="Solutions6.html#5426" class="Bound">X</a> <a id="5487" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">]</a><a id="5488" class="Symbol">)</a>
+             <a id="5503" class="Symbol">(</a><a id="5504" href="Solutions6.html#5504" class="Bound">q</a> <a id="5506" class="Symbol">:</a> <a id="5508" href="Solutions6.html#5452" class="Bound">x</a> <a id="5510" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">≡</a> <a id="5512" href="Solutions6.html#5452" class="Bound">x</a> <a id="5514" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">[</a> <a id="5516" href="Solutions6.html#5426" class="Bound">X</a> <a id="5518" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">]</a><a id="5519" class="Symbol">)</a>
+           <a id="5532" class="Symbol">→</a> <a id="5534" href="Solutions6.html#5148" data-type="(x : X) → Path X x x → Path X x x → Bowtie → X" class="Function">Bowtie-rec</a> <a id="5545" href="Solutions6.html#5452" class="Bound">x</a> <a id="5547" href="Solutions6.html#5473" class="Bound">p</a> <a id="5549" href="Solutions6.html#5504" class="Bound">q</a> <a id="5551" href="Solutions6.html#1438" data-type="Bowtie" class="Postulate">baseB</a> <a id="5557" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="5559" href="Solutions6.html#5452" class="Bound">x</a>
+<a id="5561" href="Solutions6.html#5395" data-type="(x : X) (p q : Path X x x) → Bowtie-rec x p q baseB ≡ x" class="Function">Bowtie-rec-base</a> <a id="5577" class="Symbol">_</a> <a id="5579" class="Symbol">_</a> <a id="5581" class="Symbol">_</a> <a id="5583" class="Symbol">=</a> <a id="5585" href="new-prelude.html#502" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="5590" class="Symbol">_</a>
+</pre>
+<p>(⋆⋆) Prove the reductions for loop:</p>
+<pre class="Agda"><a id="Bowtie-rec-loop1"></a><a id="5642" href="Solutions6.html#5642" data-type="(x : X) (p q : Path X x x) → ap (Bowtie-rec x p q) loop1 ≡ p" class="Function">Bowtie-rec-loop1</a> <a id="5659" class="Symbol">:</a> <a id="5661" class="Symbol">{</a><a id="5662" href="Solutions6.html#5662" class="Bound">l</a> <a id="5664" class="Symbol">:</a> <a id="5666" href="Agda.Primitive.html#597" data-type="Set" class="Postulate">Level</a><a id="5671" class="Symbol">}</a> <a id="5673" class="Symbol">{</a><a id="5674" href="Solutions6.html#5674" class="Bound">X</a> <a id="5676" class="Symbol">:</a> <a id="5678" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="5683" href="Solutions6.html#5662" class="Bound">l</a><a id="5684" class="Symbol">}</a>
+               <a id="5701" class="Symbol">(</a><a id="5702" href="Solutions6.html#5702" class="Bound">x</a> <a id="5704" class="Symbol">:</a> <a id="5706" href="Solutions6.html#5674" class="Bound">X</a><a id="5707" class="Symbol">)</a>
+               <a id="5724" class="Symbol">(</a><a id="5725" href="Solutions6.html#5725" class="Bound">p</a> <a id="5727" class="Symbol">:</a> <a id="5729" href="Solutions6.html#5702" class="Bound">x</a> <a id="5731" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">≡</a> <a id="5733" href="Solutions6.html#5702" class="Bound">x</a> <a id="5735" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">[</a> <a id="5737" href="Solutions6.html#5674" class="Bound">X</a> <a id="5739" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">]</a><a id="5740" class="Symbol">)</a>
+               <a id="5757" class="Symbol">(</a><a id="5758" href="Solutions6.html#5758" class="Bound">q</a> <a id="5760" class="Symbol">:</a> <a id="5762" href="Solutions6.html#5702" class="Bound">x</a> <a id="5764" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">≡</a> <a id="5766" href="Solutions6.html#5702" class="Bound">x</a> <a id="5768" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">[</a> <a id="5770" href="Solutions6.html#5674" class="Bound">X</a> <a id="5772" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">]</a><a id="5773" class="Symbol">)</a>
+             <a id="5788" class="Symbol">→</a> <a id="5790" href="new-prelude.html#937" data-type="(f : A → B) → x ≡ y → f x ≡ f y" class="Function">ap</a> <a id="5793" class="Symbol">(</a><a id="5794" href="Solutions6.html#5148" data-type="(x : X) → Path X x x → Path X x x → Bowtie → X" class="Function">Bowtie-rec</a> <a id="5805" href="Solutions6.html#5702" class="Bound">x</a> <a id="5807" href="Solutions6.html#5725" class="Bound">p</a> <a id="5809" href="Solutions6.html#5758" class="Bound">q</a><a id="5810" class="Symbol">)</a> <a id="5812" href="Solutions6.html#1455" data-type="baseB ≡ baseB" class="Postulate">loop1</a> <a id="5818" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="5820" href="Solutions6.html#5725" class="Bound">p</a>
+<a id="5822" href="Solutions6.html#5642" data-type="(x : X) (p q : Path X x x) → ap (Bowtie-rec x p q) loop1 ≡ p" class="Function">Bowtie-rec-loop1</a> <a id="5839" href="Solutions6.html#5839" class="Bound">x</a> <a id="5841" href="Solutions6.html#5841" class="Bound">p</a> <a id="5843" href="Solutions6.html#5843" class="Bound">q</a> <a id="5845" class="Symbol">=</a>  <a id="5848" href="Solutions6.html#4823" data-type="(p : a1 ≡ a2) (f : A → B) →
+ap f p ≡ PathOver-constant-inverse p (apd f p)" class="Function">ap-apd-constant</a> <a id="5864" class="Symbol">_</a> <a id="5866" class="Symbol">_</a> <a id="5868" href="new-prelude.html#642" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function Operator">∙</a>
+                          <a id="5896" href="new-prelude.html#937" data-type="(f : A → B) → x ≡ y → f x ≡ f y" class="Function">ap</a> <a id="5899" class="Symbol">(</a><a id="5900" href="Solutions6.html#2978" data-type="(p : a1 ≡ a2) → PathOver (λ _ → B) p b1 b2 → b1 ≡ b2" class="Function">PathOver-constant-inverse</a> <a id="5926" href="Solutions6.html#1455" data-type="baseB ≡ baseB" class="Postulate">loop1</a><a id="5931" class="Symbol">)</a> <a id="5933" class="Symbol">(</a><a id="5934" href="Solutions6.html#1982" data-type="(X : Bowtie → Set l) (x : X baseB) (p : PathOver X loop1 x x)
+(q : PathOver X loop2 x x) →
+apd (Bowtie-elim X x p q) loop1 ≡ p" class="Postulate">Bowtie-elim-loop1</a> <a id="5952" class="Symbol">_</a> <a id="5954" href="Solutions6.html#5839" class="Bound">x</a> <a id="5956" class="Symbol">(</a><a id="5957" href="Solutions6.html#2697" data-type="(p : a1 ≡ a2) → b1 ≡ b2 → PathOver (λ _ → B) p b1 b2" class="Function">PathOver-constant</a> <a id="5975" class="Symbol">_</a> <a id="5977" href="Solutions6.html#5841" class="Bound">p</a><a id="5978" class="Symbol">)</a> <a id="5980" class="Symbol">(</a><a id="5981" href="Solutions6.html#2697" data-type="(p : a1 ≡ a2) → b1 ≡ b2 → PathOver (λ _ → B) p b1 b2" class="Function">PathOver-constant</a> <a id="5999" class="Symbol">_</a> <a id="6001" href="Solutions6.html#5843" class="Bound">q</a><a id="6002" class="Symbol">))</a> <a id="6005" href="new-prelude.html#642" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function Operator">∙</a>
+                          <a id="6033" href="Solutions6.html#3314" data-type="(p : a1 ≡ a2) (q : b1 ≡ b2) →
+PathOver-constant-inverse p (PathOver-constant p q) ≡ q" class="Function">PathOver-constant-inverse-cancel1</a> <a id="6067" class="Symbol">_</a> <a id="6069" class="Symbol">_</a>
+
+<a id="Bowtie-rec-loop2"></a><a id="6072" href="Solutions6.html#6072" data-type="(x : X) (p q : Path X x x) → ap (Bowtie-rec x p q) loop2 ≡ q" class="Function">Bowtie-rec-loop2</a> <a id="6089" class="Symbol">:</a> <a id="6091" class="Symbol">{</a><a id="6092" href="Solutions6.html#6092" class="Bound">l</a> <a id="6094" class="Symbol">:</a> <a id="6096" href="Agda.Primitive.html#597" data-type="Set" class="Postulate">Level</a><a id="6101" class="Symbol">}</a> <a id="6103" class="Symbol">{</a><a id="6104" href="Solutions6.html#6104" class="Bound">X</a> <a id="6106" class="Symbol">:</a> <a id="6108" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="6113" href="Solutions6.html#6092" class="Bound">l</a><a id="6114" class="Symbol">}</a>
+                   <a id="6135" class="Symbol">(</a><a id="6136" href="Solutions6.html#6136" class="Bound">x</a> <a id="6138" class="Symbol">:</a> <a id="6140" href="Solutions6.html#6104" class="Bound">X</a><a id="6141" class="Symbol">)</a>
+                   <a id="6162" class="Symbol">(</a><a id="6163" href="Solutions6.html#6163" class="Bound">p</a> <a id="6165" class="Symbol">:</a> <a id="6167" href="Solutions6.html#6136" class="Bound">x</a> <a id="6169" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">≡</a> <a id="6171" href="Solutions6.html#6136" class="Bound">x</a> <a id="6173" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">[</a> <a id="6175" href="Solutions6.html#6104" class="Bound">X</a> <a id="6177" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">]</a><a id="6178" class="Symbol">)</a>
+                   <a id="6199" class="Symbol">(</a><a id="6200" href="Solutions6.html#6200" class="Bound">q</a> <a id="6202" class="Symbol">:</a> <a id="6204" href="Solutions6.html#6136" class="Bound">x</a> <a id="6206" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">≡</a> <a id="6208" href="Solutions6.html#6136" class="Bound">x</a> <a id="6210" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">[</a> <a id="6212" href="Solutions6.html#6104" class="Bound">X</a> <a id="6214" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">]</a><a id="6215" class="Symbol">)</a>
+                 <a id="6234" class="Symbol">→</a> <a id="6236" href="new-prelude.html#937" data-type="(f : A → B) → x ≡ y → f x ≡ f y" class="Function">ap</a> <a id="6239" class="Symbol">(</a><a id="6240" href="Solutions6.html#5148" data-type="(x : X) → Path X x x → Path X x x → Bowtie → X" class="Function">Bowtie-rec</a> <a id="6251" href="Solutions6.html#6136" class="Bound">x</a> <a id="6253" href="Solutions6.html#6163" class="Bound">p</a> <a id="6255" href="Solutions6.html#6200" class="Bound">q</a><a id="6256" class="Symbol">)</a> <a id="6258" href="Solutions6.html#1479" data-type="baseB ≡ baseB" class="Postulate">loop2</a> <a id="6264" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="6266" href="Solutions6.html#6200" class="Bound">q</a>
+<a id="6268" href="Solutions6.html#6072" data-type="(x : X) (p q : Path X x x) → ap (Bowtie-rec x p q) loop2 ≡ q" class="Function">Bowtie-rec-loop2</a> <a id="6285" href="Solutions6.html#6285" class="Bound">x</a> <a id="6287" href="Solutions6.html#6287" class="Bound">p</a> <a id="6289" href="Solutions6.html#6289" class="Bound">q</a> <a id="6291" class="Symbol">=</a> <a id="6293" href="Solutions6.html#4823" data-type="(p : a1 ≡ a2) (f : A → B) →
+ap f p ≡ PathOver-constant-inverse p (apd f p)" class="Function">ap-apd-constant</a> <a id="6309" class="Symbol">_</a> <a id="6311" class="Symbol">_</a> <a id="6313" href="new-prelude.html#642" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function Operator">∙</a>
+                         <a id="6340" href="new-prelude.html#937" data-type="(f : A → B) → x ≡ y → f x ≡ f y" class="Function">ap</a> <a id="6343" class="Symbol">(</a><a id="6344" href="Solutions6.html#2978" data-type="(p : a1 ≡ a2) → PathOver (λ _ → B) p b1 b2 → b1 ≡ b2" class="Function">PathOver-constant-inverse</a> <a id="6370" href="Solutions6.html#1479" data-type="baseB ≡ baseB" class="Postulate">loop2</a><a id="6375" class="Symbol">)</a> <a id="6377" class="Symbol">(</a><a id="6378" href="Solutions6.html#2228" data-type="(X : Bowtie → Set l) (x : X baseB) (p : PathOver X loop1 x x)
+(q : PathOver X loop2 x x) →
+apd (Bowtie-elim X x p q) loop2 ≡ q" class="Postulate">Bowtie-elim-loop2</a> <a id="6396" class="Symbol">_</a> <a id="6398" href="Solutions6.html#6285" class="Bound">x</a> <a id="6400" class="Symbol">(</a><a id="6401" href="Solutions6.html#2697" data-type="(p : a1 ≡ a2) → b1 ≡ b2 → PathOver (λ _ → B) p b1 b2" class="Function">PathOver-constant</a> <a id="6419" class="Symbol">_</a> <a id="6421" href="Solutions6.html#6287" class="Bound">p</a><a id="6422" class="Symbol">)</a> <a id="6424" class="Symbol">(</a><a id="6425" href="Solutions6.html#2697" data-type="(p : a1 ≡ a2) → b1 ≡ b2 → PathOver (λ _ → B) p b1 b2" class="Function">PathOver-constant</a> <a id="6443" class="Symbol">_</a> <a id="6445" href="Solutions6.html#6289" class="Bound">q</a><a id="6446" class="Symbol">))</a> <a id="6449" href="new-prelude.html#642" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function Operator">∙</a>
+                         <a id="6476" href="Solutions6.html#3314" data-type="(p : a1 ≡ a2) (q : b1 ≡ b2) →
+PathOver-constant-inverse p (PathOver-constant p q) ≡ q" class="Function">PathOver-constant-inverse-cancel1</a> <a id="6510" class="Symbol">_</a> <a id="6512" class="Symbol">_</a>
+</pre>
+<h1 id="loop-space-of-the-bowtie">Loop space of the bowtie</h1>
+<p>In this problem, you will show that the loop space of the bowtie is
+the “free group on two generators”, which we will write in Agda as F2.
+The point of this problem is mainly for you to read and really
+understand the proof that the loop space of the circle is ℤ. All of the
+code is essentially a rearrangement of code from that proof. I’d suggest
+trying the proof yourself, and looking at the analogous bits of the
+Circle proof if you get stuck.</p>
+<h2 id="some-lemmas">Some lemmas (⋆⋆)</h2>
+<p>In the Circle proof in lecture, I inlined a couple of things that can
+be proved more generally. You might want to prove these general versions
+in advance and use them in your proof, or, if that seems confusing, you
+might first do the proof without these lemmas to motivate them.</p>
+<pre class="Agda"><a id="concat-equiv"></a><a id="7312" href="Solutions6.html#7312" data-type="(a : A) → a&#39; ≡ a&#39;&#39; → (a ≡ a&#39;) ≃ (a ≡ a&#39;&#39;)" class="Function">concat-equiv</a> <a id="7325" class="Symbol">:</a> <a id="7327" class="Symbol">∀</a> <a id="7329" class="Symbol">{</a><a id="7330" href="Solutions6.html#7330" class="Bound">A</a> <a id="7332" class="Symbol">:</a> <a id="7334" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a><a id="7338" class="Symbol">}</a> <a id="7340" class="Symbol">(</a><a id="7341" href="Solutions6.html#7341" class="Bound">a</a> <a id="7343" class="Symbol">:</a> <a id="7345" href="Solutions6.html#7330" class="Bound">A</a><a id="7346" class="Symbol">)</a> <a id="7348" class="Symbol">{</a><a id="7349" href="Solutions6.html#7349" class="Bound">a&#39;</a> <a id="7352" href="Solutions6.html#7352" class="Bound">a&#39;&#39;</a> <a id="7356" class="Symbol">:</a> <a id="7358" href="Solutions6.html#7330" class="Bound">A</a><a id="7359" class="Symbol">}</a>
+                     <a id="7382" class="Symbol">→</a> <a id="7384" class="Symbol">(</a><a id="7385" href="Solutions6.html#7385" class="Bound">p</a> <a id="7387" class="Symbol">:</a> <a id="7389" href="Solutions6.html#7349" class="Bound">a&#39;</a> <a id="7392" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="7394" href="Solutions6.html#7352" class="Bound">a&#39;&#39;</a><a id="7397" class="Symbol">)</a>
+                     <a id="7420" class="Symbol">→</a> <a id="7422" class="Symbol">(</a><a id="7423" href="Solutions6.html#7341" class="Bound">a</a> <a id="7425" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="7427" href="Solutions6.html#7349" class="Bound">a&#39;</a><a id="7429" class="Symbol">)</a> <a id="7431" href="Lecture5-notes.html#968" data-type="(A : Set l1) (B : Set l2) → Set (l1 ⊔ l2)" class="Record Operator">≃</a> <a id="7433" class="Symbol">(</a><a id="7434" href="Solutions6.html#7341" class="Bound">a</a> <a id="7436" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="7438" href="Solutions6.html#7352" class="Bound">a&#39;&#39;</a><a id="7441" class="Symbol">)</a>
+<a id="7443" href="Solutions6.html#7312" data-type="(a : A) → a&#39; ≡ a&#39;&#39; → (a ≡ a&#39;) ≃ (a ≡ a&#39;&#39;)" class="Function">concat-equiv</a> <a id="7456" class="Symbol">_</a> <a id="7458" class="Symbol">(</a><a id="7459" href="new-prelude.html#502" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="7464" class="Symbol">_)</a> <a id="7467" class="Symbol">=</a> <a id="7469" href="Lecture6-notes.html#857" data-type="A ≃ A" class="Function">id≃</a> 
+
+<a id="concat-equiv-map"></a><a id="7475" href="Solutions6.html#7475" data-type="(p : a&#39; ≡ a&#39;&#39;) → fwd (concat-equiv a p) ≡ (λ q → q ∙ p)" class="Function">concat-equiv-map</a> <a id="7492" class="Symbol">:</a> <a id="7494" class="Symbol">∀</a> <a id="7496" class="Symbol">{</a><a id="7497" href="Solutions6.html#7497" class="Bound">A</a> <a id="7499" class="Symbol">:</a> <a id="7501" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a><a id="7505" class="Symbol">}</a> <a id="7507" class="Symbol">{</a><a id="7508" href="Solutions6.html#7508" class="Bound">a</a> <a id="7510" href="Solutions6.html#7510" class="Bound">a&#39;</a> <a id="7513" href="Solutions6.html#7513" class="Bound">a&#39;&#39;</a> <a id="7517" class="Symbol">:</a> <a id="7519" href="Solutions6.html#7497" class="Bound">A</a><a id="7520" class="Symbol">}</a>
+                 <a id="7539" class="Symbol">→</a> <a id="7541" class="Symbol">(</a><a id="7542" href="Solutions6.html#7542" class="Bound">p</a> <a id="7544" class="Symbol">:</a> <a id="7546" href="Solutions6.html#7510" class="Bound">a&#39;</a> <a id="7549" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="7551" href="Solutions6.html#7513" class="Bound">a&#39;&#39;</a><a id="7554" class="Symbol">)</a>
+                 <a id="7573" class="Symbol">→</a> <a id="7575" href="Lecture5-notes.html#1230" data-type="A ≃ B → A → B" class="Function">fwd</a> <a id="7579" class="Symbol">(</a><a id="7580" href="Solutions6.html#7312" data-type="(a : A) → a&#39; ≡ a&#39;&#39; → (a ≡ a&#39;) ≃ (a ≡ a&#39;&#39;)" class="Function">concat-equiv</a> <a id="7593" href="Solutions6.html#7508" class="Bound">a</a> <a id="7595" href="Solutions6.html#7542" class="Bound">p</a><a id="7596" class="Symbol">)</a> <a id="7598" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="7600" class="Symbol">\</a> <a id="7602" href="Solutions6.html#7602" class="Bound">q</a> <a id="7604" class="Symbol">→</a> <a id="7606" href="Solutions6.html#7602" class="Bound">q</a> <a id="7608" href="new-prelude.html#642" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function Operator">∙</a> <a id="7610" href="Solutions6.html#7542" class="Bound">p</a> 
+<a id="7613" href="Solutions6.html#7475" data-type="(p : a&#39; ≡ a&#39;&#39;) → fwd (concat-equiv a p) ≡ (λ q → q ∙ p)" class="Function">concat-equiv-map</a> <a id="7630" class="Symbol">(</a><a id="7631" href="new-prelude.html#502" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="7636" class="Symbol">_)</a> <a id="7639" class="Symbol">=</a> <a id="7641" href="new-prelude.html#502" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="7646" class="Symbol">_</a>
+</pre>
+<p>(Note: you could also write out all of the components, but this was
+easier.)</p>
+<pre class="Agda"><a id="transport-∙"></a><a id="7739" href="Solutions6.html#7739" data-type="(p : a1 ≡ a2) (q : a2 ≡ a3) →
+transport B (p ∙ q) ∼ (transport B q ∘ transport B p)" class="Function">transport-∙</a> <a id="7751" class="Symbol">:</a> <a id="7753" class="Symbol">{</a><a id="7754" href="Solutions6.html#7754" class="Bound">l1</a> <a id="7757" href="Solutions6.html#7757" class="Bound">l2</a> <a id="7760" class="Symbol">:</a> <a id="7762" href="Agda.Primitive.html#597" data-type="Set" class="Postulate">Level</a><a id="7767" class="Symbol">}</a> <a id="7769" class="Symbol">{</a><a id="7770" href="Solutions6.html#7770" class="Bound">A</a> <a id="7772" class="Symbol">:</a> <a id="7774" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="7779" href="Solutions6.html#7754" class="Bound">l1</a><a id="7781" class="Symbol">}</a> <a id="7783" class="Symbol">{</a><a id="7784" href="Solutions6.html#7784" class="Bound">B</a> <a id="7786" class="Symbol">:</a> <a id="7788" href="Solutions6.html#7770" class="Bound">A</a> <a id="7790" class="Symbol">→</a> <a id="7792" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="7797" href="Solutions6.html#7757" class="Bound">l2</a><a id="7799" class="Symbol">}</a>
+                  <a id="7819" class="Symbol">{</a><a id="7820" href="Solutions6.html#7820" class="Bound">a1</a> <a id="7823" href="Solutions6.html#7823" class="Bound">a2</a> <a id="7826" href="Solutions6.html#7826" class="Bound">a3</a> <a id="7829" class="Symbol">:</a> <a id="7831" href="Solutions6.html#7770" class="Bound">A</a><a id="7832" class="Symbol">}</a> <a id="7834" class="Symbol">(</a><a id="7835" href="Solutions6.html#7835" class="Bound">p</a> <a id="7837" class="Symbol">:</a> <a id="7839" href="Solutions6.html#7820" class="Bound">a1</a> <a id="7842" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="7844" href="Solutions6.html#7823" class="Bound">a2</a><a id="7846" class="Symbol">)</a> <a id="7848" class="Symbol">(</a><a id="7849" href="Solutions6.html#7849" class="Bound">q</a> <a id="7851" class="Symbol">:</a> <a id="7853" href="Solutions6.html#7823" class="Bound">a2</a> <a id="7856" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="7858" href="Solutions6.html#7826" class="Bound">a3</a><a id="7860" class="Symbol">)</a>
+                <a id="7878" class="Symbol">→</a> <a id="7880" href="new-prelude.html#1241" data-type="(A : X → Set l2) → x ≡ y → A x → A y" class="Function">transport</a> <a id="7890" href="Solutions6.html#7784" class="Bound">B</a> <a id="7892" class="Symbol">(</a><a id="7893" href="Solutions6.html#7835" class="Bound">p</a> <a id="7895" href="new-prelude.html#642" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function Operator">∙</a> <a id="7897" href="Solutions6.html#7849" class="Bound">q</a><a id="7898" class="Symbol">)</a> <a id="7900" href="new-prelude.html#1372" data-type="((x : A) → B x) → ((x : A) → B x) → Set (l1 ⊔ l2)" class="Function Operator">∼</a> <a id="7902" href="new-prelude.html#1241" data-type="(A : X → Set l2) → x ≡ y → A x → A y" class="Function">transport</a> <a id="7912" href="Solutions6.html#7784" class="Bound">B</a> <a id="7914" href="Solutions6.html#7849" class="Bound">q</a> <a id="7916" href="new-prelude.html#2059" data-type="((y : B) → C y) → (f : A → B) (x : A) → C (f x)" class="Function Operator">∘</a> <a id="7918" href="new-prelude.html#1241" data-type="(A : X → Set l2) → x ≡ y → A x → A y" class="Function">transport</a> <a id="7928" href="Solutions6.html#7784" class="Bound">B</a> <a id="7930" href="Solutions6.html#7835" class="Bound">p</a>
+<a id="7932" href="Solutions6.html#7739" data-type="(p : a1 ≡ a2) (q : a2 ≡ a3) →
+transport B (p ∙ q) ∼ (transport B q ∘ transport B p)" class="Function">transport-∙</a> <a id="7944" class="Symbol">(</a><a id="7945" href="new-prelude.html#502" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="7950" class="Symbol">_)</a> <a id="7953" class="Symbol">(</a><a id="7954" href="new-prelude.html#502" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="7959" class="Symbol">_)</a> <a id="7962" class="Symbol">_</a> <a id="7964" class="Symbol">=</a> <a id="7966" href="new-prelude.html#502" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="7971" class="Symbol">_</a>
+</pre>
+<h2 id="calculating-the-loop-space">Calculating the loop space</h2>
+<p>First, we will assume a type F2 representing the free group on 2
+generators.</p>
+<p>ℤ is the free group on one generator, with 0 as the neutral element
+and succℤ corresponding to “addition” with the one generator. succℤ is
+an equivalence, with the inverse representing “addition” with -1.</p>
+<p>For other groups, it is somewhat more common to think of the group
+operation as “multiplication” rather than “addition”, so we will name
+the neutral element as “1” and the action of the elements as
+“multiplication”. Thus, we assume a type with an element 1F, and two
+equivalences, which we think of as “multiplication with generator 1” and
+“multiplication with generator 2”.</p>
+<p>Unscaffolded hard exercise: You can implement F2 as lists whose
+elements are a four-element type g1, g2, g1⁻¹, g2⁻¹ with no adjacent
+pairs of inverse elements. Then the forward directions of mult1/mult2
+will be implement by cons’ing g1/g2 on and “reducing” if that creates
+two adjacent inverses, the backwards directions by consing g1⁻¹ and g2⁻¹
+on and reducing, and the inverse laws will hold because the reduction
+cancels the inverses.</p>
+<p>For this problem, we will simply assume the nice universal property
+for this type: that it maps uniquely into any other type with a point
+and two equivalences, and that it is a set.</p>
+<pre class="Agda"><a id="9304" class="Keyword">module</a> <a id="AssumeF2"></a><a id="9311" href="Solutions6.html#9311" class="Module">AssumeF2</a> 
+    <a id="9325" class="Symbol">(</a><a id="9326" href="Solutions6.html#9326" class="Bound">F2</a> <a id="9329" class="Symbol">:</a> <a id="9331" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a><a id="9335" class="Symbol">)</a>
+    <a id="9341" class="Symbol">(</a><a id="9342" href="Solutions6.html#9342" class="Bound">1F</a> <a id="9345" class="Symbol">:</a> <a id="9347" href="Solutions6.html#9326" class="Bound">F2</a><a id="9349" class="Symbol">)</a>
+    <a id="9355" class="Symbol">(</a><a id="9356" href="Solutions6.html#9356" class="Bound">mult1</a> <a id="9362" class="Symbol">:</a> <a id="9364" href="Solutions6.html#9326" class="Bound">F2</a> <a id="9367" href="Lecture5-notes.html#968" data-type="(A : Set l1) (B : Set l2) → Set (l1 ⊔ l2)" class="Record Operator">≃</a> <a id="9369" href="Solutions6.html#9326" class="Bound">F2</a><a id="9371" class="Symbol">)</a>
+    <a id="9377" class="Symbol">(</a><a id="9378" href="Solutions6.html#9378" class="Bound">mult2</a> <a id="9384" class="Symbol">:</a> <a id="9386" href="Solutions6.html#9326" class="Bound">F2</a> <a id="9389" href="Lecture5-notes.html#968" data-type="(A : Set l1) (B : Set l2) → Set (l1 ⊔ l2)" class="Record Operator">≃</a> <a id="9391" href="Solutions6.html#9326" class="Bound">F2</a><a id="9393" class="Symbol">)</a>
+    <a id="9399" class="Symbol">(</a><a id="9400" href="Solutions6.html#9400" class="Bound">F2-rec</a> <a id="9407" class="Symbol">:</a> <a id="9409" class="Symbol">{</a><a id="9410" href="Solutions6.html#9410" class="Bound">X</a> <a id="9412" class="Symbol">:</a> <a id="9414" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a><a id="9418" class="Symbol">}</a>
+              <a id="9434" class="Symbol">(</a><a id="9435" href="Solutions6.html#9435" class="Bound">o</a> <a id="9437" class="Symbol">:</a> <a id="9439" href="Solutions6.html#9410" class="Bound">X</a><a id="9440" class="Symbol">)</a>
+              <a id="9456" class="Symbol">(</a><a id="9457" href="Solutions6.html#9457" class="Bound">m1</a> <a id="9460" class="Symbol">:</a> <a id="9462" href="Solutions6.html#9410" class="Bound">X</a> <a id="9464" href="Lecture5-notes.html#968" data-type="(A : Set l1) (B : Set l2) → Set (l1 ⊔ l2)" class="Record Operator">≃</a> <a id="9466" href="Solutions6.html#9410" class="Bound">X</a><a id="9467" class="Symbol">)</a>
+              <a id="9483" class="Symbol">(</a><a id="9484" href="Solutions6.html#9484" class="Bound">m2</a> <a id="9487" class="Symbol">:</a> <a id="9489" href="Solutions6.html#9410" class="Bound">X</a> <a id="9491" href="Lecture5-notes.html#968" data-type="(A : Set l1) (B : Set l2) → Set (l1 ⊔ l2)" class="Record Operator">≃</a> <a id="9493" href="Solutions6.html#9410" class="Bound">X</a><a id="9494" class="Symbol">)</a>
+            <a id="9508" class="Symbol">→</a> <a id="9510" href="Solutions6.html#9326" class="Bound">F2</a> <a id="9513" class="Symbol">→</a> <a id="9515" href="Solutions6.html#9410" class="Bound">X</a><a id="9516" class="Symbol">)</a>
+    <a id="9522" class="Symbol">(</a><a id="9523" href="Solutions6.html#9523" class="Bound">F2-rec-1</a> <a id="9532" class="Symbol">:</a> <a id="9534" class="Symbol">{</a><a id="9535" href="Solutions6.html#9535" class="Bound">X</a> <a id="9537" class="Symbol">:</a> <a id="9539" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a><a id="9543" class="Symbol">}</a>
+                <a id="9561" class="Symbol">(</a><a id="9562" href="Solutions6.html#9562" class="Bound">z</a> <a id="9564" class="Symbol">:</a> <a id="9566" href="Solutions6.html#9535" class="Bound">X</a><a id="9567" class="Symbol">)</a>
+                <a id="9585" class="Symbol">(</a><a id="9586" href="Solutions6.html#9586" class="Bound">m1</a> <a id="9589" class="Symbol">:</a> <a id="9591" href="Solutions6.html#9535" class="Bound">X</a> <a id="9593" href="Lecture5-notes.html#968" data-type="(A : Set l1) (B : Set l2) → Set (l1 ⊔ l2)" class="Record Operator">≃</a> <a id="9595" href="Solutions6.html#9535" class="Bound">X</a><a id="9596" class="Symbol">)</a>
+                <a id="9614" class="Symbol">(</a><a id="9615" href="Solutions6.html#9615" class="Bound">m2</a> <a id="9618" class="Symbol">:</a> <a id="9620" href="Solutions6.html#9535" class="Bound">X</a> <a id="9622" href="Lecture5-notes.html#968" data-type="(A : Set l1) (B : Set l2) → Set (l1 ⊔ l2)" class="Record Operator">≃</a> <a id="9624" href="Solutions6.html#9535" class="Bound">X</a><a id="9625" class="Symbol">)</a>
+              <a id="9641" class="Symbol">→</a> <a id="9643" href="Solutions6.html#9400" class="Bound">F2-rec</a> <a id="9650" href="Solutions6.html#9562" class="Bound">z</a> <a id="9652" href="Solutions6.html#9586" class="Bound">m1</a> <a id="9655" href="Solutions6.html#9615" class="Bound">m2</a> <a id="9658" href="Solutions6.html#9342" class="Bound">1F</a> <a id="9661" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="9663" href="Solutions6.html#9562" class="Bound">z</a><a id="9664" class="Symbol">)</a>
+    <a id="9670" class="Symbol">(</a><a id="9671" href="Solutions6.html#9671" class="Bound">F2-rec-mult1</a> <a id="9684" class="Symbol">:</a> <a id="9686" class="Symbol">{</a><a id="9687" href="Solutions6.html#9687" class="Bound">X</a> <a id="9689" class="Symbol">:</a> <a id="9691" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a><a id="9695" class="Symbol">}</a>
+                    <a id="9717" class="Symbol">(</a><a id="9718" href="Solutions6.html#9718" class="Bound">z</a> <a id="9720" class="Symbol">:</a> <a id="9722" href="Solutions6.html#9687" class="Bound">X</a><a id="9723" class="Symbol">)</a>
+                    <a id="9745" class="Symbol">(</a><a id="9746" href="Solutions6.html#9746" class="Bound">m1</a> <a id="9749" class="Symbol">:</a> <a id="9751" href="Solutions6.html#9687" class="Bound">X</a> <a id="9753" href="Lecture5-notes.html#968" data-type="(A : Set l1) (B : Set l2) → Set (l1 ⊔ l2)" class="Record Operator">≃</a> <a id="9755" href="Solutions6.html#9687" class="Bound">X</a><a id="9756" class="Symbol">)</a>
+                    <a id="9778" class="Symbol">(</a><a id="9779" href="Solutions6.html#9779" class="Bound">m2</a> <a id="9782" class="Symbol">:</a> <a id="9784" href="Solutions6.html#9687" class="Bound">X</a> <a id="9786" href="Lecture5-notes.html#968" data-type="(A : Set l1) (B : Set l2) → Set (l1 ⊔ l2)" class="Record Operator">≃</a> <a id="9788" href="Solutions6.html#9687" class="Bound">X</a><a id="9789" class="Symbol">)</a>
+                    <a id="9811" class="Symbol">(</a><a id="9812" href="Solutions6.html#9812" class="Bound">a</a> <a id="9814" class="Symbol">:</a> <a id="9816" href="Solutions6.html#9326" class="Bound">F2</a><a id="9818" class="Symbol">)</a> <a id="9820" class="Symbol">→</a> <a id="9822" href="Solutions6.html#9400" class="Bound">F2-rec</a> <a id="9829" href="Solutions6.html#9718" class="Bound">z</a> <a id="9831" href="Solutions6.html#9746" class="Bound">m1</a> <a id="9834" href="Solutions6.html#9779" class="Bound">m2</a> <a id="9837" class="Symbol">(</a><a id="9838" href="Lecture5-notes.html#1230" data-type="A ≃ B → A → B" class="Function">fwd</a> <a id="9842" href="Solutions6.html#9356" class="Bound">mult1</a> <a id="9848" href="Solutions6.html#9812" class="Bound">a</a><a id="9849" class="Symbol">)</a> <a id="9851" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="9853" href="Lecture5-notes.html#1230" data-type="A ≃ B → A → B" class="Function">fwd</a> <a id="9857" href="Solutions6.html#9746" class="Bound">m1</a> <a id="9860" class="Symbol">(</a><a id="9861" href="Solutions6.html#9400" class="Bound">F2-rec</a> <a id="9868" href="Solutions6.html#9718" class="Bound">z</a> <a id="9870" href="Solutions6.html#9746" class="Bound">m1</a> <a id="9873" href="Solutions6.html#9779" class="Bound">m2</a> <a id="9876" href="Solutions6.html#9812" class="Bound">a</a><a id="9877" class="Symbol">))</a>
+    <a id="9884" class="Symbol">(</a><a id="9885" href="Solutions6.html#9885" class="Bound">F2-rec-mult2</a> <a id="9898" class="Symbol">:</a> <a id="9900" class="Symbol">{</a><a id="9901" href="Solutions6.html#9901" class="Bound">X</a> <a id="9903" class="Symbol">:</a> <a id="9905" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a><a id="9909" class="Symbol">}</a>
+                    <a id="9931" class="Symbol">(</a><a id="9932" href="Solutions6.html#9932" class="Bound">z</a> <a id="9934" class="Symbol">:</a> <a id="9936" href="Solutions6.html#9901" class="Bound">X</a><a id="9937" class="Symbol">)</a>
+                    <a id="9959" class="Symbol">(</a><a id="9960" href="Solutions6.html#9960" class="Bound">m1</a> <a id="9963" class="Symbol">:</a> <a id="9965" href="Solutions6.html#9901" class="Bound">X</a> <a id="9967" href="Lecture5-notes.html#968" data-type="(A : Set l1) (B : Set l2) → Set (l1 ⊔ l2)" class="Record Operator">≃</a> <a id="9969" href="Solutions6.html#9901" class="Bound">X</a><a id="9970" class="Symbol">)</a>
+                    <a id="9992" class="Symbol">(</a><a id="9993" href="Solutions6.html#9993" class="Bound">m2</a> <a id="9996" class="Symbol">:</a> <a id="9998" href="Solutions6.html#9901" class="Bound">X</a> <a id="10000" href="Lecture5-notes.html#968" data-type="(A : Set l1) (B : Set l2) → Set (l1 ⊔ l2)" class="Record Operator">≃</a> <a id="10002" href="Solutions6.html#9901" class="Bound">X</a><a id="10003" class="Symbol">)</a>
+                    <a id="10025" class="Symbol">(</a><a id="10026" href="Solutions6.html#10026" class="Bound">a</a> <a id="10028" class="Symbol">:</a> <a id="10030" href="Solutions6.html#9326" class="Bound">F2</a><a id="10032" class="Symbol">)</a> <a id="10034" class="Symbol">→</a> <a id="10036" href="Solutions6.html#9400" class="Bound">F2-rec</a> <a id="10043" href="Solutions6.html#9932" class="Bound">z</a> <a id="10045" href="Solutions6.html#9960" class="Bound">m1</a> <a id="10048" href="Solutions6.html#9993" class="Bound">m2</a> <a id="10051" class="Symbol">(</a><a id="10052" href="Lecture5-notes.html#1230" data-type="A ≃ B → A → B" class="Function">fwd</a> <a id="10056" href="Solutions6.html#9378" class="Bound">mult2</a> <a id="10062" href="Solutions6.html#10026" class="Bound">a</a><a id="10063" class="Symbol">)</a> <a id="10065" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="10067" href="Lecture5-notes.html#1230" data-type="A ≃ B → A → B" class="Function">fwd</a> <a id="10071" href="Solutions6.html#9993" class="Bound">m2</a> <a id="10074" class="Symbol">(</a><a id="10075" href="Solutions6.html#9400" class="Bound">F2-rec</a> <a id="10082" href="Solutions6.html#9932" class="Bound">z</a> <a id="10084" href="Solutions6.html#9960" class="Bound">m1</a> <a id="10087" href="Solutions6.html#9993" class="Bound">m2</a> <a id="10090" href="Solutions6.html#10026" class="Bound">a</a><a id="10091" class="Symbol">))</a>
+    <a id="10098" class="Symbol">(</a><a id="10099" href="Solutions6.html#10099" class="Bound">F2-rec-unique</a> <a id="10113" class="Symbol">:</a> <a id="10115" class="Symbol">{</a><a id="10116" href="Solutions6.html#10116" class="Bound">X</a> <a id="10118" class="Symbol">:</a> <a id="10120" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a><a id="10124" class="Symbol">}</a>
+                    <a id="10146" class="Symbol">(</a><a id="10147" href="Solutions6.html#10147" class="Bound">f</a> <a id="10149" class="Symbol">:</a> <a id="10151" href="Solutions6.html#9326" class="Bound">F2</a> <a id="10154" class="Symbol">→</a> <a id="10156" href="Solutions6.html#10116" class="Bound">X</a><a id="10157" class="Symbol">)</a>
+                    <a id="10179" class="Symbol">(</a><a id="10180" href="Solutions6.html#10180" class="Bound">z</a> <a id="10182" class="Symbol">:</a> <a id="10184" href="Solutions6.html#10116" class="Bound">X</a><a id="10185" class="Symbol">)</a>
+                    <a id="10207" class="Symbol">(</a><a id="10208" href="Solutions6.html#10208" class="Bound">m1</a> <a id="10211" class="Symbol">:</a> <a id="10213" href="Solutions6.html#10116" class="Bound">X</a> <a id="10215" href="Lecture5-notes.html#968" data-type="(A : Set l1) (B : Set l2) → Set (l1 ⊔ l2)" class="Record Operator">≃</a> <a id="10217" href="Solutions6.html#10116" class="Bound">X</a><a id="10218" class="Symbol">)</a>
+                    <a id="10240" class="Symbol">(</a><a id="10241" href="Solutions6.html#10241" class="Bound">m2</a> <a id="10244" class="Symbol">:</a> <a id="10246" href="Solutions6.html#10116" class="Bound">X</a> <a id="10248" href="Lecture5-notes.html#968" data-type="(A : Set l1) (B : Set l2) → Set (l1 ⊔ l2)" class="Record Operator">≃</a> <a id="10250" href="Solutions6.html#10116" class="Bound">X</a><a id="10251" class="Symbol">)</a>
+                  <a id="10271" class="Symbol">→</a> <a id="10273" href="Solutions6.html#10147" class="Bound">f</a> <a id="10275" href="Solutions6.html#9342" class="Bound">1F</a> <a id="10278" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="10280" href="Solutions6.html#10180" class="Bound">z</a>
+                  <a id="10300" class="Symbol">→</a> <a id="10302" class="Symbol">((</a><a id="10304" href="Solutions6.html#10147" class="Bound">f</a> <a id="10306" href="new-prelude.html#2059" data-type="((y : B) → C y) → (f : A → B) (x : A) → C (f x)" class="Function Operator">∘</a> <a id="10308" href="Lecture5-notes.html#1230" data-type="A ≃ B → A → B" class="Function">fwd</a> <a id="10312" href="Solutions6.html#9356" class="Bound">mult1</a><a id="10317" class="Symbol">)</a> <a id="10319" href="new-prelude.html#1372" data-type="((x : A) → B x) → ((x : A) → B x) → Set (l1 ⊔ l2)" class="Function Operator">∼</a> <a id="10321" class="Symbol">(</a><a id="10322" href="Lecture5-notes.html#1230" data-type="A ≃ B → A → B" class="Function">fwd</a> <a id="10326" href="Solutions6.html#10208" class="Bound">m1</a> <a id="10329" href="new-prelude.html#2059" data-type="((y : B) → C y) → (f : A → B) (x : A) → C (f x)" class="Function Operator">∘</a> <a id="10331" href="Solutions6.html#10147" class="Bound">f</a><a id="10332" class="Symbol">))</a>
+                  <a id="10353" class="Symbol">→</a> <a id="10355" class="Symbol">((</a><a id="10357" href="Solutions6.html#10147" class="Bound">f</a> <a id="10359" href="new-prelude.html#2059" data-type="((y : B) → C y) → (f : A → B) (x : A) → C (f x)" class="Function Operator">∘</a> <a id="10361" href="Lecture5-notes.html#1230" data-type="A ≃ B → A → B" class="Function">fwd</a> <a id="10365" href="Solutions6.html#9378" class="Bound">mult2</a><a id="10370" class="Symbol">)</a> <a id="10372" href="new-prelude.html#1372" data-type="((x : A) → B x) → ((x : A) → B x) → Set (l1 ⊔ l2)" class="Function Operator">∼</a> <a id="10374" class="Symbol">(</a><a id="10375" href="Lecture5-notes.html#1230" data-type="A ≃ B → A → B" class="Function">fwd</a> <a id="10379" href="Solutions6.html#10241" class="Bound">m2</a> <a id="10382" href="new-prelude.html#2059" data-type="((y : B) → C y) → (f : A → B) (x : A) → C (f x)" class="Function Operator">∘</a> <a id="10384" href="Solutions6.html#10147" class="Bound">f</a><a id="10385" class="Symbol">))</a>
+                 <a id="10405" class="Symbol">→</a> <a id="10407" class="Symbol">(</a><a id="10408" href="Solutions6.html#10408" class="Bound">x</a> <a id="10410" class="Symbol">:</a> <a id="10412" href="Solutions6.html#9326" class="Bound">F2</a><a id="10414" class="Symbol">)</a> <a id="10416" class="Symbol">→</a> <a id="10418" href="Solutions6.html#10147" class="Bound">f</a> <a id="10420" href="Solutions6.html#10408" class="Bound">x</a> <a id="10422" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="10424" href="Solutions6.html#9400" class="Bound">F2-rec</a> <a id="10431" href="Solutions6.html#10180" class="Bound">z</a> <a id="10433" href="Solutions6.html#10208" class="Bound">m1</a> <a id="10436" href="Solutions6.html#10241" class="Bound">m2</a> <a id="10439" href="Solutions6.html#10408" class="Bound">x</a><a id="10440" class="Symbol">)</a>
+    <a id="10446" class="Symbol">(</a><a id="10447" href="Solutions6.html#10447" class="Bound">hSetF</a> <a id="10453" class="Symbol">:</a> <a id="10455" href="new-prelude.html#3115" data-type="Set l → Set l" class="Function">is-set</a> <a id="10462" href="Solutions6.html#9326" class="Bound">F2</a><a id="10464" class="Symbol">)</a> <a id="10466" class="Keyword">where</a>
+</pre>
+<p>(⋆⋆⋆) Prove that the loop space of the Bowtie is F2. Each bit of the
+proof will be analogous to the corresponding part of the Circle
+proof.</p>
+<pre class="Agda">    <a id="AssumeF2.Cover"></a><a id="10631" href="Solutions6.html#10631" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) →
+Bowtie → Set" class="Function">Cover</a> <a id="10637" class="Symbol">:</a> <a id="10639" href="Solutions6.html#1423" data-type="Set" class="Postulate">Bowtie</a> <a id="10646" class="Symbol">→</a> <a id="10648" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a>
+    <a id="10657" href="Solutions6.html#10631" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) →
+Bowtie → Set" class="Function">Cover</a> <a id="10663" class="Symbol">=</a> <a id="10665" href="Solutions6.html#5148" data-type="(x : X) → Path X x x → Path X x x → Bowtie → X" class="Function">Bowtie-rec</a> <a id="10676" href="Solutions6.html#9326" class="Bound">F2</a>
+                       <a id="10702" class="Symbol">(</a><a id="10703" href="Lecture6-notes.html#589" data-type="X ≃ Y → X ≡ Y" class="Postulate">ua</a> <a id="10706" href="Solutions6.html#9356" class="Bound">mult1</a><a id="10711" class="Symbol">)</a>
+                       <a id="10736" class="Symbol">(</a><a id="10737" href="Lecture6-notes.html#589" data-type="X ≃ Y → X ≡ Y" class="Postulate">ua</a> <a id="10740" href="Solutions6.html#9378" class="Bound">mult2</a><a id="10745" class="Symbol">)</a>
+                  
+    <a id="AssumeF2.encode"></a><a id="10770" href="Solutions6.html#10770" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) (x : Bowtie) →
+baseB ≡ x →
+Cover F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1 F2-rec-mult2
+F2-rec-unique hSetF x" class="Function">encode</a> <a id="10777" class="Symbol">:</a> <a id="10779" class="Symbol">(</a><a id="10780" href="Solutions6.html#10780" class="Bound">x</a> <a id="10782" class="Symbol">:</a> <a id="10784" href="Solutions6.html#1423" data-type="Set" class="Postulate">Bowtie</a><a id="10790" class="Symbol">)</a> <a id="10792" class="Symbol">→</a> <a id="10794" href="Solutions6.html#1438" data-type="Bowtie" class="Postulate">baseB</a> <a id="10800" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="10802" href="Solutions6.html#10780" class="Bound">x</a> <a id="10804" class="Symbol">→</a> <a id="10806" href="Solutions6.html#10631" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) →
+Bowtie → Set" class="Function">Cover</a> <a id="10812" href="Solutions6.html#10780" class="Bound">x</a>
+    <a id="10818" href="Solutions6.html#10770" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) (x : Bowtie) →
+baseB ≡ x →
+Cover F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1 F2-rec-mult2
+F2-rec-unique hSetF x" class="Function">encode</a> <a id="10825" href="Solutions6.html#10825" class="Bound">x</a> <a id="10827" href="Solutions6.html#10827" class="Bound">p</a> <a id="10829" class="Symbol">=</a> <a id="10831" href="new-prelude.html#1241" data-type="(A : X → Set l2) → x ≡ y → A x → A y" class="Function">transport</a> <a id="10841" href="Solutions6.html#10631" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) →
+Bowtie → Set" class="Function">Cover</a> <a id="10847" href="Solutions6.html#10827" class="Bound">p</a> <a id="10849" href="Solutions6.html#9342" class="Bound">1F</a>
+
+    <a id="AssumeF2.transport-Cover-loop1"></a><a id="10857" href="Solutions6.html#10857" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) (x : F2) →
+transport
+(Cover F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1 F2-rec-mult2
+ F2-rec-unique hSetF)
+loop1 x
+≡ fwd mult1 x" class="Function">transport-Cover-loop1</a> <a id="10879" class="Symbol">:</a> <a id="10881" class="Symbol">(</a><a id="10882" href="Solutions6.html#10882" class="Bound">x</a> <a id="10884" class="Symbol">:</a> <a id="10886" href="Solutions6.html#9326" class="Bound">F2</a><a id="10888" class="Symbol">)</a> <a id="10890" class="Symbol">→</a> <a id="10892" href="new-prelude.html#1241" data-type="(A : X → Set l2) → x ≡ y → A x → A y" class="Function">transport</a> <a id="10902" href="Solutions6.html#10631" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) →
+Bowtie → Set" class="Function">Cover</a> <a id="10908" href="Solutions6.html#1455" data-type="baseB ≡ baseB" class="Postulate">loop1</a> <a id="10914" class="Symbol">(</a><a id="10915" href="Solutions6.html#10882" class="Bound">x</a><a id="10916" class="Symbol">)</a> <a id="10918" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="10920" class="Symbol">(</a><a id="10921" href="Lecture5-notes.html#1230" data-type="A ≃ B → A → B" class="Function">fwd</a> <a id="10925" href="Solutions6.html#9356" class="Bound">mult1</a> <a id="10931" href="Solutions6.html#10882" class="Bound">x</a><a id="10932" class="Symbol">)</a>
+    <a id="10938" href="Solutions6.html#10857" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) (x : F2) →
+transport
+(Cover F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1 F2-rec-mult2
+ F2-rec-unique hSetF)
+loop1 x
+≡ fwd mult1 x" class="Function">transport-Cover-loop1</a> <a id="10960" href="Solutions6.html#10960" class="Bound">x</a> <a id="10962" class="Symbol">=</a> <a id="10964" href="Lecture6-notes.html#2144" data-type="(C : A → Set) (p : a ≡ a&#39;) →
+transport C p x ≡ transport (λ X → X) (ap C p) x" class="Function">transport-ap-assoc</a> <a id="10983" class="Symbol">_</a> <a id="10985" href="Solutions6.html#1455" data-type="baseB ≡ baseB" class="Postulate">loop1</a> <a id="10991" href="new-prelude.html#642" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function Operator">∙</a>
+                              <a id="11023" class="Symbol">(</a><a id="11024" href="new-prelude.html#937" data-type="(f : A → B) → x ≡ y → f x ≡ f y" class="Function">ap</a> <a id="11027" class="Symbol">(\</a> <a id="11030" href="Solutions6.html#11030" class="Bound">H</a> <a id="11032" class="Symbol">→</a> <a id="11034" href="new-prelude.html#1241" data-type="(A : X → Set l2) → x ≡ y → A x → A y" class="Function">transport</a> <a id="11044" class="Symbol">(\</a> <a id="11047" href="Solutions6.html#11047" class="Bound">X</a> <a id="11049" class="Symbol">→</a> <a id="11051" href="Solutions6.html#11047" class="Bound">X</a><a id="11052" class="Symbol">)</a> <a id="11054" href="Solutions6.html#11030" class="Bound">H</a> <a id="11056" href="Solutions6.html#10960" class="Bound">x</a><a id="11057" class="Symbol">)</a> <a id="11059" class="Symbol">(</a><a id="11060" href="Solutions6.html#5642" data-type="(x : X) (p q : Path X x x) → ap (Bowtie-rec x p q) loop1 ≡ p" class="Function">Bowtie-rec-loop1</a> <a id="11077" class="Symbol">_</a> <a id="11079" class="Symbol">_</a> <a id="11081" class="Symbol">_)</a> <a id="11084" href="new-prelude.html#642" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function Operator">∙</a>
+                              <a id="11116" href="Lecture6-notes.html#1543" data-type="(e : X ≃ Y) → transport (λ X → X) (ua e) x ≡ fwd e x" class="Postulate">uaβ</a> <a id="11120" class="Symbol">_)</a>
+
+    <a id="AssumeF2.transport-Cover-loop2"></a><a id="11128" href="Solutions6.html#11128" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) (x : F2) →
+transport
+(Cover F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1 F2-rec-mult2
+ F2-rec-unique hSetF)
+loop2 x
+≡ fwd mult2 x" class="Function">transport-Cover-loop2</a> <a id="11150" class="Symbol">:</a> <a id="11152" class="Symbol">(</a><a id="11153" href="Solutions6.html#11153" class="Bound">x</a> <a id="11155" class="Symbol">:</a> <a id="11157" href="Solutions6.html#9326" class="Bound">F2</a><a id="11159" class="Symbol">)</a> <a id="11161" class="Symbol">→</a> <a id="11163" href="new-prelude.html#1241" data-type="(A : X → Set l2) → x ≡ y → A x → A y" class="Function">transport</a> <a id="11173" href="Solutions6.html#10631" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) →
+Bowtie → Set" class="Function">Cover</a> <a id="11179" href="Solutions6.html#1479" data-type="baseB ≡ baseB" class="Postulate">loop2</a> <a id="11185" class="Symbol">(</a><a id="11186" href="Solutions6.html#11153" class="Bound">x</a><a id="11187" class="Symbol">)</a> <a id="11189" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="11191" class="Symbol">(</a><a id="11192" href="Lecture5-notes.html#1230" data-type="A ≃ B → A → B" class="Function">fwd</a> <a id="11196" href="Solutions6.html#9378" class="Bound">mult2</a> <a id="11202" href="Solutions6.html#11153" class="Bound">x</a><a id="11203" class="Symbol">)</a>
+    <a id="11209" href="Solutions6.html#11128" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) (x : F2) →
+transport
+(Cover F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1 F2-rec-mult2
+ F2-rec-unique hSetF)
+loop2 x
+≡ fwd mult2 x" class="Function">transport-Cover-loop2</a> <a id="11231" href="Solutions6.html#11231" class="Bound">x</a> <a id="11233" class="Symbol">=</a> <a id="11235" href="Lecture6-notes.html#2144" data-type="(C : A → Set) (p : a ≡ a&#39;) →
+transport C p x ≡ transport (λ X → X) (ap C p) x" class="Function">transport-ap-assoc</a> <a id="11254" class="Symbol">_</a> <a id="11256" href="Solutions6.html#1479" data-type="baseB ≡ baseB" class="Postulate">loop2</a> <a id="11262" href="new-prelude.html#642" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function Operator">∙</a>
+                              <a id="11294" class="Symbol">(</a><a id="11295" href="new-prelude.html#937" data-type="(f : A → B) → x ≡ y → f x ≡ f y" class="Function">ap</a> <a id="11298" class="Symbol">(\</a> <a id="11301" href="Solutions6.html#11301" class="Bound">H</a> <a id="11303" class="Symbol">→</a> <a id="11305" href="new-prelude.html#1241" data-type="(A : X → Set l2) → x ≡ y → A x → A y" class="Function">transport</a> <a id="11315" class="Symbol">(\</a> <a id="11318" href="Solutions6.html#11318" class="Bound">X</a> <a id="11320" class="Symbol">→</a> <a id="11322" href="Solutions6.html#11318" class="Bound">X</a><a id="11323" class="Symbol">)</a> <a id="11325" href="Solutions6.html#11301" class="Bound">H</a> <a id="11327" href="Solutions6.html#11231" class="Bound">x</a><a id="11328" class="Symbol">)</a> <a id="11330" class="Symbol">(</a><a id="11331" href="Solutions6.html#6072" data-type="(x : X) (p q : Path X x x) → ap (Bowtie-rec x p q) loop2 ≡ q" class="Function">Bowtie-rec-loop2</a> <a id="11348" class="Symbol">_</a> <a id="11350" class="Symbol">_</a> <a id="11352" class="Symbol">_)</a> <a id="11355" href="new-prelude.html#642" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function Operator">∙</a>
+                              <a id="11387" href="Lecture6-notes.html#1543" data-type="(e : X ≃ Y) → transport (λ X → X) (ua e) x ≡ fwd e x" class="Postulate">uaβ</a> <a id="11391" class="Symbol">_)</a>
+
+    <a id="AssumeF2.decode-F2"></a><a id="11399" href="Solutions6.html#11399" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) →
+F2 → Path Bowtie baseB baseB" class="Function">decode-F2</a> <a id="11409" class="Symbol">:</a> <a id="11411" href="Solutions6.html#9326" class="Bound">F2</a> <a id="11414" class="Symbol">→</a> <a id="11416" href="Solutions6.html#1438" data-type="Bowtie" class="Postulate">baseB</a> <a id="11422" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">≡</a> <a id="11424" href="Solutions6.html#1438" data-type="Bowtie" class="Postulate">baseB</a> <a id="11430" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">[</a> <a id="11432" href="Solutions6.html#1423" data-type="Set" class="Postulate">Bowtie</a> <a id="11439" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">]</a>
+    <a id="11445" href="Solutions6.html#11399" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) →
+F2 → Path Bowtie baseB baseB" class="Function">decode-F2</a> <a id="11455" class="Symbol">=</a> <a id="11457" href="Solutions6.html#9400" class="Bound">F2-rec</a> <a id="11464" class="Symbol">(</a><a id="11465" href="new-prelude.html#502" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="11470" href="Solutions6.html#1438" data-type="Bowtie" class="Postulate">baseB</a><a id="11475" class="Symbol">)</a>
+                       <a id="11500" class="Symbol">(</a><a id="11501" href="Solutions6.html#7312" data-type="(a : A) → a&#39; ≡ a&#39;&#39; → (a ≡ a&#39;) ≃ (a ≡ a&#39;&#39;)" class="Function">concat-equiv</a> <a id="11514" class="Symbol">_</a> <a id="11516" href="Solutions6.html#1455" data-type="baseB ≡ baseB" class="Postulate">loop1</a><a id="11521" class="Symbol">)</a>
+                       <a id="11546" class="Symbol">(</a><a id="11547" href="Solutions6.html#7312" data-type="(a : A) → a&#39; ≡ a&#39;&#39; → (a ≡ a&#39;) ≃ (a ≡ a&#39;&#39;)" class="Function">concat-equiv</a> <a id="11560" class="Symbol">_</a> <a id="11562" href="Solutions6.html#1479" data-type="baseB ≡ baseB" class="Postulate">loop2</a><a id="11567" class="Symbol">)</a>
+
+    <a id="AssumeF2.decode-F2-mult1"></a><a id="11574" href="Solutions6.html#11574" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) (x : F2) →
+decode-F2 F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1
+F2-rec-mult2 F2-rec-unique hSetF (fwd mult1 x)
+≡
+(decode-F2 F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1
+ F2-rec-mult2 F2-rec-unique hSetF x
+ ∙ loop1)" class="Function">decode-F2-mult1</a> <a id="11590" class="Symbol">:</a> <a id="11592" class="Symbol">(</a><a id="11593" href="Solutions6.html#11593" class="Bound">x</a> <a id="11595" class="Symbol">:</a> <a id="11597" href="Solutions6.html#9326" class="Bound">F2</a><a id="11599" class="Symbol">)</a> <a id="11601" class="Symbol">→</a> <a id="11603" href="Solutions6.html#11399" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) →
+F2 → Path Bowtie baseB baseB" class="Function">decode-F2</a> <a id="11613" class="Symbol">(</a><a id="11614" href="Lecture5-notes.html#1230" data-type="A ≃ B → A → B" class="Function">fwd</a> <a id="11618" href="Solutions6.html#9356" class="Bound">mult1</a> <a id="11624" href="Solutions6.html#11593" class="Bound">x</a><a id="11625" class="Symbol">)</a> <a id="11627" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="11629" href="Solutions6.html#11399" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) →
+F2 → Path Bowtie baseB baseB" class="Function">decode-F2</a> <a id="11639" href="Solutions6.html#11593" class="Bound">x</a> <a id="11641" href="new-prelude.html#642" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function Operator">∙</a> <a id="11643" href="Solutions6.html#1455" data-type="baseB ≡ baseB" class="Postulate">loop1</a>
+    <a id="11653" href="Solutions6.html#11574" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) (x : F2) →
+decode-F2 F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1
+F2-rec-mult2 F2-rec-unique hSetF (fwd mult1 x)
+≡
+(decode-F2 F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1
+ F2-rec-mult2 F2-rec-unique hSetF x
+ ∙ loop1)" class="Function">decode-F2-mult1</a> <a id="11669" href="Solutions6.html#11669" class="Bound">x</a> <a id="11671" class="Symbol">=</a>  <a id="11674" href="Solutions6.html#9671" class="Bound">F2-rec-mult1</a> <a id="11687" class="Symbol">_</a> <a id="11689" class="Symbol">_</a> <a id="11691" class="Symbol">_</a> <a id="11693" class="Symbol">_</a> <a id="11695" href="new-prelude.html#642" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function Operator">∙</a> <a id="11697" href="Lecture5-notes.html#10539" data-type="f ≡ g → f ∼ g" class="Function">app≡</a> <a id="11702" class="Symbol">(</a><a id="11703" href="Solutions6.html#7475" data-type="(p : a&#39; ≡ a&#39;&#39;) → fwd (concat-equiv a p) ≡ (λ q → q ∙ p)" class="Function">concat-equiv-map</a> <a id="11720" href="Solutions6.html#1455" data-type="baseB ≡ baseB" class="Postulate">loop1</a><a id="11725" class="Symbol">)</a> <a id="11727" class="Symbol">_</a> 
+
+    <a id="AssumeF2.decode-F2-mult2"></a><a id="11735" href="Solutions6.html#11735" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) (x : F2) →
+decode-F2 F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1
+F2-rec-mult2 F2-rec-unique hSetF (fwd mult2 x)
+≡
+(decode-F2 F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1
+ F2-rec-mult2 F2-rec-unique hSetF x
+ ∙ loop2)" class="Function">decode-F2-mult2</a> <a id="11751" class="Symbol">:</a> <a id="11753" class="Symbol">(</a><a id="11754" href="Solutions6.html#11754" class="Bound">x</a> <a id="11756" class="Symbol">:</a> <a id="11758" href="Solutions6.html#9326" class="Bound">F2</a><a id="11760" class="Symbol">)</a> <a id="11762" class="Symbol">→</a> <a id="11764" href="Solutions6.html#11399" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) →
+F2 → Path Bowtie baseB baseB" class="Function">decode-F2</a> <a id="11774" class="Symbol">(</a><a id="11775" href="Lecture5-notes.html#1230" data-type="A ≃ B → A → B" class="Function">fwd</a> <a id="11779" href="Solutions6.html#9378" class="Bound">mult2</a> <a id="11785" href="Solutions6.html#11754" class="Bound">x</a><a id="11786" class="Symbol">)</a> <a id="11788" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="11790" href="Solutions6.html#11399" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) →
+F2 → Path Bowtie baseB baseB" class="Function">decode-F2</a> <a id="11800" href="Solutions6.html#11754" class="Bound">x</a> <a id="11802" href="new-prelude.html#642" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function Operator">∙</a> <a id="11804" href="Solutions6.html#1479" data-type="baseB ≡ baseB" class="Postulate">loop2</a>
+    <a id="11814" href="Solutions6.html#11735" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) (x : F2) →
+decode-F2 F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1
+F2-rec-mult2 F2-rec-unique hSetF (fwd mult2 x)
+≡
+(decode-F2 F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1
+ F2-rec-mult2 F2-rec-unique hSetF x
+ ∙ loop2)" class="Function">decode-F2-mult2</a> <a id="11830" href="Solutions6.html#11830" class="Bound">x</a> <a id="11832" class="Symbol">=</a>  <a id="11835" href="Solutions6.html#9885" class="Bound">F2-rec-mult2</a> <a id="11848" class="Symbol">_</a> <a id="11850" class="Symbol">_</a> <a id="11852" class="Symbol">_</a> <a id="11854" class="Symbol">_</a> <a id="11856" href="new-prelude.html#642" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function Operator">∙</a> <a id="11858" href="Lecture5-notes.html#10539" data-type="f ≡ g → f ∼ g" class="Function">app≡</a> <a id="11863" class="Symbol">(</a><a id="11864" href="Solutions6.html#7475" data-type="(p : a&#39; ≡ a&#39;&#39;) → fwd (concat-equiv a p) ≡ (λ q → q ∙ p)" class="Function">concat-equiv-map</a> <a id="11881" href="Solutions6.html#1479" data-type="baseB ≡ baseB" class="Postulate">loop2</a><a id="11886" class="Symbol">)</a> <a id="11888" class="Symbol">_</a> 
+
+    <a id="AssumeF2.decode"></a><a id="11896" href="Solutions6.html#11896" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) (x : Bowtie) →
+Cover F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1 F2-rec-mult2
+F2-rec-unique hSetF x →
+baseB ≡ x" class="Function">decode</a> <a id="11903" class="Symbol">:</a> <a id="11905" class="Symbol">(</a><a id="11906" href="Solutions6.html#11906" class="Bound">x</a> <a id="11908" class="Symbol">:</a> <a id="11910" href="Solutions6.html#1423" data-type="Set" class="Postulate">Bowtie</a><a id="11916" class="Symbol">)</a> <a id="11918" class="Symbol">→</a> <a id="11920" href="Solutions6.html#10631" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) →
+Bowtie → Set" class="Function">Cover</a> <a id="11926" href="Solutions6.html#11906" class="Bound">x</a> <a id="11928" class="Symbol">→</a> <a id="11930" href="Solutions6.html#1438" data-type="Bowtie" class="Postulate">baseB</a> <a id="11936" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="11938" href="Solutions6.html#11906" class="Bound">x</a>
+    <a id="11944" href="Solutions6.html#11896" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) (x : Bowtie) →
+Cover F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1 F2-rec-mult2
+F2-rec-unique hSetF x →
+baseB ≡ x" class="Function">decode</a> <a id="11951" class="Symbol">=</a> <a id="11953" href="Solutions6.html#1503" data-type="(X : Bowtie → Set l) (x : X baseB) →
+PathOver X loop1 x x → PathOver X loop2 x x → (x₁ : Bowtie) → X x₁" class="Postulate">Bowtie-elim</a> <a id="11965" class="Symbol">_</a>
+                         <a id="11992" href="Solutions6.html#11399" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) →
+F2 → Path Bowtie baseB baseB" class="Function">decode-F2</a>
+                         <a id="12027" class="Symbol">(</a><a id="12028" href="Lecture6-notes.html#2834" data-type="((a : A x) → PathOver B p (f1 a) (f2 (transport A p a))) →
+PathOver (λ z → A z → B z) p f1 f2" class="Function">PathOver-→</a> <a id="12039" class="Symbol">\</a> <a id="12041" href="Solutions6.html#12041" class="Bound">a</a> <a id="12043" class="Symbol">→</a> <a id="12045" href="Lecture6-notes.html#4629" data-type="(q ∙ p) ≡ r → PathOver (_≡_ a0) p q r" class="Function">PathOver-path-to</a> <a id="12062" class="Symbol">(</a><a id="12063" href="new-prelude.html#861" data-type="x ≡ y → y ≡ x" class="Function">!</a> <a id="12065" class="Symbol">(</a><a id="12066" href="Solutions6.html#11574" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) (x : F2) →
+decode-F2 F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1
+F2-rec-mult2 F2-rec-unique hSetF (fwd mult1 x)
+≡
+(decode-F2 F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1
+ F2-rec-mult2 F2-rec-unique hSetF x
+ ∙ loop1)" class="Function">decode-F2-mult1</a> <a id="12082" href="Solutions6.html#12041" class="Bound">a</a><a id="12083" class="Symbol">)</a> <a id="12085" href="new-prelude.html#642" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function Operator">∙</a> <a id="12087" href="new-prelude.html#937" data-type="(f : A → B) → x ≡ y → f x ≡ f y" class="Function">ap</a> <a id="12090" href="Solutions6.html#11399" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) →
+F2 → Path Bowtie baseB baseB" class="Function">decode-F2</a> <a id="12100" class="Symbol">(</a><a id="12101" href="new-prelude.html#861" data-type="x ≡ y → y ≡ x" class="Function">!</a> <a id="12103" class="Symbol">(</a><a id="12104" href="Solutions6.html#10857" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) (x : F2) →
+transport
+(Cover F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1 F2-rec-mult2
+ F2-rec-unique hSetF)
+loop1 x
+≡ fwd mult1 x" class="Function">transport-Cover-loop1</a> <a id="12126" class="Symbol">_))))</a>
+                         <a id="12157" class="Symbol">(</a><a id="12158" href="Lecture6-notes.html#2834" data-type="((a : A x) → PathOver B p (f1 a) (f2 (transport A p a))) →
+PathOver (λ z → A z → B z) p f1 f2" class="Function">PathOver-→</a> <a id="12169" class="Symbol">\</a> <a id="12171" href="Solutions6.html#12171" class="Bound">a</a> <a id="12173" class="Symbol">→</a> <a id="12175" href="Lecture6-notes.html#4629" data-type="(q ∙ p) ≡ r → PathOver (_≡_ a0) p q r" class="Function">PathOver-path-to</a> <a id="12192" class="Symbol">(</a><a id="12193" href="new-prelude.html#861" data-type="x ≡ y → y ≡ x" class="Function">!</a> <a id="12195" class="Symbol">(</a><a id="12196" href="Solutions6.html#11735" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) (x : F2) →
+decode-F2 F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1
+F2-rec-mult2 F2-rec-unique hSetF (fwd mult2 x)
+≡
+(decode-F2 F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1
+ F2-rec-mult2 F2-rec-unique hSetF x
+ ∙ loop2)" class="Function">decode-F2-mult2</a> <a id="12212" href="Solutions6.html#12171" class="Bound">a</a><a id="12213" class="Symbol">)</a> <a id="12215" href="new-prelude.html#642" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function Operator">∙</a> <a id="12217" href="new-prelude.html#937" data-type="(f : A → B) → x ≡ y → f x ≡ f y" class="Function">ap</a> <a id="12220" href="Solutions6.html#11399" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) →
+F2 → Path Bowtie baseB baseB" class="Function">decode-F2</a> <a id="12230" class="Symbol">(</a><a id="12231" href="new-prelude.html#861" data-type="x ≡ y → y ≡ x" class="Function">!</a> <a id="12233" class="Symbol">(</a><a id="12234" href="Solutions6.html#11128" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) (x : F2) →
+transport
+(Cover F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1 F2-rec-mult2
+ F2-rec-unique hSetF)
+loop2 x
+≡ fwd mult2 x" class="Function">transport-Cover-loop2</a> <a id="12256" class="Symbol">_))))</a>
+
+    <a id="AssumeF2.encode-decode"></a><a id="12267" href="Solutions6.html#12267" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) (x : Bowtie) (p : baseB ≡ x) →
+decode F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1 F2-rec-mult2
+F2-rec-unique hSetF x
+(encode F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1 F2-rec-mult2
+ F2-rec-unique hSetF x p)
+≡ p" class="Function">encode-decode</a> <a id="12281" class="Symbol">:</a> <a id="12283" class="Symbol">(</a><a id="12284" href="Solutions6.html#12284" class="Bound">x</a> <a id="12286" class="Symbol">:</a> <a id="12288" href="Solutions6.html#1423" data-type="Set" class="Postulate">Bowtie</a><a id="12294" class="Symbol">)</a> <a id="12296" class="Symbol">(</a><a id="12297" href="Solutions6.html#12297" class="Bound">p</a> <a id="12299" class="Symbol">:</a> <a id="12301" href="Solutions6.html#1438" data-type="Bowtie" class="Postulate">baseB</a> <a id="12307" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="12309" href="Solutions6.html#12284" class="Bound">x</a><a id="12310" class="Symbol">)</a> <a id="12312" class="Symbol">→</a> <a id="12314" href="Solutions6.html#11896" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) (x : Bowtie) →
+Cover F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1 F2-rec-mult2
+F2-rec-unique hSetF x →
+baseB ≡ x" class="Function">decode</a> <a id="12321" href="Solutions6.html#12284" class="Bound">x</a> <a id="12323" class="Symbol">(</a><a id="12324" href="Solutions6.html#10770" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) (x : Bowtie) →
+baseB ≡ x →
+Cover F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1 F2-rec-mult2
+F2-rec-unique hSetF x" class="Function">encode</a> <a id="12331" href="Solutions6.html#12284" class="Bound">x</a> <a id="12333" href="Solutions6.html#12297" class="Bound">p</a><a id="12334" class="Symbol">)</a> <a id="12336" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="12338" href="Solutions6.html#12297" class="Bound">p</a>
+    <a id="12344" href="Solutions6.html#12267" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) (x : Bowtie) (p : baseB ≡ x) →
+decode F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1 F2-rec-mult2
+F2-rec-unique hSetF x
+(encode F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1 F2-rec-mult2
+ F2-rec-unique hSetF x p)
+≡ p" class="Function">encode-decode</a> <a id="12358" class="DottedPattern Symbol">.</a><a id="12359" href="Solutions6.html#12371" class="DottedPattern Bound">baseB</a> <a id="12365" class="Symbol">(</a><a id="12366" href="new-prelude.html#502" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="12371" href="Solutions6.html#12371" class="Bound">baseB</a><a id="12376" class="Symbol">)</a> <a id="12378" class="Symbol">=</a> <a id="12380" href="Solutions6.html#9523" class="Bound">F2-rec-1</a> <a id="12389" class="Symbol">_</a> <a id="12391" class="Symbol">_</a> <a id="12393" class="Symbol">_</a>
+
+    <a id="AssumeF2.endo-F2-is-id"></a><a id="12400" href="Solutions6.html#12400" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) →
+   (x : F2) → f x ≡ F2-rec z m1 m2 x) →
+is-set F2 →
+(f : F2 → F2) →
+f 1F ≡ 1F →
+(f ∘ fwd mult1) ∼ (fwd mult1 ∘ f) →
+(f ∘ fwd mult2) ∼ (fwd mult2 ∘ f) → f ∼ id" class="Function">endo-F2-is-id</a> <a id="12414" class="Symbol">:</a> <a id="12416" class="Symbol">(</a><a id="12417" href="Solutions6.html#12417" class="Bound">f</a> <a id="12419" class="Symbol">:</a> <a id="12421" href="Solutions6.html#9326" class="Bound">F2</a> <a id="12424" class="Symbol">→</a> <a id="12426" href="Solutions6.html#9326" class="Bound">F2</a><a id="12428" class="Symbol">)</a>
+                 <a id="12447" class="Symbol">→</a> <a id="12449" href="Solutions6.html#12417" class="Bound">f</a> <a id="12451" href="Solutions6.html#9342" class="Bound">1F</a> <a id="12454" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="12456" href="Solutions6.html#9342" class="Bound">1F</a>
+                 <a id="12476" class="Symbol">→</a> <a id="12478" class="Symbol">(</a><a id="12479" href="Solutions6.html#12417" class="Bound">f</a> <a id="12481" href="new-prelude.html#2059" data-type="((y : B) → C y) → (f : A → B) (x : A) → C (f x)" class="Function Operator">∘</a> <a id="12483" href="Lecture5-notes.html#1230" data-type="A ≃ B → A → B" class="Function">fwd</a> <a id="12487" href="Solutions6.html#9356" class="Bound">mult1</a><a id="12492" class="Symbol">)</a> <a id="12494" href="new-prelude.html#1372" data-type="((x : A) → B x) → ((x : A) → B x) → Set (l1 ⊔ l2)" class="Function Operator">∼</a> <a id="12496" class="Symbol">(</a><a id="12497" href="Lecture5-notes.html#1230" data-type="A ≃ B → A → B" class="Function">fwd</a> <a id="12501" href="Solutions6.html#9356" class="Bound">mult1</a> <a id="12507" href="new-prelude.html#2059" data-type="((y : B) → C y) → (f : A → B) (x : A) → C (f x)" class="Function Operator">∘</a> <a id="12509" href="Solutions6.html#12417" class="Bound">f</a><a id="12510" class="Symbol">)</a>
+                 <a id="12529" class="Symbol">→</a> <a id="12531" class="Symbol">(</a><a id="12532" href="Solutions6.html#12417" class="Bound">f</a> <a id="12534" href="new-prelude.html#2059" data-type="((y : B) → C y) → (f : A → B) (x : A) → C (f x)" class="Function Operator">∘</a> <a id="12536" href="Lecture5-notes.html#1230" data-type="A ≃ B → A → B" class="Function">fwd</a> <a id="12540" href="Solutions6.html#9378" class="Bound">mult2</a><a id="12545" class="Symbol">)</a> <a id="12547" href="new-prelude.html#1372" data-type="((x : A) → B x) → ((x : A) → B x) → Set (l1 ⊔ l2)" class="Function Operator">∼</a> <a id="12549" class="Symbol">(</a><a id="12550" href="Lecture5-notes.html#1230" data-type="A ≃ B → A → B" class="Function">fwd</a> <a id="12554" href="Solutions6.html#9378" class="Bound">mult2</a> <a id="12560" href="new-prelude.html#2059" data-type="((y : B) → C y) → (f : A → B) (x : A) → C (f x)" class="Function Operator">∘</a> <a id="12562" href="Solutions6.html#12417" class="Bound">f</a><a id="12563" class="Symbol">)</a>
+                 <a id="12582" class="Symbol">→</a> <a id="12584" href="Solutions6.html#12417" class="Bound">f</a> <a id="12586" href="new-prelude.html#1372" data-type="((x : A) → B x) → ((x : A) → B x) → Set (l1 ⊔ l2)" class="Function Operator">∼</a> <a id="12588" href="new-prelude.html#2011" data-type="A → A" class="Function">id</a>
+    <a id="12595" href="Solutions6.html#12400" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) →
+   (x : F2) → f x ≡ F2-rec z m1 m2 x) →
+is-set F2 →
+(f : F2 → F2) →
+f 1F ≡ 1F →
+(f ∘ fwd mult1) ∼ (fwd mult1 ∘ f) →
+(f ∘ fwd mult2) ∼ (fwd mult2 ∘ f) → f ∼ id" class="Function">endo-F2-is-id</a> <a id="12609" href="Solutions6.html#12609" class="Bound">f</a> <a id="12611" href="Solutions6.html#12611" class="Bound">f1</a> <a id="12614" href="Solutions6.html#12614" class="Bound">fmult1</a> <a id="12621" href="Solutions6.html#12621" class="Bound">fmult2</a> <a id="12628" href="Solutions6.html#12628" class="Bound">x</a> <a id="12630" class="Symbol">=</a> <a id="12632" href="Solutions6.html#10099" class="Bound">F2-rec-unique</a> <a id="12646" href="Solutions6.html#12609" class="Bound">f</a> <a id="12648" href="Solutions6.html#9342" class="Bound">1F</a> <a id="12651" href="Solutions6.html#9356" class="Bound">mult1</a> <a id="12657" href="Solutions6.html#9378" class="Bound">mult2</a> <a id="12663" href="Solutions6.html#12611" class="Bound">f1</a> <a id="12666" href="Solutions6.html#12614" class="Bound">fmult1</a> <a id="12673" href="Solutions6.html#12621" class="Bound">fmult2</a> <a id="12680" href="Solutions6.html#12628" class="Bound">x</a> <a id="12682" href="new-prelude.html#642" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function Operator">∙</a>
+                                      <a id="12722" href="new-prelude.html#861" data-type="x ≡ y → y ≡ x" class="Function">!</a> <a id="12724" class="Symbol">(</a><a id="12725" href="Solutions6.html#10099" class="Bound">F2-rec-unique</a> <a id="12739" class="Symbol">(\</a> <a id="12742" href="Solutions6.html#12742" class="Bound">x</a> <a id="12744" class="Symbol">→</a> <a id="12746" href="Solutions6.html#12742" class="Bound">x</a><a id="12747" class="Symbol">)</a> <a id="12749" href="Solutions6.html#9342" class="Bound">1F</a> <a id="12752" href="Solutions6.html#9356" class="Bound">mult1</a> <a id="12758" href="Solutions6.html#9378" class="Bound">mult2</a> <a id="12764" class="Symbol">(</a><a id="12765" href="new-prelude.html#502" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="12770" class="Symbol">_)</a> <a id="12773" class="Symbol">(\</a> <a id="12776" href="Solutions6.html#12776" class="Bound">_</a> <a id="12778" class="Symbol">→</a> <a id="12780" href="new-prelude.html#502" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="12785" class="Symbol">_)</a> <a id="12788" class="Symbol">(\</a> <a id="12791" href="Solutions6.html#12791" class="Bound">_</a> <a id="12793" class="Symbol">→</a> <a id="12795" href="new-prelude.html#502" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="12800" class="Symbol">_)</a>  <a id="12804" href="Solutions6.html#12628" class="Bound">x</a><a id="12805" class="Symbol">)</a>  
+
+    <a id="AssumeF2.decode-encode"></a><a id="12814" href="Solutions6.html#12814" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) (x : Bowtie)
+(p
+ : Cover F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1 F2-rec-mult2
+   F2-rec-unique hSetF x) →
+encode F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1 F2-rec-mult2
+F2-rec-unique hSetF x
+(decode F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1 F2-rec-mult2
+ F2-rec-unique hSetF x p)
+≡ p" class="Function">decode-encode</a> <a id="12828" class="Symbol">:</a> <a id="12830" class="Symbol">(</a><a id="12831" href="Solutions6.html#12831" class="Bound">x</a> <a id="12833" class="Symbol">:</a> <a id="12835" href="Solutions6.html#1423" data-type="Set" class="Postulate">Bowtie</a><a id="12841" class="Symbol">)</a> <a id="12843" class="Symbol">(</a><a id="12844" href="Solutions6.html#12844" class="Bound">p</a> <a id="12846" class="Symbol">:</a> <a id="12848" href="Solutions6.html#10631" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) →
+Bowtie → Set" class="Function">Cover</a> <a id="12854" href="Solutions6.html#12831" class="Bound">x</a><a id="12855" class="Symbol">)</a> <a id="12857" class="Symbol">→</a> <a id="12859" href="Solutions6.html#10770" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) (x : Bowtie) →
+baseB ≡ x →
+Cover F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1 F2-rec-mult2
+F2-rec-unique hSetF x" class="Function">encode</a> <a id="12866" href="Solutions6.html#12831" class="Bound">x</a> <a id="12868" class="Symbol">(</a><a id="12869" href="Solutions6.html#11896" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) (x : Bowtie) →
+Cover F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1 F2-rec-mult2
+F2-rec-unique hSetF x →
+baseB ≡ x" class="Function">decode</a> <a id="12876" href="Solutions6.html#12831" class="Bound">x</a> <a id="12878" href="Solutions6.html#12844" class="Bound">p</a><a id="12879" class="Symbol">)</a> <a id="12881" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="12883" href="Solutions6.html#12844" class="Bound">p</a>
+    <a id="12889" href="Solutions6.html#12814" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) (x : Bowtie)
+(p
+ : Cover F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1 F2-rec-mult2
+   F2-rec-unique hSetF x) →
+encode F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1 F2-rec-mult2
+F2-rec-unique hSetF x
+(decode F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1 F2-rec-mult2
+ F2-rec-unique hSetF x p)
+≡ p" class="Function">decode-encode</a> <a id="12903" class="Symbol">=</a> <a id="12905" href="Solutions6.html#1503" data-type="(X : Bowtie → Set l) (x : X baseB) →
+PathOver X loop1 x x → PathOver X loop2 x x → (x₁ : Bowtie) → X x₁" class="Postulate">Bowtie-elim</a> <a id="12917" class="Symbol">_</a>
+                                <a id="12951" class="Symbol">(</a><a id="12952" href="Solutions6.html#12400" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) →
+   (x : F2) → f x ≡ F2-rec z m1 m2 x) →
+is-set F2 →
+(f : F2 → F2) →
+f 1F ≡ 1F →
+(f ∘ fwd mult1) ∼ (fwd mult1 ∘ f) →
+(f ∘ fwd mult2) ∼ (fwd mult2 ∘ f) → f ∼ id" class="Function">endo-F2-is-id</a> <a id="12966" class="Symbol">(λ</a> <a id="12969" href="Solutions6.html#12969" class="Bound">z</a> <a id="12971" class="Symbol">→</a> <a id="12973" href="Solutions6.html#10770" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) (x : Bowtie) →
+baseB ≡ x →
+Cover F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1 F2-rec-mult2
+F2-rec-unique hSetF x" class="Function">encode</a> <a id="12980" href="Solutions6.html#1438" data-type="Bowtie" class="Postulate">baseB</a> <a id="12986" class="Symbol">(</a><a id="12987" href="Solutions6.html#11399" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) →
+F2 → Path Bowtie baseB baseB" class="Function">decode-F2</a> <a id="12997" href="Solutions6.html#12969" class="Bound">z</a><a id="12998" class="Symbol">))</a>
+                                               <a id="13048" class="Symbol">(</a><a id="13049" href="new-prelude.html#937" data-type="(f : A → B) → x ≡ y → f x ≡ f y" class="Function">ap</a> <a id="13052" class="Symbol">(\</a> <a id="13055" href="Solutions6.html#13055" class="Bound">H</a> <a id="13057" class="Symbol">→</a> <a id="13059" href="Solutions6.html#10770" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) (x : Bowtie) →
+baseB ≡ x →
+Cover F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1 F2-rec-mult2
+F2-rec-unique hSetF x" class="Function">encode</a> <a id="13066" href="Solutions6.html#1438" data-type="Bowtie" class="Postulate">baseB</a> <a id="13072" href="Solutions6.html#13055" class="Bound">H</a><a id="13073" class="Symbol">)</a> <a id="13075" class="Symbol">(</a><a id="13076" href="Solutions6.html#9523" class="Bound">F2-rec-1</a> <a id="13085" class="Symbol">_</a> <a id="13087" class="Symbol">_</a> <a id="13089" class="Symbol">_))</a>
+                                               <a id="13140" class="Symbol">(\</a> <a id="13143" href="Solutions6.html#13143" class="Bound">x</a> <a id="13145" class="Symbol">→</a> <a id="13147" href="new-prelude.html#937" data-type="(f : A → B) → x ≡ y → f x ≡ f y" class="Function">ap</a> <a id="13150" class="Symbol">(</a><a id="13151" href="Solutions6.html#10770" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) (x : Bowtie) →
+baseB ≡ x →
+Cover F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1 F2-rec-mult2
+F2-rec-unique hSetF x" class="Function">encode</a> <a id="13158" href="Solutions6.html#1438" data-type="Bowtie" class="Postulate">baseB</a><a id="13163" class="Symbol">)</a> <a id="13165" class="Symbol">(</a><a id="13166" href="Solutions6.html#11574" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) (x : F2) →
+decode-F2 F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1
+F2-rec-mult2 F2-rec-unique hSetF (fwd mult1 x)
+≡
+(decode-F2 F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1
+ F2-rec-mult2 F2-rec-unique hSetF x
+ ∙ loop1)" class="Function">decode-F2-mult1</a> <a id="13182" href="Solutions6.html#13143" class="Bound">x</a><a id="13183" class="Symbol">)</a> <a id="13185" href="new-prelude.html#642" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function Operator">∙</a> <a id="13187" class="Symbol">(</a><a id="13188" href="Solutions6.html#7739" data-type="(p : a1 ≡ a2) (q : a2 ≡ a3) →
+transport B (p ∙ q) ∼ (transport B q ∘ transport B p)" class="Function">transport-∙</a> <a id="13200" class="Symbol">_</a> <a id="13202" href="Solutions6.html#1455" data-type="baseB ≡ baseB" class="Postulate">loop1</a> <a id="13208" class="Symbol">_</a> <a id="13210" href="new-prelude.html#642" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function Operator">∙</a> <a id="13212" class="Symbol">(</a><a id="13213" href="Solutions6.html#10857" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) (x : F2) →
+transport
+(Cover F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1 F2-rec-mult2
+ F2-rec-unique hSetF)
+loop1 x
+≡ fwd mult1 x" class="Function">transport-Cover-loop1</a> <a id="13235" class="Symbol">_))</a> <a id="13239" class="Symbol">)</a>
+                                               <a id="13288" class="Symbol">(\</a> <a id="13291" href="Solutions6.html#13291" class="Bound">x</a> <a id="13293" class="Symbol">→</a> <a id="13295" href="new-prelude.html#937" data-type="(f : A → B) → x ≡ y → f x ≡ f y" class="Function">ap</a> <a id="13298" class="Symbol">(</a><a id="13299" href="Solutions6.html#10770" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) (x : Bowtie) →
+baseB ≡ x →
+Cover F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1 F2-rec-mult2
+F2-rec-unique hSetF x" class="Function">encode</a> <a id="13306" href="Solutions6.html#1438" data-type="Bowtie" class="Postulate">baseB</a><a id="13311" class="Symbol">)</a> <a id="13313" class="Symbol">(</a><a id="13314" href="Solutions6.html#11735" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) (x : F2) →
+decode-F2 F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1
+F2-rec-mult2 F2-rec-unique hSetF (fwd mult2 x)
+≡
+(decode-F2 F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1
+ F2-rec-mult2 F2-rec-unique hSetF x
+ ∙ loop2)" class="Function">decode-F2-mult2</a> <a id="13330" href="Solutions6.html#13291" class="Bound">x</a><a id="13331" class="Symbol">)</a> <a id="13333" href="new-prelude.html#642" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function Operator">∙</a> <a id="13335" class="Symbol">(</a><a id="13336" href="Solutions6.html#7739" data-type="(p : a1 ≡ a2) (q : a2 ≡ a3) →
+transport B (p ∙ q) ∼ (transport B q ∘ transport B p)" class="Function">transport-∙</a> <a id="13348" class="Symbol">_</a> <a id="13350" href="Solutions6.html#1479" data-type="baseB ≡ baseB" class="Postulate">loop2</a> <a id="13356" class="Symbol">_</a> <a id="13358" href="new-prelude.html#642" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function Operator">∙</a> <a id="13360" class="Symbol">(</a><a id="13361" href="Solutions6.html#11128" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) (x : F2) →
+transport
+(Cover F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1 F2-rec-mult2
+ F2-rec-unique hSetF)
+loop2 x
+≡ fwd mult2 x" class="Function">transport-Cover-loop2</a> <a id="13383" class="Symbol">_))</a> <a id="13387" class="Symbol">))</a>
+                                <a id="13422" class="Symbol">(</a><a id="13423" href="Lecture6-notes.html#4069" data-type="((q : PathOver A p a a&#39;) →
+ PathOver B (pair≡d p q) (f1 a) (f2 a&#39;)) →
+PathOver (λ z → (y : A z) → B (z , y)) p f1 f2" class="Function">PathOver-Π</a> <a id="13434" class="Symbol">\</a> <a id="13436" href="Solutions6.html#13436" class="Bound">a</a> <a id="13438" class="Symbol">→</a> <a id="13440" href="Lecture5-notes.html#1230" data-type="A ≃ B → A → B" class="Function">fwd</a> <a id="13444" class="Symbol">(</a><a id="13445" href="Lecture5-notes.html#3985" data-type="(B : A → Set l2) (p : a1 ≡ a2) (b1 : B a1) (b2 : B a2) →
+(transport B p b1 ≡ b2) ≃ PathOver B p b1 b2" class="Function">transport-to-pathover</a> <a id="13467" class="Symbol">_</a> <a id="13469" class="Symbol">_</a> <a id="13471" class="Symbol">_</a> <a id="13473" class="Symbol">_)</a> <a id="13476" class="Symbol">(</a><a id="13477" href="Solutions6.html#10447" class="Bound">hSetF</a> <a id="13483" class="Symbol">_</a> <a id="13485" class="Symbol">_</a> <a id="13487" class="Symbol">_</a> <a id="13489" class="Symbol">_))</a>
+                                <a id="13525" class="Symbol">(</a><a id="13526" href="Lecture6-notes.html#4069" data-type="((q : PathOver A p a a&#39;) →
+ PathOver B (pair≡d p q) (f1 a) (f2 a&#39;)) →
+PathOver (λ z → (y : A z) → B (z , y)) p f1 f2" class="Function">PathOver-Π</a> <a id="13537" class="Symbol">\</a> <a id="13539" href="Solutions6.html#13539" class="Bound">a</a> <a id="13541" class="Symbol">→</a> <a id="13543" href="Lecture5-notes.html#1230" data-type="A ≃ B → A → B" class="Function">fwd</a> <a id="13547" class="Symbol">(</a><a id="13548" href="Lecture5-notes.html#3985" data-type="(B : A → Set l2) (p : a1 ≡ a2) (b1 : B a1) (b2 : B a2) →
+(transport B p b1 ≡ b2) ≃ PathOver B p b1 b2" class="Function">transport-to-pathover</a> <a id="13570" class="Symbol">_</a> <a id="13572" class="Symbol">_</a> <a id="13574" class="Symbol">_</a> <a id="13576" class="Symbol">_)</a> <a id="13579" class="Symbol">(</a><a id="13580" href="Solutions6.html#10447" class="Bound">hSetF</a> <a id="13586" class="Symbol">_</a> <a id="13588" class="Symbol">_</a> <a id="13590" class="Symbol">_</a> <a id="13592" class="Symbol">_))</a>
+
+</pre>
+
+  </article>
+</div>
+</main>
+</body>
+<style>
+
+:root {
+  --text-bg: #fff;
+  --text-fg: #222;
+  --shadow: #000;
+  --primary: #0054F4;
+  --secondary: #9C1BD6;
+  --modal-bg: #ccccccaa;
+  --warning-bg: #fef08a;
+  --code-bg: var(--text-bg);
+  --code-fg: var(--text-fg);
+  --code-keyword: #BB3B13;
+  --code-string:  #d52753;
+  --code-number:  #8A1060;
+  --code-module:  #8A1060;
+  --code-field:   #9C1BD6;
+  --code-constructor: #207B1D;
+  --code-highlight: #F5DEB3;
+  --search-selected: #e2e8f0;
+  --details-summary: #b2ebf2;
+  --details-open:    #80deea;
+  --depgraph-edge: #eee;
+  --blockquote-bg: #d8b4fe; }
+
+.diagram-dark {
+  display: none !important; }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-bg: #282C34;
+    --text-fg: #bfbfbf;
+    --shadow: #475569;
+    --primary: #61AFEF;
+    --secondary: #C878DD;
+    --modal-bg: #282C34aa;
+    --warning-bg: #991b1b;
+    --code-keyword:     #E5C07B;
+    --code-string:      #E06C75;
+    --code-number:      #98C379;
+    --code-module:      #56B6C2;
+    --code-field:       #C878DD;
+    --code-constructor: #98C379;
+    --code-highlight: #ef444499;
+    --search-selected: #474e5e;
+    --details-summary: #5b21b6;
+    --details-open:    #4c1d95;
+    --depgraph-edge: #474e5e;
+    --blockquote-bg: #475569; }
+  div.warning {
+    --shadow: #7f1d1d
+  ; }
+  input {
+    background-color: #334155;
+    border: 1px solid #475569;
+    color: var(--text-fg); }
+  body {
+    scrollbar-color: #3b4454 #2b2e33; }
+  .diagram-dark {
+    display: block !important; }
+  .diagram-light {
+    display: none !important; } }
+
+table {
+  margin: auto;
+  border-collapse: collapse; }
+  table td, table th {
+    text-align: center;
+    padding: 0px 1em 0px 1em;
+    border: 1px solid black; }
+  table th {
+    border-bottom: 2px solid black; }
+  table td {
+    white-space: nowrap; }
+
+html { max-width: 100%; }
+
+body {
+  font-family: "Inria Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  width: 100%;
+  font-size: var(--font-size);
+  overflow-x: clip;
+  background-color: var(--text-bg);
+  color: var(--text-fg);
+}
+
+div#post-toc-container { max-width: 120ch; margin: auto; }
+
+article a[href], div#return > a[href], div#top > a[href], aside#toc > div#toc-container ul a[href] {
+  color: var(--primary);
+  text-decoration: none; }
+  article a[href]:hover, div#return > a[href]:hover, div#top > a[href]:hover, aside#toc > div#toc-container ul a[href]:hover {
+    text-decoration: 2px currentColor underline !important; }
+  article a[href]:visited, div#return > a[href]:visited, div#top > a[href]:visited, aside#toc > div#toc-container ul a[href]:visited {
+    color: var(--secondary); }
+
+/* Aspects. */
+.Agda {
+  /* NameKinds. */
+  /* OtherAspects. */
+  /* Standard attributes. */
+  font-family: 'iosevka', 'Iosevka', 'Fantasque Sans Mono', 'Roboto Mono', monospace;
+  font-weight: 400; }
+  .Agda .Comment {
+    color: var(--code-fg);
+    font-style: italic; }
+  .Agda .Background {
+    background-color: var(--code-bg); }
+  .Agda .Markup {
+    color: var(--code-fg); }
+  .Agda .Keyword {
+    color: var(--code-keyword); }
+  .Agda .String {
+    color: var(--code-string); }
+  .Agda .Number {
+    color: var(--code-number); }
+  .Agda .Symbol {
+    color: var(--code-fg); }
+  .Agda .PrimitiveType {
+    color: var(--primary); }
+  .Agda .Pragma {
+    color: var(--code-fg); }
+  .Agda .Bound {
+    color: var(--code-fg) !important; }
+  .Agda .Generalizable {
+    color: var(--code-fg) !important; }
+  .Agda .InductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .CoinductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .Datatype {
+    color: var(--primary) !important; }
+  .Agda .Field {
+    color: var(--code-field) !important; }
+  .Agda .Function {
+    color: var(--primary) !important; }
+  .Agda .Module {
+    color: var(--code-module) !important; }
+  .Agda .Postulate {
+    color: var(--primary) !important; }
+  .Agda .Primitive {
+    color: var(--primary) !important; }
+  .Agda .Record {
+    color: var(--primary) !important; }
+  .Agda .UnsolvedMeta {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .UnsolvedConstraint {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .TerminationProblem {
+    color: var(--code-fg);
+    background: #FFA07A; }
+  .Agda .IncompletePattern {
+    color: var(--code-fg);
+    background: #F5DEB3; }
+  .Agda .Error {
+    color: red;
+    text-decoration: underline; }
+  .Agda .TypeChecks {
+    color: var(--code-fg);
+    background: #ADD8E6; }
+  .Agda .ShadowingInTelescope {
+    color: var(--code-fg);
+    background: #808080; }
+  .Agda .Deadcode {
+    color: var(--code-keyword);
+    font-weight: bold; }
+  .Agda a {
+    text-decoration: none; }
+  .Agda a[href]:hover {
+    text-decoration: 2px var(--primary) underline; }
+  .Agda a[href]:target {
+    animation: highlight 2.5s; }
+  body.text-page .Agda {
+    font-size: var(--code-font-size); }
+
+pre.Agda, div.sourceCode, pre {
+  border-radius: 0;
+  box-shadow: none;
+  overflow-y: clip;
+  margin: 0;
+  padding: 1em;
+  padding-top: 0.25em;
+  padding-bottom: 0.25em;
+  background-color: var(--code-bg);
+  color: var(--code-fg);
+  font-size: var(--code-font-size);
+  max-width: 100%;
+  overflow-x: auto;
+}
+</style>
+</html>

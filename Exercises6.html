@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>HoTTEST Summer School 2022 Lecture Notes</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+</head>
+
+<body class="text-page">
+<main>
+<div id="post-toc-container" style="padding-left: 1em; padding-right: 1em;">
+
+  <article>
+
+<pre class="Agda">
+<a id="11" class="Symbol">{-#</a> <a id="15" class="Keyword">OPTIONS</a> <a id="23" class="Pragma">--rewriting</a> <a id="35" class="Pragma">--without-K</a> <a id="47" class="Pragma">--allow-unsolved-metas</a> <a id="70" class="Symbol">#-}</a>
+
+<a id="75" class="Keyword">open</a> <a id="80" class="Keyword">import</a> <a id="87" href="new-prelude.html" class="Module">new-prelude</a>
+
+<a id="100" class="Keyword">open</a> <a id="105" class="Keyword">import</a> <a id="112" href="Lecture6-notes.html" class="Module">Lecture6-notes</a>
+<a id="127" class="Keyword">open</a> <a id="132" class="Keyword">import</a> <a id="139" href="Lecture5-notes.html" class="Module">Lecture5-notes</a>
+
+<a id="155" class="Keyword">module</a> <a id="162" href="Exercises6.html" class="Module">Exercises6</a> <a id="173" class="Keyword">where</a>
+</pre>
+<p>In this problem set, you will look at a variation on the circle, a
+higher inductive type for a “bowtie”, i.e. two loops at a point.
+(Unscaffolded harder exercise: do these problems for a “wedge of k
+circles” for any natural number k.)</p>
+<h1 id="hit-recursion-from-induction">HIT recursion from induction</h1>
+<p>In general, the dependent elimination rule for a higher inductive
+type implies the simple/non-dependent elimination rule. In this problem,
+you will show this for the bowtie. We could have done this for the
+circles in the past lectures, but I wanted to introduce the
+non-dependent elimination rule first, and then left both as
+postulates.</p>
+<p>Note that this problem has a bit of a “metamathematical” flavor
+(showing that a set of axioms is implied by a shorter set). If you
+prefer to jump right to the more “mathematical” problem of
+characterizing the loop space of the bowtie below, I recommend turning
+Bowtie-rec and its associated reductions into postulates like we have
+done for previous higher inductive types, and adding a rewrite for the
+reduction on the base point. This will make Agda display things in a
+more easy to read way (otherwise, it will display Bowtie-rec as a
+meta-variable).</p>
+<p>Here is the definition of the bowtie and its dependent elimination
+rule:</p>
+<pre class="Agda"><a id="1434" class="Keyword">postulate</a>
+  <a id="Bowtie"></a><a id="1446" href="Exercises6.html#1446" data-type="Set" class="Postulate">Bowtie</a> <a id="1453" class="Symbol">:</a> <a id="1455" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Set</a>
+  <a id="baseB"></a><a id="1461" href="Exercises6.html#1461" data-type="Bowtie" class="Postulate">baseB</a> <a id="1467" class="Symbol">:</a> <a id="1469" href="Exercises6.html#1446" data-type="Set" class="Postulate">Bowtie</a>
+  <a id="loop1"></a><a id="1478" href="Exercises6.html#1478" data-type="baseB ≡ baseB" class="Postulate">loop1</a> <a id="1484" class="Symbol">:</a> <a id="1486" href="Exercises6.html#1461" data-type="Bowtie" class="Postulate">baseB</a> <a id="1492" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="1494" href="Exercises6.html#1461" data-type="Bowtie" class="Postulate">baseB</a>
+  <a id="loop2"></a><a id="1502" href="Exercises6.html#1502" data-type="baseB ≡ baseB" class="Postulate">loop2</a> <a id="1508" class="Symbol">:</a> <a id="1510" href="Exercises6.html#1461" data-type="Bowtie" class="Postulate">baseB</a> <a id="1516" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="1518" href="Exercises6.html#1461" data-type="Bowtie" class="Postulate">baseB</a>
+  <a id="Bowtie-elim"></a><a id="1526" href="Exercises6.html#1526" data-type="(X : Bowtie → Set l) (x : X baseB) →
+PathOver X loop1 x x → PathOver X loop2 x x → (x₁ : Bowtie) → X x₁" class="Postulate">Bowtie-elim</a> <a id="1538" class="Symbol">:</a> <a id="1540" class="Symbol">{</a><a id="1541" href="Exercises6.html#1541" class="Bound">l</a> <a id="1543" class="Symbol">:</a> <a id="1545" href="Agda.Primitive.html#597" data-type="Set" class="Postulate">Level</a><a id="1550" class="Symbol">}</a> <a id="1552" class="Symbol">(</a><a id="1553" href="Exercises6.html#1553" class="Bound">X</a> <a id="1555" class="Symbol">:</a> <a id="1557" href="Exercises6.html#1446" data-type="Set" class="Postulate">Bowtie</a> <a id="1564" class="Symbol">→</a> <a id="1566" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="1571" href="Exercises6.html#1541" class="Bound">l</a><a id="1572" class="Symbol">)</a>
+                <a id="1590" class="Symbol">(</a><a id="1591" href="Exercises6.html#1591" class="Bound">x</a> <a id="1593" class="Symbol">:</a> <a id="1595" href="Exercises6.html#1553" class="Bound">X</a> <a id="1597" href="Exercises6.html#1461" data-type="Bowtie" class="Postulate">baseB</a><a id="1602" class="Symbol">)</a>
+                <a id="1620" class="Symbol">(</a><a id="1621" href="Exercises6.html#1621" class="Bound">p</a> <a id="1623" class="Symbol">:</a> <a id="1625" href="Exercises6.html#1591" class="Bound">x</a> <a id="1627" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">≡</a> <a id="1629" href="Exercises6.html#1591" class="Bound">x</a> <a id="1631" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">[</a> <a id="1633" href="Exercises6.html#1553" class="Bound">X</a> <a id="1635" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">↓</a> <a id="1637" href="Exercises6.html#1478" data-type="baseB ≡ baseB" class="Postulate">loop1</a> <a id="1643" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">]</a><a id="1644" class="Symbol">)</a>
+                <a id="1662" class="Symbol">(</a><a id="1663" href="Exercises6.html#1663" class="Bound">q</a> <a id="1665" class="Symbol">:</a> <a id="1667" href="Exercises6.html#1591" class="Bound">x</a> <a id="1669" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">≡</a> <a id="1671" href="Exercises6.html#1591" class="Bound">x</a> <a id="1673" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">[</a> <a id="1675" href="Exercises6.html#1553" class="Bound">X</a> <a id="1677" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">↓</a> <a id="1679" href="Exercises6.html#1502" data-type="baseB ≡ baseB" class="Postulate">loop2</a> <a id="1685" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">]</a><a id="1686" class="Symbol">)</a>
+                <a id="1704" class="Symbol">→</a> <a id="1706" class="Symbol">(</a><a id="1707" href="Exercises6.html#1707" class="Bound">x</a> <a id="1709" class="Symbol">:</a> <a id="1711" href="Exercises6.html#1446" data-type="Set" class="Postulate">Bowtie</a><a id="1717" class="Symbol">)</a> <a id="1719" class="Symbol">→</a> <a id="1721" href="Exercises6.html#1553" class="Bound">X</a> <a id="1723" href="Exercises6.html#1707" class="Bound">x</a>
+  <a id="Bowtie-elim-base"></a><a id="1727" href="Exercises6.html#1727" data-type="(X : Bowtie → Set l) (x : X baseB) (p : PathOver X loop1 x x)
+(q : PathOver X loop2 x x) →
+Bowtie-elim X x p q baseB ≡ x" class="Postulate">Bowtie-elim-base</a> <a id="1744" class="Symbol">:</a> <a id="1746" class="Symbol">{</a><a id="1747" href="Exercises6.html#1747" class="Bound">l</a> <a id="1749" class="Symbol">:</a> <a id="1751" href="Agda.Primitive.html#597" data-type="Set" class="Postulate">Level</a><a id="1756" class="Symbol">}</a> <a id="1758" class="Symbol">(</a><a id="1759" href="Exercises6.html#1759" class="Bound">X</a> <a id="1761" class="Symbol">:</a> <a id="1763" href="Exercises6.html#1446" data-type="Set" class="Postulate">Bowtie</a> <a id="1770" class="Symbol">→</a> <a id="1772" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="1777" href="Exercises6.html#1747" class="Bound">l</a><a id="1778" class="Symbol">)</a>
+                     <a id="1801" class="Symbol">(</a><a id="1802" href="Exercises6.html#1802" class="Bound">x</a> <a id="1804" class="Symbol">:</a> <a id="1806" href="Exercises6.html#1759" class="Bound">X</a> <a id="1808" href="Exercises6.html#1461" data-type="Bowtie" class="Postulate">baseB</a><a id="1813" class="Symbol">)</a>
+                     <a id="1836" class="Symbol">(</a><a id="1837" href="Exercises6.html#1837" class="Bound">p</a> <a id="1839" class="Symbol">:</a> <a id="1841" href="Exercises6.html#1802" class="Bound">x</a> <a id="1843" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">≡</a> <a id="1845" href="Exercises6.html#1802" class="Bound">x</a> <a id="1847" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">[</a> <a id="1849" href="Exercises6.html#1759" class="Bound">X</a> <a id="1851" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">↓</a> <a id="1853" href="Exercises6.html#1478" data-type="baseB ≡ baseB" class="Postulate">loop1</a> <a id="1859" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">]</a><a id="1860" class="Symbol">)</a>
+                     <a id="1883" class="Symbol">(</a><a id="1884" href="Exercises6.html#1884" class="Bound">q</a> <a id="1886" class="Symbol">:</a> <a id="1888" href="Exercises6.html#1802" class="Bound">x</a> <a id="1890" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">≡</a> <a id="1892" href="Exercises6.html#1802" class="Bound">x</a> <a id="1894" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">[</a> <a id="1896" href="Exercises6.html#1759" class="Bound">X</a> <a id="1898" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">↓</a> <a id="1900" href="Exercises6.html#1502" data-type="baseB ≡ baseB" class="Postulate">loop2</a> <a id="1906" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">]</a><a id="1907" class="Symbol">)</a>
+                  <a id="1927" class="Symbol">→</a> <a id="1929" href="Exercises6.html#1526" data-type="(X : Bowtie → Set l) (x : X baseB) →
+PathOver X loop1 x x → PathOver X loop2 x x → (x₁ : Bowtie) → X x₁" class="Postulate">Bowtie-elim</a> <a id="1941" href="Exercises6.html#1759" class="Bound">X</a> <a id="1943" href="Exercises6.html#1802" class="Bound">x</a> <a id="1945" href="Exercises6.html#1837" class="Bound">p</a> <a id="1947" href="Exercises6.html#1884" class="Bound">q</a> <a id="1949" href="Exercises6.html#1461" data-type="Bowtie" class="Postulate">baseB</a> <a id="1955" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="1957" href="Exercises6.html#1802" class="Bound">x</a>
+<a id="1959" class="Symbol">{-#</a> <a id="1963" class="Keyword">REWRITE</a> <a id="1971" href="Exercises6.html#1727" data-type="(X : Bowtie → Set l) (x : X baseB) (p : PathOver X loop1 x x)
+(q : PathOver X loop2 x x) →
+Bowtie-elim X x p q baseB ≡ x" class="Postulate">Bowtie-elim-base</a> <a id="1988" class="Symbol">#-}</a>
+
+<a id="1993" class="Keyword">postulate</a>
+  <a id="Bowtie-elim-loop1"></a><a id="2005" href="Exercises6.html#2005" data-type="(X : Bowtie → Set l) (x : X baseB) (p : PathOver X loop1 x x)
+(q : PathOver X loop2 x x) →
+apd (Bowtie-elim X x p q) loop1 ≡ p" class="Postulate">Bowtie-elim-loop1</a> <a id="2023" class="Symbol">:</a> <a id="2025" class="Symbol">{</a><a id="2026" href="Exercises6.html#2026" class="Bound">l</a> <a id="2028" class="Symbol">:</a> <a id="2030" href="Agda.Primitive.html#597" data-type="Set" class="Postulate">Level</a><a id="2035" class="Symbol">}</a> <a id="2037" class="Symbol">(</a><a id="2038" href="Exercises6.html#2038" class="Bound">X</a> <a id="2040" class="Symbol">:</a> <a id="2042" href="Exercises6.html#1446" data-type="Set" class="Postulate">Bowtie</a> <a id="2049" class="Symbol">→</a> <a id="2051" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="2056" href="Exercises6.html#2026" class="Bound">l</a><a id="2057" class="Symbol">)</a>
+                      <a id="2081" class="Symbol">(</a><a id="2082" href="Exercises6.html#2082" class="Bound">x</a> <a id="2084" class="Symbol">:</a> <a id="2086" href="Exercises6.html#2038" class="Bound">X</a> <a id="2088" href="Exercises6.html#1461" data-type="Bowtie" class="Postulate">baseB</a><a id="2093" class="Symbol">)</a>
+                      <a id="2117" class="Symbol">(</a><a id="2118" href="Exercises6.html#2118" class="Bound">p</a> <a id="2120" class="Symbol">:</a> <a id="2122" href="Exercises6.html#2082" class="Bound">x</a> <a id="2124" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">≡</a> <a id="2126" href="Exercises6.html#2082" class="Bound">x</a> <a id="2128" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">[</a> <a id="2130" href="Exercises6.html#2038" class="Bound">X</a> <a id="2132" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">↓</a> <a id="2134" href="Exercises6.html#1478" data-type="baseB ≡ baseB" class="Postulate">loop1</a> <a id="2140" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">]</a><a id="2141" class="Symbol">)</a>
+                      <a id="2165" class="Symbol">(</a><a id="2166" href="Exercises6.html#2166" class="Bound">q</a> <a id="2168" class="Symbol">:</a> <a id="2170" href="Exercises6.html#2082" class="Bound">x</a> <a id="2172" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">≡</a> <a id="2174" href="Exercises6.html#2082" class="Bound">x</a> <a id="2176" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">[</a> <a id="2178" href="Exercises6.html#2038" class="Bound">X</a> <a id="2180" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">↓</a> <a id="2182" href="Exercises6.html#1502" data-type="baseB ≡ baseB" class="Postulate">loop2</a> <a id="2188" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">]</a><a id="2189" class="Symbol">)</a>
+                    <a id="2211" class="Symbol">→</a> <a id="2213" href="Lecture5-notes.html#4872" data-type="(f : (x : A) → B x) (p : a1 ≡ a2) → PathOver B p (f a1) (f a2)" class="Function">apd</a> <a id="2217" class="Symbol">(</a><a id="2218" href="Exercises6.html#1526" data-type="(X : Bowtie → Set l) (x : X baseB) →
+PathOver X loop1 x x → PathOver X loop2 x x → (x₁ : Bowtie) → X x₁" class="Postulate">Bowtie-elim</a> <a id="2230" href="Exercises6.html#2038" class="Bound">X</a> <a id="2232" href="Exercises6.html#2082" class="Bound">x</a> <a id="2234" href="Exercises6.html#2118" class="Bound">p</a> <a id="2236" href="Exercises6.html#2166" class="Bound">q</a><a id="2237" class="Symbol">)</a> <a id="2239" href="Exercises6.html#1478" data-type="baseB ≡ baseB" class="Postulate">loop1</a> <a id="2245" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="2247" href="Exercises6.html#2118" class="Bound">p</a>
+  <a id="Bowtie-elim-loop2"></a><a id="2251" href="Exercises6.html#2251" data-type="(X : Bowtie → Set l) (x : X baseB) (p : PathOver X loop1 x x)
+(q : PathOver X loop2 x x) →
+apd (Bowtie-elim X x p q) loop2 ≡ q" class="Postulate">Bowtie-elim-loop2</a> <a id="2269" class="Symbol">:</a> <a id="2271" class="Symbol">{</a><a id="2272" href="Exercises6.html#2272" class="Bound">l</a> <a id="2274" class="Symbol">:</a> <a id="2276" href="Agda.Primitive.html#597" data-type="Set" class="Postulate">Level</a><a id="2281" class="Symbol">}</a> <a id="2283" class="Symbol">(</a><a id="2284" href="Exercises6.html#2284" class="Bound">X</a> <a id="2286" class="Symbol">:</a> <a id="2288" href="Exercises6.html#1446" data-type="Set" class="Postulate">Bowtie</a> <a id="2295" class="Symbol">→</a> <a id="2297" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="2302" href="Exercises6.html#2272" class="Bound">l</a><a id="2303" class="Symbol">)</a>
+                      <a id="2327" class="Symbol">(</a><a id="2328" href="Exercises6.html#2328" class="Bound">x</a> <a id="2330" class="Symbol">:</a> <a id="2332" href="Exercises6.html#2284" class="Bound">X</a> <a id="2334" href="Exercises6.html#1461" data-type="Bowtie" class="Postulate">baseB</a><a id="2339" class="Symbol">)</a>
+                      <a id="2363" class="Symbol">(</a><a id="2364" href="Exercises6.html#2364" class="Bound">p</a> <a id="2366" class="Symbol">:</a> <a id="2368" href="Exercises6.html#2328" class="Bound">x</a> <a id="2370" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">≡</a> <a id="2372" href="Exercises6.html#2328" class="Bound">x</a> <a id="2374" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">[</a> <a id="2376" href="Exercises6.html#2284" class="Bound">X</a> <a id="2378" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">↓</a> <a id="2380" href="Exercises6.html#1478" data-type="baseB ≡ baseB" class="Postulate">loop1</a> <a id="2386" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">]</a><a id="2387" class="Symbol">)</a>
+                      <a id="2411" class="Symbol">(</a><a id="2412" href="Exercises6.html#2412" class="Bound">q</a> <a id="2414" class="Symbol">:</a> <a id="2416" href="Exercises6.html#2328" class="Bound">x</a> <a id="2418" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">≡</a> <a id="2420" href="Exercises6.html#2328" class="Bound">x</a> <a id="2422" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">[</a> <a id="2424" href="Exercises6.html#2284" class="Bound">X</a> <a id="2426" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">↓</a> <a id="2428" href="Exercises6.html#1502" data-type="baseB ≡ baseB" class="Postulate">loop2</a> <a id="2434" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">]</a><a id="2435" class="Symbol">)</a>
+                    <a id="2457" class="Symbol">→</a> <a id="2459" href="Lecture5-notes.html#4872" data-type="(f : (x : A) → B x) (p : a1 ≡ a2) → PathOver B p (f a1) (f a2)" class="Function">apd</a> <a id="2463" class="Symbol">(</a><a id="2464" href="Exercises6.html#1526" data-type="(X : Bowtie → Set l) (x : X baseB) →
+PathOver X loop1 x x → PathOver X loop2 x x → (x₁ : Bowtie) → X x₁" class="Postulate">Bowtie-elim</a> <a id="2476" href="Exercises6.html#2284" class="Bound">X</a> <a id="2478" href="Exercises6.html#2328" class="Bound">x</a> <a id="2480" href="Exercises6.html#2364" class="Bound">p</a> <a id="2482" href="Exercises6.html#2412" class="Bound">q</a><a id="2483" class="Symbol">)</a> <a id="2485" href="Exercises6.html#1502" data-type="baseB ≡ baseB" class="Postulate">loop2</a> <a id="2491" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="2493" href="Exercises6.html#2412" class="Bound">q</a>
+</pre>
+<p>Next, we will prove the non-dependent elim/“recursion principle” from
+these. First, we need some lemmas.</p>
+<p>(⋆) Paths over a path in a constant fibration are equivalent to
+paths. It is simple to prove this by path induction.</p>
+<pre class="Agda"><a id="PathOver-constant"></a><a id="2737" href="Exercises6.html#2737" data-type="(p : a1 ≡ a2) → b1 ≡ b2 → PathOver (λ _ → B) p b1 b2" class="Function">PathOver-constant</a> <a id="2755" class="Symbol">:</a> <a id="2757" class="Symbol">{</a><a id="2758" href="Exercises6.html#2758" class="Bound">l1</a> <a id="2761" href="Exercises6.html#2761" class="Bound">l2</a> <a id="2764" class="Symbol">:</a> <a id="2766" href="Agda.Primitive.html#597" data-type="Set" class="Postulate">Level</a><a id="2771" class="Symbol">}</a> <a id="2773" class="Symbol">{</a><a id="2774" href="Exercises6.html#2774" class="Bound">A</a> <a id="2776" class="Symbol">:</a> <a id="2778" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="2783" href="Exercises6.html#2758" class="Bound">l1</a><a id="2785" class="Symbol">}</a> <a id="2787" class="Symbol">{</a><a id="2788" href="Exercises6.html#2788" class="Bound">B</a> <a id="2790" class="Symbol">:</a> <a id="2792" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="2797" href="Exercises6.html#2761" class="Bound">l2</a><a id="2799" class="Symbol">}</a>
+                  <a id="2819" class="Symbol">→</a> <a id="2821" class="Symbol">{</a><a id="2822" href="Exercises6.html#2822" class="Bound">a1</a> <a id="2825" href="Exercises6.html#2825" class="Bound">a2</a> <a id="2828" class="Symbol">:</a> <a id="2830" href="Exercises6.html#2774" class="Bound">A</a><a id="2831" class="Symbol">}</a>
+                  <a id="2851" class="Symbol">→</a> <a id="2853" class="Symbol">(</a><a id="2854" href="Exercises6.html#2854" class="Bound">p</a> <a id="2856" class="Symbol">:</a> <a id="2858" href="Exercises6.html#2822" class="Bound">a1</a> <a id="2861" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="2863" href="Exercises6.html#2825" class="Bound">a2</a><a id="2865" class="Symbol">)</a>
+                  <a id="2885" class="Symbol">→</a> <a id="2887" class="Symbol">{</a><a id="2888" href="Exercises6.html#2888" class="Bound">b1</a> <a id="2891" href="Exercises6.html#2891" class="Bound">b2</a> <a id="2894" class="Symbol">:</a> <a id="2896" href="Exercises6.html#2788" class="Bound">B</a><a id="2897" class="Symbol">}</a>
+                  <a id="2917" class="Symbol">→</a> <a id="2919" href="Exercises6.html#2888" class="Bound">b1</a> <a id="2922" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="2924" href="Exercises6.html#2891" class="Bound">b2</a>
+                  <a id="2945" class="Symbol">→</a> <a id="2947" href="Exercises6.html#2888" class="Bound">b1</a> <a id="2950" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">≡</a> <a id="2952" href="Exercises6.html#2891" class="Bound">b2</a> <a id="2955" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">[</a> <a id="2957" class="Symbol">(\</a> <a id="2960" href="Exercises6.html#2960" class="Bound">_</a> <a id="2962" class="Symbol">→</a> <a id="2964" href="Exercises6.html#2788" class="Bound">B</a><a id="2965" class="Symbol">)</a> <a id="2967" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">↓</a> <a id="2969" href="Exercises6.html#2854" class="Bound">p</a> <a id="2971" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">]</a>
+<a id="2973" href="Exercises6.html#2737" data-type="(p : a1 ≡ a2) → b1 ≡ b2 → PathOver (λ _ → B) p b1 b2" class="Function">PathOver-constant</a> <a id="2991" class="Symbol">=</a> <a id="2993" class="Hole">{!!}</a>
+
+<a id="PathOver-constant-inverse"></a><a id="2999" href="Exercises6.html#2999" data-type="(p : a1 ≡ a2) → PathOver (λ _ → B) p b1 b2 → b1 ≡ b2" class="Function">PathOver-constant-inverse</a> <a id="3025" class="Symbol">:</a> <a id="3027" class="Symbol">{</a><a id="3028" href="Exercises6.html#3028" class="Bound">l1</a> <a id="3031" href="Exercises6.html#3031" class="Bound">l2</a> <a id="3034" class="Symbol">:</a> <a id="3036" href="Agda.Primitive.html#597" data-type="Set" class="Postulate">Level</a><a id="3041" class="Symbol">}</a> <a id="3043" class="Symbol">{</a><a id="3044" href="Exercises6.html#3044" class="Bound">A</a> <a id="3046" class="Symbol">:</a> <a id="3048" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="3053" href="Exercises6.html#3028" class="Bound">l1</a><a id="3055" class="Symbol">}</a> <a id="3057" class="Symbol">{</a><a id="3058" href="Exercises6.html#3058" class="Bound">B</a> <a id="3060" class="Symbol">:</a> <a id="3062" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="3067" href="Exercises6.html#3031" class="Bound">l2</a><a id="3069" class="Symbol">}</a>
+                          <a id="3097" class="Symbol">→</a> <a id="3099" class="Symbol">{</a><a id="3100" href="Exercises6.html#3100" class="Bound">a1</a> <a id="3103" href="Exercises6.html#3103" class="Bound">a2</a> <a id="3106" class="Symbol">:</a> <a id="3108" href="Exercises6.html#3044" class="Bound">A</a><a id="3109" class="Symbol">}</a>
+                          <a id="3137" class="Symbol">→</a> <a id="3139" class="Symbol">(</a><a id="3140" href="Exercises6.html#3140" class="Bound">p</a> <a id="3142" class="Symbol">:</a> <a id="3144" href="Exercises6.html#3100" class="Bound">a1</a> <a id="3147" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="3149" href="Exercises6.html#3103" class="Bound">a2</a><a id="3151" class="Symbol">)</a>
+                          <a id="3179" class="Symbol">→</a> <a id="3181" class="Symbol">{</a><a id="3182" href="Exercises6.html#3182" class="Bound">b1</a> <a id="3185" href="Exercises6.html#3185" class="Bound">b2</a> <a id="3188" class="Symbol">:</a> <a id="3190" href="Exercises6.html#3058" class="Bound">B</a><a id="3191" class="Symbol">}</a>
+                          <a id="3219" class="Symbol">→</a> <a id="3221" href="Exercises6.html#3182" class="Bound">b1</a> <a id="3224" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">≡</a> <a id="3226" href="Exercises6.html#3185" class="Bound">b2</a> <a id="3229" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">[</a> <a id="3231" class="Symbol">(\</a> <a id="3234" href="Exercises6.html#3234" class="Bound">_</a> <a id="3236" class="Symbol">→</a> <a id="3238" href="Exercises6.html#3058" class="Bound">B</a><a id="3239" class="Symbol">)</a> <a id="3241" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">↓</a> <a id="3243" href="Exercises6.html#3140" class="Bound">p</a> <a id="3245" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">]</a>
+                          <a id="3273" class="Symbol">→</a> <a id="3275" href="Exercises6.html#3182" class="Bound">b1</a> <a id="3278" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="3280" href="Exercises6.html#3185" class="Bound">b2</a>
+<a id="3283" href="Exercises6.html#2999" data-type="(p : a1 ≡ a2) → PathOver (λ _ → B) p b1 b2 → b1 ≡ b2" class="Function">PathOver-constant-inverse</a> <a id="3309" class="Symbol">=</a> <a id="3311" class="Hole">{!!}</a>
+
+<a id="PathOver-constant-inverse-cancel1"></a><a id="3317" href="Exercises6.html#3317" data-type="(p : a1 ≡ a2) (q : b1 ≡ b2) →
+PathOver-constant-inverse p (PathOver-constant p q) ≡ q" class="Function">PathOver-constant-inverse-cancel1</a> <a id="3351" class="Symbol">:</a> <a id="3353" class="Symbol">{</a><a id="3354" href="Exercises6.html#3354" class="Bound">l1</a> <a id="3357" href="Exercises6.html#3357" class="Bound">l2</a> <a id="3360" class="Symbol">:</a> <a id="3362" href="Agda.Primitive.html#597" data-type="Set" class="Postulate">Level</a><a id="3367" class="Symbol">}</a> <a id="3369" class="Symbol">{</a><a id="3370" href="Exercises6.html#3370" class="Bound">A</a> <a id="3372" class="Symbol">:</a> <a id="3374" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="3379" href="Exercises6.html#3354" class="Bound">l1</a><a id="3381" class="Symbol">}</a> <a id="3383" class="Symbol">{</a><a id="3384" href="Exercises6.html#3384" class="Bound">B</a> <a id="3386" class="Symbol">:</a> <a id="3388" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="3393" href="Exercises6.html#3357" class="Bound">l2</a><a id="3395" class="Symbol">}</a>
+                          <a id="3423" class="Symbol">→</a> <a id="3425" class="Symbol">{</a><a id="3426" href="Exercises6.html#3426" class="Bound">a1</a> <a id="3429" href="Exercises6.html#3429" class="Bound">a2</a> <a id="3432" class="Symbol">:</a> <a id="3434" href="Exercises6.html#3370" class="Bound">A</a><a id="3435" class="Symbol">}</a>
+                          <a id="3463" class="Symbol">→</a> <a id="3465" class="Symbol">(</a><a id="3466" href="Exercises6.html#3466" class="Bound">p</a> <a id="3468" class="Symbol">:</a> <a id="3470" href="Exercises6.html#3426" class="Bound">a1</a> <a id="3473" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="3475" href="Exercises6.html#3429" class="Bound">a2</a><a id="3477" class="Symbol">)</a>
+                          <a id="3505" class="Symbol">→</a> <a id="3507" class="Symbol">{</a><a id="3508" href="Exercises6.html#3508" class="Bound">b1</a> <a id="3511" href="Exercises6.html#3511" class="Bound">b2</a> <a id="3514" class="Symbol">:</a> <a id="3516" href="Exercises6.html#3384" class="Bound">B</a><a id="3517" class="Symbol">}</a>
+                          <a id="3545" class="Symbol">→</a> <a id="3547" class="Symbol">(</a><a id="3548" href="Exercises6.html#3548" class="Bound">q</a> <a id="3550" class="Symbol">:</a> <a id="3552" href="Exercises6.html#3508" class="Bound">b1</a> <a id="3555" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="3557" href="Exercises6.html#3511" class="Bound">b2</a><a id="3559" class="Symbol">)</a>
+                          <a id="3587" class="Symbol">→</a> <a id="3589" href="Exercises6.html#2999" data-type="(p : a1 ≡ a2) → PathOver (λ _ → B) p b1 b2 → b1 ≡ b2" class="Function">PathOver-constant-inverse</a> <a id="3615" href="Exercises6.html#3466" class="Bound">p</a> <a id="3617" class="Symbol">(</a><a id="3618" href="Exercises6.html#2737" data-type="(p : a1 ≡ a2) → b1 ≡ b2 → PathOver (λ _ → B) p b1 b2" class="Function">PathOver-constant</a> <a id="3636" href="Exercises6.html#3466" class="Bound">p</a> <a id="3638" href="Exercises6.html#3548" class="Bound">q</a><a id="3639" class="Symbol">)</a> <a id="3641" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="3643" href="Exercises6.html#3548" class="Bound">q</a>
+<a id="3645" href="Exercises6.html#3317" data-type="(p : a1 ≡ a2) (q : b1 ≡ b2) →
+PathOver-constant-inverse p (PathOver-constant p q) ≡ q" class="Function">PathOver-constant-inverse-cancel1</a> <a id="3679" class="Symbol">=</a> <a id="3681" class="Hole">{!!}</a>
+
+<a id="PathOver-constant-inverse-cancel2"></a><a id="3687" href="Exercises6.html#3687" data-type="(p : a1 ≡ a2) (q : PathOver (λ v → B) p b1 b2) →
+PathOver-constant p (PathOver-constant-inverse p q) ≡ q" class="Function">PathOver-constant-inverse-cancel2</a> <a id="3721" class="Symbol">:</a> <a id="3723" class="Symbol">{</a><a id="3724" href="Exercises6.html#3724" class="Bound">l1</a> <a id="3727" href="Exercises6.html#3727" class="Bound">l2</a> <a id="3730" class="Symbol">:</a> <a id="3732" href="Agda.Primitive.html#597" data-type="Set" class="Postulate">Level</a><a id="3737" class="Symbol">}</a> <a id="3739" class="Symbol">{</a><a id="3740" href="Exercises6.html#3740" class="Bound">A</a> <a id="3742" class="Symbol">:</a> <a id="3744" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="3749" href="Exercises6.html#3724" class="Bound">l1</a><a id="3751" class="Symbol">}</a> <a id="3753" class="Symbol">{</a><a id="3754" href="Exercises6.html#3754" class="Bound">B</a> <a id="3756" class="Symbol">:</a> <a id="3758" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="3763" href="Exercises6.html#3727" class="Bound">l2</a><a id="3765" class="Symbol">}</a>
+                          <a id="3793" class="Symbol">→</a> <a id="3795" class="Symbol">{</a><a id="3796" href="Exercises6.html#3796" class="Bound">a1</a> <a id="3799" href="Exercises6.html#3799" class="Bound">a2</a> <a id="3802" class="Symbol">:</a> <a id="3804" href="Exercises6.html#3740" class="Bound">A</a><a id="3805" class="Symbol">}</a>
+                          <a id="3833" class="Symbol">→</a> <a id="3835" class="Symbol">(</a><a id="3836" href="Exercises6.html#3836" class="Bound">p</a> <a id="3838" class="Symbol">:</a> <a id="3840" href="Exercises6.html#3796" class="Bound">a1</a> <a id="3843" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="3845" href="Exercises6.html#3799" class="Bound">a2</a><a id="3847" class="Symbol">)</a>
+                          <a id="3875" class="Symbol">→</a> <a id="3877" class="Symbol">{</a><a id="3878" href="Exercises6.html#3878" class="Bound">b1</a> <a id="3881" href="Exercises6.html#3881" class="Bound">b2</a> <a id="3884" class="Symbol">:</a> <a id="3886" href="Exercises6.html#3754" class="Bound">B</a><a id="3887" class="Symbol">}</a>
+                          <a id="3915" class="Symbol">→</a> <a id="3917" class="Symbol">(</a><a id="3918" href="Exercises6.html#3918" class="Bound">q</a> <a id="3920" class="Symbol">:</a> <a id="3922" href="Exercises6.html#3878" class="Bound">b1</a> <a id="3925" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">≡</a> <a id="3927" href="Exercises6.html#3881" class="Bound">b2</a> <a id="3930" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">[</a> <a id="3932" class="Symbol">_</a> <a id="3934" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">↓</a> <a id="3936" href="Exercises6.html#3836" class="Bound">p</a> <a id="3938" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">]</a><a id="3939" class="Symbol">)</a>
+                          <a id="3967" class="Symbol">→</a> <a id="3969" href="Exercises6.html#2737" data-type="(p : a1 ≡ a2) → b1 ≡ b2 → PathOver (λ _ → B) p b1 b2" class="Function">PathOver-constant</a> <a id="3987" href="Exercises6.html#3836" class="Bound">p</a> <a id="3989" class="Symbol">(</a><a id="3990" href="Exercises6.html#2999" data-type="(p : a1 ≡ a2) → PathOver (λ _ → B) p b1 b2 → b1 ≡ b2" class="Function">PathOver-constant-inverse</a> <a id="4016" href="Exercises6.html#3836" class="Bound">p</a> <a id="4018" href="Exercises6.html#3918" class="Bound">q</a><a id="4019" class="Symbol">)</a> <a id="4021" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="4023" href="Exercises6.html#3918" class="Bound">q</a>
+<a id="4025" href="Exercises6.html#3687" data-type="(p : a1 ≡ a2) (q : PathOver (λ v → B) p b1 b2) →
+PathOver-constant p (PathOver-constant-inverse p q) ≡ q" class="Function">PathOver-constant-inverse-cancel2</a> <a id="4059" class="Symbol">=</a> <a id="4061" class="Hole">{!!}</a>
+
+<a id="PathOver-constant-equiv"></a><a id="4067" href="Exercises6.html#4067" data-type="(p : a1 ≡ a2) → (b1 ≡ b2) ≃ PathOver (λ _ → B) p b1 b2" class="Function">PathOver-constant-equiv</a> <a id="4091" class="Symbol">:</a> <a id="4093" class="Symbol">{</a><a id="4094" href="Exercises6.html#4094" class="Bound">l1</a> <a id="4097" href="Exercises6.html#4097" class="Bound">l2</a> <a id="4100" class="Symbol">:</a> <a id="4102" href="Agda.Primitive.html#597" data-type="Set" class="Postulate">Level</a><a id="4107" class="Symbol">}</a> <a id="4109" class="Symbol">{</a><a id="4110" href="Exercises6.html#4110" class="Bound">A</a> <a id="4112" class="Symbol">:</a> <a id="4114" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="4119" href="Exercises6.html#4094" class="Bound">l1</a><a id="4121" class="Symbol">}</a> <a id="4123" class="Symbol">{</a><a id="4124" href="Exercises6.html#4124" class="Bound">B</a> <a id="4126" class="Symbol">:</a> <a id="4128" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="4133" href="Exercises6.html#4097" class="Bound">l2</a><a id="4135" class="Symbol">}</a>
+                          <a id="4163" class="Symbol">→</a> <a id="4165" class="Symbol">{</a><a id="4166" href="Exercises6.html#4166" class="Bound">a1</a> <a id="4169" href="Exercises6.html#4169" class="Bound">a2</a> <a id="4172" class="Symbol">:</a> <a id="4174" href="Exercises6.html#4110" class="Bound">A</a><a id="4175" class="Symbol">}</a>
+                          <a id="4203" class="Symbol">→</a> <a id="4205" class="Symbol">(</a><a id="4206" href="Exercises6.html#4206" class="Bound">p</a> <a id="4208" class="Symbol">:</a> <a id="4210" href="Exercises6.html#4166" class="Bound">a1</a> <a id="4213" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="4215" href="Exercises6.html#4169" class="Bound">a2</a><a id="4217" class="Symbol">)</a>
+                          <a id="4245" class="Symbol">→</a> <a id="4247" class="Symbol">{</a><a id="4248" href="Exercises6.html#4248" class="Bound">b1</a> <a id="4251" href="Exercises6.html#4251" class="Bound">b2</a> <a id="4254" class="Symbol">:</a> <a id="4256" href="Exercises6.html#4124" class="Bound">B</a><a id="4257" class="Symbol">}</a>
+                          <a id="4285" class="Symbol">→</a> <a id="4287" class="Symbol">(</a><a id="4288" href="Exercises6.html#4248" class="Bound">b1</a> <a id="4291" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="4293" href="Exercises6.html#4251" class="Bound">b2</a><a id="4295" class="Symbol">)</a> <a id="4297" href="Lecture5-notes.html#968" data-type="(A : Set l1) (B : Set l2) → Set (l1 ⊔ l2)" class="Record Operator">≃</a> <a id="4299" class="Symbol">(</a><a id="4300" href="Exercises6.html#4248" class="Bound">b1</a> <a id="4303" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">≡</a> <a id="4305" href="Exercises6.html#4251" class="Bound">b2</a> <a id="4308" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">[</a> <a id="4310" class="Symbol">(\</a> <a id="4313" href="Exercises6.html#4313" class="Bound">_</a> <a id="4315" class="Symbol">→</a> <a id="4317" href="Exercises6.html#4124" class="Bound">B</a><a id="4318" class="Symbol">)</a> <a id="4320" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">↓</a> <a id="4322" href="Exercises6.html#4206" class="Bound">p</a> <a id="4324" href="Lecture5-notes.html#3169" data-type="(B : A → Set l2) → a1 ≡ a2 → B a1 → B a2 → Set (l1 ⊔ l2)" class="Datatype">]</a><a id="4325" class="Symbol">)</a>
+<a id="4327" href="Exercises6.html#4067" data-type="(p : a1 ≡ a2) → (b1 ≡ b2) ≃ PathOver (λ _ → B) p b1 b2" class="Function">PathOver-constant-equiv</a> <a id="4351" href="Exercises6.html#4351" class="Bound">p</a> <a id="4353" class="Symbol">=</a> <a id="4355" href="Lecture5-notes.html#1565" data-type="A ≅ B → A ≃ B" class="Function">improve</a> <a id="4363" class="Symbol">(</a><a id="4364" href="new-prelude.html#2950" data-type="(bijection : A → B) (bijectivity : is-bijection bijection) → A ≅ B" class="InductiveConstructor">Isomorphism</a> <a id="4376" class="Symbol">(</a><a id="4377" href="Exercises6.html#2737" data-type="(p : a1 ≡ a2) → b1 ≡ b2 → PathOver (λ _ → B) p b1 b2" class="Function">PathOver-constant</a> <a id="4395" href="Exercises6.html#4351" class="Bound">p</a><a id="4396" class="Symbol">)</a>
+                                    <a id="4434" class="Symbol">(</a><a id="4435" href="new-prelude.html#2765" data-type="(inverse : B → A) (η : (inverse ∘ f) ∼ id)
+(ε : (f ∘ inverse) ∼ id) →
+is-bijection f" class="InductiveConstructor">Inverse</a> <a id="4443" class="Symbol">(</a><a id="4444" href="Exercises6.html#2999" data-type="(p : a1 ≡ a2) → PathOver (λ _ → B) p b1 b2 → b1 ≡ b2" class="Function">PathOver-constant-inverse</a> <a id="4470" href="Exercises6.html#4351" class="Bound">p</a><a id="4471" class="Symbol">)</a>
+                                             <a id="4518" class="Symbol">(</a><a id="4519" href="Exercises6.html#3317" data-type="(p : a1 ≡ a2) (q : b1 ≡ b2) →
+PathOver-constant-inverse p (PathOver-constant p q) ≡ q" class="Function">PathOver-constant-inverse-cancel1</a> <a id="4553" href="Exercises6.html#4351" class="Bound">p</a><a id="4554" class="Symbol">)</a>
+                                             <a id="4601" class="Symbol">(</a><a id="4602" href="Exercises6.html#3687" data-type="(p : a1 ≡ a2) (q : PathOver (λ v → B) p b1 b2) →
+PathOver-constant p (PathOver-constant-inverse p q) ≡ q" class="Function">PathOver-constant-inverse-cancel2</a> <a id="4636" href="Exercises6.html#4351" class="Bound">p</a><a id="4637" class="Symbol">)))</a>
+
+</pre>
+<p>(⋆) Next, for a non-dependent function f, there is an annoying
+mismatch between ap f and apd f, which we can reconcile as follows:</p>
+<pre class="Agda"><a id="ap-apd-constant"></a><a id="4787" href="Exercises6.html#4787" data-type="(p : a1 ≡ a2) (f : A → B) →
+ap f p ≡ PathOver-constant-inverse p (apd f p)" class="Function">ap-apd-constant</a> <a id="4803" class="Symbol">:</a> <a id="4805" class="Symbol">{</a><a id="4806" href="Exercises6.html#4806" class="Bound">l1</a> <a id="4809" href="Exercises6.html#4809" class="Bound">l2</a> <a id="4812" class="Symbol">:</a> <a id="4814" href="Agda.Primitive.html#597" data-type="Set" class="Postulate">Level</a><a id="4819" class="Symbol">}</a> <a id="4821" class="Symbol">{</a><a id="4822" href="Exercises6.html#4822" class="Bound">A</a> <a id="4824" class="Symbol">:</a> <a id="4826" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="4831" href="Exercises6.html#4806" class="Bound">l1</a><a id="4833" class="Symbol">}</a> <a id="4835" class="Symbol">{</a><a id="4836" href="Exercises6.html#4836" class="Bound">B</a> <a id="4838" class="Symbol">:</a> <a id="4840" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="4845" href="Exercises6.html#4809" class="Bound">l2</a><a id="4847" class="Symbol">}</a>
+                <a id="4865" class="Symbol">→</a> <a id="4867" class="Symbol">{</a><a id="4868" href="Exercises6.html#4868" class="Bound">a1</a> <a id="4871" href="Exercises6.html#4871" class="Bound">a2</a> <a id="4874" class="Symbol">:</a> <a id="4876" href="Exercises6.html#4822" class="Bound">A</a><a id="4877" class="Symbol">}</a>
+                <a id="4895" class="Symbol">→</a> <a id="4897" class="Symbol">(</a><a id="4898" href="Exercises6.html#4898" class="Bound">p</a> <a id="4900" class="Symbol">:</a> <a id="4902" href="Exercises6.html#4868" class="Bound">a1</a> <a id="4905" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="4907" href="Exercises6.html#4871" class="Bound">a2</a><a id="4909" class="Symbol">)</a>
+                <a id="4927" class="Symbol">→</a> <a id="4929" class="Symbol">(</a><a id="4930" href="Exercises6.html#4930" class="Bound">f</a> <a id="4932" class="Symbol">:</a> <a id="4934" href="Exercises6.html#4822" class="Bound">A</a> <a id="4936" class="Symbol">→</a> <a id="4938" href="Exercises6.html#4836" class="Bound">B</a><a id="4939" class="Symbol">)</a>
+                <a id="4957" class="Symbol">→</a> <a id="4959" href="new-prelude.html#937" data-type="(f : A → B) → x ≡ y → f x ≡ f y" class="Function">ap</a> <a id="4962" href="Exercises6.html#4930" class="Bound">f</a> <a id="4964" href="Exercises6.html#4898" class="Bound">p</a> <a id="4966" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="4968" href="Exercises6.html#2999" data-type="(p : a1 ≡ a2) → PathOver (λ _ → B) p b1 b2 → b1 ≡ b2" class="Function">PathOver-constant-inverse</a> <a id="4994" class="Symbol">_</a> <a id="4996" class="Symbol">(</a><a id="4997" href="Lecture5-notes.html#4872" data-type="(f : (x : A) → B x) (p : a1 ≡ a2) → PathOver B p (f a1) (f a2)" class="Function">apd</a> <a id="5001" href="Exercises6.html#4930" class="Bound">f</a> <a id="5003" href="Exercises6.html#4898" class="Bound">p</a><a id="5004" class="Symbol">)</a>
+<a id="5006" href="Exercises6.html#4787" data-type="(p : a1 ≡ a2) (f : A → B) →
+ap f p ≡ PathOver-constant-inverse p (apd f p)" class="Function">ap-apd-constant</a> <a id="5022" class="Symbol">=</a> <a id="5024" class="Hole">{!!}</a>
+</pre>
+<p>(⋆) Define Bowtie-rec and prove the reduction for base:</p>
+<pre class="Agda"><a id="Bowtie-rec"></a><a id="5099" href="Exercises6.html#5099" data-type="(x : X) → Path X x x → Path X x x → Bowtie → X" class="Function">Bowtie-rec</a> <a id="5110" class="Symbol">:</a> <a id="5112" class="Symbol">{</a><a id="5113" href="Exercises6.html#5113" class="Bound">l</a> <a id="5115" class="Symbol">:</a> <a id="5117" href="Agda.Primitive.html#597" data-type="Set" class="Postulate">Level</a><a id="5122" class="Symbol">}</a> <a id="5124" class="Symbol">{</a><a id="5125" href="Exercises6.html#5125" class="Bound">X</a> <a id="5127" class="Symbol">:</a> <a id="5129" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="5134" href="Exercises6.html#5113" class="Bound">l</a><a id="5135" class="Symbol">}</a>
+             <a id="5150" class="Symbol">(</a><a id="5151" href="Exercises6.html#5151" class="Bound">x</a> <a id="5153" class="Symbol">:</a> <a id="5155" href="Exercises6.html#5125" class="Bound">X</a><a id="5156" class="Symbol">)</a>
+             <a id="5171" class="Symbol">(</a><a id="5172" href="Exercises6.html#5172" class="Bound">p</a> <a id="5174" class="Symbol">:</a> <a id="5176" href="Exercises6.html#5151" class="Bound">x</a> <a id="5178" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">≡</a> <a id="5180" href="Exercises6.html#5151" class="Bound">x</a> <a id="5182" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">[</a> <a id="5184" href="Exercises6.html#5125" class="Bound">X</a> <a id="5186" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">]</a><a id="5187" class="Symbol">)</a>
+             <a id="5202" class="Symbol">(</a><a id="5203" href="Exercises6.html#5203" class="Bound">q</a> <a id="5205" class="Symbol">:</a> <a id="5207" href="Exercises6.html#5151" class="Bound">x</a> <a id="5209" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">≡</a> <a id="5211" href="Exercises6.html#5151" class="Bound">x</a> <a id="5213" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">[</a> <a id="5215" href="Exercises6.html#5125" class="Bound">X</a> <a id="5217" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">]</a><a id="5218" class="Symbol">)</a>
+           <a id="5231" class="Symbol">→</a> <a id="5233" class="Symbol">(</a><a id="5234" href="Exercises6.html#1446" data-type="Set" class="Postulate">Bowtie</a><a id="5240" class="Symbol">)</a> <a id="5242" class="Symbol">→</a> <a id="5244" href="Exercises6.html#5125" class="Bound">X</a>
+<a id="5246" href="Exercises6.html#5099" data-type="(x : X) → Path X x x → Path X x x → Bowtie → X" class="Function">Bowtie-rec</a> <a id="5257" class="Symbol">{_}</a> <a id="5261" class="Symbol">{</a><a id="5262" href="Exercises6.html#5262" class="Bound">X</a><a id="5263" class="Symbol">}</a> <a id="5265" href="Exercises6.html#5265" class="Bound">x</a> <a id="5267" href="Exercises6.html#5267" class="Bound">p</a> <a id="5269" href="Exercises6.html#5269" class="Bound">q</a> <a id="5271" class="Symbol">=</a> <a id="5273" class="Hole">{!!}</a>
+
+<a id="Bowtie-rec-base"></a><a id="5279" href="Exercises6.html#5279" data-type="(x : X) (p q : Path X x x) → Bowtie-rec x p q baseB ≡ x" class="Function">Bowtie-rec-base</a> <a id="5295" class="Symbol">:</a> <a id="5297" class="Symbol">{</a><a id="5298" href="Exercises6.html#5298" class="Bound">l</a> <a id="5300" class="Symbol">:</a> <a id="5302" href="Agda.Primitive.html#597" data-type="Set" class="Postulate">Level</a><a id="5307" class="Symbol">}</a> <a id="5309" class="Symbol">{</a><a id="5310" href="Exercises6.html#5310" class="Bound">X</a> <a id="5312" class="Symbol">:</a> <a id="5314" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="5319" href="Exercises6.html#5298" class="Bound">l</a><a id="5320" class="Symbol">}</a>
+             <a id="5335" class="Symbol">(</a><a id="5336" href="Exercises6.html#5336" class="Bound">x</a> <a id="5338" class="Symbol">:</a> <a id="5340" href="Exercises6.html#5310" class="Bound">X</a><a id="5341" class="Symbol">)</a>
+             <a id="5356" class="Symbol">(</a><a id="5357" href="Exercises6.html#5357" class="Bound">p</a> <a id="5359" class="Symbol">:</a> <a id="5361" href="Exercises6.html#5336" class="Bound">x</a> <a id="5363" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">≡</a> <a id="5365" href="Exercises6.html#5336" class="Bound">x</a> <a id="5367" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">[</a> <a id="5369" href="Exercises6.html#5310" class="Bound">X</a> <a id="5371" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">]</a><a id="5372" class="Symbol">)</a>
+             <a id="5387" class="Symbol">(</a><a id="5388" href="Exercises6.html#5388" class="Bound">q</a> <a id="5390" class="Symbol">:</a> <a id="5392" href="Exercises6.html#5336" class="Bound">x</a> <a id="5394" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">≡</a> <a id="5396" href="Exercises6.html#5336" class="Bound">x</a> <a id="5398" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">[</a> <a id="5400" href="Exercises6.html#5310" class="Bound">X</a> <a id="5402" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">]</a><a id="5403" class="Symbol">)</a>
+           <a id="5416" class="Symbol">→</a> <a id="5418" href="Exercises6.html#5099" data-type="(x : X) → Path X x x → Path X x x → Bowtie → X" class="Function">Bowtie-rec</a> <a id="5429" href="Exercises6.html#5336" class="Bound">x</a> <a id="5431" href="Exercises6.html#5357" class="Bound">p</a> <a id="5433" href="Exercises6.html#5388" class="Bound">q</a> <a id="5435" href="Exercises6.html#1461" data-type="Bowtie" class="Postulate">baseB</a> <a id="5441" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="5443" href="Exercises6.html#5336" class="Bound">x</a>
+<a id="5445" href="Exercises6.html#5279" data-type="(x : X) (p q : Path X x x) → Bowtie-rec x p q baseB ≡ x" class="Function">Bowtie-rec-base</a> <a id="5461" class="Symbol">_</a> <a id="5463" class="Symbol">_</a> <a id="5465" class="Symbol">_</a> <a id="5467" class="Symbol">=</a> <a id="5469" class="Hole">{!!}</a>
+</pre>
+<p>(⋆⋆) Prove the reductions for loop:</p>
+<pre class="Agda"><a id="Bowtie-rec-loop1"></a><a id="5524" href="Exercises6.html#5524" data-type="(x : X) (p q : Path X x x) →
+Path (x ≡ x) (unsolved#meta.312 x p q) p" class="Function">Bowtie-rec-loop1</a> <a id="5541" class="Symbol">:</a> <a id="5543" class="Symbol">{</a><a id="5544" href="Exercises6.html#5544" class="Bound">l</a> <a id="5546" class="Symbol">:</a> <a id="5548" href="Agda.Primitive.html#597" data-type="Set" class="Postulate">Level</a><a id="5553" class="Symbol">}</a> <a id="5555" class="Symbol">{</a><a id="5556" href="Exercises6.html#5556" class="Bound">X</a> <a id="5558" class="Symbol">:</a> <a id="5560" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="5565" href="Exercises6.html#5544" class="Bound">l</a><a id="5566" class="Symbol">}</a>
+               <a id="5583" class="Symbol">(</a><a id="5584" href="Exercises6.html#5584" class="Bound">x</a> <a id="5586" class="Symbol">:</a> <a id="5588" href="Exercises6.html#5556" class="Bound">X</a><a id="5589" class="Symbol">)</a>
+               <a id="5606" class="Symbol">(</a><a id="5607" href="Exercises6.html#5607" class="Bound">p</a> <a id="5609" class="Symbol">:</a> <a id="5611" href="Exercises6.html#5584" class="Bound">x</a> <a id="5613" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">≡</a> <a id="5615" href="Exercises6.html#5584" class="Bound">x</a> <a id="5617" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">[</a> <a id="5619" href="Exercises6.html#5556" class="Bound">X</a> <a id="5621" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">]</a><a id="5622" class="Symbol">)</a>
+               <a id="5639" class="Symbol">(</a><a id="5640" href="Exercises6.html#5640" class="Bound">q</a> <a id="5642" class="Symbol">:</a> <a id="5644" href="Exercises6.html#5584" class="Bound">x</a> <a id="5646" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">≡</a> <a id="5648" href="Exercises6.html#5584" class="Bound">x</a> <a id="5650" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">[</a> <a id="5652" href="Exercises6.html#5556" class="Bound">X</a> <a id="5654" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">]</a><a id="5655" class="Symbol">)</a>
+             <a id="5670" class="Symbol">→</a> <a id="5672" href="new-prelude.html#937" data-type="(f : A → B) → x ≡ y → f x ≡ f y" class="UnsolvedMeta UnsolvedConstraint Function">ap</a><a id="5674" class="UnsolvedMeta UnsolvedConstraint"> </a><a id="5675" class="UnsolvedMeta UnsolvedConstraint Symbol">(</a><a id="5676" href="Exercises6.html#5099" data-type="(x : X) → Path X x x → Path X x x → Bowtie → X" class="UnsolvedMeta UnsolvedConstraint Function">Bowtie-rec</a><a id="5686" class="UnsolvedMeta UnsolvedConstraint"> </a><a id="5687" href="Exercises6.html#5584" class="UnsolvedMeta UnsolvedConstraint Bound">x</a><a id="5688" class="UnsolvedMeta UnsolvedConstraint"> </a><a id="5689" href="Exercises6.html#5607" class="UnsolvedMeta UnsolvedConstraint Bound">p</a><a id="5690" class="UnsolvedMeta UnsolvedConstraint"> </a><a id="5691" href="Exercises6.html#5640" class="UnsolvedMeta UnsolvedConstraint Bound">q</a><a id="5692" class="UnsolvedMeta UnsolvedConstraint Symbol">)</a><a id="5693" class="UnsolvedMeta UnsolvedConstraint"> </a><a id="5694" href="Exercises6.html#1478" data-type="baseB ≡ baseB" class="UnsolvedMeta UnsolvedConstraint Postulate">loop1</a> <a id="5700" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">≡</a> <a id="5702" href="Exercises6.html#5607" class="Bound">p</a> <a id="5704" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">[</a> <a id="5706" href="Exercises6.html#5584" class="Bound">x</a> <a id="5708" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="5710" href="Exercises6.html#5584" class="Bound">x</a> <a id="5712" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">]</a>
+<a id="5714" href="Exercises6.html#5524" data-type="(x : X) (p q : Path X x x) →
+Path (x ≡ x) (unsolved#meta.312 x p q) p" class="Function">Bowtie-rec-loop1</a> <a id="5731" href="Exercises6.html#5731" class="Bound">x</a> <a id="5733" href="Exercises6.html#5733" class="Bound">p</a> <a id="5735" href="Exercises6.html#5735" class="Bound">q</a> <a id="5737" class="Symbol">=</a>  <a id="5740" class="Hole">{!!}</a>
+
+<a id="Bowtie-rec-loop2"></a><a id="5746" href="Exercises6.html#5746" data-type="(x : X) (p q : Path X x x) →
+Path (x ≡ x) (unsolved#meta.333 x p q) q" class="Function">Bowtie-rec-loop2</a> <a id="5763" class="Symbol">:</a> <a id="5765" class="Symbol">{</a><a id="5766" href="Exercises6.html#5766" class="Bound">l</a> <a id="5768" class="Symbol">:</a> <a id="5770" href="Agda.Primitive.html#597" data-type="Set" class="Postulate">Level</a><a id="5775" class="Symbol">}</a> <a id="5777" class="Symbol">{</a><a id="5778" href="Exercises6.html#5778" class="Bound">X</a> <a id="5780" class="Symbol">:</a> <a id="5782" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="5787" href="Exercises6.html#5766" class="Bound">l</a><a id="5788" class="Symbol">}</a>
+                   <a id="5809" class="Symbol">(</a><a id="5810" href="Exercises6.html#5810" class="Bound">x</a> <a id="5812" class="Symbol">:</a> <a id="5814" href="Exercises6.html#5778" class="Bound">X</a><a id="5815" class="Symbol">)</a>
+                   <a id="5836" class="Symbol">(</a><a id="5837" href="Exercises6.html#5837" class="Bound">p</a> <a id="5839" class="Symbol">:</a> <a id="5841" href="Exercises6.html#5810" class="Bound">x</a> <a id="5843" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">≡</a> <a id="5845" href="Exercises6.html#5810" class="Bound">x</a> <a id="5847" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">[</a> <a id="5849" href="Exercises6.html#5778" class="Bound">X</a> <a id="5851" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">]</a><a id="5852" class="Symbol">)</a>
+                   <a id="5873" class="Symbol">(</a><a id="5874" href="Exercises6.html#5874" class="Bound">q</a> <a id="5876" class="Symbol">:</a> <a id="5878" href="Exercises6.html#5810" class="Bound">x</a> <a id="5880" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">≡</a> <a id="5882" href="Exercises6.html#5810" class="Bound">x</a> <a id="5884" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">[</a> <a id="5886" href="Exercises6.html#5778" class="Bound">X</a> <a id="5888" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">]</a><a id="5889" class="Symbol">)</a>
+                 <a id="5908" class="Symbol">→</a> <a id="5910" href="new-prelude.html#937" data-type="(f : A → B) → x ≡ y → f x ≡ f y" class="UnsolvedMeta UnsolvedConstraint Function">ap</a><a id="5912" class="UnsolvedMeta UnsolvedConstraint"> </a><a id="5913" class="UnsolvedMeta UnsolvedConstraint Symbol">(</a><a id="5914" href="Exercises6.html#5099" data-type="(x : X) → Path X x x → Path X x x → Bowtie → X" class="UnsolvedMeta UnsolvedConstraint Function">Bowtie-rec</a><a id="5924" class="UnsolvedMeta UnsolvedConstraint"> </a><a id="5925" href="Exercises6.html#5810" class="UnsolvedMeta UnsolvedConstraint Bound">x</a><a id="5926" class="UnsolvedMeta UnsolvedConstraint"> </a><a id="5927" href="Exercises6.html#5837" class="UnsolvedMeta UnsolvedConstraint Bound">p</a><a id="5928" class="UnsolvedMeta UnsolvedConstraint"> </a><a id="5929" href="Exercises6.html#5874" class="UnsolvedMeta UnsolvedConstraint Bound">q</a><a id="5930" class="UnsolvedMeta UnsolvedConstraint Symbol">)</a><a id="5931" class="UnsolvedMeta UnsolvedConstraint"> </a><a id="5932" href="Exercises6.html#1502" data-type="baseB ≡ baseB" class="UnsolvedMeta UnsolvedConstraint Postulate">loop2</a> <a id="5938" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">≡</a> <a id="5940" href="Exercises6.html#5874" class="Bound">q</a> <a id="5942" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">[</a> <a id="5944" href="Exercises6.html#5810" class="Bound">x</a> <a id="5946" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="5948" href="Exercises6.html#5810" class="Bound">x</a> <a id="5950" href="new-prelude.html#526" data-type="(A : Set l) → A → A → Set l" class="Function">]</a>
+<a id="5952" href="Exercises6.html#5746" data-type="(x : X) (p q : Path X x x) →
+Path (x ≡ x) (unsolved#meta.333 x p q) q" class="Function">Bowtie-rec-loop2</a> <a id="5969" href="Exercises6.html#5969" class="Bound">x</a> <a id="5971" href="Exercises6.html#5971" class="Bound">p</a> <a id="5973" href="Exercises6.html#5973" class="Bound">q</a> <a id="5975" class="Symbol">=</a> <a id="5977" class="Hole">{!!}</a>
+</pre>
+<h1 id="loop-space-of-the-bowtie">Loop space of the bowtie</h1>
+<p>In this problem, you will show that the loop space of the bowtie is
+the “free group on two generators”, which we will write in Agda as F2.
+The point of this problem is mainly for you to read and really
+understand the proof that the loop space of the circle is ℤ. All of the
+code is essentially a rearrangement of code from that proof. I’d suggest
+trying the proof yourself, and looking at the analogous bits of the
+Circle proof if you get stuck.</p>
+<h2 id="some-lemmas">Some lemmas (⋆⋆)</h2>
+<p>In the Circle proof in lecture, I inlined a couple of things that can
+be proved more generally. You might want to prove these general versions
+in advance and use them in your proof, or, if that seems confusing, you
+might first do the proof without these lemmas to motivate them.</p>
+<pre class="Agda"><a id="concat-equiv"></a><a id="6780" href="Exercises6.html#6780" data-type="(a : A) → a&#39; ≡ a&#39;&#39; → (a ≡ a&#39;) ≃ (a ≡ a&#39;&#39;)" class="Function">concat-equiv</a> <a id="6793" class="Symbol">:</a> <a id="6795" class="Symbol">∀</a> <a id="6797" class="Symbol">{</a><a id="6798" href="Exercises6.html#6798" class="Bound">A</a> <a id="6800" class="Symbol">:</a> <a id="6802" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a><a id="6806" class="Symbol">}</a> <a id="6808" class="Symbol">(</a><a id="6809" href="Exercises6.html#6809" class="Bound">a</a> <a id="6811" class="Symbol">:</a> <a id="6813" href="Exercises6.html#6798" class="Bound">A</a><a id="6814" class="Symbol">)</a> <a id="6816" class="Symbol">{</a><a id="6817" href="Exercises6.html#6817" class="Bound">a&#39;</a> <a id="6820" href="Exercises6.html#6820" class="Bound">a&#39;&#39;</a> <a id="6824" class="Symbol">:</a> <a id="6826" href="Exercises6.html#6798" class="Bound">A</a><a id="6827" class="Symbol">}</a>
+                     <a id="6850" class="Symbol">→</a> <a id="6852" class="Symbol">(</a><a id="6853" href="Exercises6.html#6853" class="Bound">p</a> <a id="6855" class="Symbol">:</a> <a id="6857" href="Exercises6.html#6817" class="Bound">a&#39;</a> <a id="6860" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="6862" href="Exercises6.html#6820" class="Bound">a&#39;&#39;</a><a id="6865" class="Symbol">)</a>
+                     <a id="6888" class="Symbol">→</a> <a id="6890" class="Symbol">(</a><a id="6891" href="Exercises6.html#6809" class="Bound">a</a> <a id="6893" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="6895" href="Exercises6.html#6817" class="Bound">a&#39;</a><a id="6897" class="Symbol">)</a> <a id="6899" href="Lecture5-notes.html#968" data-type="(A : Set l1) (B : Set l2) → Set (l1 ⊔ l2)" class="Record Operator">≃</a> <a id="6901" class="Symbol">(</a><a id="6902" href="Exercises6.html#6809" class="Bound">a</a> <a id="6904" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="6906" href="Exercises6.html#6820" class="Bound">a&#39;&#39;</a><a id="6909" class="Symbol">)</a>
+<a id="6911" href="Exercises6.html#6780" data-type="(a : A) → a&#39; ≡ a&#39;&#39; → (a ≡ a&#39;) ≃ (a ≡ a&#39;&#39;)" class="Function">concat-equiv</a> <a id="6924" class="Symbol">=</a> <a id="6926" class="Hole">{!!}</a>
+
+<a id="concat-equiv-map"></a><a id="6932" href="Exercises6.html#6932" data-type="(p : a&#39; ≡ a&#39;&#39;) → fwd (concat-equiv a p) ≡ (λ q → q ∙ p)" class="Function">concat-equiv-map</a> <a id="6949" class="Symbol">:</a> <a id="6951" class="Symbol">∀</a> <a id="6953" class="Symbol">{</a><a id="6954" href="Exercises6.html#6954" class="Bound">A</a> <a id="6956" class="Symbol">:</a> <a id="6958" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a><a id="6962" class="Symbol">}</a> <a id="6964" class="Symbol">{</a><a id="6965" href="Exercises6.html#6965" class="Bound">a</a> <a id="6967" href="Exercises6.html#6967" class="Bound">a&#39;</a> <a id="6970" href="Exercises6.html#6970" class="Bound">a&#39;&#39;</a> <a id="6974" class="Symbol">:</a> <a id="6976" href="Exercises6.html#6954" class="Bound">A</a><a id="6977" class="Symbol">}</a>
+                 <a id="6996" class="Symbol">→</a> <a id="6998" class="Symbol">(</a><a id="6999" href="Exercises6.html#6999" class="Bound">p</a> <a id="7001" class="Symbol">:</a> <a id="7003" href="Exercises6.html#6967" class="Bound">a&#39;</a> <a id="7006" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="7008" href="Exercises6.html#6970" class="Bound">a&#39;&#39;</a><a id="7011" class="Symbol">)</a>
+                 <a id="7030" class="Symbol">→</a> <a id="7032" href="Lecture5-notes.html#1230" data-type="A ≃ B → A → B" class="Function">fwd</a> <a id="7036" class="Symbol">(</a><a id="7037" href="Exercises6.html#6780" data-type="(a : A) → a&#39; ≡ a&#39;&#39; → (a ≡ a&#39;) ≃ (a ≡ a&#39;&#39;)" class="Function">concat-equiv</a> <a id="7050" href="Exercises6.html#6965" class="Bound">a</a> <a id="7052" href="Exercises6.html#6999" class="Bound">p</a><a id="7053" class="Symbol">)</a> <a id="7055" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="7057" class="Symbol">\</a> <a id="7059" href="Exercises6.html#7059" class="Bound">q</a> <a id="7061" class="Symbol">→</a> <a id="7063" href="Exercises6.html#7059" class="Bound">q</a> <a id="7065" href="new-prelude.html#642" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function Operator">∙</a> <a id="7067" href="Exercises6.html#6999" class="Bound">p</a> 
+<a id="7070" href="Exercises6.html#6932" data-type="(p : a&#39; ≡ a&#39;&#39;) → fwd (concat-equiv a p) ≡ (λ q → q ∙ p)" class="Function">concat-equiv-map</a> <a id="7087" class="Symbol">=</a> <a id="7089" class="Hole">{!!}</a>
+</pre>
+<p>(Note: you could also write out all of the components, but this was
+easier.)</p>
+<pre class="Agda"><a id="transport-∙"></a><a id="7185" href="Exercises6.html#7185" data-type="(p : a1 ≡ a2) (q : a2 ≡ a3) →
+transport B (p ∙ q) ∼ (transport B q ∘ transport B p)" class="Function">transport-∙</a> <a id="7197" class="Symbol">:</a> <a id="7199" class="Symbol">{</a><a id="7200" href="Exercises6.html#7200" class="Bound">l1</a> <a id="7203" href="Exercises6.html#7203" class="Bound">l2</a> <a id="7206" class="Symbol">:</a> <a id="7208" href="Agda.Primitive.html#597" data-type="Set" class="Postulate">Level</a><a id="7213" class="Symbol">}</a> <a id="7215" class="Symbol">{</a><a id="7216" href="Exercises6.html#7216" class="Bound">A</a> <a id="7218" class="Symbol">:</a> <a id="7220" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="7225" href="Exercises6.html#7200" class="Bound">l1</a><a id="7227" class="Symbol">}</a> <a id="7229" class="Symbol">{</a><a id="7230" href="Exercises6.html#7230" class="Bound">B</a> <a id="7232" class="Symbol">:</a> <a id="7234" href="Exercises6.html#7216" class="Bound">A</a> <a id="7236" class="Symbol">→</a> <a id="7238" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="7243" href="Exercises6.html#7203" class="Bound">l2</a><a id="7245" class="Symbol">}</a>
+                  <a id="7265" class="Symbol">{</a><a id="7266" href="Exercises6.html#7266" class="Bound">a1</a> <a id="7269" href="Exercises6.html#7269" class="Bound">a2</a> <a id="7272" href="Exercises6.html#7272" class="Bound">a3</a> <a id="7275" class="Symbol">:</a> <a id="7277" href="Exercises6.html#7216" class="Bound">A</a><a id="7278" class="Symbol">}</a> <a id="7280" class="Symbol">(</a><a id="7281" href="Exercises6.html#7281" class="Bound">p</a> <a id="7283" class="Symbol">:</a> <a id="7285" href="Exercises6.html#7266" class="Bound">a1</a> <a id="7288" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="7290" href="Exercises6.html#7269" class="Bound">a2</a><a id="7292" class="Symbol">)</a> <a id="7294" class="Symbol">(</a><a id="7295" href="Exercises6.html#7295" class="Bound">q</a> <a id="7297" class="Symbol">:</a> <a id="7299" href="Exercises6.html#7269" class="Bound">a2</a> <a id="7302" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="7304" href="Exercises6.html#7272" class="Bound">a3</a><a id="7306" class="Symbol">)</a>
+                <a id="7324" class="Symbol">→</a> <a id="7326" href="new-prelude.html#1241" data-type="(A : X → Set l2) → x ≡ y → A x → A y" class="Function">transport</a> <a id="7336" href="Exercises6.html#7230" class="Bound">B</a> <a id="7338" class="Symbol">(</a><a id="7339" href="Exercises6.html#7281" class="Bound">p</a> <a id="7341" href="new-prelude.html#642" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function Operator">∙</a> <a id="7343" href="Exercises6.html#7295" class="Bound">q</a><a id="7344" class="Symbol">)</a> <a id="7346" href="new-prelude.html#1372" data-type="((x : A) → B x) → ((x : A) → B x) → Set (l1 ⊔ l2)" class="Function Operator">∼</a> <a id="7348" href="new-prelude.html#1241" data-type="(A : X → Set l2) → x ≡ y → A x → A y" class="Function">transport</a> <a id="7358" href="Exercises6.html#7230" class="Bound">B</a> <a id="7360" href="Exercises6.html#7295" class="Bound">q</a> <a id="7362" href="new-prelude.html#2059" data-type="((y : B) → C y) → (f : A → B) (x : A) → C (f x)" class="Function Operator">∘</a> <a id="7364" href="new-prelude.html#1241" data-type="(A : X → Set l2) → x ≡ y → A x → A y" class="Function">transport</a> <a id="7374" href="Exercises6.html#7230" class="Bound">B</a> <a id="7376" href="Exercises6.html#7281" class="Bound">p</a>
+<a id="7378" href="Exercises6.html#7185" data-type="(p : a1 ≡ a2) (q : a2 ≡ a3) →
+transport B (p ∙ q) ∼ (transport B q ∘ transport B p)" class="Function">transport-∙</a> <a id="7390" class="Symbol">=</a> <a id="7392" class="Hole">{!!}</a>
+</pre>
+<h2 id="calculating-the-loop-space">Calculating the loop space</h2>
+<p>First, we will assume a type F2 representing the free group on 2
+generators.</p>
+<p>ℤ is the free group on one generator, with 0 as the neutral element
+and succℤ corresponding to “addition” with the one generator. succℤ is
+an equivalence, with the inverse representing “addition” with -1.</p>
+<p>For other groups, it is somewhat more common to think of the group
+operation as “multiplication” rather than “addition”, so we will name
+the neutral element as “1” and the action of the elements as
+“multiplication”. Thus, we assume a type with an element 1F, and two
+equivalences, which we think of as “multiplication with generator 1” and
+“multiplication with generator 2”.</p>
+<p>Unscaffolded hard exercise: You can implement F2 as lists whose
+elements are a four-element type g1, g2, g1⁻¹, g2⁻¹ with no adjacent
+pairs of inverse elements. Then the forward directions of mult1/mult2
+will be implement by cons’ing g1/g2 on and “reducing” if that creates
+two adjacent inverses, the backwards directions by consing g1⁻¹ and g2⁻¹
+on and reducing, and the inverse laws will hold because the reduction
+cancels the inverses.</p>
+<p>For this problem, we will simply assume the nice universal property
+for this type: that it maps uniquely into any other type with a point
+and two equivalences, and that it is a set.</p>
+<pre class="Agda"><a id="8728" class="Keyword">module</a> <a id="AssumeF2"></a><a id="8735" href="Exercises6.html#8735" class="Module">AssumeF2</a> 
+    <a id="8749" class="Symbol">(</a><a id="8750" href="Exercises6.html#8750" class="Bound">F2</a> <a id="8753" class="Symbol">:</a> <a id="8755" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a><a id="8759" class="Symbol">)</a>
+    <a id="8765" class="Symbol">(</a><a id="8766" href="Exercises6.html#8766" class="Bound">1F</a> <a id="8769" class="Symbol">:</a> <a id="8771" href="Exercises6.html#8750" class="Bound">F2</a><a id="8773" class="Symbol">)</a>
+    <a id="8779" class="Symbol">(</a><a id="8780" href="Exercises6.html#8780" class="Bound">mult1</a> <a id="8786" class="Symbol">:</a> <a id="8788" href="Exercises6.html#8750" class="Bound">F2</a> <a id="8791" href="Lecture5-notes.html#968" data-type="(A : Set l1) (B : Set l2) → Set (l1 ⊔ l2)" class="Record Operator">≃</a> <a id="8793" href="Exercises6.html#8750" class="Bound">F2</a><a id="8795" class="Symbol">)</a>
+    <a id="8801" class="Symbol">(</a><a id="8802" href="Exercises6.html#8802" class="Bound">mult2</a> <a id="8808" class="Symbol">:</a> <a id="8810" href="Exercises6.html#8750" class="Bound">F2</a> <a id="8813" href="Lecture5-notes.html#968" data-type="(A : Set l1) (B : Set l2) → Set (l1 ⊔ l2)" class="Record Operator">≃</a> <a id="8815" href="Exercises6.html#8750" class="Bound">F2</a><a id="8817" class="Symbol">)</a>
+    <a id="8823" class="Symbol">(</a><a id="8824" href="Exercises6.html#8824" class="Bound">F2-rec</a> <a id="8831" class="Symbol">:</a> <a id="8833" class="Symbol">{</a><a id="8834" href="Exercises6.html#8834" class="Bound">X</a> <a id="8836" class="Symbol">:</a> <a id="8838" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a><a id="8842" class="Symbol">}</a>
+              <a id="8858" class="Symbol">(</a><a id="8859" href="Exercises6.html#8859" class="Bound">o</a> <a id="8861" class="Symbol">:</a> <a id="8863" href="Exercises6.html#8834" class="Bound">X</a><a id="8864" class="Symbol">)</a>
+              <a id="8880" class="Symbol">(</a><a id="8881" href="Exercises6.html#8881" class="Bound">m1</a> <a id="8884" class="Symbol">:</a> <a id="8886" href="Exercises6.html#8834" class="Bound">X</a> <a id="8888" href="Lecture5-notes.html#968" data-type="(A : Set l1) (B : Set l2) → Set (l1 ⊔ l2)" class="Record Operator">≃</a> <a id="8890" href="Exercises6.html#8834" class="Bound">X</a><a id="8891" class="Symbol">)</a>
+              <a id="8907" class="Symbol">(</a><a id="8908" href="Exercises6.html#8908" class="Bound">m2</a> <a id="8911" class="Symbol">:</a> <a id="8913" href="Exercises6.html#8834" class="Bound">X</a> <a id="8915" href="Lecture5-notes.html#968" data-type="(A : Set l1) (B : Set l2) → Set (l1 ⊔ l2)" class="Record Operator">≃</a> <a id="8917" href="Exercises6.html#8834" class="Bound">X</a><a id="8918" class="Symbol">)</a>
+            <a id="8932" class="Symbol">→</a> <a id="8934" href="Exercises6.html#8750" class="Bound">F2</a> <a id="8937" class="Symbol">→</a> <a id="8939" href="Exercises6.html#8834" class="Bound">X</a><a id="8940" class="Symbol">)</a>
+    <a id="8946" class="Symbol">(</a><a id="8947" href="Exercises6.html#8947" class="Bound">F2-rec-1</a> <a id="8956" class="Symbol">:</a> <a id="8958" class="Symbol">{</a><a id="8959" href="Exercises6.html#8959" class="Bound">X</a> <a id="8961" class="Symbol">:</a> <a id="8963" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a><a id="8967" class="Symbol">}</a>
+                <a id="8985" class="Symbol">(</a><a id="8986" href="Exercises6.html#8986" class="Bound">z</a> <a id="8988" class="Symbol">:</a> <a id="8990" href="Exercises6.html#8959" class="Bound">X</a><a id="8991" class="Symbol">)</a>
+                <a id="9009" class="Symbol">(</a><a id="9010" href="Exercises6.html#9010" class="Bound">m1</a> <a id="9013" class="Symbol">:</a> <a id="9015" href="Exercises6.html#8959" class="Bound">X</a> <a id="9017" href="Lecture5-notes.html#968" data-type="(A : Set l1) (B : Set l2) → Set (l1 ⊔ l2)" class="Record Operator">≃</a> <a id="9019" href="Exercises6.html#8959" class="Bound">X</a><a id="9020" class="Symbol">)</a>
+                <a id="9038" class="Symbol">(</a><a id="9039" href="Exercises6.html#9039" class="Bound">m2</a> <a id="9042" class="Symbol">:</a> <a id="9044" href="Exercises6.html#8959" class="Bound">X</a> <a id="9046" href="Lecture5-notes.html#968" data-type="(A : Set l1) (B : Set l2) → Set (l1 ⊔ l2)" class="Record Operator">≃</a> <a id="9048" href="Exercises6.html#8959" class="Bound">X</a><a id="9049" class="Symbol">)</a>
+              <a id="9065" class="Symbol">→</a> <a id="9067" href="Exercises6.html#8824" class="Bound">F2-rec</a> <a id="9074" href="Exercises6.html#8986" class="Bound">z</a> <a id="9076" href="Exercises6.html#9010" class="Bound">m1</a> <a id="9079" href="Exercises6.html#9039" class="Bound">m2</a> <a id="9082" href="Exercises6.html#8766" class="Bound">1F</a> <a id="9085" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="9087" href="Exercises6.html#8986" class="Bound">z</a><a id="9088" class="Symbol">)</a>
+    <a id="9094" class="Symbol">(</a><a id="9095" href="Exercises6.html#9095" class="Bound">F2-rec-mult1</a> <a id="9108" class="Symbol">:</a> <a id="9110" class="Symbol">{</a><a id="9111" href="Exercises6.html#9111" class="Bound">X</a> <a id="9113" class="Symbol">:</a> <a id="9115" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a><a id="9119" class="Symbol">}</a>
+                    <a id="9141" class="Symbol">(</a><a id="9142" href="Exercises6.html#9142" class="Bound">z</a> <a id="9144" class="Symbol">:</a> <a id="9146" href="Exercises6.html#9111" class="Bound">X</a><a id="9147" class="Symbol">)</a>
+                    <a id="9169" class="Symbol">(</a><a id="9170" href="Exercises6.html#9170" class="Bound">m1</a> <a id="9173" class="Symbol">:</a> <a id="9175" href="Exercises6.html#9111" class="Bound">X</a> <a id="9177" href="Lecture5-notes.html#968" data-type="(A : Set l1) (B : Set l2) → Set (l1 ⊔ l2)" class="Record Operator">≃</a> <a id="9179" href="Exercises6.html#9111" class="Bound">X</a><a id="9180" class="Symbol">)</a>
+                    <a id="9202" class="Symbol">(</a><a id="9203" href="Exercises6.html#9203" class="Bound">m2</a> <a id="9206" class="Symbol">:</a> <a id="9208" href="Exercises6.html#9111" class="Bound">X</a> <a id="9210" href="Lecture5-notes.html#968" data-type="(A : Set l1) (B : Set l2) → Set (l1 ⊔ l2)" class="Record Operator">≃</a> <a id="9212" href="Exercises6.html#9111" class="Bound">X</a><a id="9213" class="Symbol">)</a>
+                    <a id="9235" class="Symbol">(</a><a id="9236" href="Exercises6.html#9236" class="Bound">a</a> <a id="9238" class="Symbol">:</a> <a id="9240" href="Exercises6.html#8750" class="Bound">F2</a><a id="9242" class="Symbol">)</a> <a id="9244" class="Symbol">→</a> <a id="9246" href="Exercises6.html#8824" class="Bound">F2-rec</a> <a id="9253" href="Exercises6.html#9142" class="Bound">z</a> <a id="9255" href="Exercises6.html#9170" class="Bound">m1</a> <a id="9258" href="Exercises6.html#9203" class="Bound">m2</a> <a id="9261" class="Symbol">(</a><a id="9262" href="Lecture5-notes.html#1230" data-type="A ≃ B → A → B" class="Function">fwd</a> <a id="9266" href="Exercises6.html#8780" class="Bound">mult1</a> <a id="9272" href="Exercises6.html#9236" class="Bound">a</a><a id="9273" class="Symbol">)</a> <a id="9275" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="9277" href="Lecture5-notes.html#1230" data-type="A ≃ B → A → B" class="Function">fwd</a> <a id="9281" href="Exercises6.html#9170" class="Bound">m1</a> <a id="9284" class="Symbol">(</a><a id="9285" href="Exercises6.html#8824" class="Bound">F2-rec</a> <a id="9292" href="Exercises6.html#9142" class="Bound">z</a> <a id="9294" href="Exercises6.html#9170" class="Bound">m1</a> <a id="9297" href="Exercises6.html#9203" class="Bound">m2</a> <a id="9300" href="Exercises6.html#9236" class="Bound">a</a><a id="9301" class="Symbol">))</a>
+    <a id="9308" class="Symbol">(</a><a id="9309" href="Exercises6.html#9309" class="Bound">F2-rec-mult2</a> <a id="9322" class="Symbol">:</a> <a id="9324" class="Symbol">{</a><a id="9325" href="Exercises6.html#9325" class="Bound">X</a> <a id="9327" class="Symbol">:</a> <a id="9329" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a><a id="9333" class="Symbol">}</a>
+                    <a id="9355" class="Symbol">(</a><a id="9356" href="Exercises6.html#9356" class="Bound">z</a> <a id="9358" class="Symbol">:</a> <a id="9360" href="Exercises6.html#9325" class="Bound">X</a><a id="9361" class="Symbol">)</a>
+                    <a id="9383" class="Symbol">(</a><a id="9384" href="Exercises6.html#9384" class="Bound">m1</a> <a id="9387" class="Symbol">:</a> <a id="9389" href="Exercises6.html#9325" class="Bound">X</a> <a id="9391" href="Lecture5-notes.html#968" data-type="(A : Set l1) (B : Set l2) → Set (l1 ⊔ l2)" class="Record Operator">≃</a> <a id="9393" href="Exercises6.html#9325" class="Bound">X</a><a id="9394" class="Symbol">)</a>
+                    <a id="9416" class="Symbol">(</a><a id="9417" href="Exercises6.html#9417" class="Bound">m2</a> <a id="9420" class="Symbol">:</a> <a id="9422" href="Exercises6.html#9325" class="Bound">X</a> <a id="9424" href="Lecture5-notes.html#968" data-type="(A : Set l1) (B : Set l2) → Set (l1 ⊔ l2)" class="Record Operator">≃</a> <a id="9426" href="Exercises6.html#9325" class="Bound">X</a><a id="9427" class="Symbol">)</a>
+                    <a id="9449" class="Symbol">(</a><a id="9450" href="Exercises6.html#9450" class="Bound">a</a> <a id="9452" class="Symbol">:</a> <a id="9454" href="Exercises6.html#8750" class="Bound">F2</a><a id="9456" class="Symbol">)</a> <a id="9458" class="Symbol">→</a> <a id="9460" href="Exercises6.html#8824" class="Bound">F2-rec</a> <a id="9467" href="Exercises6.html#9356" class="Bound">z</a> <a id="9469" href="Exercises6.html#9384" class="Bound">m1</a> <a id="9472" href="Exercises6.html#9417" class="Bound">m2</a> <a id="9475" class="Symbol">(</a><a id="9476" href="Lecture5-notes.html#1230" data-type="A ≃ B → A → B" class="Function">fwd</a> <a id="9480" href="Exercises6.html#8802" class="Bound">mult2</a> <a id="9486" href="Exercises6.html#9450" class="Bound">a</a><a id="9487" class="Symbol">)</a> <a id="9489" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="9491" href="Lecture5-notes.html#1230" data-type="A ≃ B → A → B" class="Function">fwd</a> <a id="9495" href="Exercises6.html#9417" class="Bound">m2</a> <a id="9498" class="Symbol">(</a><a id="9499" href="Exercises6.html#8824" class="Bound">F2-rec</a> <a id="9506" href="Exercises6.html#9356" class="Bound">z</a> <a id="9508" href="Exercises6.html#9384" class="Bound">m1</a> <a id="9511" href="Exercises6.html#9417" class="Bound">m2</a> <a id="9514" href="Exercises6.html#9450" class="Bound">a</a><a id="9515" class="Symbol">))</a>
+    <a id="9522" class="Symbol">(</a><a id="9523" href="Exercises6.html#9523" class="Bound">F2-rec-unique</a> <a id="9537" class="Symbol">:</a> <a id="9539" class="Symbol">{</a><a id="9540" href="Exercises6.html#9540" class="Bound">X</a> <a id="9542" class="Symbol">:</a> <a id="9544" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a><a id="9548" class="Symbol">}</a>
+                    <a id="9570" class="Symbol">(</a><a id="9571" href="Exercises6.html#9571" class="Bound">f</a> <a id="9573" class="Symbol">:</a> <a id="9575" href="Exercises6.html#8750" class="Bound">F2</a> <a id="9578" class="Symbol">→</a> <a id="9580" href="Exercises6.html#9540" class="Bound">X</a><a id="9581" class="Symbol">)</a>
+                    <a id="9603" class="Symbol">(</a><a id="9604" href="Exercises6.html#9604" class="Bound">z</a> <a id="9606" class="Symbol">:</a> <a id="9608" href="Exercises6.html#9540" class="Bound">X</a><a id="9609" class="Symbol">)</a>
+                    <a id="9631" class="Symbol">(</a><a id="9632" href="Exercises6.html#9632" class="Bound">m1</a> <a id="9635" class="Symbol">:</a> <a id="9637" href="Exercises6.html#9540" class="Bound">X</a> <a id="9639" href="Lecture5-notes.html#968" data-type="(A : Set l1) (B : Set l2) → Set (l1 ⊔ l2)" class="Record Operator">≃</a> <a id="9641" href="Exercises6.html#9540" class="Bound">X</a><a id="9642" class="Symbol">)</a>
+                    <a id="9664" class="Symbol">(</a><a id="9665" href="Exercises6.html#9665" class="Bound">m2</a> <a id="9668" class="Symbol">:</a> <a id="9670" href="Exercises6.html#9540" class="Bound">X</a> <a id="9672" href="Lecture5-notes.html#968" data-type="(A : Set l1) (B : Set l2) → Set (l1 ⊔ l2)" class="Record Operator">≃</a> <a id="9674" href="Exercises6.html#9540" class="Bound">X</a><a id="9675" class="Symbol">)</a>
+                  <a id="9695" class="Symbol">→</a> <a id="9697" href="Exercises6.html#9571" class="Bound">f</a> <a id="9699" href="Exercises6.html#8766" class="Bound">1F</a> <a id="9702" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="9704" href="Exercises6.html#9604" class="Bound">z</a>
+                  <a id="9724" class="Symbol">→</a> <a id="9726" class="Symbol">((</a><a id="9728" href="Exercises6.html#9571" class="Bound">f</a> <a id="9730" href="new-prelude.html#2059" data-type="((y : B) → C y) → (f : A → B) (x : A) → C (f x)" class="Function Operator">∘</a> <a id="9732" href="Lecture5-notes.html#1230" data-type="A ≃ B → A → B" class="Function">fwd</a> <a id="9736" href="Exercises6.html#8780" class="Bound">mult1</a><a id="9741" class="Symbol">)</a> <a id="9743" href="new-prelude.html#1372" data-type="((x : A) → B x) → ((x : A) → B x) → Set (l1 ⊔ l2)" class="Function Operator">∼</a> <a id="9745" class="Symbol">(</a><a id="9746" href="Lecture5-notes.html#1230" data-type="A ≃ B → A → B" class="Function">fwd</a> <a id="9750" href="Exercises6.html#9632" class="Bound">m1</a> <a id="9753" href="new-prelude.html#2059" data-type="((y : B) → C y) → (f : A → B) (x : A) → C (f x)" class="Function Operator">∘</a> <a id="9755" href="Exercises6.html#9571" class="Bound">f</a><a id="9756" class="Symbol">))</a>
+                  <a id="9777" class="Symbol">→</a> <a id="9779" class="Symbol">((</a><a id="9781" href="Exercises6.html#9571" class="Bound">f</a> <a id="9783" href="new-prelude.html#2059" data-type="((y : B) → C y) → (f : A → B) (x : A) → C (f x)" class="Function Operator">∘</a> <a id="9785" href="Lecture5-notes.html#1230" data-type="A ≃ B → A → B" class="Function">fwd</a> <a id="9789" href="Exercises6.html#8802" class="Bound">mult2</a><a id="9794" class="Symbol">)</a> <a id="9796" href="new-prelude.html#1372" data-type="((x : A) → B x) → ((x : A) → B x) → Set (l1 ⊔ l2)" class="Function Operator">∼</a> <a id="9798" class="Symbol">(</a><a id="9799" href="Lecture5-notes.html#1230" data-type="A ≃ B → A → B" class="Function">fwd</a> <a id="9803" href="Exercises6.html#9665" class="Bound">m2</a> <a id="9806" href="new-prelude.html#2059" data-type="((y : B) → C y) → (f : A → B) (x : A) → C (f x)" class="Function Operator">∘</a> <a id="9808" href="Exercises6.html#9571" class="Bound">f</a><a id="9809" class="Symbol">))</a>
+                 <a id="9829" class="Symbol">→</a> <a id="9831" class="Symbol">(</a><a id="9832" href="Exercises6.html#9832" class="Bound">x</a> <a id="9834" class="Symbol">:</a> <a id="9836" href="Exercises6.html#8750" class="Bound">F2</a><a id="9838" class="Symbol">)</a> <a id="9840" class="Symbol">→</a> <a id="9842" href="Exercises6.html#9571" class="Bound">f</a> <a id="9844" href="Exercises6.html#9832" class="Bound">x</a> <a id="9846" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="9848" href="Exercises6.html#8824" class="Bound">F2-rec</a> <a id="9855" href="Exercises6.html#9604" class="Bound">z</a> <a id="9857" href="Exercises6.html#9632" class="Bound">m1</a> <a id="9860" href="Exercises6.html#9665" class="Bound">m2</a> <a id="9863" href="Exercises6.html#9832" class="Bound">x</a><a id="9864" class="Symbol">)</a>
+     <a id="9871" class="Symbol">(</a><a id="9872" href="Exercises6.html#9872" class="Bound">hSetF</a> <a id="9878" class="Symbol">:</a> <a id="9880" href="new-prelude.html#3115" data-type="Set l → Set l" class="Function">is-set</a> <a id="9887" href="Exercises6.html#8750" class="Bound">F2</a><a id="9889" class="Symbol">)</a> <a id="9891" class="Keyword">where</a>
+</pre>
+<p>(⋆⋆⋆) Prove that the loop space of the Bowtie is F2. Each bit of the
+proof will be analogous to the corresponding part of the Circle
+proof.</p>
+<pre class="Agda">    <a id="AssumeF2.Cover"></a><a id="10056" href="Exercises6.html#10056" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) →
+Bowtie → Set" class="Function">Cover</a> <a id="10062" class="Symbol">:</a> <a id="10064" href="Exercises6.html#1446" data-type="Set" class="Postulate">Bowtie</a> <a id="10071" class="Symbol">→</a> <a id="10073" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a>
+    <a id="10082" href="Exercises6.html#10056" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) →
+Bowtie → Set" class="Function">Cover</a> <a id="10088" class="Symbol">=</a> <a id="10090" class="Hole">{!!}</a>
+                  
+    <a id="AssumeF2.encode"></a><a id="10118" href="Exercises6.html#10118" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) (x : Bowtie) →
+baseB ≡ x →
+Cover F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1 F2-rec-mult2
+F2-rec-unique hSetF x" class="Function">encode</a> <a id="10125" class="Symbol">:</a> <a id="10127" class="Symbol">(</a><a id="10128" href="Exercises6.html#10128" class="Bound">x</a> <a id="10130" class="Symbol">:</a> <a id="10132" href="Exercises6.html#1446" data-type="Set" class="Postulate">Bowtie</a><a id="10138" class="Symbol">)</a> <a id="10140" class="Symbol">→</a> <a id="10142" href="Exercises6.html#1461" data-type="Bowtie" class="Postulate">baseB</a> <a id="10148" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="10150" href="Exercises6.html#10128" class="Bound">x</a> <a id="10152" class="Symbol">→</a> <a id="10154" href="Exercises6.html#10056" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) →
+Bowtie → Set" class="Function">Cover</a> <a id="10160" href="Exercises6.html#10128" class="Bound">x</a>
+    <a id="10166" href="Exercises6.html#10118" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) (x : Bowtie) →
+baseB ≡ x →
+Cover F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1 F2-rec-mult2
+F2-rec-unique hSetF x" class="Function">encode</a> <a id="10173" class="Symbol">=</a> <a id="10175" class="Hole">{!!}</a>
+
+    <a id="AssumeF2.decode"></a><a id="10185" href="Exercises6.html#10185" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) (x : Bowtie) →
+Cover F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1 F2-rec-mult2
+F2-rec-unique hSetF x →
+baseB ≡ x" class="Function">decode</a> <a id="10192" class="Symbol">:</a> <a id="10194" class="Symbol">(</a><a id="10195" href="Exercises6.html#10195" class="Bound">x</a> <a id="10197" class="Symbol">:</a> <a id="10199" href="Exercises6.html#1446" data-type="Set" class="Postulate">Bowtie</a><a id="10205" class="Symbol">)</a> <a id="10207" class="Symbol">→</a> <a id="10209" href="Exercises6.html#10056" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) →
+Bowtie → Set" class="Function">Cover</a> <a id="10215" href="Exercises6.html#10195" class="Bound">x</a> <a id="10217" class="Symbol">→</a> <a id="10219" href="Exercises6.html#1461" data-type="Bowtie" class="Postulate">baseB</a> <a id="10225" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="10227" href="Exercises6.html#10195" class="Bound">x</a>
+    <a id="10233" href="Exercises6.html#10185" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) (x : Bowtie) →
+Cover F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1 F2-rec-mult2
+F2-rec-unique hSetF x →
+baseB ≡ x" class="Function">decode</a> <a id="10240" class="Symbol">=</a> <a id="10242" class="Hole">{!!}</a>
+
+    <a id="AssumeF2.encode-decode"></a><a id="10252" href="Exercises6.html#10252" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) (x : Bowtie) (p : baseB ≡ x) →
+decode F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1 F2-rec-mult2
+F2-rec-unique hSetF x
+(encode F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1 F2-rec-mult2
+ F2-rec-unique hSetF x p)
+≡ p" class="Function">encode-decode</a> <a id="10266" class="Symbol">:</a> <a id="10268" class="Symbol">(</a><a id="10269" href="Exercises6.html#10269" class="Bound">x</a> <a id="10271" class="Symbol">:</a> <a id="10273" href="Exercises6.html#1446" data-type="Set" class="Postulate">Bowtie</a><a id="10279" class="Symbol">)</a> <a id="10281" class="Symbol">(</a><a id="10282" href="Exercises6.html#10282" class="Bound">p</a> <a id="10284" class="Symbol">:</a> <a id="10286" href="Exercises6.html#1461" data-type="Bowtie" class="Postulate">baseB</a> <a id="10292" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="10294" href="Exercises6.html#10269" class="Bound">x</a><a id="10295" class="Symbol">)</a> <a id="10297" class="Symbol">→</a> <a id="10299" href="Exercises6.html#10185" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) (x : Bowtie) →
+Cover F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1 F2-rec-mult2
+F2-rec-unique hSetF x →
+baseB ≡ x" class="Function">decode</a> <a id="10306" href="Exercises6.html#10269" class="Bound">x</a> <a id="10308" class="Symbol">(</a><a id="10309" href="Exercises6.html#10118" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) (x : Bowtie) →
+baseB ≡ x →
+Cover F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1 F2-rec-mult2
+F2-rec-unique hSetF x" class="Function">encode</a> <a id="10316" href="Exercises6.html#10269" class="Bound">x</a> <a id="10318" href="Exercises6.html#10282" class="Bound">p</a><a id="10319" class="Symbol">)</a> <a id="10321" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="10323" href="Exercises6.html#10282" class="Bound">p</a>
+    <a id="10329" href="Exercises6.html#10252" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) (x : Bowtie) (p : baseB ≡ x) →
+decode F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1 F2-rec-mult2
+F2-rec-unique hSetF x
+(encode F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1 F2-rec-mult2
+ F2-rec-unique hSetF x p)
+≡ p" class="Function">encode-decode</a> <a id="10343" class="Symbol">=</a> <a id="10345" class="Hole">{!!}</a>
+
+    <a id="AssumeF2.decode-encode"></a><a id="10355" href="Exercises6.html#10355" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) (x : Bowtie)
+(p
+ : Cover F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1 F2-rec-mult2
+   F2-rec-unique hSetF x) →
+encode F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1 F2-rec-mult2
+F2-rec-unique hSetF x
+(decode F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1 F2-rec-mult2
+ F2-rec-unique hSetF x p)
+≡ p" class="Function">decode-encode</a> <a id="10369" class="Symbol">:</a> <a id="10371" class="Symbol">(</a><a id="10372" href="Exercises6.html#10372" class="Bound">x</a> <a id="10374" class="Symbol">:</a> <a id="10376" href="Exercises6.html#1446" data-type="Set" class="Postulate">Bowtie</a><a id="10382" class="Symbol">)</a> <a id="10384" class="Symbol">(</a><a id="10385" href="Exercises6.html#10385" class="Bound">p</a> <a id="10387" class="Symbol">:</a> <a id="10389" href="Exercises6.html#10056" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) →
+Bowtie → Set" class="Function">Cover</a> <a id="10395" href="Exercises6.html#10372" class="Bound">x</a><a id="10396" class="Symbol">)</a> <a id="10398" class="Symbol">→</a> <a id="10400" href="Exercises6.html#10118" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) (x : Bowtie) →
+baseB ≡ x →
+Cover F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1 F2-rec-mult2
+F2-rec-unique hSetF x" class="Function">encode</a> <a id="10407" href="Exercises6.html#10372" class="Bound">x</a> <a id="10409" class="Symbol">(</a><a id="10410" href="Exercises6.html#10185" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) (x : Bowtie) →
+Cover F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1 F2-rec-mult2
+F2-rec-unique hSetF x →
+baseB ≡ x" class="Function">decode</a> <a id="10417" href="Exercises6.html#10372" class="Bound">x</a> <a id="10419" href="Exercises6.html#10385" class="Bound">p</a><a id="10420" class="Symbol">)</a> <a id="10422" href="new-prelude.html#449" data-type="A → A → Set l" class="Datatype Operator">≡</a> <a id="10424" href="Exercises6.html#10385" class="Bound">p</a>
+    <a id="10430" href="Exercises6.html#10355" data-type="(F2 : Set) (1F : F2) (mult1 mult2 : F2 ≃ F2)
+(F2-rec : X → X ≃ X → X ≃ X → F2 → X)
+(F2-rec-1 : (z : X) (m1 m2 : X ≃ X) → F2-rec z m1 m2 1F ≡ z)
+(F2-rec-mult1
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult1 a) ≡ fwd m1 (F2-rec z m1 m2 a))
+(F2-rec-mult2
+ : (z : X) (m1 m2 : X ≃ X) (a : F2) →
+   F2-rec z m1 m2 (fwd mult2 a) ≡ fwd m2 (F2-rec z m1 m2 a))
+(F2-rec-unique
+ : (f : F2 → X) (z : X) (m1 m2 : X ≃ X) →
+   f 1F ≡ z →
+   (f ∘ fwd mult1) ∼ (fwd m1 ∘ f) →
+   (f ∘ fwd mult2) ∼ (fwd m2 ∘ f) → (x : F2) → f x ≡ F2-rec z m1 m2 x)
+(hSetF : is-set F2) (x : Bowtie)
+(p
+ : Cover F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1 F2-rec-mult2
+   F2-rec-unique hSetF x) →
+encode F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1 F2-rec-mult2
+F2-rec-unique hSetF x
+(decode F2 1F mult1 mult2 F2-rec F2-rec-1 F2-rec-mult1 F2-rec-mult2
+ F2-rec-unique hSetF x p)
+≡ p" class="Function">decode-encode</a> <a id="10444" class="Symbol">=</a> <a id="10446" class="Hole">{!!}</a>
+    
+</pre>
+
+  </article>
+</div>
+</main>
+</body>
+<style>
+
+:root {
+  --text-bg: #fff;
+  --text-fg: #222;
+  --shadow: #000;
+  --primary: #0054F4;
+  --secondary: #9C1BD6;
+  --modal-bg: #ccccccaa;
+  --warning-bg: #fef08a;
+  --code-bg: var(--text-bg);
+  --code-fg: var(--text-fg);
+  --code-keyword: #BB3B13;
+  --code-string:  #d52753;
+  --code-number:  #8A1060;
+  --code-module:  #8A1060;
+  --code-field:   #9C1BD6;
+  --code-constructor: #207B1D;
+  --code-highlight: #F5DEB3;
+  --search-selected: #e2e8f0;
+  --details-summary: #b2ebf2;
+  --details-open:    #80deea;
+  --depgraph-edge: #eee;
+  --blockquote-bg: #d8b4fe; }
+
+.diagram-dark {
+  display: none !important; }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-bg: #282C34;
+    --text-fg: #bfbfbf;
+    --shadow: #475569;
+    --primary: #61AFEF;
+    --secondary: #C878DD;
+    --modal-bg: #282C34aa;
+    --warning-bg: #991b1b;
+    --code-keyword:     #E5C07B;
+    --code-string:      #E06C75;
+    --code-number:      #98C379;
+    --code-module:      #56B6C2;
+    --code-field:       #C878DD;
+    --code-constructor: #98C379;
+    --code-highlight: #ef444499;
+    --search-selected: #474e5e;
+    --details-summary: #5b21b6;
+    --details-open:    #4c1d95;
+    --depgraph-edge: #474e5e;
+    --blockquote-bg: #475569; }
+  div.warning {
+    --shadow: #7f1d1d
+  ; }
+  input {
+    background-color: #334155;
+    border: 1px solid #475569;
+    color: var(--text-fg); }
+  body {
+    scrollbar-color: #3b4454 #2b2e33; }
+  .diagram-dark {
+    display: block !important; }
+  .diagram-light {
+    display: none !important; } }
+
+table {
+  margin: auto;
+  border-collapse: collapse; }
+  table td, table th {
+    text-align: center;
+    padding: 0px 1em 0px 1em;
+    border: 1px solid black; }
+  table th {
+    border-bottom: 2px solid black; }
+  table td {
+    white-space: nowrap; }
+
+html { max-width: 100%; }
+
+body {
+  font-family: "Inria Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  width: 100%;
+  font-size: var(--font-size);
+  overflow-x: clip;
+  background-color: var(--text-bg);
+  color: var(--text-fg);
+}
+
+div#post-toc-container { max-width: 120ch; margin: auto; }
+
+article a[href], div#return > a[href], div#top > a[href], aside#toc > div#toc-container ul a[href] {
+  color: var(--primary);
+  text-decoration: none; }
+  article a[href]:hover, div#return > a[href]:hover, div#top > a[href]:hover, aside#toc > div#toc-container ul a[href]:hover {
+    text-decoration: 2px currentColor underline !important; }
+  article a[href]:visited, div#return > a[href]:visited, div#top > a[href]:visited, aside#toc > div#toc-container ul a[href]:visited {
+    color: var(--secondary); }
+
+/* Aspects. */
+.Agda {
+  /* NameKinds. */
+  /* OtherAspects. */
+  /* Standard attributes. */
+  font-family: 'iosevka', 'Iosevka', 'Fantasque Sans Mono', 'Roboto Mono', monospace;
+  font-weight: 400; }
+  .Agda .Comment {
+    color: var(--code-fg);
+    font-style: italic; }
+  .Agda .Background {
+    background-color: var(--code-bg); }
+  .Agda .Markup {
+    color: var(--code-fg); }
+  .Agda .Keyword {
+    color: var(--code-keyword); }
+  .Agda .String {
+    color: var(--code-string); }
+  .Agda .Number {
+    color: var(--code-number); }
+  .Agda .Symbol {
+    color: var(--code-fg); }
+  .Agda .PrimitiveType {
+    color: var(--primary); }
+  .Agda .Pragma {
+    color: var(--code-fg); }
+  .Agda .Bound {
+    color: var(--code-fg) !important; }
+  .Agda .Generalizable {
+    color: var(--code-fg) !important; }
+  .Agda .InductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .CoinductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .Datatype {
+    color: var(--primary) !important; }
+  .Agda .Field {
+    color: var(--code-field) !important; }
+  .Agda .Function {
+    color: var(--primary) !important; }
+  .Agda .Module {
+    color: var(--code-module) !important; }
+  .Agda .Postulate {
+    color: var(--primary) !important; }
+  .Agda .Primitive {
+    color: var(--primary) !important; }
+  .Agda .Record {
+    color: var(--primary) !important; }
+  .Agda .UnsolvedMeta {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .UnsolvedConstraint {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .TerminationProblem {
+    color: var(--code-fg);
+    background: #FFA07A; }
+  .Agda .IncompletePattern {
+    color: var(--code-fg);
+    background: #F5DEB3; }
+  .Agda .Error {
+    color: red;
+    text-decoration: underline; }
+  .Agda .TypeChecks {
+    color: var(--code-fg);
+    background: #ADD8E6; }
+  .Agda .ShadowingInTelescope {
+    color: var(--code-fg);
+    background: #808080; }
+  .Agda .Deadcode {
+    color: var(--code-keyword);
+    font-weight: bold; }
+  .Agda a {
+    text-decoration: none; }
+  .Agda a[href]:hover {
+    text-decoration: 2px var(--primary) underline; }
+  .Agda a[href]:target {
+    animation: highlight 2.5s; }
+  body.text-page .Agda {
+    font-size: var(--code-font-size); }
+
+pre.Agda, div.sourceCode, pre {
+  border-radius: 0;
+  box-shadow: none;
+  overflow-y: clip;
+  margin: 0;
+  padding: 1em;
+  padding-top: 0.25em;
+  padding-bottom: 0.25em;
+  background-color: var(--code-bg);
+  color: var(--code-fg);
+  font-size: var(--code-font-size);
+  max-width: 100%;
+  overflow-x: auto;
+}
+</style>
+</html>
