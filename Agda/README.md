@@ -1,7 +1,3 @@
-[Martin Escardo](Https://www.Cs.Bham.Ac.Uk/~mhe/).
-Notes originally written for the module *Advanced Functional Programming*
-at the [School of Computer Science](https://www.birmingham.ac.uk/schools/computer-science/index.aspx) of the [University of Birmingham](https://www.birmingham.ac.uk/index.aspx), UK.
-
 ## [Preferred link to see these lecture notes](https://martinescardo.github.io/HoTTEST-Summer-School/)
 
 ## [Download the Agda files as a zip file](https://github.com/martinescardo/HoTTEST-Summer-School/archive/refs/heads/main.zip)
