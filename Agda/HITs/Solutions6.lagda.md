@@ -188,9 +188,6 @@ confusing, you might first do the proof without these lemmas
 to motivate them.  
 
 ```agda
-id≃ : ∀ {A : Type} → A ≃ A
-id≃ = Equivalence ((\ x → x)) (Inverse (\ x → x) (\ _ → refl _) (\ x → x) (\ _ → refl _))
-
 concat-equiv : ∀ {A : Type} (a : A) {a' a'' : A}
                      → (p : a' ≡ a'')
                      → (a ≡ a') ≃ (a ≡ a'')
