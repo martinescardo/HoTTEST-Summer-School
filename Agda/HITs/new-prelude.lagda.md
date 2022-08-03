@@ -140,4 +140,8 @@ record Unit {l : Level} : Type l where
 𝟙 : Type
 𝟙 = Unit {lzero}
 
+data ℕ : Type where
+ zero : ℕ
+ suc  : ℕ → ℕ
+
 ```
