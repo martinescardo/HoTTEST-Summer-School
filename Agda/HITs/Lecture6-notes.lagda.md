@@ -30,7 +30,7 @@ There is already a converse to this map: to turn a path X ≡ Y into and
 equivalence, we can do path induction to contract X to Y, and then
 return the identity equivalence X ≃ X.  Call this path-to-equiv:
 
-```
+```agda
 id≃ : ∀ {A : Type} → A ≃ A
 id≃ = Equivalence ((\ x → x)) (Inverse (\ x → x) (\ _ → refl _) (\ x → x) (\ _ → refl _))
 
@@ -65,7 +65,7 @@ In class, we will prove these as they come up in the proof, but they
 need to be lifted outside of the AssumeInts module for the exercises
 code to work, since they don't actually depend on those assumptions.  
 
-```
+```agda
 transport-ap-assoc : {A : Type} (C : A → Type) {a a' : A} (p : a ≡ a') {x : C a}
                        → transport C p x ≡ transport (\ X → X) (ap C p) x
 transport-ap-assoc C (refl _) = refl _
@@ -246,7 +246,7 @@ family/fibrations over S1, where transporting in that type family
 converts paths to ints.  This is where the universal cover of the
 circle/the helix comes in:
 
-```
+```agda
   Cover : S1 → Type
   Cover = S1-rec ℤ (ua succℤ)
 ```
@@ -273,7 +273,7 @@ Now we can define
 
 For the other direction, we need to use S1-elim:
 
-```
+```agda
   decode : (x : S1) → Cover x → base ≡ x
   decode = S1-elim _
                    loop^
@@ -284,7 +284,7 @@ For the other direction, we need to use S1-elim:
 
 One composite is easy by path induction:
 
-```
+```agda
   encode-decode : (x : S1) (p : base ≡ x) → decode x (encode x p) ≡ p
   encode-decode .base (refl base) = ℤ-rec-0ℤ _ _
 ```
@@ -296,7 +296,7 @@ For the other composite, we do circle induction, use the uniqueness
 principle for maps out of ℤ, and use the fact that ℤ is a set to easily
 finish the final goal:
 
-```
+```agda
   endo-ℤ-is-id : (f : ℤ → ℤ)
                → f 0ℤ ≡ 0ℤ
                → (f ∘ fwd succℤ) ∼ (fwd succℤ ∘ f)
