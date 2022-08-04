@@ -2,6 +2,7 @@
 {-# OPTIONS --without-K --safe #-}
 
 module lecture1 where
+import introduction
 
 Type = Set
 Type₁ = Set₁
@@ -55,13 +56,17 @@ data ℕ : Type where
 three : ℕ
 three = suc (suc (suc zero))
 
-{-# BUILTIN NATURAL ℕ #-}
+-- {-# BUILTIN NATURAL ℕ #-}
+-- for technical reasons we can not have this binding here. however
+-- there is already a type ℕ in the introduction module which /does/
+-- support numeral notation. we are careful not to use the ℕ type
+-- defined in this module again.
 
-three' : ℕ
+three' : introduction.ℕ
 three' = 3 -- synonym for the above
 
 D : Bool → Type
-D true  = ℕ
+D true  = introduction.ℕ
 D false = Bool
 
 -- "mix-fix" operator (3rd sense of "_" in Agda)
@@ -91,16 +96,16 @@ infixr 10 _::_
 ff : Type → Type
 ff = List
 
-sample-list₀ : List ℕ
+sample-list₀ : List introduction.ℕ
 sample-list₀ = 0 :: 1 :: 2 :: []
 
 length : {X : Type} → List X → ℕ
-length []        = 0
+length []        = zero
 length (x :: xs) = suc (length xs)
 
 -- Principle of induction on ℕ
 ℕ-elim : {A : ℕ → Type}
-       → A 0 -- base case
+       → A zero -- base case
        → ((k : ℕ) → A k → A (suc k)) -- induction step
        → (n : ℕ) → A n
 ℕ-elim {A} a₀ f = h
@@ -113,7 +118,7 @@ length (x :: xs) = suc (length xs)
     IH = h n
 
 ℕ-elim' : {A : ℕ → Type}
-       → A 0 -- base case
+       → A zero -- base case
        → ((k : ℕ) → A k → A (suc k)) -- induction step
        → (n : ℕ) → A n
 ℕ-elim' {A} a₀ f zero    = a₀

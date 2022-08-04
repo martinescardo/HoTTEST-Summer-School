@@ -11,8 +11,9 @@ module lecture3 where
 --       Characterization of equality in Σ types.
 
 
-open import lecture1 hiding (𝟘 ; 𝟙 ; ⋆ ; D ; _≣_)
+open import lecture1 hiding (𝟘 ; 𝟙 ; ⋆ ; D ; _≣_ ; ℕ)
 open import lecture2 using (is-prime ; _*_ ; 𝟘 ; 𝟙 ; ⋆ ; _≥_)
+open import introduction using (ℕ ; zero ; suc ; _+_)
 
 -- Give Σ a universe-polymorphic type
 
@@ -306,8 +307,8 @@ bb = (6 , (2 , 3) , refl 6)
 
 To prove that aa ≢ bb, we need to know that ℕ is a set! And this is
 difficult. See the module
-[Hedbergs-Theorem](../Lecture-Notes/Hedbergs-Theorem.lagda.md) for a
-complete proof.
+[Hedbergs-Theorem](../Lecture-Notes/files/Hedbergs-Theorem.lagda.md) for
+a complete proof.
 
 For the moment we just assume that ℕ is a set, and prove that 3 ≢ 2 by
 cheating (produce a genuine MLTT proof as an exercise).
