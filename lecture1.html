@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>HoTTEST Summer School 2022 Lecture Notes</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+</head>
+
+<body class="text-page">
+<main>
+<div id="post-toc-container" style="padding-left: 1em; padding-right: 1em;">
+
+  <article>
+
+<pre class="Agda"><a id="9" class="Symbol">{-#</a> <a id="13" class="Keyword">OPTIONS</a> <a id="21" class="Pragma">--without-K</a> <a id="33" class="Pragma">--safe</a> <a id="40" class="Symbol">#-}</a>
+
+<a id="45" class="Keyword">module</a> <a id="52" href="lecture1.html" class="Module">lecture1</a> <a id="61" class="Keyword">where</a>
+<a id="67" class="Keyword">import</a> <a id="74" href="introduction.html" class="Module">introduction</a>
+
+<a id="Type"></a><a id="88" href="lecture1.html#88" data-type="Set₁" class="Function">Type</a> <a id="93" class="Symbol">=</a> <a id="95" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Set</a>
+<a id="Type₁"></a><a id="99" href="lecture1.html#99" data-type="Set₂" class="Function">Type₁</a> <a id="105" class="Symbol">=</a> <a id="107" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Set₁</a>
+
+<a id="113" class="Keyword">data</a> <a id="Bool"></a><a id="118" href="lecture1.html#118" data-type="Set" class="Datatype">Bool</a> <a id="123" class="Symbol">:</a> <a id="125" href="lecture1.html#88" data-type="Set₁" class="Function">Type</a> <a id="130" class="Keyword">where</a>
+ <a id="Bool.true"></a><a id="137" href="lecture1.html#137" data-type="Bool" class="InductiveConstructor">true</a> <a id="Bool.false"></a><a id="142" href="lecture1.html#142" data-type="Bool" class="InductiveConstructor">false</a> <a id="148" class="Symbol">:</a> <a id="150" href="lecture1.html#118" data-type="Set" class="Datatype">Bool</a>
+
+<a id="156" class="Comment">-- Type &quot;→&quot; as &quot;\to&quot; or &quot;\-&gt;&quot;</a>
+<a id="not"></a><a id="186" href="lecture1.html#186" data-type="Bool → Bool" class="Function">not</a> <a id="190" class="Symbol">:</a> <a id="192" href="lecture1.html#118" data-type="Set" class="Datatype">Bool</a> <a id="197" class="Symbol">→</a> <a id="199" href="lecture1.html#118" data-type="Set" class="Datatype">Bool</a>
+<a id="204" href="lecture1.html#186" data-type="Bool → Bool" class="Function">not</a> <a id="208" href="lecture1.html#137" data-type="Bool" class="InductiveConstructor">true</a>  <a id="214" class="Symbol">=</a> <a id="216" href="lecture1.html#142" data-type="Bool" class="InductiveConstructor">false</a>
+<a id="222" href="lecture1.html#186" data-type="Bool → Bool" class="Function">not</a> <a id="226" href="lecture1.html#142" data-type="Bool" class="InductiveConstructor">false</a> <a id="232" class="Symbol">=</a> <a id="234" href="lecture1.html#137" data-type="Bool" class="InductiveConstructor">true</a>
+
+<a id="idBool"></a><a id="240" href="lecture1.html#240" data-type="Bool → Bool" class="Function">idBool</a> <a id="247" class="Symbol">:</a> <a id="249" href="lecture1.html#118" data-type="Set" class="Datatype">Bool</a> <a id="254" class="Symbol">→</a> <a id="256" href="lecture1.html#118" data-type="Set" class="Datatype">Bool</a>
+<a id="261" href="lecture1.html#240" data-type="Bool → Bool" class="Function">idBool</a> <a id="268" href="lecture1.html#268" class="Bound">x</a> <a id="270" class="Symbol">=</a> <a id="272" href="lecture1.html#268" class="Bound">x</a>
+
+<a id="idBool&#39;"></a><a id="275" href="lecture1.html#275" data-type="Bool → Bool" class="Function">idBool&#39;</a> <a id="283" class="Symbol">:</a> <a id="285" href="lecture1.html#118" data-type="Set" class="Datatype">Bool</a> <a id="290" class="Symbol">→</a> <a id="292" href="lecture1.html#118" data-type="Set" class="Datatype">Bool</a>
+<a id="297" href="lecture1.html#275" data-type="Bool → Bool" class="Function">idBool&#39;</a> <a id="305" class="Symbol">=</a> <a id="307" class="Symbol">λ</a> <a id="309" class="Symbol">(</a><a id="310" href="lecture1.html#310" class="Bound">x</a> <a id="312" class="Symbol">:</a> <a id="314" href="lecture1.html#118" data-type="Set" class="Datatype">Bool</a><a id="318" class="Symbol">)</a> <a id="320" class="Symbol">→</a> <a id="322" href="lecture1.html#310" class="Bound">x</a>
+
+<a id="325" class="Comment">-- The following is a Π type</a>
+<a id="id&#39;"></a><a id="354" href="lecture1.html#354" data-type="(X : Type) → X → X" class="Function">id&#39;</a> <a id="358" class="Symbol">:</a> <a id="360" class="Symbol">(</a><a id="361" href="lecture1.html#361" class="Bound">X</a> <a id="363" class="Symbol">:</a> <a id="365" href="lecture1.html#88" data-type="Set₁" class="Function">Type</a><a id="369" class="Symbol">)</a> <a id="371" class="Symbol">→</a> <a id="373" href="lecture1.html#361" class="Bound">X</a> <a id="375" class="Symbol">→</a> <a id="377" href="lecture1.html#361" class="Bound">X</a>
+<a id="379" href="lecture1.html#354" data-type="(X : Type) → X → X" class="Function">id&#39;</a> <a id="383" href="lecture1.html#383" class="Bound">X</a> <a id="385" href="lecture1.html#385" class="Bound">x</a> <a id="387" class="Symbol">=</a> <a id="389" href="lecture1.html#385" class="Bound">x</a>
+
+<a id="392" class="Comment">-- Implicit</a>
+<a id="id"></a><a id="404" href="lecture1.html#404" data-type="X → X" class="Function">id</a> <a id="407" class="Symbol">:</a> <a id="409" class="Symbol">{</a><a id="410" href="lecture1.html#410" class="Bound">X</a> <a id="412" class="Symbol">:</a> <a id="414" href="lecture1.html#88" data-type="Set₁" class="Function">Type</a><a id="418" class="Symbol">}</a> <a id="420" class="Symbol">→</a> <a id="422" href="lecture1.html#410" class="Bound">X</a> <a id="424" class="Symbol">→</a> <a id="426" href="lecture1.html#410" class="Bound">X</a>
+<a id="428" href="lecture1.html#404" data-type="X → X" class="Function">id</a> <a id="431" href="lecture1.html#431" class="Bound">x</a> <a id="433" class="Symbol">=</a> <a id="435" href="lecture1.html#431" class="Bound">x</a>
+
+<a id="idBool&#39;&#39;"></a><a id="438" href="lecture1.html#438" data-type="Bool → Bool" class="Function">idBool&#39;&#39;</a> <a id="447" class="Symbol">:</a> <a id="449" href="lecture1.html#118" data-type="Set" class="Datatype">Bool</a> <a id="454" class="Symbol">→</a> <a id="456" href="lecture1.html#118" data-type="Set" class="Datatype">Bool</a>
+<a id="461" href="lecture1.html#438" data-type="Bool → Bool" class="Function">idBool&#39;&#39;</a> <a id="470" class="Symbol">=</a> <a id="472" href="lecture1.html#354" data-type="(X : Type) → X → X" class="Function">id&#39;</a> <a id="476" class="Symbol">_</a>
+
+<a id="479" class="Comment">-- &quot;propositions as types&quot; &quot;mathematical statements as types&quot;</a>
+<a id="example"></a><a id="541" href="lecture1.html#541" data-type="P → Q → P" class="Function">example</a> <a id="549" class="Symbol">:</a> <a id="551" class="Symbol">{</a><a id="552" href="lecture1.html#552" class="Bound">P</a> <a id="554" href="lecture1.html#554" class="Bound">Q</a> <a id="556" class="Symbol">:</a> <a id="558" href="lecture1.html#88" data-type="Set₁" class="Function">Type</a><a id="562" class="Symbol">}</a> <a id="564" class="Symbol">→</a> <a id="566" href="lecture1.html#552" class="Bound">P</a> <a id="568" class="Symbol">→</a> <a id="570" class="Symbol">(</a><a id="571" href="lecture1.html#554" class="Bound">Q</a> <a id="573" class="Symbol">→</a> <a id="575" href="lecture1.html#552" class="Bound">P</a><a id="576" class="Symbol">)</a>
+<a id="578" href="lecture1.html#541" data-type="P → Q → P" class="Function">example</a> <a id="586" class="Symbol">{</a><a id="587" href="lecture1.html#587" class="Bound">P</a><a id="588" class="Symbol">}</a> <a id="590" class="Symbol">{</a><a id="591" href="lecture1.html#591" class="Bound">Q</a><a id="592" class="Symbol">}</a> <a id="594" href="lecture1.html#594" class="Bound">p</a> <a id="596" class="Symbol">=</a> <a id="598" href="lecture1.html#609" data-type="(p : P) → Q → P" class="Function">f</a>
+ <a id="601" class="Keyword">where</a>
+  <a id="609" href="lecture1.html#609" data-type="(p : P) → Q → P" class="Function">f</a> <a id="611" class="Symbol">:</a> <a id="613" href="lecture1.html#591" class="Bound">Q</a> <a id="615" class="Symbol">→</a> <a id="617" href="lecture1.html#587" class="Bound">P</a>
+  <a id="621" href="lecture1.html#609" data-type="(p : P) → Q → P" class="Function">f</a> <a id="623" class="Symbol">_</a> <a id="625" class="Symbol">=</a> <a id="627" href="lecture1.html#594" class="Bound">p</a>
+
+<a id="example&#39;"></a><a id="630" href="lecture1.html#630" data-type="P → Q → P" class="Function">example&#39;</a> <a id="639" class="Symbol">:</a> <a id="641" class="Symbol">{</a><a id="642" href="lecture1.html#642" class="Bound">P</a> <a id="644" href="lecture1.html#644" class="Bound">Q</a> <a id="646" class="Symbol">:</a> <a id="648" href="lecture1.html#88" data-type="Set₁" class="Function">Type</a><a id="652" class="Symbol">}</a> <a id="654" class="Symbol">→</a> <a id="656" href="lecture1.html#642" class="Bound">P</a> <a id="658" class="Symbol">→</a> <a id="660" class="Symbol">(</a><a id="661" href="lecture1.html#644" class="Bound">Q</a> <a id="663" class="Symbol">→</a> <a id="665" href="lecture1.html#642" class="Bound">P</a><a id="666" class="Symbol">)</a>
+<a id="668" href="lecture1.html#630" data-type="P → Q → P" class="Function">example&#39;</a> <a id="677" href="lecture1.html#677" class="Bound">p</a> <a id="679" class="Symbol">=</a> <a id="681" class="Symbol">λ</a> <a id="683" href="lecture1.html#683" class="Bound">q</a> <a id="685" class="Symbol">→</a> <a id="687" href="lecture1.html#677" class="Bound">p</a>
+
+<a id="690" class="Keyword">open</a> <a id="695" class="Keyword">import</a> <a id="702" href="binary-products.html" class="Module">binary-products</a>
+
+<a id="719" class="Comment">-- &quot;×&quot; is &quot;and&quot; in propositions as types</a>
+<a id="ex"></a><a id="760" href="lecture1.html#760" data-type="P × Q → Q × P" class="Function">ex</a> <a id="763" class="Symbol">:</a> <a id="765" class="Symbol">{</a><a id="766" href="lecture1.html#766" class="Bound">P</a> <a id="768" href="lecture1.html#768" class="Bound">Q</a> <a id="770" class="Symbol">:</a> <a id="772" href="lecture1.html#88" data-type="Set₁" class="Function">Type</a><a id="776" class="Symbol">}</a> <a id="778" class="Symbol">→</a> <a id="780" href="lecture1.html#766" class="Bound">P</a> <a id="782" href="binary-products.html#670" data-type="Type → Type → Type" class="Function Operator">×</a> <a id="784" href="lecture1.html#768" class="Bound">Q</a> <a id="786" class="Symbol">→</a> <a id="788" href="lecture1.html#768" class="Bound">Q</a> <a id="790" href="binary-products.html#670" data-type="Type → Type → Type" class="Function Operator">×</a> <a id="792" href="lecture1.html#766" class="Bound">P</a>
+<a id="794" href="lecture1.html#760" data-type="P × Q → Q × P" class="Function">ex</a> <a id="797" class="Symbol">(</a><a id="798" href="lecture1.html#798" class="Bound">p</a> <a id="800" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="802" href="lecture1.html#802" class="Bound">q</a><a id="803" class="Symbol">)</a> <a id="805" class="Symbol">=</a> <a id="807" class="Symbol">(</a><a id="808" href="lecture1.html#802" class="Bound">q</a> <a id="810" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="812" href="lecture1.html#798" class="Bound">p</a><a id="813" class="Symbol">)</a>
+
+<a id="816" class="Comment">-- \bN</a>
+<a id="823" class="Keyword">data</a> <a id="ℕ"></a><a id="828" href="lecture1.html#828" data-type="Set" class="Datatype">ℕ</a> <a id="830" class="Symbol">:</a> <a id="832" href="lecture1.html#88" data-type="Set₁" class="Function">Type</a> <a id="837" class="Keyword">where</a>
+ <a id="ℕ.zero"></a><a id="844" href="lecture1.html#844" data-type="ℕ" class="InductiveConstructor">zero</a> <a id="849" class="Symbol">:</a> <a id="851" href="lecture1.html#828" data-type="Set" class="Datatype">ℕ</a>
+ <a id="ℕ.suc"></a><a id="854" href="lecture1.html#854" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a>  <a id="859" class="Symbol">:</a> <a id="861" href="lecture1.html#828" data-type="Set" class="Datatype">ℕ</a> <a id="863" class="Symbol">→</a> <a id="865" href="lecture1.html#828" data-type="Set" class="Datatype">ℕ</a>
+
+<a id="three"></a><a id="868" href="lecture1.html#868" data-type="ℕ" class="Function">three</a> <a id="874" class="Symbol">:</a> <a id="876" href="lecture1.html#828" data-type="Set" class="Datatype">ℕ</a>
+<a id="878" href="lecture1.html#868" data-type="ℕ" class="Function">three</a> <a id="884" class="Symbol">=</a> <a id="886" href="lecture1.html#854" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="890" class="Symbol">(</a><a id="891" href="lecture1.html#854" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="895" class="Symbol">(</a><a id="896" href="lecture1.html#854" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="900" href="lecture1.html#844" data-type="ℕ" class="InductiveConstructor">zero</a><a id="904" class="Symbol">))</a>
+
+<a id="908" class="Comment">-- {-# BUILTIN NATURAL ℕ #-}</a>
+<a id="937" class="Comment">-- for technical reasons we can not have this binding here. however</a>
+<a id="1005" class="Comment">-- there is already a type ℕ in the introduction module which /does/</a>
+<a id="1074" class="Comment">-- support numeral notation. we are careful not to use the ℕ type</a>
+<a id="1140" class="Comment">-- defined in this module again.</a>
+
+<a id="three&#39;"></a><a id="1174" href="lecture1.html#1174" data-type="ℕ" class="Function">three&#39;</a> <a id="1181" class="Symbol">:</a> <a id="1183" href="introduction.html#1034" data-type="Set" class="Datatype">introduction.ℕ</a>
+<a id="1198" href="lecture1.html#1174" data-type="ℕ" class="Function">three&#39;</a> <a id="1205" class="Symbol">=</a> <a id="1207" class="Number">3</a> <a id="1209" class="Comment">-- synonym for the above</a>
+
+<a id="D"></a><a id="1235" href="lecture1.html#1235" data-type="Bool → Type" class="Function">D</a> <a id="1237" class="Symbol">:</a> <a id="1239" href="lecture1.html#118" data-type="Set" class="Datatype">Bool</a> <a id="1244" class="Symbol">→</a> <a id="1246" href="lecture1.html#88" data-type="Set₁" class="Function">Type</a>
+<a id="1251" href="lecture1.html#1235" data-type="Bool → Type" class="Function">D</a> <a id="1253" href="lecture1.html#137" data-type="Bool" class="InductiveConstructor">true</a>  <a id="1259" class="Symbol">=</a> <a id="1261" href="introduction.html#1034" data-type="Set" class="Datatype">introduction.ℕ</a>
+<a id="1276" href="lecture1.html#1235" data-type="Bool → Type" class="Function">D</a> <a id="1278" href="lecture1.html#142" data-type="Bool" class="InductiveConstructor">false</a> <a id="1284" class="Symbol">=</a> <a id="1286" href="lecture1.html#118" data-type="Set" class="Datatype">Bool</a>
+
+<a id="1292" class="Comment">-- &quot;mix-fix&quot; operator (3rd sense of &quot;_&quot; in Agda)</a>
+<a id="1341" class="Comment">--                           b      x   y</a>
+<a id="if_then_else_"></a><a id="1383" href="lecture1.html#1383" data-type="Bool → X → X → X" class="Function Operator">if_then_else_</a> <a id="1397" class="Symbol">:</a> <a id="1399" class="Symbol">{</a><a id="1400" href="lecture1.html#1400" class="Bound">X</a> <a id="1402" class="Symbol">:</a> <a id="1404" href="lecture1.html#88" data-type="Set₁" class="Function">Type</a><a id="1408" class="Symbol">}</a> <a id="1410" class="Symbol">→</a> <a id="1412" href="lecture1.html#118" data-type="Set" class="Datatype">Bool</a> <a id="1417" class="Symbol">→</a> <a id="1419" href="lecture1.html#1400" class="Bound">X</a> <a id="1421" class="Symbol">→</a> <a id="1423" href="lecture1.html#1400" class="Bound">X</a> <a id="1425" class="Symbol">→</a> <a id="1427" href="lecture1.html#1400" class="Bound">X</a>
+<a id="1429" href="lecture1.html#1383" data-type="Bool → X → X → X" class="Function Operator">if</a> <a id="1432" href="lecture1.html#137" data-type="Bool" class="InductiveConstructor">true</a>  <a id="1438" href="lecture1.html#1383" data-type="Bool → X → X → X" class="Function Operator">then</a> <a id="1443" href="lecture1.html#1443" class="Bound">x</a> <a id="1445" href="lecture1.html#1383" data-type="Bool → X → X → X" class="Function Operator">else</a> <a id="1450" href="lecture1.html#1450" class="Bound">y</a> <a id="1452" class="Symbol">=</a> <a id="1454" href="lecture1.html#1443" class="Bound">x</a>
+<a id="1456" href="lecture1.html#1383" data-type="Bool → X → X → X" class="Function Operator">if</a> <a id="1459" href="lecture1.html#142" data-type="Bool" class="InductiveConstructor">false</a> <a id="1465" href="lecture1.html#1383" data-type="Bool → X → X → X" class="Function Operator">then</a> <a id="1470" href="lecture1.html#1470" class="Bound">x</a> <a id="1472" href="lecture1.html#1383" data-type="Bool → X → X → X" class="Function Operator">else</a> <a id="1477" href="lecture1.html#1477" class="Bound">y</a> <a id="1479" class="Symbol">=</a> <a id="1481" href="lecture1.html#1477" class="Bound">y</a>
+
+<a id="if[_]_then_else_"></a><a id="1484" href="lecture1.html#1484" data-type="(X : Bool → Type) (b : Bool) → X true → X false → X b" class="Function Operator">if[_]_then_else_</a> <a id="1501" class="Symbol">:</a> <a id="1503" class="Symbol">(</a><a id="1504" href="lecture1.html#1504" class="Bound">X</a> <a id="1506" class="Symbol">:</a> <a id="1508" href="lecture1.html#118" data-type="Set" class="Datatype">Bool</a> <a id="1513" class="Symbol">→</a> <a id="1515" href="lecture1.html#88" data-type="Set₁" class="Function">Type</a><a id="1519" class="Symbol">)</a>
+                 <a id="1538" class="Symbol">→</a> <a id="1540" class="Symbol">(</a><a id="1541" href="lecture1.html#1541" class="Bound">b</a> <a id="1543" class="Symbol">:</a> <a id="1545" href="lecture1.html#118" data-type="Set" class="Datatype">Bool</a><a id="1549" class="Symbol">)</a>
+                 <a id="1568" class="Symbol">→</a> <a id="1570" href="lecture1.html#1504" class="Bound">X</a> <a id="1572" href="lecture1.html#137" data-type="Bool" class="InductiveConstructor">true</a>
+                 <a id="1594" class="Symbol">→</a> <a id="1596" href="lecture1.html#1504" class="Bound">X</a> <a id="1598" href="lecture1.html#142" data-type="Bool" class="InductiveConstructor">false</a>
+                 <a id="1621" class="Symbol">→</a> <a id="1623" href="lecture1.html#1504" class="Bound">X</a> <a id="1625" href="lecture1.html#1541" class="Bound">b</a>
+<a id="1627" href="lecture1.html#1484" data-type="(X : Bool → Type) (b : Bool) → X true → X false → X b" class="Function Operator">if[</a> <a id="1631" href="lecture1.html#1631" class="Bound">X</a> <a id="1633" href="lecture1.html#1484" data-type="(X : Bool → Type) (b : Bool) → X true → X false → X b" class="Function Operator">]</a> <a id="1635" href="lecture1.html#137" data-type="Bool" class="InductiveConstructor">true</a> <a id="1640" href="lecture1.html#1484" data-type="(X : Bool → Type) (b : Bool) → X true → X false → X b" class="Function Operator">then</a>  <a id="1646" href="lecture1.html#1646" class="Bound">x</a> <a id="1648" href="lecture1.html#1484" data-type="(X : Bool → Type) (b : Bool) → X true → X false → X b" class="Function Operator">else</a> <a id="1653" href="lecture1.html#1653" class="Bound">y</a> <a id="1655" class="Symbol">=</a> <a id="1657" href="lecture1.html#1646" class="Bound">x</a>
+<a id="1659" href="lecture1.html#1484" data-type="(X : Bool → Type) (b : Bool) → X true → X false → X b" class="Function Operator">if[</a> <a id="1663" href="lecture1.html#1663" class="Bound">X</a> <a id="1665" href="lecture1.html#1484" data-type="(X : Bool → Type) (b : Bool) → X true → X false → X b" class="Function Operator">]</a> <a id="1667" href="lecture1.html#142" data-type="Bool" class="InductiveConstructor">false</a> <a id="1673" href="lecture1.html#1484" data-type="(X : Bool → Type) (b : Bool) → X true → X false → X b" class="Function Operator">then</a> <a id="1678" href="lecture1.html#1678" class="Bound">x</a> <a id="1680" href="lecture1.html#1484" data-type="(X : Bool → Type) (b : Bool) → X true → X false → X b" class="Function Operator">else</a> <a id="1685" href="lecture1.html#1685" class="Bound">y</a> <a id="1687" class="Symbol">=</a> <a id="1689" href="lecture1.html#1685" class="Bound">y</a>
+
+<a id="1692" class="Comment">-- Π (b : Bool), D b</a>
+<a id="unfamiliar"></a><a id="1713" href="lecture1.html#1713" data-type="(b : Bool) → D b" class="Function">unfamiliar</a> <a id="1724" class="Symbol">:</a> <a id="1726" class="Symbol">(</a><a id="1727" href="lecture1.html#1727" class="Bound">b</a> <a id="1729" class="Symbol">:</a> <a id="1731" href="lecture1.html#118" data-type="Set" class="Datatype">Bool</a><a id="1735" class="Symbol">)</a> <a id="1737" class="Symbol">→</a> <a id="1739" href="lecture1.html#1235" data-type="Bool → Type" class="Function">D</a> <a id="1741" href="lecture1.html#1727" class="Bound">b</a>
+<a id="1743" href="lecture1.html#1713" data-type="(b : Bool) → D b" class="Function">unfamiliar</a> <a id="1754" href="lecture1.html#1754" class="Bound">b</a> <a id="1756" class="Symbol">=</a> <a id="1758" href="lecture1.html#1484" data-type="(X : Bool → Type) (b : Bool) → X true → X false → X b" class="Function Operator">if[</a> <a id="1762" href="lecture1.html#1235" data-type="Bool → Type" class="Function">D</a> <a id="1764" href="lecture1.html#1484" data-type="(X : Bool → Type) (b : Bool) → X true → X false → X b" class="Function Operator">]</a> <a id="1766" href="lecture1.html#1754" class="Bound">b</a> <a id="1768" href="lecture1.html#1484" data-type="(X : Bool → Type) (b : Bool) → X true → X false → X b" class="Function Operator">then</a> <a id="1773" class="Number">3</a> <a id="1775" href="lecture1.html#1484" data-type="(X : Bool → Type) (b : Bool) → X true → X false → X b" class="Function Operator">else</a> <a id="1780" href="lecture1.html#142" data-type="Bool" class="InductiveConstructor">false</a>
+
+<a id="1787" class="Keyword">data</a> <a id="List"></a><a id="1792" href="lecture1.html#1792" data-type="Type → Set" class="Datatype">List</a> <a id="1797" class="Symbol">(</a><a id="1798" href="lecture1.html#1798" class="Bound">A</a> <a id="1800" class="Symbol">:</a> <a id="1802" href="lecture1.html#88" data-type="Set₁" class="Function">Type</a><a id="1806" class="Symbol">)</a> <a id="1808" class="Symbol">:</a> <a id="1810" href="lecture1.html#88" data-type="Set₁" class="Function">Type</a> <a id="1815" class="Keyword">where</a>
+ <a id="List.[]"></a><a id="1822" href="lecture1.html#1822" data-type="List A" class="InductiveConstructor">[]</a>   <a id="1827" class="Symbol">:</a> <a id="1829" href="lecture1.html#1792" data-type="Type → Set" class="Datatype">List</a> <a id="1834" href="lecture1.html#1798" class="Bound">A</a>  <a id="1837" class="Comment">-- empty list</a>
+ <a id="List._::_"></a><a id="1852" href="lecture1.html#1852" data-type="A → List A → List A" class="InductiveConstructor Operator">_::_</a> <a id="1857" class="Symbol">:</a> <a id="1859" href="lecture1.html#1798" class="Bound">A</a> <a id="1861" class="Symbol">→</a> <a id="1863" href="lecture1.html#1792" data-type="Type → Set" class="Datatype">List</a> <a id="1868" href="lecture1.html#1798" class="Bound">A</a> <a id="1870" class="Symbol">→</a> <a id="1872" href="lecture1.html#1792" data-type="Type → Set" class="Datatype">List</a> <a id="1877" href="lecture1.html#1798" class="Bound">A</a> <a id="1879" class="Comment">-- if xs is a list then x :: xs is list</a>
+
+<a id="1920" class="Keyword">infixr</a> <a id="1927" class="Number">10</a> <a id="1930" href="lecture1.html#1852" data-type="A → List A → List A" class="InductiveConstructor Operator">_::_</a>
+
+<a id="ff"></a><a id="1936" href="lecture1.html#1936" data-type="Type → Type" class="Function">ff</a> <a id="1939" class="Symbol">:</a> <a id="1941" href="lecture1.html#88" data-type="Set₁" class="Function">Type</a> <a id="1946" class="Symbol">→</a> <a id="1948" href="lecture1.html#88" data-type="Set₁" class="Function">Type</a>
+<a id="1953" href="lecture1.html#1936" data-type="Type → Type" class="Function">ff</a> <a id="1956" class="Symbol">=</a> <a id="1958" href="lecture1.html#1792" data-type="Type → Set" class="Datatype">List</a>
+
+<a id="sample-list₀"></a><a id="1964" href="lecture1.html#1964" data-type="List ℕ" class="Function">sample-list₀</a> <a id="1977" class="Symbol">:</a> <a id="1979" href="lecture1.html#1792" data-type="Type → Set" class="Datatype">List</a> <a id="1984" href="introduction.html#1034" data-type="Set" class="Datatype">introduction.ℕ</a>
+<a id="1999" href="lecture1.html#1964" data-type="List ℕ" class="Function">sample-list₀</a> <a id="2012" class="Symbol">=</a> <a id="2014" class="Number">0</a> <a id="2016" href="lecture1.html#1852" data-type="A → List A → List A" class="InductiveConstructor Operator">::</a> <a id="2019" class="Number">1</a> <a id="2021" href="lecture1.html#1852" data-type="A → List A → List A" class="InductiveConstructor Operator">::</a> <a id="2024" class="Number">2</a> <a id="2026" href="lecture1.html#1852" data-type="A → List A → List A" class="InductiveConstructor Operator">::</a> <a id="2029" href="lecture1.html#1822" data-type="List A" class="InductiveConstructor">[]</a>
+
+<a id="length"></a><a id="2033" href="lecture1.html#2033" data-type="List X → ℕ" class="Function">length</a> <a id="2040" class="Symbol">:</a> <a id="2042" class="Symbol">{</a><a id="2043" href="lecture1.html#2043" class="Bound">X</a> <a id="2045" class="Symbol">:</a> <a id="2047" href="lecture1.html#88" data-type="Set₁" class="Function">Type</a><a id="2051" class="Symbol">}</a> <a id="2053" class="Symbol">→</a> <a id="2055" href="lecture1.html#1792" data-type="Type → Set" class="Datatype">List</a> <a id="2060" href="lecture1.html#2043" class="Bound">X</a> <a id="2062" class="Symbol">→</a> <a id="2064" href="lecture1.html#828" data-type="Set" class="Datatype">ℕ</a>
+<a id="2066" href="lecture1.html#2033" data-type="List X → ℕ" class="Function">length</a> <a id="2073" href="lecture1.html#1822" data-type="List A" class="InductiveConstructor">[]</a>        <a id="2083" class="Symbol">=</a> <a id="2085" href="lecture1.html#844" data-type="ℕ" class="InductiveConstructor">zero</a>
+<a id="2090" href="lecture1.html#2033" data-type="List X → ℕ" class="Function">length</a> <a id="2097" class="Symbol">(</a><a id="2098" href="lecture1.html#2098" class="Bound">x</a> <a id="2100" href="lecture1.html#1852" data-type="A → List A → List A" class="InductiveConstructor Operator">::</a> <a id="2103" href="lecture1.html#2103" class="Bound">xs</a><a id="2105" class="Symbol">)</a> <a id="2107" class="Symbol">=</a> <a id="2109" href="lecture1.html#854" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="2113" class="Symbol">(</a><a id="2114" href="lecture1.html#2033" data-type="List X → ℕ" class="Function">length</a> <a id="2121" href="lecture1.html#2103" class="Bound">xs</a><a id="2123" class="Symbol">)</a>
+
+<a id="2126" class="Comment">-- Principle of induction on ℕ</a>
+<a id="ℕ-elim"></a><a id="2157" href="lecture1.html#2157" data-type="A zero → ((k : ℕ) → A k → A (suc k)) → (n : ℕ) → A n" class="Function">ℕ-elim</a> <a id="2164" class="Symbol">:</a> <a id="2166" class="Symbol">{</a><a id="2167" href="lecture1.html#2167" class="Bound">A</a> <a id="2169" class="Symbol">:</a> <a id="2171" href="lecture1.html#828" data-type="Set" class="Datatype">ℕ</a> <a id="2173" class="Symbol">→</a> <a id="2175" href="lecture1.html#88" data-type="Set₁" class="Function">Type</a><a id="2179" class="Symbol">}</a>
+       <a id="2188" class="Symbol">→</a> <a id="2190" href="lecture1.html#2167" class="Bound">A</a> <a id="2192" href="lecture1.html#844" data-type="ℕ" class="InductiveConstructor">zero</a> <a id="2197" class="Comment">-- base case</a>
+       <a id="2217" class="Symbol">→</a> <a id="2219" class="Symbol">((</a><a id="2221" href="lecture1.html#2221" class="Bound">k</a> <a id="2223" class="Symbol">:</a> <a id="2225" href="lecture1.html#828" data-type="Set" class="Datatype">ℕ</a><a id="2226" class="Symbol">)</a> <a id="2228" class="Symbol">→</a> <a id="2230" href="lecture1.html#2167" class="Bound">A</a> <a id="2232" href="lecture1.html#2221" class="Bound">k</a> <a id="2234" class="Symbol">→</a> <a id="2236" href="lecture1.html#2167" class="Bound">A</a> <a id="2238" class="Symbol">(</a><a id="2239" href="lecture1.html#854" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="2243" href="lecture1.html#2221" class="Bound">k</a><a id="2244" class="Symbol">))</a> <a id="2247" class="Comment">-- induction step</a>
+       <a id="2272" class="Symbol">→</a> <a id="2274" class="Symbol">(</a><a id="2275" href="lecture1.html#2275" class="Bound">n</a> <a id="2277" class="Symbol">:</a> <a id="2279" href="lecture1.html#828" data-type="Set" class="Datatype">ℕ</a><a id="2280" class="Symbol">)</a> <a id="2282" class="Symbol">→</a> <a id="2284" href="lecture1.html#2167" class="Bound">A</a> <a id="2286" href="lecture1.html#2275" class="Bound">n</a>
+<a id="2288" href="lecture1.html#2157" data-type="A zero → ((k : ℕ) → A k → A (suc k)) → (n : ℕ) → A n" class="Function">ℕ-elim</a> <a id="2295" class="Symbol">{</a><a id="2296" href="lecture1.html#2296" class="Bound">A</a><a id="2297" class="Symbol">}</a> <a id="2299" href="lecture1.html#2299" class="Bound">a₀</a> <a id="2302" href="lecture1.html#2302" class="Bound">f</a> <a id="2304" class="Symbol">=</a> <a id="2306" href="lecture1.html#2317" data-type="A zero → ((k : ℕ) → A k → A (suc k)) → (n : ℕ) → A n" class="Function">h</a>
+ <a id="2309" class="Keyword">where</a>
+  <a id="2317" href="lecture1.html#2317" data-type="A zero → ((k : ℕ) → A k → A (suc k)) → (n : ℕ) → A n" class="Function">h</a> <a id="2319" class="Symbol">:</a> <a id="2321" class="Symbol">(</a><a id="2322" href="lecture1.html#2322" class="Bound">n</a> <a id="2324" class="Symbol">:</a> <a id="2326" href="lecture1.html#828" data-type="Set" class="Datatype">ℕ</a><a id="2327" class="Symbol">)</a> <a id="2329" class="Symbol">→</a> <a id="2331" href="lecture1.html#2296" class="Bound">A</a> <a id="2333" href="lecture1.html#2322" class="Bound">n</a>
+  <a id="2337" href="lecture1.html#2317" data-type="A zero → ((k : ℕ) → A k → A (suc k)) → (n : ℕ) → A n" class="Function">h</a> <a id="2339" href="lecture1.html#844" data-type="ℕ" class="InductiveConstructor">zero</a>    <a id="2347" class="Symbol">=</a> <a id="2349" href="lecture1.html#2299" class="Bound">a₀</a>
+  <a id="2354" href="lecture1.html#2317" data-type="A zero → ((k : ℕ) → A k → A (suc k)) → (n : ℕ) → A n" class="Function">h</a> <a id="2356" class="Symbol">(</a><a id="2357" href="lecture1.html#854" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="2361" href="lecture1.html#2361" class="Bound">n</a><a id="2362" class="Symbol">)</a> <a id="2364" class="Symbol">=</a> <a id="2366" href="lecture1.html#2302" class="Bound">f</a> <a id="2368" href="lecture1.html#2361" class="Bound">n</a> <a id="2370" href="lecture1.html#2386" data-type="(a₀ : A zero) (f : (k : ℕ) → A k → A (suc k)) (n : ℕ) → A n" class="Function">IH</a>
+   <a id="2376" class="Keyword">where</a>
+    <a id="2386" href="lecture1.html#2386" data-type="(a₀ : A zero) (f : (k : ℕ) → A k → A (suc k)) (n : ℕ) → A n" class="Function">IH</a> <a id="2389" class="Symbol">:</a> <a id="2391" href="lecture1.html#2296" class="Bound">A</a> <a id="2393" href="lecture1.html#2361" class="Bound">n</a>
+    <a id="2399" href="lecture1.html#2386" data-type="(a₀ : A zero) (f : (k : ℕ) → A k → A (suc k)) (n : ℕ) → A n" class="Function">IH</a> <a id="2402" class="Symbol">=</a> <a id="2404" href="lecture1.html#2317" data-type="A zero → ((k : ℕ) → A k → A (suc k)) → (n : ℕ) → A n" class="Function">h</a> <a id="2406" href="lecture1.html#2361" class="Bound">n</a>
+
+<a id="ℕ-elim&#39;"></a><a id="2409" href="lecture1.html#2409" data-type="A zero → ((k : ℕ) → A k → A (suc k)) → (n : ℕ) → A n" class="Function">ℕ-elim&#39;</a> <a id="2417" class="Symbol">:</a> <a id="2419" class="Symbol">{</a><a id="2420" href="lecture1.html#2420" class="Bound">A</a> <a id="2422" class="Symbol">:</a> <a id="2424" href="lecture1.html#828" data-type="Set" class="Datatype">ℕ</a> <a id="2426" class="Symbol">→</a> <a id="2428" href="lecture1.html#88" data-type="Set₁" class="Function">Type</a><a id="2432" class="Symbol">}</a>
+       <a id="2441" class="Symbol">→</a> <a id="2443" href="lecture1.html#2420" class="Bound">A</a> <a id="2445" href="lecture1.html#844" data-type="ℕ" class="InductiveConstructor">zero</a> <a id="2450" class="Comment">-- base case</a>
+       <a id="2470" class="Symbol">→</a> <a id="2472" class="Symbol">((</a><a id="2474" href="lecture1.html#2474" class="Bound">k</a> <a id="2476" class="Symbol">:</a> <a id="2478" href="lecture1.html#828" data-type="Set" class="Datatype">ℕ</a><a id="2479" class="Symbol">)</a> <a id="2481" class="Symbol">→</a> <a id="2483" href="lecture1.html#2420" class="Bound">A</a> <a id="2485" href="lecture1.html#2474" class="Bound">k</a> <a id="2487" class="Symbol">→</a> <a id="2489" href="lecture1.html#2420" class="Bound">A</a> <a id="2491" class="Symbol">(</a><a id="2492" href="lecture1.html#854" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="2496" href="lecture1.html#2474" class="Bound">k</a><a id="2497" class="Symbol">))</a> <a id="2500" class="Comment">-- induction step</a>
+       <a id="2525" class="Symbol">→</a> <a id="2527" class="Symbol">(</a><a id="2528" href="lecture1.html#2528" class="Bound">n</a> <a id="2530" class="Symbol">:</a> <a id="2532" href="lecture1.html#828" data-type="Set" class="Datatype">ℕ</a><a id="2533" class="Symbol">)</a> <a id="2535" class="Symbol">→</a> <a id="2537" href="lecture1.html#2420" class="Bound">A</a> <a id="2539" href="lecture1.html#2528" class="Bound">n</a>
+<a id="2541" href="lecture1.html#2409" data-type="A zero → ((k : ℕ) → A k → A (suc k)) → (n : ℕ) → A n" class="Function">ℕ-elim&#39;</a> <a id="2549" class="Symbol">{</a><a id="2550" href="lecture1.html#2550" class="Bound">A</a><a id="2551" class="Symbol">}</a> <a id="2553" href="lecture1.html#2553" class="Bound">a₀</a> <a id="2556" href="lecture1.html#2556" class="Bound">f</a> <a id="2558" href="lecture1.html#844" data-type="ℕ" class="InductiveConstructor">zero</a>    <a id="2566" class="Symbol">=</a> <a id="2568" href="lecture1.html#2553" class="Bound">a₀</a>
+<a id="2571" href="lecture1.html#2409" data-type="A zero → ((k : ℕ) → A k → A (suc k)) → (n : ℕ) → A n" class="Function">ℕ-elim&#39;</a> <a id="2579" class="Symbol">{</a><a id="2580" href="lecture1.html#2580" class="Bound">A</a><a id="2581" class="Symbol">}</a> <a id="2583" href="lecture1.html#2583" class="Bound">a₀</a> <a id="2586" href="lecture1.html#2586" class="Bound">f</a> <a id="2588" class="Symbol">(</a><a id="2589" href="lecture1.html#854" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="2593" href="lecture1.html#2593" class="Bound">n</a><a id="2594" class="Symbol">)</a> <a id="2596" class="Symbol">=</a> <a id="2598" href="lecture1.html#2586" class="Bound">f</a> <a id="2600" href="lecture1.html#2593" class="Bound">n</a> <a id="2602" class="Symbol">(</a><a id="2603" href="lecture1.html#2409" data-type="A zero → ((k : ℕ) → A k → A (suc k)) → (n : ℕ) → A n" class="Function">ℕ-elim&#39;</a> <a id="2611" href="lecture1.html#2583" class="Bound">a₀</a> <a id="2614" href="lecture1.html#2586" class="Bound">f</a> <a id="2616" href="lecture1.html#2593" class="Bound">n</a><a id="2617" class="Symbol">)</a>
+
+<a id="List-elim"></a><a id="2620" href="lecture1.html#2620" data-type="(A : List X → Type) →
+A [] →
+((x : X) (xs : List X) → A xs → A (x :: xs)) → (xs : List X) → A xs" class="Function">List-elim</a> <a id="2630" class="Symbol">:</a> <a id="2632" class="Symbol">{</a><a id="2633" href="lecture1.html#2633" class="Bound">X</a> <a id="2635" class="Symbol">:</a> <a id="2637" href="lecture1.html#88" data-type="Set₁" class="Function">Type</a><a id="2641" class="Symbol">}</a> <a id="2643" class="Symbol">(</a><a id="2644" href="lecture1.html#2644" class="Bound">A</a> <a id="2646" class="Symbol">:</a> <a id="2648" href="lecture1.html#1792" data-type="Type → Set" class="Datatype">List</a> <a id="2653" href="lecture1.html#2633" class="Bound">X</a> <a id="2655" class="Symbol">→</a> <a id="2657" href="lecture1.html#88" data-type="Set₁" class="Function">Type</a><a id="2661" class="Symbol">)</a>
+          <a id="2673" class="Symbol">→</a> <a id="2675" href="lecture1.html#2644" class="Bound">A</a> <a id="2677" href="lecture1.html#1822" data-type="List A" class="InductiveConstructor">[]</a> <a id="2680" class="Comment">-- base</a>
+          <a id="2698" class="Symbol">→</a> <a id="2700" class="Symbol">((</a><a id="2702" href="lecture1.html#2702" class="Bound">x</a> <a id="2704" class="Symbol">:</a> <a id="2706" href="lecture1.html#2633" class="Bound">X</a><a id="2707" class="Symbol">)</a> <a id="2709" class="Symbol">(</a><a id="2710" href="lecture1.html#2710" class="Bound">xs</a> <a id="2713" class="Symbol">:</a> <a id="2715" href="lecture1.html#1792" data-type="Type → Set" class="Datatype">List</a> <a id="2720" href="lecture1.html#2633" class="Bound">X</a><a id="2721" class="Symbol">)</a> <a id="2723" class="Symbol">→</a> <a id="2725" href="lecture1.html#2644" class="Bound">A</a> <a id="2727" href="lecture1.html#2710" class="Bound">xs</a> <a id="2730" class="Symbol">→</a> <a id="2732" href="lecture1.html#2644" class="Bound">A</a> <a id="2734" class="Symbol">(</a><a id="2735" href="lecture1.html#2702" class="Bound">x</a> <a id="2737" href="lecture1.html#1852" data-type="A → List A → List A" class="InductiveConstructor Operator">::</a> <a id="2740" href="lecture1.html#2710" class="Bound">xs</a><a id="2742" class="Symbol">))</a> <a id="2745" class="Comment">-- step</a>
+          <a id="2763" class="Symbol">→</a> <a id="2765" class="Symbol">(</a><a id="2766" href="lecture1.html#2766" class="Bound">xs</a> <a id="2769" class="Symbol">:</a> <a id="2771" href="lecture1.html#1792" data-type="Type → Set" class="Datatype">List</a> <a id="2776" href="lecture1.html#2633" class="Bound">X</a><a id="2777" class="Symbol">)</a> <a id="2779" class="Symbol">→</a> <a id="2781" href="lecture1.html#2644" class="Bound">A</a> <a id="2783" href="lecture1.html#2766" class="Bound">xs</a>
+<a id="2786" href="lecture1.html#2620" data-type="(A : List X → Type) →
+A [] →
+((x : X) (xs : List X) → A xs → A (x :: xs)) → (xs : List X) → A xs" class="Function">List-elim</a> <a id="2796" class="Symbol">{</a><a id="2797" href="lecture1.html#2797" class="Bound">X</a><a id="2798" class="Symbol">}</a> <a id="2800" href="lecture1.html#2800" class="Bound">A</a> <a id="2802" href="lecture1.html#2802" class="Bound">a</a> <a id="2804" href="lecture1.html#2804" class="Bound">f</a> <a id="2806" class="Symbol">=</a> <a id="2808" href="lecture1.html#2819" data-type="(A : List X → Type) →
+A [] →
+((x : X) (xs : List X) → A xs → A (x :: xs)) → (xs : List X) → A xs" class="Function">h</a>
+ <a id="2811" class="Keyword">where</a>
+  <a id="2819" href="lecture1.html#2819" data-type="(A : List X → Type) →
+A [] →
+((x : X) (xs : List X) → A xs → A (x :: xs)) → (xs : List X) → A xs" class="Function">h</a> <a id="2821" class="Symbol">:</a> <a id="2823" class="Symbol">(</a><a id="2824" href="lecture1.html#2824" class="Bound">xs</a> <a id="2827" class="Symbol">:</a> <a id="2829" href="lecture1.html#1792" data-type="Type → Set" class="Datatype">List</a> <a id="2834" href="lecture1.html#2797" class="Bound">X</a><a id="2835" class="Symbol">)</a> <a id="2837" class="Symbol">→</a> <a id="2839" href="lecture1.html#2800" class="Bound">A</a> <a id="2841" href="lecture1.html#2824" class="Bound">xs</a>
+  <a id="2846" href="lecture1.html#2819" data-type="(A : List X → Type) →
+A [] →
+((x : X) (xs : List X) → A xs → A (x :: xs)) → (xs : List X) → A xs" class="Function">h</a> <a id="2848" href="lecture1.html#1822" data-type="List A" class="InductiveConstructor">[]</a>        <a id="2858" class="Symbol">=</a> <a id="2860" href="lecture1.html#2802" class="Bound">a</a> <a id="2862" class="Comment">-- base</a>
+  <a id="2872" href="lecture1.html#2819" data-type="(A : List X → Type) →
+A [] →
+((x : X) (xs : List X) → A xs → A (x :: xs)) → (xs : List X) → A xs" class="Function">h</a> <a id="2874" class="Symbol">(</a><a id="2875" href="lecture1.html#2875" class="Bound">x</a> <a id="2877" href="lecture1.html#1852" data-type="A → List A → List A" class="InductiveConstructor Operator">::</a> <a id="2880" href="lecture1.html#2880" class="Bound">xs</a><a id="2882" class="Symbol">)</a> <a id="2884" class="Symbol">=</a> <a id="2886" href="lecture1.html#2804" class="Bound">f</a> <a id="2888" href="lecture1.html#2875" class="Bound">x</a> <a id="2890" href="lecture1.html#2880" class="Bound">xs</a> <a id="2893" class="Symbol">(</a><a id="2894" href="lecture1.html#2819" data-type="(A : List X → Type) →
+A [] →
+((x : X) (xs : List X) → A xs → A (x :: xs)) → (xs : List X) → A xs" class="Function">h</a> <a id="2896" href="lecture1.html#2880" class="Bound">xs</a><a id="2898" class="Symbol">)</a> <a id="2900" class="Comment">-- step</a>
+
+<a id="2909" class="Comment">-- \b0</a>
+<a id="2916" class="Keyword">data</a> <a id="𝟘"></a><a id="2921" href="lecture1.html#2921" data-type="Set" class="Datatype">𝟘</a> <a id="2923" class="Symbol">:</a> <a id="2925" href="lecture1.html#88" data-type="Set₁" class="Function">Type</a> <a id="2930" class="Keyword">where</a>
+
+<a id="2937" class="Comment">-- \b1</a>
+<a id="2944" class="Keyword">data</a> <a id="𝟙"></a><a id="2949" href="lecture1.html#2949" data-type="Set" class="Datatype">𝟙</a> <a id="2951" class="Symbol">:</a> <a id="2953" href="lecture1.html#88" data-type="Set₁" class="Function">Type</a> <a id="2958" class="Keyword">where</a>
+ <a id="𝟙.⋆"></a><a id="2965" href="lecture1.html#2965" data-type="𝟙" class="InductiveConstructor">⋆</a> <a id="2967" class="Symbol">:</a> <a id="2969" href="lecture1.html#2949" data-type="Set" class="Datatype">𝟙</a>  <a id="2972" class="Comment">-- \star</a>
+
+<a id="_≣_"></a><a id="2982" href="lecture1.html#2982" data-type="ℕ → ℕ → Type" class="Function Operator">_≣_</a> <a id="2986" class="Symbol">:</a> <a id="2988" href="lecture1.html#828" data-type="Set" class="Datatype">ℕ</a> <a id="2990" class="Symbol">→</a> <a id="2992" href="lecture1.html#828" data-type="Set" class="Datatype">ℕ</a> <a id="2994" class="Symbol">→</a> <a id="2996" href="lecture1.html#88" data-type="Set₁" class="Function">Type</a>
+<a id="3001" href="lecture1.html#844" data-type="ℕ" class="InductiveConstructor">zero</a>  <a id="3007" href="lecture1.html#2982" data-type="ℕ → ℕ → Type" class="Function Operator">≣</a> <a id="3009" href="lecture1.html#844" data-type="ℕ" class="InductiveConstructor">zero</a>  <a id="3015" class="Symbol">=</a> <a id="3017" href="lecture1.html#2949" data-type="Set" class="Datatype">𝟙</a>
+<a id="3019" href="lecture1.html#844" data-type="ℕ" class="InductiveConstructor">zero</a>  <a id="3025" href="lecture1.html#2982" data-type="ℕ → ℕ → Type" class="Function Operator">≣</a> <a id="3027" href="lecture1.html#854" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="3031" href="lecture1.html#3031" class="Bound">y</a> <a id="3033" class="Symbol">=</a> <a id="3035" href="lecture1.html#2921" data-type="Set" class="Datatype">𝟘</a>
+<a id="3037" href="lecture1.html#854" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="3041" href="lecture1.html#3041" class="Bound">x</a> <a id="3043" href="lecture1.html#2982" data-type="ℕ → ℕ → Type" class="Function Operator">≣</a> <a id="3045" href="lecture1.html#844" data-type="ℕ" class="InductiveConstructor">zero</a>  <a id="3051" class="Symbol">=</a> <a id="3053" href="lecture1.html#2921" data-type="Set" class="Datatype">𝟘</a>
+<a id="3055" href="lecture1.html#854" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="3059" href="lecture1.html#3059" class="Bound">x</a> <a id="3061" href="lecture1.html#2982" data-type="ℕ → ℕ → Type" class="Function Operator">≣</a> <a id="3063" href="lecture1.html#854" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="3067" href="lecture1.html#3067" class="Bound">y</a> <a id="3069" class="Symbol">=</a> <a id="3071" href="lecture1.html#3059" class="Bound">x</a> <a id="3073" href="lecture1.html#2982" data-type="ℕ → ℕ → Type" class="Function Operator">≣</a> <a id="3075" href="lecture1.html#3067" class="Bound">y</a>
+
+<a id="3078" class="Keyword">infix</a> <a id="3084" class="Number">0</a> <a id="3086" href="lecture1.html#2982" data-type="ℕ → ℕ → Type" class="Function Operator">_≣_</a>
+
+<a id="ℕ-refl"></a><a id="3091" href="lecture1.html#3091" data-type="(x : ℕ) → x ≣ x" class="Function">ℕ-refl</a> <a id="3098" class="Symbol">:</a> <a id="3100" class="Symbol">(</a><a id="3101" href="lecture1.html#3101" class="Bound">x</a> <a id="3103" class="Symbol">:</a> <a id="3105" href="lecture1.html#828" data-type="Set" class="Datatype">ℕ</a><a id="3106" class="Symbol">)</a> <a id="3108" class="Symbol">→</a> <a id="3110" href="lecture1.html#3101" class="Bound">x</a> <a id="3112" href="lecture1.html#2982" data-type="ℕ → ℕ → Type" class="Function Operator">≣</a> <a id="3114" href="lecture1.html#3101" class="Bound">x</a>
+<a id="3116" href="lecture1.html#3091" data-type="(x : ℕ) → x ≣ x" class="Function">ℕ-refl</a> <a id="3123" href="lecture1.html#844" data-type="ℕ" class="InductiveConstructor">zero</a>    <a id="3131" class="Symbol">=</a> <a id="3133" href="lecture1.html#2965" data-type="𝟙" class="InductiveConstructor">⋆</a>
+<a id="3135" href="lecture1.html#3091" data-type="(x : ℕ) → x ≣ x" class="Function">ℕ-refl</a> <a id="3142" class="Symbol">(</a><a id="3143" href="lecture1.html#854" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="3147" href="lecture1.html#3147" class="Bound">x</a><a id="3148" class="Symbol">)</a> <a id="3150" class="Symbol">=</a> <a id="3152" href="lecture1.html#3091" data-type="(x : ℕ) → x ≣ x" class="Function">ℕ-refl</a> <a id="3159" href="lecture1.html#3147" class="Bound">x</a>
+
+<a id="_+_"></a><a id="3162" href="lecture1.html#3162" data-type="ℕ → ℕ → ℕ" class="Function Operator">_+_</a> <a id="3166" class="Symbol">:</a> <a id="3168" href="lecture1.html#828" data-type="Set" class="Datatype">ℕ</a> <a id="3170" class="Symbol">→</a> <a id="3172" href="lecture1.html#828" data-type="Set" class="Datatype">ℕ</a> <a id="3174" class="Symbol">→</a> <a id="3176" href="lecture1.html#828" data-type="Set" class="Datatype">ℕ</a>
+<a id="3178" href="lecture1.html#844" data-type="ℕ" class="InductiveConstructor">zero</a>  <a id="3184" href="lecture1.html#3162" data-type="ℕ → ℕ → ℕ" class="Function Operator">+</a> <a id="3186" href="lecture1.html#3186" class="Bound">y</a> <a id="3188" class="Symbol">=</a> <a id="3190" href="lecture1.html#3186" class="Bound">y</a>
+<a id="3192" href="lecture1.html#854" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="3196" href="lecture1.html#3196" class="Bound">x</a> <a id="3198" href="lecture1.html#3162" data-type="ℕ → ℕ → ℕ" class="Function Operator">+</a> <a id="3200" href="lecture1.html#3200" class="Bound">y</a> <a id="3202" class="Symbol">=</a> <a id="3204" href="lecture1.html#854" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="3208" class="Symbol">(</a><a id="3209" href="lecture1.html#3196" class="Bound">x</a> <a id="3211" href="lecture1.html#3162" data-type="ℕ → ℕ → ℕ" class="Function Operator">+</a> <a id="3213" href="lecture1.html#3200" class="Bound">y</a><a id="3214" class="Symbol">)</a>
+
+<a id="3217" class="Keyword">infixr</a> <a id="3224" class="Number">20</a> <a id="3227" href="lecture1.html#3162" data-type="ℕ → ℕ → ℕ" class="Function Operator">_+_</a>
+
+<a id="_++_"></a><a id="3232" href="lecture1.html#3232" data-type="List A → List A → List A" class="Function Operator">_++_</a> <a id="3237" class="Symbol">:</a> <a id="3239" class="Symbol">{</a><a id="3240" href="lecture1.html#3240" class="Bound">A</a> <a id="3242" class="Symbol">:</a> <a id="3244" href="lecture1.html#88" data-type="Set₁" class="Function">Type</a><a id="3248" class="Symbol">}</a> <a id="3250" class="Symbol">→</a> <a id="3252" href="lecture1.html#1792" data-type="Type → Set" class="Datatype">List</a> <a id="3257" href="lecture1.html#3240" class="Bound">A</a> <a id="3259" class="Symbol">→</a> <a id="3261" href="lecture1.html#1792" data-type="Type → Set" class="Datatype">List</a> <a id="3266" href="lecture1.html#3240" class="Bound">A</a> <a id="3268" class="Symbol">→</a> <a id="3270" href="lecture1.html#1792" data-type="Type → Set" class="Datatype">List</a> <a id="3275" href="lecture1.html#3240" class="Bound">A</a>
+<a id="3277" href="lecture1.html#1822" data-type="List A" class="InductiveConstructor">[]</a>        <a id="3287" href="lecture1.html#3232" data-type="List A → List A → List A" class="Function Operator">++</a> <a id="3290" href="lecture1.html#3290" class="Bound">ys</a> <a id="3293" class="Symbol">=</a> <a id="3295" href="lecture1.html#3290" class="Bound">ys</a>
+<a id="3298" class="Symbol">(</a><a id="3299" href="lecture1.html#3299" class="Bound">x</a> <a id="3301" href="lecture1.html#1852" data-type="A → List A → List A" class="InductiveConstructor Operator">::</a> <a id="3304" href="lecture1.html#3304" class="Bound">xs</a><a id="3306" class="Symbol">)</a> <a id="3308" href="lecture1.html#3232" data-type="List A → List A → List A" class="Function Operator">++</a> <a id="3311" href="lecture1.html#3311" class="Bound">ys</a> <a id="3314" class="Symbol">=</a> <a id="3316" href="lecture1.html#3299" class="Bound">x</a> <a id="3318" href="lecture1.html#1852" data-type="A → List A → List A" class="InductiveConstructor Operator">::</a> <a id="3321" class="Symbol">(</a><a id="3322" href="lecture1.html#3304" class="Bound">xs</a> <a id="3325" href="lecture1.html#3232" data-type="List A → List A → List A" class="Function Operator">++</a> <a id="3328" href="lecture1.html#3311" class="Bound">ys</a><a id="3330" class="Symbol">)</a>
+
+<a id="lh"></a><a id="3333" href="lecture1.html#3333" data-type="(xs ys : List X) → length (xs ++ ys) ≣ length xs + length ys" class="Function">lh</a> <a id="3336" class="Symbol">:</a> <a id="3338" class="Symbol">{</a><a id="3339" href="lecture1.html#3339" class="Bound">X</a> <a id="3341" class="Symbol">:</a> <a id="3343" href="lecture1.html#88" data-type="Set₁" class="Function">Type</a><a id="3347" class="Symbol">}</a> <a id="3349" class="Symbol">(</a><a id="3350" href="lecture1.html#3350" class="Bound">xs</a> <a id="3353" href="lecture1.html#3353" class="Bound">ys</a> <a id="3356" class="Symbol">:</a> <a id="3358" href="lecture1.html#1792" data-type="Type → Set" class="Datatype">List</a> <a id="3363" href="lecture1.html#3339" class="Bound">X</a><a id="3364" class="Symbol">)</a>
+   <a id="3369" class="Symbol">→</a> <a id="3371" href="lecture1.html#2033" data-type="List X → ℕ" class="Function">length</a> <a id="3378" class="Symbol">(</a><a id="3379" href="lecture1.html#3350" class="Bound">xs</a> <a id="3382" href="lecture1.html#3232" data-type="List A → List A → List A" class="Function Operator">++</a> <a id="3385" href="lecture1.html#3353" class="Bound">ys</a><a id="3387" class="Symbol">)</a> <a id="3389" href="lecture1.html#2982" data-type="ℕ → ℕ → Type" class="Function Operator">≣</a> <a id="3391" href="lecture1.html#2033" data-type="List X → ℕ" class="Function">length</a> <a id="3398" href="lecture1.html#3350" class="Bound">xs</a> <a id="3401" href="lecture1.html#3162" data-type="ℕ → ℕ → ℕ" class="Function Operator">+</a> <a id="3403" href="lecture1.html#2033" data-type="List X → ℕ" class="Function">length</a> <a id="3410" href="lecture1.html#3353" class="Bound">ys</a>
+<a id="3413" href="lecture1.html#3333" data-type="(xs ys : List X) → length (xs ++ ys) ≣ length xs + length ys" class="Function">lh</a> <a id="3416" href="lecture1.html#1822" data-type="List A" class="InductiveConstructor">[]</a> <a id="3419" href="lecture1.html#3419" class="Bound">ys</a>        <a id="3429" class="Symbol">=</a> <a id="3431" href="lecture1.html#3091" data-type="(x : ℕ) → x ≣ x" class="Function">ℕ-refl</a> <a id="3438" class="Symbol">(</a><a id="3439" href="lecture1.html#2033" data-type="List X → ℕ" class="Function">length</a> <a id="3446" href="lecture1.html#3419" class="Bound">ys</a><a id="3448" class="Symbol">)</a>
+<a id="3450" href="lecture1.html#3333" data-type="(xs ys : List X) → length (xs ++ ys) ≣ length xs + length ys" class="Function">lh</a> <a id="3453" class="Symbol">(</a><a id="3454" href="lecture1.html#3454" class="Bound">x</a> <a id="3456" href="lecture1.html#1852" data-type="A → List A → List A" class="InductiveConstructor Operator">::</a> <a id="3459" href="lecture1.html#3459" class="Bound">xs</a><a id="3461" class="Symbol">)</a> <a id="3463" href="lecture1.html#3463" class="Bound">ys</a> <a id="3466" class="Symbol">=</a> <a id="3468" href="lecture1.html#3480" data-type="(x : X) (xs ys : List X) →
+length (xs ++ ys) ≣ length xs + length ys" class="Function">IH</a>
+ <a id="3472" class="Keyword">where</a>
+  <a id="3480" href="lecture1.html#3480" data-type="(x : X) (xs ys : List X) →
+length (xs ++ ys) ≣ length xs + length ys" class="Function">IH</a> <a id="3483" class="Symbol">:</a> <a id="3485" href="lecture1.html#2033" data-type="List X → ℕ" class="Function">length</a> <a id="3492" class="Symbol">(</a><a id="3493" href="lecture1.html#3459" class="Bound">xs</a> <a id="3496" href="lecture1.html#3232" data-type="List A → List A → List A" class="Function Operator">++</a> <a id="3499" href="lecture1.html#3463" class="Bound">ys</a><a id="3501" class="Symbol">)</a> <a id="3503" href="lecture1.html#2982" data-type="ℕ → ℕ → Type" class="Function Operator">≣</a> <a id="3505" class="Symbol">(</a><a id="3506" href="lecture1.html#2033" data-type="List X → ℕ" class="Function">length</a> <a id="3513" href="lecture1.html#3459" class="Bound">xs</a> <a id="3516" href="lecture1.html#3162" data-type="ℕ → ℕ → ℕ" class="Function Operator">+</a> <a id="3518" href="lecture1.html#2033" data-type="List X → ℕ" class="Function">length</a> <a id="3525" href="lecture1.html#3463" class="Bound">ys</a><a id="3527" class="Symbol">)</a>
+  <a id="3531" href="lecture1.html#3480" data-type="(x : X) (xs ys : List X) →
+length (xs ++ ys) ≣ length xs + length ys" class="Function">IH</a> <a id="3534" class="Symbol">=</a> <a id="3536" href="lecture1.html#3333" data-type="(xs ys : List X) → length (xs ++ ys) ≣ length xs + length ys" class="Function">lh</a> <a id="3539" href="lecture1.html#3459" class="Bound">xs</a> <a id="3542" href="lecture1.html#3463" class="Bound">ys</a>
+</pre>
+
+  </article>
+</div>
+</main>
+</body>
+<style>
+
+:root {
+  --text-bg: #fff;
+  --text-fg: #222;
+  --shadow: #000;
+  --primary: #0054F4;
+  --secondary: #9C1BD6;
+  --modal-bg: #ccccccaa;
+  --warning-bg: #fef08a;
+  --code-bg: var(--text-bg);
+  --code-fg: var(--text-fg);
+  --code-keyword: #BB3B13;
+  --code-string:  #d52753;
+  --code-number:  #8A1060;
+  --code-module:  #8A1060;
+  --code-field:   #9C1BD6;
+  --code-constructor: #207B1D;
+  --code-highlight: #F5DEB3;
+  --search-selected: #e2e8f0;
+  --details-summary: #b2ebf2;
+  --details-open:    #80deea;
+  --depgraph-edge: #eee;
+  --blockquote-bg: #d8b4fe; }
+
+.diagram-dark {
+  display: none !important; }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-bg: #282C34;
+    --text-fg: #bfbfbf;
+    --shadow: #475569;
+    --primary: #61AFEF;
+    --secondary: #C878DD;
+    --modal-bg: #282C34aa;
+    --warning-bg: #991b1b;
+    --code-keyword:     #E5C07B;
+    --code-string:      #E06C75;
+    --code-number:      #98C379;
+    --code-module:      #56B6C2;
+    --code-field:       #C878DD;
+    --code-constructor: #98C379;
+    --code-highlight: #ef444499;
+    --search-selected: #474e5e;
+    --details-summary: #5b21b6;
+    --details-open:    #4c1d95;
+    --depgraph-edge: #474e5e;
+    --blockquote-bg: #475569; }
+  div.warning {
+    --shadow: #7f1d1d
+  ; }
+  input {
+    background-color: #334155;
+    border: 1px solid #475569;
+    color: var(--text-fg); }
+  body {
+    scrollbar-color: #3b4454 #2b2e33; }
+  .diagram-dark {
+    display: block !important; }
+  .diagram-light {
+    display: none !important; } }
+
+table {
+  margin: auto;
+  border-collapse: collapse; }
+  table td, table th {
+    text-align: center;
+    padding: 0px 1em 0px 1em;
+    border: 1px solid black; }
+  table th {
+    border-bottom: 2px solid black; }
+  table td {
+    white-space: nowrap; }
+
+html { max-width: 100%; }
+
+body {
+  font-family: "Inria Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  width: 100%;
+  font-size: var(--font-size);
+  overflow-x: clip;
+  background-color: var(--text-bg);
+  color: var(--text-fg);
+}
+
+div#post-toc-container { max-width: 120ch; margin: auto; }
+
+article a[href], div#return > a[href], div#top > a[href], aside#toc > div#toc-container ul a[href] {
+  color: var(--primary);
+  text-decoration: none; }
+  article a[href]:hover, div#return > a[href]:hover, div#top > a[href]:hover, aside#toc > div#toc-container ul a[href]:hover {
+    text-decoration: 2px currentColor underline !important; }
+  article a[href]:visited, div#return > a[href]:visited, div#top > a[href]:visited, aside#toc > div#toc-container ul a[href]:visited {
+    color: var(--secondary); }
+
+/* Aspects. */
+.Agda {
+  /* NameKinds. */
+  /* OtherAspects. */
+  /* Standard attributes. */
+  font-family: 'iosevka', 'Iosevka', 'Fantasque Sans Mono', 'Roboto Mono', monospace;
+  font-weight: 400; }
+  .Agda .Comment {
+    color: var(--code-fg);
+    font-style: italic; }
+  .Agda .Background {
+    background-color: var(--code-bg); }
+  .Agda .Markup {
+    color: var(--code-fg); }
+  .Agda .Keyword {
+    color: var(--code-keyword); }
+  .Agda .String {
+    color: var(--code-string); }
+  .Agda .Number {
+    color: var(--code-number); }
+  .Agda .Symbol {
+    color: var(--code-fg); }
+  .Agda .PrimitiveType {
+    color: var(--primary); }
+  .Agda .Pragma {
+    color: var(--code-fg); }
+  .Agda .Bound {
+    color: var(--code-fg) !important; }
+  .Agda .Generalizable {
+    color: var(--code-fg) !important; }
+  .Agda .InductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .CoinductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .Datatype {
+    color: var(--primary) !important; }
+  .Agda .Field {
+    color: var(--code-field) !important; }
+  .Agda .Function {
+    color: var(--primary) !important; }
+  .Agda .Module {
+    color: var(--code-module) !important; }
+  .Agda .Postulate {
+    color: var(--primary) !important; }
+  .Agda .Primitive {
+    color: var(--primary) !important; }
+  .Agda .Record {
+    color: var(--primary) !important; }
+  .Agda .UnsolvedMeta {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .UnsolvedConstraint {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .TerminationProblem {
+    color: var(--code-fg);
+    background: #FFA07A; }
+  .Agda .IncompletePattern {
+    color: var(--code-fg);
+    background: #F5DEB3; }
+  .Agda .Error {
+    color: red;
+    text-decoration: underline; }
+  .Agda .TypeChecks {
+    color: var(--code-fg);
+    background: #ADD8E6; }
+  .Agda .ShadowingInTelescope {
+    color: var(--code-fg);
+    background: #808080; }
+  .Agda .Deadcode {
+    color: var(--code-keyword);
+    font-weight: bold; }
+  .Agda a {
+    text-decoration: none; }
+  .Agda a[href]:hover {
+    text-decoration: 2px var(--primary) underline; }
+  .Agda a[href]:target {
+    animation: highlight 2.5s; }
+  body.text-page .Agda {
+    font-size: var(--code-font-size); }
+
+pre.Agda, div.sourceCode, pre {
+  border-radius: 0;
+  box-shadow: none;
+  overflow-y: clip;
+  margin: 0;
+  padding: 1em;
+  padding-top: 0.25em;
+  padding-bottom: 0.25em;
+  background-color: var(--code-bg);
+  color: var(--code-fg);
+  font-size: var(--code-font-size);
+  max-width: 100%;
+  overflow-x: auto;
+}
+</style>
+</html>
