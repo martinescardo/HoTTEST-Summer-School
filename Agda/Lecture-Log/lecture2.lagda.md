@@ -7,7 +7,8 @@ module lecture2 where
 -- Plan: basic MLTT types, including their elimination principles.
 --
 
-open import lecture1 hiding (𝟘 ; 𝟙 ; D)
+open import lecture1 hiding (𝟘 ; 𝟙 ; D ; ℕ ; _+_)
+open import introduction using (ℕ ; zero ; suc ; _+_)
 
 -- empty type
 data 𝟘 : Type where
