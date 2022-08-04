@@ -306,7 +306,7 @@ bb = (6 , (2 , 3) , refl 6)
 
 To prove that aa ≢ bb, we need to know that ℕ is a set! And this is
 difficult. See the module
-[Hedbergs-Theorem](../Lecture-Notes/Hedbergs-Theorem.lagda.md) for a
+[Hedbergs-Theorem](../Lecture-Notes/files/Hedbergs-Theorem.lagda.md) for a
 complete proof.
 
 For the moment we just assume that ℕ is a set, and prove that 3 ≢ 2 by
