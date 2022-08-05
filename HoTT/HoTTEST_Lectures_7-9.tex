@@ -500,7 +500,7 @@ This last type is contractible so the first type is as claimed. Chasing through 
 
 By the fundamental theorem of identity types, this establishes the desired family of equivalences of types.
 
-\subsection*{Embeddings}
+\section*{Embeddings}
 
 Our next application will show that equivalences are embeddings, defined as follows:
 
@@ -794,6 +794,45 @@ For the converse, we have an equivalence between $\fib_{\ap_f}(p)$ and the ident
 
 \part*{August 5: Function extensionality \& Universal properties}
 
+Let $A$, $B$, and $C$ be types. It is natural to ask whether the types
+\[ (A \times B \to C) \qquad \text{and} \qquad (A \to B \to C)\]
+are equivalent, perhaps via ``currying'' and ``uncurrying''?
+
+Without too much difficulty, we can construct a logical equivalence between these types. One of these maps is
+\[ \term{ev-pair} : (A \times B \to C) \to (A \to B \to C)\] defined by
+ $(\term{ev-pair} g)(a,b) \coloneq g(a,b)$. Note this definition uses the introduction rule
+\[ (\_,\_) : A \to B \to A \times B\]
+for product types. In the other direction we have
+\[ \ind_\times : (A \to B \to C) \to (A \times B \to C)\]
+defined by the elimination rule for product types. Recall that this can be expressed in terms of an induction principle for any type family $x : A, y : B \vdash P(x,y)$, in the form of a map
+\[ \ind_\times : \left( \Pi_{x:A} \Pi_{y: B} P(x,y) \right) \to \left( \Pi_{p: A \times B} P(p) \right).\]
+This specializes to the map we need in the case of a constant type family.
+
+It remains to show that $\term{ev-pair}$ and $\ind_\times$ are inverse equivalences. To show that $\term{ev-pair} \circ \ind_\times \simeq \id$ we must construct an identification
+\[ \term{ev-pair} (\ind_\times f) =_{A \to B \to C} f\]
+for each $f : A \to B \to C$. For any $a : A$ and $b : B$ we know that
+\[ (\term{ev-pair} (\ind_\times f))(a,b) \doteq (\ind_\times f)(a,b) \doteq f(a,b),\]
+by the definition of $\term{ev-pair}$ and by the computation rule for product types. Thus by the $\eta$-rule for function types,
+\[
+    \term{ev-pair} (\ind_\times f) \doteq \lambda a \lambda b. f(a,b) \doteq f\]
+Thus $\refl$ defines an identification
+\[ \refl : \term{ev-pair} (\ind_\times f) =_{A \to B \to C} f.\]
+
+For the other homotopy $\ind_\times \circ \term{ev-pair} \simeq \id$ we must construct an identification
+\[ \ind_\times (\term{ev-pair} g) =_{A \times B \to C} g
+    \]
+for each $g : A \times B \to C$. Here we can't compute the value of of the left hand side at a generic term $p : A \times B$ but in the case of a pair $(a,b) : A \times B$ we do have definitional equalities
+\[ (\ind_\times (\term{ev-pair} g))(a,b) \doteq g(a,b).\] Thus $\refl$ defines a term
+\[ \lambda a. \lambda b. \refl : \Pi_{a:A} \Pi_{b : B} (\ind_\times (\term{ev-pair} g))(a,b) = g(a,b).\]
+By the induction principle for product types, we have a map
+\[ \ind_\times : \left(  \Pi_{a:A} \Pi_{b : B} (\ind_\times (\term{ev-pair} g))(a,b) = g(a,b) \right) \to \left( \Pi_{p : A \times B} (\ind_\times (\term{ev-pair}g))p = g(p) \right).\]
+Thus, we have a homotopy
+\[\ind_\times(\lambda a. \lambda b. \refl) : \ind_\times (\term{ev-pair}g) \sim g. \]
+However, we require an identification $\ind_\times (\term{ev-pair}g) = g$ and we do not have a mechanism to promote homotopies to identifications between functions. So our proof gets stuck here.
+
+We'll be able to complete this argument in the presence of the \textbf{function extensionality} axiom, which asserts that the canonical map that converts an identification between functions into a homotopy is a family of equivalences of types.
+
+
 
 \section*{Function extensionality}
 
@@ -874,7 +913,7 @@ In particular, $\neg A$ is a proposition for any type $A$!
 
 \section*{The type theoretic principle of choice}
 
-There's a result that's sometimes called the ``type theoretic principle of choice'' that is just true, asserting that $\Pi$-types distribute over $\Sigma$-types. We'll now give a proof.
+There's a result that's sometimes called the ``type theoretic principle of choice'' that is just true, asserting that $\Pi$-types distribute over $\Sigma$-types. Without function extensionality we can give a logical equivalence between the following types, but we can now show that it is a full equivalence.
 
 \begin{thm} For any family of types $x :A, y : B(x) \vdash C(x,y) \univ$ the map
 \[ \term{choice} : \left(\prod_{x:A}\sum_{y:B(x)}C(x,y) \right) \to \left( \sum_{f: \prod_{x:A}B(x)} \prod_{x:A} C(x,f(x))\right)\]
@@ -898,6 +937,8 @@ For the second homotopy, we require an identification $\term{choice}^{-1}(\term{
 We do not have a definitional equality relating $h(x)$ and $(\pr_1(h(x)), \pr_2(h(x)))$ but in our characterization of the identity type of $\Sigma$-types we do have an identification between them called $\term{eq-pair}(\refl,\refl)$. By function extensionality, the homotopy $\lambda x. \term{eq-pair}(\refl,\refl) : \term{choice}^{-1}(\term{choice}(h))\sim h$ can be turned into an identification and thus a homotopy $\term{choice}^{-1} \circ \term{choice} \sim \id$.
 \end{proof}
 
+With function extensionality, the rules for the other inductive types can similarly be expressed as universal properties that characterize the type of dependent functions out of a particular type. One map of the equivalence is defined by evaluating at the constructors, while the other is given by the induction principle. The computation rule shows that the induction map is a section of the evaluation map, and the remaining required homotopy can also be constructed from this computation rule, combined with function extensionality.
+
 \section*{Universal properties}
 
 More generally, the function extensionality axiom allows us to prove universal properties, which characterize maps out of or into a given type, and characterize that type up to equivalence. Some examples follow.
@@ -914,12 +955,12 @@ given by $f \mapsto \lambda x.\lambda y. f(x,y)$ is an equivalence
 \begin{proof}
 The inverse map is given by the induction principle for $\Sigma$-types:
 \[ \ind_\Sigma : \left( \prod_{x:A}\prod_{y:B(x)} C(x,y) \right) \to \left( \prod_{z: \sum_{x:A}B(x)} C(z) \right) .\]
-By the computation rule for $\Sigma$ types, we have the homotopy
+By the computation rules for $\Sigma$ types and $\Pi$ types, we have the homotopy
 \[ \term{refl-htpy} : \term{ev-pair} \circ\ind_\Sigma \sim \id,\]
 which shows that $\ind_\Sigma$ is a section of $\term{ev-pair}$.
 
 Function extensionality is used to construct the other homotopy. To define a homotopy $\ind_\Sigma \circ \term{ev-pair} \sim \id$ requires identifications $\ind_\Sigma(\lambda x. \lambda y. f(x,y)) = f$. By function extensionality it suffices to show that
-\[ \prod_{z: \sum_{x:A}B(x)} \ind_\Sigma(\lambda x. \lambda y. f(x,y))(t) = f(t).\] By $\Sigma$-induction it suffices to prove this for pairs in which case we require identifications
+\[ \prod_{z: \sum_{x:A}B(x)} \ind_\Sigma(\lambda x. \lambda y. f(x,y))(z) = f(z).\] By $\Sigma$-induction it suffices to prove this for pairs in which case we require identifications
 \[ \ind_\Sigma(\lambda x. \lambda y. f(x,y))(a,b) = f(a,b),\]
 but this holds definitionally by the computation rule for $\Sigma$ types.
 \end{proof}
@@ -931,7 +972,7 @@ In the non-dependent case we have as a corollary:
 given by $f \mapsto \lambda a. \lambda b. f(a,b)$ is an equivalence. \qed
 \end{cor}
 
-\subsection*{The universal property of identity types}
+\section*{The universal property of identity types}
 
 The universal property for identity types can be understood as an (undirected) type theoretic version of the Yoneda lemma. In the most familiar case, when $B$ is a type family over $A$, it says that the map
 \[ \term{ev-refl} : \left( \prod_{x:A}(a=x) \to B(x) \right) \to B(a)\]
@@ -952,7 +993,7 @@ $\pathind_a(f(a,\refl_a)) = f$ we apply function extensionality twice so that it
 \end{proof}
 
 \begin{comment}
-\subsection*{Composing with equivalences}
+\section*{Composing with equivalences}
 
 Another useful consequence is the fact that $f : A \to B$ is an equivalence if and only if precomposing with $f$ is an equivalence.
 
@@ -980,7 +1021,7 @@ over $f$. We have $(\id_B,\refl_f)$ in this fiber but also the point $(f \circ h
 Thus, it remains to prove that (i) implies (ii) which is the hard part. The first step is to promote the equivalence $f$ to a coherently invertible equivalence, involving $g : B \to A$, homopies $G$ and $H$, and a higher homotopy $K : G \cdot f \sim f \cdot H$. We leave the details to \cite[13.4.1]{Rijke}.
 \end{proof}
 
-\subsection*{The strong induction principle of \texorpdfstring{$\bN$}{the natural numbers}}
+\section*{The strong induction principle of \texorpdfstring{$\bN$}{the natural numbers}}
 
 A final application of function extensionality is to prove the strong induction principle for the natural numbers. We give the statement and leave the proof to \cite[\S13.5]{Rijke}. Function extensionality is needed to give the computation rules.
 
@@ -993,13 +1034,14 @@ so that $\term{strong-ind}_\bN(p_0,p_S,0)  = 0$ and
 \end{thm}
 \end{comment}
 
-\subsection*{Univalence}
+\section*{Univalence}
 
 We have now characterized the identity types of every family of types that we have introduced with a single exception. It remains to identify the identity types of the universe $\UU$. As with the case of identity types of dependent function types, we cannot prove a characterization in type theory. Instead, we need an axiom. What differentiates \emph{homotopy} type theory from Martin-L\"{o}f's dependent type theory is our adoption of Voevodsky's \emph{univalence axiom} for this purpose.
 
 \begin{defn} A universe
 $\UU$ is \textbf{univalent} if for any $A, B : \UU$, the map
-\[ \term{equiv-eq} : (A = B) \to (A \simeq B)\]
+\[ \term{equiv-id} : (A = B) \to (A \simeq B)\]
+defined by path induction by sending $\refl_A$ to the identity equivalence is an equivalence.
 \end{defn}
 
 In other words, univalence asserts that the family $\lambda A,\lambda B, A \simeq B : \UU \to \UU \to \UU$ with the identity equivalences gives an identity system for $\UU$.
@@ -1007,7 +1049,7 @@ In other words, univalence asserts that the family $\lambda A,\lambda B, A \sime
 \begin{exc} Apply the fundamental theorem of identity types, to obtain various equivalent forms of the univalence axiom.
 \end{exc}
 
-As Voevodsky first observed, univalence implies function extensionality, through a non-obvious proof. So the applications we've seen of function extensionality, to prove various universal properties, can also be understood as consequence of the univalence axiom.
+As Voevodsky first observed, univalence implies function extensionality, through a non-obvious proof. So the applications we've seen of function extensionality, to prove various universal properties, can also be understood as consequence of the univalence axiom. But there are myriad other consequences of univalence as we shall soon discover.
 
 
 \bibliographystyle{alpha}
