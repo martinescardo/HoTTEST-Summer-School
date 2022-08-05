@@ -11,3 +11,5 @@
 1. Week 05: [Exercises](../HITs/Exercises5.lagda.md);
    	    [Solutions (by Dan Licata)](../HITs/Solutions5-dan.lagda.md);
    	    [Solutions (by Tom de Jong)](../HITs/Solutions5-tom.lagda.md);
+1. Week 06: [Exercises](../HITs/Exercises6.lagda.md);
+   	    [Solutions](../HITs/Solutions6.lagda.md);

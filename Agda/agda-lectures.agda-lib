@@ -1,5 +1,5 @@
 name: agda-lectures
-include: Lecture-Notes
+include: Lecture-Notes/files
          Lecture-Log
          Exercises
          Auxiliary
