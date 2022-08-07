@@ -9,6 +9,8 @@ Rough plan:
 - Some cool example of transporting programs/proofs using the SIP and
   then computing with the result
 
+- Maybe something with matrices and polynomials?
+
 ```agda
 {-# OPTIONS --cubical #-}
 

@@ -1,40 +1,64 @@
-WARNING: these notes are currently very much work in progress!
-
 # Lecture 7: Cubical Agda
 
 Contents:
 
-- The interval and path types
-- Path and PathP types
-- Function extensionality
+- The interval and Path/PathP types
 - Cubical higher inductive types
 
-Documentation of the Cubical Agda mode can be found at:
-https://agda.readthedocs.io/en/v2.6.2.2/language/cubical.html
+## Some introductory pointers for further reading
 
-The lectures about Cubical Agda are roughly based on:
-https://github.com/HoTT/EPIT-2020/tree/main/04-cubical-type-theory
+Documentation of the Cubical Agda mode can be found
+[here](https://agda.readthedocs.io/en/v2.6.2.2/language/cubical.html).
 
+These lectures about Cubical Agda will be inspired by my material from
+the [2020 EPIT school on HoTT](https://github.com/HoTT/EPIT-2020/tree/main/04-cubical-type-theory).
 
-# Introduction: cubical type theory and Cubical Agda
+For students interested in a more in depth introduction to cubical
+type theory see [my lecture notes for the 2019 HoTT school](https://www.cambridge.org/core/journals/mathematical-structures-in-computer-science/article/cubical-methods-in-homotopy-type-theory-and-univalent-foundations/ECB3FE6B4A0B19AED2D3A2D785C38AF9).
+Those notes contain a lot more background and motivation to cubical
+methods in HoTT and an extensive list of references for those that
+want to read more background material.
 
-**TODO:** give some background, introduction and motivation to cubical stuff
+If one wants a library to work with when doing Cubical Agda there is
+the [agda/cubical](https://github.com/agda/cubical/) library that I
+started developing with Andrea Vezzosi (the implementor of Cubical
+Agda) in 2018 and which has now over 70 contributors. It contains a
+variety of things, including data structures, algebra, synthetic
+homotopy and cohomology theory, etc..
 
+For a slower-paced introduction to mathematics in Cubical Agda, there
+is the more recent [1lab](https://1lab.dev/). Although meant to be
+read on the web, it also doubles as a community-maintained library of
+formalized mathematics, most notably category theory.
+
+# Cubical Agda
+
+To make Agda cubical simply add the following option:
 
 ```agda
-
--- To make Agda cubical add the following option
 {-# OPTIONS --cubical #-}
 
 module Lecture7-notes where
+```
 
+We also have a small cubical prelude which sets things up to work
+nicely and which provides whatever we might need for the lectures.
+
+```agda
 open import cubical-prelude
 ```
 
-# The interval and path types                          --
+The key idea in cubical type theories like Cubical Agda is to not have
+equality be inductively defined as in Book HoTT, but rather we assume
+that there is a primitive interval and define equality literally as
+paths, i.e. as functions out of the interval. By iterating these paths
+we get squares, cubes, hypercubes, ..., making the type theory
+inherently cubical.
 
-The interval is a primitive concept in Cubical Agda and it's written
-I. It has two endpoints:
+# The interval and path types
+
+The interval is a primitive concept in Cubical Agda. It's written `I`.
+It has two endpoints:
 
   i0 : I
   i1 : I
@@ -50,26 +74,26 @@ apply0 A p = p i0
 ```
 
 The equality type _≡_ is not inductively defined in Cubical Agda,
-instead it's a builtin primitive. An element of x ≡ y consists of a
-function p : I → A such that p i0 is definitionally x and p i1 is
-definitionally y. The check that the endpoints are correct when we
-provide a p : I → A is automatically performed by Agda during
-typechecking, so introducing an element of x ≡ y is done just like
-how we introduce elements of I → A but Agda will check the side
-conditions.
+instead it's a builtin primitive notion defined using the interval. An
+element of x ≡ y consists of a function p : I → A such that p i0 is
+definitionally x and p i1 is definitionally y. The check that the
+endpoints are correct when we provide a p : I → A is automatically
+performed by Agda during typechecking, so introducing an element of x
+≡ y is done just like how we introduce elements of I → A but Agda will
+check the side conditions.
 
 We can hence write paths using λ-abstraction:
 
 ```agda
-path1 : {A : Type ℓ} (x : A) → x ≡ x
-path1 x = λ i → x
+mypath : {A : Type ℓ} (x : A) → x ≡ x
+mypath x = λ i → x
 ```
 
-As explained above Agda checks that whatever we write as definition
-matches the path that we have written (so the endpoints have to be
-correct). In this case everything is fine and path1 can be thought
-of as a proof reflexivity. Let's give it a nicer name and more
-implicit arguments:
+As explained above Agda checks that whatever we written as definition
+matches the path that we have provided (so the endpoints have to be
+correct). In this case everything is fine and mypath can be thought of
+as a proof reflexivity. Let's give it a nicer name and more implicit
+arguments:
 
 ```agda
 refl : {A : Type ℓ} {x : A} → x ≡ x
@@ -87,12 +111,13 @@ Note that we cannot pattern-match on interval variables as I is not
 inductively defined. Try uncommenting and typing C-c C-c in the hole:
 
 ```agda
--- foo : {A : Type} → I → A
--- foo r = {!r!}
+-- oops : {A : Type} → I → A
+-- oops r = {!r!}
 ```
 
-It often gets tiring to write {A : Type ℓ} everywhere, so let's
-assume that we have some types:
+It often gets tiring to write {A : Type ℓ} everywhere, so let's assume
+that we have some types (in fact, we've already assumed that ℓ is a
+Level in the cubical-prelude):
 
 ```agda
 variable
@@ -111,19 +136,19 @@ ap : (f : A → B) {x y : A} → x ≡ y → f x ≡ f y
 ap f p i = f (p i)
 ```
 
-Note that the definition differs from the Book HoTT definition in
-that it is not defined by J or pattern-matching on p, but rather
-it's just a direct definition as a composition of functions. Agda
-treats p : x ≡ y like any function, so we can apply it to i to get
-an element of A which at i0 is x and at i1 is y. By applying f to
-this element we hence get an element of B which at i0 is f x and at
-i1 is f y.
+Note that the definition differs from the Book HoTT definition in that
+it is not defined by path induction or pattern-matching on p, but
+rather it's just a direct definition as a composition of functions.
+Agda treats p : x ≡ y like any function, so we can apply it to i to
+get an element of A which at i0 is x and at i1 is y. By applying f to
+this element we hence get an element of B which at i0 is f x and at i1
+is f y.
 
 As this is just function composition it satisfies lots of nice
 definitional equalities, see the exercises. Some of these are not
-satisfied by the HoTT definition of ap/ap.
+satisfied by the Book HoTT definition of ap.
 
-In HoTT function extensionality is proved as a consequence of
+In Book HoTT function extensionality is proved as a consequence of
 univalence using a rather ingenious proof due to Voevodsky, but in
 cubical systems it has a much more direct proof. As paths are just
 functions we can get it by swapping the arguments to p:
@@ -168,12 +193,14 @@ These operations on I are very useful as they let us define even
 more things directly. For example symmetry of paths is easily
 defined using ~_.
 
-**TODO:** rename to "!"?
-
 ```agda
 sym : {x y : A} → x ≡ y → y ≡ x
 sym p i = p (~ i)
 ```
+
+Remark: this has been called "!" in the previous lectures. Here we
+stick to sym for the cubical version following the agda/cubical
+notation.
 
 The operations _∧_ and _∨_ are called "connections" and let us
 build higher dimensional cubes from lower dimensional ones, for
@@ -204,14 +231,6 @@ If we draw this we get:
 Being able to make this square directly is very useful. It for
 example let's prove that singletons are contractible (a.k.a. based
 path induction).
-
-We first need the notion of contractible types. For this we need
-to use a Σ-type:
-
-```agda
-isContr : Type ℓ → Type ℓ
-isContr A = Σ x ꞉ A , ((y : A) → x ≡ y)
-```
 
 We define the type of singletons as follows
 
@@ -244,11 +263,11 @@ isContrSingl x = ctr , prf
 
 As we saw in the second component of prf we often need squares when
 proving things. In fact, pax (i ∧ j) is a path relating refl to pax
-*over* another path "λ j → x ≡ pax j". This notion of path over a
-path is very useful when working in HoTT as well as cubically. In
-HoTT these are called path-overs and are defined using transport,
-but in Cubical Agda they are a primitive notion called PathP ("Path
-over a Path"). In general PathP A x y has
+*over* another path "λ j → x ≡ pax j". This notion of path over a path
+is very useful when working in Book HoTT as well as cubically. In Book
+HoTT these are called path-overs and are defined using transport, but
+in Cubical Agda they are a primitive notion called PathP ("Path over a
+Path"). In general PathP A x y has
 
    A : I → Type ℓ
    x : A i0
@@ -267,17 +286,16 @@ prf' x (y , pax) i = (pax i) , λ j → goal i j
 ```
 
 Just like _×_ is a special case of Σ-types we have that _≡_ is a
-special case of PathP. In fact, x ≡ y is just short for PathP (λ _ → A) x y:
+special case of PathP. In fact, x ≡ y is just short for
+PathP (λ _ → A) x y:
 
 ```agda
 reflP : {x : A} → PathP (λ _ → A) x x
 reflP = refl
 ```
 
-If one looks carefully the proof of prf uses ΣPathP (**TODO:** ref to
-exercise) inlined, in fact this is used all over the place when
-working cubically and simplifies many proofs which in Book HoTT
-requires long complicated reasoning about transport.
+Working directly with paths and equalities makes many proofs from Book
+HoTT very short:
 
 ```agda
 isContrΠ : {B : A → Type ℓ} (h : (x : A) → isContr (B x))
@@ -285,26 +303,14 @@ isContrΠ : {B : A → Type ℓ} (h : (x : A) → isContr (B x))
 isContrΠ h = (λ x → pr₁ (h x)) , (λ f i x → pr₂ (h x) (f x) i)
 ```
 
-Let us end this session with defining propositions and sets
-
-```agda
-isProp : Type ℓ → Type ℓ
-isProp A = (x y : A) → x ≡ y
-
-isSet : Type ℓ → Type ℓ
-isSet A = (x y : A) → isProp (x ≡ y)
-```
-
-In the agda/cubical library we call these h-levels following Voevodsky
-instead of n-types and index by natural numbers instead of ℕ₋₂. So
-isContr is isOfHLevel 0, isProp is isOfHLevel 1, isSet is isOfHLevel
-2, etc. For details see Cubical/Foundations/HLevels.agda
-
-
-
 # Cubical higher inductive types
 
-**TODO:** say introductory things
+We have seen various HITs earlier in the course. These were added
+axiomatically to Agda by postulating there existence together with
+suitable elimination/induction principles. In Cubical Agda they are
+instead added just like any inductive data type, but with path
+constructors. This is made possible by the fact that paths in Cubical
+Agda are just fancy functions.
 
 ## The circle
 
@@ -328,17 +334,17 @@ Note that loop takes an i : I argument. This is not very surprising as
 it's a path base ≡ base, but it's an important difference to Book
 HoTT. Having the native notion of equality be heterogeneous makes it
 possible to quite directly define a general schema for a large class
-of HITs (more or less all in the HoTT book, with the exception for the
-Cauchy reals (I think?)).
+of HITs and add it to a system like Cubical Agda.
 
 Let's use univalence to compute some winding numbers on the
 circle. We first define a family of types over the circle whos
 fibers are the integers.
 
-**TODO:** make this work by adding ℤ
+```agda
 helix : S¹ → Type₀
 helix base     = ℤ
 helix (loop i) = sucPath i
+```
 
 The loopspace of the circle
 
@@ -350,23 +356,27 @@ The loopspace of the circle
 We can then define a function computing how many times we've looped
 around the circle by:
 
-**TODO:** make this work
+```agda
 winding : ΩS¹ → ℤ
-winding p = subst helix p (pos 0)
+winding p = transp (λ i → helix (p i)) i0 (pos 0)
+```
 
-This reduces just fine:
+Here "transp" is a cubical transport function. We'll talk about it in
+more detail in the next lecture, but for now we can observe that it
+reduces just fine:
+
+```agda
 _ : winding (λ i → double ((loop ∙ loop) i)) ≡ pos 4
 _ = refl
+```
 
 This would not reduce in Book HoTT as univalence is an axiom. Having
-things compute makes it possible to substantially simplify many proofs
-from HoTT in Cubical Agda, more about this later.
+things compute definitionally makes it possible to substantially
+simplify many proofs from Bool HoTT in Cubical Agda.
 
 We can in fact prove that winding is an equivalence, this relies on
 the encode-decode method. For details about how this proof looks in
-Cubical Agda see:
-
-  Cubical.HITs.S1.Base
+Cubical Agda see Cubical.HITs.S1.Base in the agda/cubical library.
 
 ## The torus
 
@@ -421,17 +431,66 @@ t2c-c2t (loop _ , loop _) = refl
 
 Using univalence we get the following equality:
 
-**TODO:** make this work by adding isoToPath
+```agda
 Torus≡S¹×S¹ : Torus ≡ S¹ × S¹
 Torus≡S¹×S¹ = isoToPath (iso t2c c2t t2c-c2t c2t-t2c)
+```
 
 We can also directly compute winding numbers on the torus
 
-**TODO:** make this work
+```agda
 windingTorus : point ≡ point → ℤ × ℤ
-windingTorus l = ( winding (λ i → proj₁ (t2c (l i)))
-                 , winding (λ i → proj₂ (t2c (l i))))
+windingTorus l = ( winding (λ i → pr₁ (t2c (l i)))
+                 , winding (λ i → pr₂ (t2c (l i))))
 
 _ : windingTorus (line1 ∙ sym line2) ≡ (pos 1 , negsuc 0)
 _ = refl
+```
+
+# Bonus content if there is time
+
+## Interval
+
+```agda
+data Interval : Type₀ where
+  zero : Interval
+  one  : Interval
+  seg  : zero ≡ one
+```
+
+## Suspension
+
+```agda
+data Susp (A : Type ℓ) : Type ℓ where
+  north : Susp A
+  south : Susp A
+  merid : (a : A) → north ≡ south
+```
+
+We can define Dan's Circle2 as the suspension of Bool.
+
+## Pushouts
+
+```agda
+data Pushout {ℓ ℓ' ℓ''} {A : Type ℓ} {B : Type ℓ'} {C : Type ℓ''}
+             (f : A → B) (g : A → C) : Type (ℓ ⊔ ℓ' ⊔ ℓ'') where
+  inl : B → Pushout f g
+  inr : C → Pushout f g
+  push : (a : A) → inl (f a) ≡ inr (g a)
+```
+
+## Relation quotient
+
+```agda
+data _/ₜ_ {ℓ ℓ'} (A : Type ℓ) (R : A → A → Type ℓ') : Type (ℓ ⊔ ℓ') where
+  [_] : (a : A) → A /ₜ R
+  eq/ : (a b : A) → (r : R a b) → [ a ] ≡ [ b ]
+```
+
+## Propositional truncation
+
+```agda
+data ∥_∥₋₁ {ℓ} (A : Type ℓ) : Type ℓ where
+  ∣_∣₋₁ : A → ∥ A ∥₋₁
+  squash₁ : (x y : ∥ A ∥₋₁) → x ≡ y
 ```

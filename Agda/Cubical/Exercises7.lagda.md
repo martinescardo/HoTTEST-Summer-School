@@ -1,7 +1,3 @@
-WARNING: these notes are currently very much work in progress!
-
-The exercises are taken from the EPIT material.
-
 **TODO:** this needs to be cleaned and should follow the style of the
   other exercise sheets.
 
@@ -103,7 +99,7 @@ without using transport:
 **TODO:** turn these into exercises
 
 ```agda
-module _ {A : Type ℓ} {B : A → Type ℓ'} {x y : Σ B} where
+module _ {A : Type ℓ} {B : A → Type ℓ'} {x y : Σ A B} where
 
   ΣPathP : Σ p ꞉ pr₁ x ≡ pr₁ y , PathP (λ i → B (p i)) (pr₂ x) (pr₂ y)
          → x ≡ y
@@ -115,3 +111,21 @@ module _ {A : Type ℓ} {B : A → Type ℓ'} {x y : Σ B} where
 
   -- The fact that these cancel is proved by refl
 ```
+
+If one looks carefully the proof of prf in Lecture 7 uses ΣPathP
+inlined, in fact this is used all over the place when working
+cubically and simplifies many proofs which in Book HoTT requires long
+complicated reasoning about transport.
+
+# Exercise 10
+
+Prove some equivalences of HITs:
+
+- Susp(Unit) = Interval
+- Susp(Bool) = S1
+...
+
+# Exercise 11
+
+Define suspension using the Pushout HIT and prove that it's equivalent
+to Susp.
