@@ -7,7 +7,7 @@
 ## [Agda manual](https://agda.readthedocs.io/en/latest/)
 
 ## Lecture Notes
-   - [Lectures 1─3](./Lecture-Notes/) delivered by Martín Escard
+   - [Lectures 1─3](./Lecture-Notes/README.md) delivered by Martín Escardó
      1. [Introduction to Agda, dependent types and dependent
           functions](./Lecture-Log/lecture1.lagda.md) covers
 	(part of) the [introduction to
@@ -24,7 +24,7 @@
 	[binary sums](./Lecture-Notes/files/binary-sums.lagda.md),
         [the identity type](./Lecture-Notes/files/identity-type.lagda.md) and
 	[equality in sums](./Lecture-Notes/files/sums-equality.lagda.md) notes.
-   - [Lectures 4─6](./HITs/) delivered by Dan Licata
+   - Lectures 4─6 delivered by Dan Licata
 
      4. [Intro to higher inductive types](./HITs/Lecture4-notes.lagda.md)
      4. [Dependent elimination principles for HITs](./HITs/Lecture5-notes.lagda.md)
