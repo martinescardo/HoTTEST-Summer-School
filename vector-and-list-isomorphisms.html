@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>HoTTEST Summer School 2022 Lecture Notes</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+</head>
+
+<body class="text-page">
+<main>
+<div id="post-toc-container" style="padding-left: 1em; padding-right: 1em;">
+
+  <article>
+
+<p><a href="Https://www.Cs.Bham.Ac.Uk/~mhe/">Martin Escardo</a>. Notes
+originally written for the module <em>Advanced Functional
+Programming</em> of the <a
+href="https://www.birmingham.ac.uk/index.aspx">University of
+Birmingham</a>, UK.</p>
+<!--
+<pre class="Agda"><a id="222" class="Symbol">{-#</a> <a id="226" class="Keyword">OPTIONS</a> <a id="234" class="Pragma">--without-K</a> <a id="246" class="Pragma">--allow-unsolved-metas</a> <a id="269" class="Symbol">#-}</a>
+
+<a id="274" class="Keyword">module</a> <a id="281" href="vector-and-list-isomorphisms.html" class="Module">vector-and-list-isomorphisms</a> <a id="310" class="Keyword">where</a>
+
+<a id="317" class="Keyword">open</a> <a id="322" class="Keyword">import</a> <a id="329" href="prelude.html" class="Module">prelude</a>
+</pre>-->
+<h1 id="vector-and-list-isomorphisms">Vector and list isomorphisms</h1>
+<p>There are deliberate gaps in this file for you to fill.</p>
+<h2 id="the-type-of-lists-can-be-defined-from-that-of-vectors">The type
+of lists can be defined from that of vectors</h2>
+<pre class="Agda"><a id="500" class="Keyword">open</a> <a id="505" class="Keyword">import</a> <a id="512" href="isomorphisms.html" class="Module">isomorphisms</a>
+
+<a id="lists-from-vectors"></a><a id="526" href="vector-and-list-isomorphisms.html#526" data-type="List A ≅ Sigma ℕ (Vector A)" class="Function">lists-from-vectors</a> <a id="545" class="Symbol">:</a> <a id="547" class="Symbol">{</a><a id="548" href="vector-and-list-isomorphisms.html#548" class="Bound">A</a> <a id="550" class="Symbol">:</a> <a id="552" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="556" class="Symbol">}</a> <a id="558" class="Symbol">→</a> <a id="560" href="List.html#402" data-type="Type → Set" class="Datatype">List</a> <a id="565" href="vector-and-list-isomorphisms.html#548" class="Bound">A</a> <a id="567" href="isomorphisms.html#1915" data-type="(A B : Type) → Type" class="Record Operator">≅</a> <a id="569" class="Symbol">(</a><a id="570" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">Σ</a> <a id="572" href="vector-and-list-isomorphisms.html#572" class="Bound">n</a> <a id="574" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">꞉</a> <a id="576" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a> <a id="578" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">,</a> <a id="580" href="Vector.html#498" data-type="Type → ℕ → Set" class="Datatype">Vector</a> <a id="587" href="vector-and-list-isomorphisms.html#548" class="Bound">A</a> <a id="589" href="vector-and-list-isomorphisms.html#572" class="Bound">n</a><a id="590" class="Symbol">)</a>
+<a id="592" href="vector-and-list-isomorphisms.html#526" data-type="List A ≅ Sigma ℕ (Vector A)" class="Function">lists-from-vectors</a> <a id="611" class="Symbol">{</a><a id="612" href="vector-and-list-isomorphisms.html#612" class="Bound">A</a><a id="613" class="Symbol">}</a> <a id="615" class="Symbol">=</a> <a id="617" class="Keyword">record</a> <a id="624" class="Symbol">{</a> <a id="626" href="isomorphisms.html#1981" data-type="A ≅ B → A → B" class="Field">bijection</a> <a id="636" class="Symbol">=</a> <a id="638" href="vector-and-list-isomorphisms.html#682" data-type="List A → Sigma ℕ (Vector A)" class="Function">f</a> <a id="640" class="Symbol">;</a> <a id="642" href="isomorphisms.html#2003" data-type="(r : A ≅ B) → is-bijection (bijection r)" class="Field">bijectivity</a> <a id="654" class="Symbol">=</a> <a id="656" href="vector-and-list-isomorphisms.html#842" data-type="is-bijection f" class="Function">f-is-bijection</a> <a id="671" class="Symbol">}</a>
+ <a id="674" class="Keyword">where</a>
+  <a id="682" href="vector-and-list-isomorphisms.html#682" data-type="List A → Sigma ℕ (Vector A)" class="Function">f</a> <a id="684" class="Symbol">:</a> <a id="686" href="List.html#402" data-type="Type → Set" class="Datatype">List</a> <a id="691" href="vector-and-list-isomorphisms.html#612" class="Bound">A</a> <a id="693" class="Symbol">→</a> <a id="695" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">Σ</a> <a id="697" href="vector-and-list-isomorphisms.html#697" class="Bound">n</a> <a id="699" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">꞉</a> <a id="701" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a> <a id="703" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">,</a> <a id="705" href="Vector.html#498" data-type="Type → ℕ → Set" class="Datatype">Vector</a> <a id="712" href="vector-and-list-isomorphisms.html#612" class="Bound">A</a> <a id="714" href="vector-and-list-isomorphisms.html#697" class="Bound">n</a>
+  <a id="718" href="vector-and-list-isomorphisms.html#682" data-type="List A → Sigma ℕ (Vector A)" class="Function">f</a> <a id="720" class="Symbol">=</a> <a id="722" class="Hole">{!!}</a>
+
+  <a id="730" href="vector-and-list-isomorphisms.html#730" data-type="Sigma ℕ (Vector A) → List A" class="Function">g</a> <a id="732" class="Symbol">:</a> <a id="734" class="Symbol">(</a><a id="735" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">Σ</a> <a id="737" href="vector-and-list-isomorphisms.html#737" class="Bound">n</a> <a id="739" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">꞉</a> <a id="741" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a> <a id="743" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">,</a> <a id="745" href="Vector.html#498" data-type="Type → ℕ → Set" class="Datatype">Vector</a> <a id="752" href="vector-and-list-isomorphisms.html#612" class="Bound">A</a> <a id="754" href="vector-and-list-isomorphisms.html#737" class="Bound">n</a><a id="755" class="Symbol">)</a> <a id="757" class="Symbol">→</a> <a id="759" href="List.html#402" data-type="Type → Set" class="Datatype">List</a> <a id="764" href="vector-and-list-isomorphisms.html#612" class="Bound">A</a>
+  <a id="768" href="vector-and-list-isomorphisms.html#730" data-type="Sigma ℕ (Vector A) → List A" class="Function">g</a> <a id="770" class="Symbol">=</a> <a id="772" class="Hole">{!!}</a>
+
+  <a id="780" href="vector-and-list-isomorphisms.html#780" data-type="(g ∘ f) ∼ id" class="Function">gf</a> <a id="783" class="Symbol">:</a> <a id="785" href="vector-and-list-isomorphisms.html#730" data-type="Sigma ℕ (Vector A) → List A" class="Function">g</a> <a id="787" href="products.html#3388" data-type="((y : B) → C y) → (f : A → B) (x : A) → C (f x)" class="Function Operator">∘</a> <a id="789" href="vector-and-list-isomorphisms.html#682" data-type="List A → Sigma ℕ (Vector A)" class="Function">f</a> <a id="791" href="identity-type.html#3258" data-type="((x : A) → B x) → ((x : A) → B x) → Type" class="Function Operator">∼</a> <a id="793" href="products.html#1041" data-type="A → A" class="Function">id</a>
+  <a id="798" href="vector-and-list-isomorphisms.html#780" data-type="(g ∘ f) ∼ id" class="Function">gf</a> <a id="801" class="Symbol">=</a> <a id="803" class="Hole">{!!}</a>
+
+  <a id="811" href="vector-and-list-isomorphisms.html#811" data-type="(f ∘ g) ∼ id" class="Function">fg</a> <a id="814" class="Symbol">:</a> <a id="816" href="vector-and-list-isomorphisms.html#682" data-type="List A → Sigma ℕ (Vector A)" class="Function">f</a> <a id="818" href="products.html#3388" data-type="((y : B) → C y) → (f : A → B) (x : A) → C (f x)" class="Function Operator">∘</a> <a id="820" href="vector-and-list-isomorphisms.html#730" data-type="Sigma ℕ (Vector A) → List A" class="Function">g</a> <a id="822" href="identity-type.html#3258" data-type="((x : A) → B x) → ((x : A) → B x) → Type" class="Function Operator">∼</a> <a id="824" href="products.html#1041" data-type="A → A" class="Function">id</a>
+  <a id="829" href="vector-and-list-isomorphisms.html#811" data-type="(f ∘ g) ∼ id" class="Function">fg</a> <a id="832" class="Symbol">=</a> <a id="834" class="Hole">{!!}</a>
+
+  <a id="842" href="vector-and-list-isomorphisms.html#842" data-type="is-bijection f" class="Function">f-is-bijection</a> <a id="857" class="Symbol">:</a> <a id="859" href="isomorphisms.html#1750" data-type="(f : A → B) → Type" class="Record">is-bijection</a> <a id="872" href="vector-and-list-isomorphisms.html#682" data-type="List A → Sigma ℕ (Vector A)" class="Function">f</a>
+  <a id="876" href="vector-and-list-isomorphisms.html#842" data-type="is-bijection f" class="Function">f-is-bijection</a> <a id="891" class="Symbol">=</a> <a id="893" class="Keyword">record</a> <a id="900" class="Symbol">{</a> <a id="902" href="isomorphisms.html#1833" data-type="is-bijection f → B → A" class="Field">inverse</a> <a id="910" class="Symbol">=</a> <a id="912" href="vector-and-list-isomorphisms.html#730" data-type="Sigma ℕ (Vector A) → List A" class="Function">g</a> <a id="914" class="Symbol">;</a> <a id="916" href="isomorphisms.html#1851" data-type="(r : is-bijection f) → (inverse r ∘ f) ∼ id" class="Field">η</a> <a id="918" class="Symbol">=</a> <a id="920" href="vector-and-list-isomorphisms.html#780" data-type="(g ∘ f) ∼ id" class="Function">gf</a> <a id="923" class="Symbol">;</a> <a id="925" href="isomorphisms.html#1880" data-type="(r : is-bijection f) → (f ∘ inverse r) ∼ id" class="Field">ε</a> <a id="927" class="Symbol">=</a> <a id="929" href="vector-and-list-isomorphisms.html#811" data-type="(f ∘ g) ∼ id" class="Function">fg</a> <a id="932" class="Symbol">}</a>
+</pre>
+<h2 id="the-type-of-vectors-can-be-defined-from-that-of-lists">The type
+of vectors can be defined from that of lists</h2>
+<pre class="Agda"><a id="1005" class="Keyword">open</a> <a id="1010" class="Keyword">import</a> <a id="1017" href="List-functions.html" class="Module">List-functions</a>
+
+<a id="vectors-from-lists"></a><a id="1033" href="vector-and-list-isomorphisms.html#1033" data-type="(n : ℕ) → Vector A n ≅ Sigma (List A) (λ xs → length xs ≡ n)" class="Function">vectors-from-lists</a> <a id="1052" class="Symbol">:</a> <a id="1054" class="Symbol">{</a><a id="1055" href="vector-and-list-isomorphisms.html#1055" class="Bound">A</a> <a id="1057" class="Symbol">:</a> <a id="1059" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="1063" class="Symbol">}</a> <a id="1065" class="Symbol">(</a><a id="1066" href="vector-and-list-isomorphisms.html#1066" class="Bound">n</a> <a id="1068" class="Symbol">:</a> <a id="1070" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a><a id="1071" class="Symbol">)</a> <a id="1073" class="Symbol">→</a> <a id="1075" href="Vector.html#498" data-type="Type → ℕ → Set" class="Datatype">Vector</a> <a id="1082" href="vector-and-list-isomorphisms.html#1055" class="Bound">A</a> <a id="1084" href="vector-and-list-isomorphisms.html#1066" class="Bound">n</a> <a id="1086" href="isomorphisms.html#1915" data-type="(A B : Type) → Type" class="Record Operator">≅</a> <a id="1088" class="Symbol">(</a><a id="1089" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">Σ</a> <a id="1091" href="vector-and-list-isomorphisms.html#1091" class="Bound">xs</a> <a id="1094" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">꞉</a> <a id="1096" href="List.html#402" data-type="Type → Set" class="Datatype">List</a> <a id="1101" href="vector-and-list-isomorphisms.html#1055" class="Bound">A</a> <a id="1103" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">,</a> <a id="1105" class="Symbol">(</a><a id="1106" href="List-functions.html#452" data-type="List A → ℕ" class="Function">length</a> <a id="1113" href="vector-and-list-isomorphisms.html#1091" class="Bound">xs</a> <a id="1116" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="1118" href="vector-and-list-isomorphisms.html#1066" class="Bound">n</a><a id="1119" class="Symbol">))</a>
+<a id="1122" href="vector-and-list-isomorphisms.html#1033" data-type="(n : ℕ) → Vector A n ≅ Sigma (List A) (λ xs → length xs ≡ n)" class="Function">vectors-from-lists</a> <a id="1141" class="Symbol">{</a><a id="1142" href="vector-and-list-isomorphisms.html#1142" class="Bound">A</a><a id="1143" class="Symbol">}</a> <a id="1145" href="vector-and-list-isomorphisms.html#1145" class="Bound">n</a> <a id="1147" class="Symbol">=</a> <a id="1149" class="Keyword">record</a> <a id="1156" class="Symbol">{</a> <a id="1158" href="isomorphisms.html#1981" data-type="A ≅ B → A → B" class="Field">bijection</a> <a id="1168" class="Symbol">=</a> <a id="1170" href="vector-and-list-isomorphisms.html#1214" data-type="(n : ℕ) → Vector A n → Sigma (List A) (λ xs → length xs ≡ n)" class="Function">f</a> <a id="1172" class="Symbol">;</a> <a id="1174" href="isomorphisms.html#2003" data-type="(r : A ≅ B) → is-bijection (bijection r)" class="Field">bijectivity</a> <a id="1186" class="Symbol">=</a> <a id="1188" href="vector-and-list-isomorphisms.html#1336" data-type="(n : ℕ) → is-bijection (f n)" class="Function">f-is-bijection</a> <a id="1203" class="Symbol">}</a>
+ <a id="1206" class="Keyword">where</a>
+  <a id="1214" href="vector-and-list-isomorphisms.html#1214" data-type="(n : ℕ) → Vector A n → Sigma (List A) (λ xs → length xs ≡ n)" class="Function">f</a> <a id="1216" class="Symbol">:</a> <a id="1218" class="Hole">{!!}</a> <a id="1223" class="Symbol">→</a> <a id="1225" class="Hole">{!!}</a>
+  <a id="1232" href="vector-and-list-isomorphisms.html#1214" data-type="(n : ℕ) → Vector A n → Sigma (List A) (λ xs → length xs ≡ n)" class="Function">f</a> <a id="1234" class="Symbol">=</a> <a id="1236" class="Hole">{!!}</a>
+
+  <a id="1244" href="vector-and-list-isomorphisms.html#1244" data-type="(n : ℕ) → Sigma (List A) (λ xs → length xs ≡ n) → Vector A n" class="Function">g</a> <a id="1246" class="Symbol">:</a> <a id="1248" class="Hole">{!!}</a> <a id="1253" class="Symbol">→</a> <a id="1255" class="Hole">{!!}</a>
+  <a id="1262" href="vector-and-list-isomorphisms.html#1244" data-type="(n : ℕ) → Sigma (List A) (λ xs → length xs ≡ n) → Vector A n" class="Function">g</a> <a id="1264" class="Symbol">=</a> <a id="1266" class="Hole">{!!}</a>
+
+  <a id="1274" href="vector-and-list-isomorphisms.html#1274" data-type="(n : ℕ) → (g n ∘ f n) ∼ id" class="Function">gf</a> <a id="1277" class="Symbol">:</a> <a id="1279" href="vector-and-list-isomorphisms.html#1244" data-type="(n : ℕ) → Sigma (List A) (λ xs → length xs ≡ n) → Vector A n" class="Function">g</a> <a id="1281" href="products.html#3388" data-type="((y : B) → C y) → (f : A → B) (x : A) → C (f x)" class="Function Operator">∘</a> <a id="1283" href="vector-and-list-isomorphisms.html#1214" data-type="(n : ℕ) → Vector A n → Sigma (List A) (λ xs → length xs ≡ n)" class="Function">f</a> <a id="1285" href="identity-type.html#3258" data-type="((x : A) → B x) → ((x : A) → B x) → Type" class="Function Operator">∼</a> <a id="1287" href="products.html#1041" data-type="A → A" class="Function">id</a>
+  <a id="1292" href="vector-and-list-isomorphisms.html#1274" data-type="(n : ℕ) → (g n ∘ f n) ∼ id" class="Function">gf</a> <a id="1295" class="Symbol">=</a> <a id="1297" class="Hole">{!!}</a>
+
+  <a id="1305" href="vector-and-list-isomorphisms.html#1305" data-type="(n : ℕ) → (f n ∘ g n) ∼ id" class="Function">fg</a> <a id="1308" class="Symbol">:</a> <a id="1310" href="vector-and-list-isomorphisms.html#1214" data-type="(n : ℕ) → Vector A n → Sigma (List A) (λ xs → length xs ≡ n)" class="Function">f</a> <a id="1312" href="products.html#3388" data-type="((y : B) → C y) → (f : A → B) (x : A) → C (f x)" class="Function Operator">∘</a> <a id="1314" href="vector-and-list-isomorphisms.html#1244" data-type="(n : ℕ) → Sigma (List A) (λ xs → length xs ≡ n) → Vector A n" class="Function">g</a> <a id="1316" href="identity-type.html#3258" data-type="((x : A) → B x) → ((x : A) → B x) → Type" class="Function Operator">∼</a> <a id="1318" href="products.html#1041" data-type="A → A" class="Function">id</a>
+  <a id="1323" href="vector-and-list-isomorphisms.html#1305" data-type="(n : ℕ) → (f n ∘ g n) ∼ id" class="Function">fg</a> <a id="1326" class="Symbol">=</a> <a id="1328" class="Hole">{!!}</a>
+
+  <a id="1336" href="vector-and-list-isomorphisms.html#1336" data-type="(n : ℕ) → is-bijection (f n)" class="Function">f-is-bijection</a> <a id="1351" class="Symbol">:</a> <a id="1353" href="isomorphisms.html#1750" data-type="(f : A → B) → Type" class="Record">is-bijection</a> <a id="1366" href="vector-and-list-isomorphisms.html#1214" data-type="(n : ℕ) → Vector A n → Sigma (List A) (λ xs → length xs ≡ n)" class="Function">f</a>
+  <a id="1370" href="vector-and-list-isomorphisms.html#1336" data-type="(n : ℕ) → is-bijection (f n)" class="Function">f-is-bijection</a> <a id="1385" class="Symbol">=</a> <a id="1387" class="Keyword">record</a> <a id="1394" class="Symbol">{</a> <a id="1396" href="isomorphisms.html#1833" data-type="is-bijection f → B → A" class="Field">inverse</a> <a id="1404" class="Symbol">=</a> <a id="1406" href="vector-and-list-isomorphisms.html#1244" data-type="(n : ℕ) → Sigma (List A) (λ xs → length xs ≡ n) → Vector A n" class="Function">g</a> <a id="1408" class="Symbol">;</a> <a id="1410" href="isomorphisms.html#1851" data-type="(r : is-bijection f) → (inverse r ∘ f) ∼ id" class="Field">η</a> <a id="1412" class="Symbol">=</a> <a id="1414" href="vector-and-list-isomorphisms.html#1274" data-type="(n : ℕ) → (g n ∘ f n) ∼ id" class="Function">gf</a> <a id="1417" class="Symbol">;</a> <a id="1419" href="isomorphisms.html#1880" data-type="(r : is-bijection f) → (f ∘ inverse r) ∼ id" class="Field">ε</a> <a id="1421" class="Symbol">=</a> <a id="1423" href="vector-and-list-isomorphisms.html#1305" data-type="(n : ℕ) → (f n ∘ g n) ∼ id" class="Function">fg</a> <a id="1426" class="Symbol">}</a>
+</pre>
+<h2 id="the-types-of-lists-and-vectors-can-be-defined-in-basic-mltt">The
+types of lists and vectors can be defined in basic MLTT</h2>
+<pre class="Agda"><a id="Vector&#39;"></a><a id="1505" href="vector-and-list-isomorphisms.html#1505" data-type="Type → ℕ → Type" class="Function">Vector&#39;</a> <a id="1513" class="Symbol">:</a> <a id="1515" class="Symbol">(</a><a id="1516" href="vector-and-list-isomorphisms.html#1516" class="Bound">A</a> <a id="1518" class="Symbol">:</a> <a id="1520" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="1524" class="Symbol">)</a> <a id="1526" class="Symbol">→</a> <a id="1528" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a> <a id="1530" class="Symbol">→</a> <a id="1532" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a>
+<a id="1537" href="vector-and-list-isomorphisms.html#1505" data-type="Type → ℕ → Type" class="Function">Vector&#39;</a> <a id="1545" href="vector-and-list-isomorphisms.html#1545" class="Bound">A</a> <a id="1547" class="Number">0</a>       <a id="1555" class="Symbol">=</a> <a id="1557" href="unit-type.html#396" data-type="Type" class="Record">𝟙</a>
+<a id="1559" href="vector-and-list-isomorphisms.html#1505" data-type="Type → ℕ → Type" class="Function">Vector&#39;</a> <a id="1567" href="vector-and-list-isomorphisms.html#1567" class="Bound">A</a> <a id="1569" class="Symbol">(</a><a id="1570" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="1574" href="vector-and-list-isomorphisms.html#1574" class="Bound">n</a><a id="1575" class="Symbol">)</a> <a id="1577" class="Symbol">=</a> <a id="1579" href="vector-and-list-isomorphisms.html#1567" class="Bound">A</a> <a id="1581" href="binary-products.html#670" data-type="Type → Type → Type" class="Function Operator">×</a> <a id="1583" href="vector-and-list-isomorphisms.html#1505" data-type="Type → ℕ → Type" class="Function">Vector&#39;</a> <a id="1591" href="vector-and-list-isomorphisms.html#1567" class="Bound">A</a> <a id="1593" href="vector-and-list-isomorphisms.html#1574" class="Bound">n</a>
+
+<a id="[]&#39;"></a><a id="1596" href="vector-and-list-isomorphisms.html#1596" data-type="Vector&#39; A 0" class="Function">[]&#39;</a> <a id="1600" class="Symbol">:</a> <a id="1602" class="Symbol">{</a><a id="1603" href="vector-and-list-isomorphisms.html#1603" class="Bound">A</a> <a id="1605" class="Symbol">:</a> <a id="1607" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="1611" class="Symbol">}</a> <a id="1613" class="Symbol">→</a> <a id="1615" href="vector-and-list-isomorphisms.html#1505" data-type="Type → ℕ → Type" class="Function">Vector&#39;</a> <a id="1623" href="vector-and-list-isomorphisms.html#1603" class="Bound">A</a> <a id="1625" class="Number">0</a>
+<a id="1627" href="vector-and-list-isomorphisms.html#1596" data-type="Vector&#39; A 0" class="Function">[]&#39;</a> <a id="1631" class="Symbol">=</a> <a id="1633" href="unit-type.html#426" data-type="𝟙" class="InductiveConstructor">⋆</a>
+
+<a id="_::&#39;_"></a><a id="1636" href="vector-and-list-isomorphisms.html#1636" data-type="A → Vector&#39; A n → Vector&#39; A (suc n)" class="Function Operator">_::&#39;_</a> <a id="1642" class="Symbol">:</a> <a id="1644" class="Symbol">{</a><a id="1645" href="vector-and-list-isomorphisms.html#1645" class="Bound">A</a> <a id="1647" class="Symbol">:</a> <a id="1649" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="1653" class="Symbol">}</a> <a id="1655" class="Symbol">{</a><a id="1656" href="vector-and-list-isomorphisms.html#1656" class="Bound">n</a> <a id="1658" class="Symbol">:</a> <a id="1660" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a><a id="1661" class="Symbol">}</a> <a id="1663" class="Symbol">→</a> <a id="1665" href="vector-and-list-isomorphisms.html#1645" class="Bound">A</a> <a id="1667" class="Symbol">→</a> <a id="1669" href="vector-and-list-isomorphisms.html#1505" data-type="Type → ℕ → Type" class="Function">Vector&#39;</a> <a id="1677" href="vector-and-list-isomorphisms.html#1645" class="Bound">A</a> <a id="1679" href="vector-and-list-isomorphisms.html#1656" class="Bound">n</a> <a id="1681" class="Symbol">→</a> <a id="1683" href="vector-and-list-isomorphisms.html#1505" data-type="Type → ℕ → Type" class="Function">Vector&#39;</a> <a id="1691" href="vector-and-list-isomorphisms.html#1645" class="Bound">A</a> <a id="1693" class="Symbol">(</a><a id="1694" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="1698" href="vector-and-list-isomorphisms.html#1656" class="Bound">n</a><a id="1699" class="Symbol">)</a>
+<a id="1701" href="vector-and-list-isomorphisms.html#1701" class="Bound">x</a> <a id="1703" href="vector-and-list-isomorphisms.html#1636" data-type="A → Vector&#39; A n → Vector&#39; A (suc n)" class="Function Operator">::&#39;</a> <a id="1707" href="vector-and-list-isomorphisms.html#1707" class="Bound">xs</a> <a id="1710" class="Symbol">=</a> <a id="1712" href="vector-and-list-isomorphisms.html#1701" class="Bound">x</a> <a id="1714" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="1716" href="vector-and-list-isomorphisms.html#1707" class="Bound">xs</a>
+
+<a id="List&#39;"></a><a id="1720" href="vector-and-list-isomorphisms.html#1720" data-type="Type → Type" class="Function">List&#39;</a> <a id="1726" class="Symbol">:</a> <a id="1728" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a> <a id="1733" class="Symbol">→</a> <a id="1735" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a>
+<a id="1740" href="vector-and-list-isomorphisms.html#1720" data-type="Type → Type" class="Function">List&#39;</a> <a id="1746" href="vector-and-list-isomorphisms.html#1746" class="Bound">X</a> <a id="1748" class="Symbol">=</a> <a id="1750" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">Σ</a> <a id="1752" href="vector-and-list-isomorphisms.html#1752" class="Bound">n</a> <a id="1754" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">꞉</a> <a id="1756" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a> <a id="1758" href="sums.html#3608" data-type="(A : Type) → (A → Type) → Type" class="Function">,</a> <a id="1760" href="vector-and-list-isomorphisms.html#1505" data-type="Type → ℕ → Type" class="Function">Vector&#39;</a> <a id="1768" href="vector-and-list-isomorphisms.html#1746" class="Bound">X</a> <a id="1770" href="vector-and-list-isomorphisms.html#1752" class="Bound">n</a>
+
+</pre>
+<pre class="Agda"><a id="vectors-in-basic-MLTT"></a><a id="1786" href="vector-and-list-isomorphisms.html#1786" data-type="(n : ℕ) → Vector A n ≅ Vector&#39; A n" class="Function">vectors-in-basic-MLTT</a> <a id="1808" class="Symbol">:</a> <a id="1810" class="Symbol">{</a><a id="1811" href="vector-and-list-isomorphisms.html#1811" class="Bound">A</a> <a id="1813" class="Symbol">:</a> <a id="1815" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="1819" class="Symbol">}</a> <a id="1821" class="Symbol">(</a><a id="1822" href="vector-and-list-isomorphisms.html#1822" class="Bound">n</a> <a id="1824" class="Symbol">:</a> <a id="1826" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a><a id="1827" class="Symbol">)</a> <a id="1829" class="Symbol">→</a> <a id="1831" href="Vector.html#498" data-type="Type → ℕ → Set" class="Datatype">Vector</a> <a id="1838" href="vector-and-list-isomorphisms.html#1811" class="Bound">A</a> <a id="1840" href="vector-and-list-isomorphisms.html#1822" class="Bound">n</a> <a id="1842" href="isomorphisms.html#1915" data-type="(A B : Type) → Type" class="Record Operator">≅</a> <a id="1844" href="vector-and-list-isomorphisms.html#1505" data-type="Type → ℕ → Type" class="Function">Vector&#39;</a> <a id="1852" href="vector-and-list-isomorphisms.html#1811" class="Bound">A</a> <a id="1854" href="vector-and-list-isomorphisms.html#1822" class="Bound">n</a>
+<a id="1856" href="vector-and-list-isomorphisms.html#1786" data-type="(n : ℕ) → Vector A n ≅ Vector&#39; A n" class="Function">vectors-in-basic-MLTT</a> <a id="1878" class="Symbol">{</a><a id="1879" href="vector-and-list-isomorphisms.html#1879" class="Bound">A</a><a id="1880" class="Symbol">}</a> <a id="1882" href="vector-and-list-isomorphisms.html#1882" class="Bound">n</a> <a id="1884" class="Symbol">=</a> <a id="1886" class="Keyword">record</a> <a id="1893" class="Symbol">{</a> <a id="1895" href="isomorphisms.html#1981" data-type="A ≅ B → A → B" class="Field">bijection</a> <a id="1905" class="Symbol">=</a> <a id="1907" href="vector-and-list-isomorphisms.html#1951" data-type="(n : ℕ) → Vector A n → Vector&#39; A n" class="Function">f</a> <a id="1909" class="Symbol">;</a> <a id="1911" href="isomorphisms.html#2003" data-type="(r : A ≅ B) → is-bijection (bijection r)" class="Field">bijectivity</a> <a id="1923" class="Symbol">=</a> <a id="1925" href="vector-and-list-isomorphisms.html#2073" data-type="(n : ℕ) → is-bijection (f n)" class="Function">f-is-bijection</a> <a id="1940" class="Symbol">}</a>
+ <a id="1943" class="Keyword">where</a>
+  <a id="1951" href="vector-and-list-isomorphisms.html#1951" data-type="(n : ℕ) → Vector A n → Vector&#39; A n" class="Function">f</a> <a id="1953" class="Symbol">:</a> <a id="1955" class="Hole">{!!}</a> <a id="1960" class="Symbol">→</a> <a id="1962" class="Hole">{!!}</a>
+  <a id="1969" href="vector-and-list-isomorphisms.html#1951" data-type="(n : ℕ) → Vector A n → Vector&#39; A n" class="Function">f</a> <a id="1971" class="Symbol">=</a> <a id="1973" class="Hole">{!!}</a>
+
+  <a id="1981" href="vector-and-list-isomorphisms.html#1981" data-type="(n : ℕ) → Vector&#39; A n → Vector A n" class="Function">g</a> <a id="1983" class="Symbol">:</a> <a id="1985" class="Hole">{!!}</a> <a id="1990" class="Symbol">→</a> <a id="1992" class="Hole">{!!}</a>
+  <a id="1999" href="vector-and-list-isomorphisms.html#1981" data-type="(n : ℕ) → Vector&#39; A n → Vector A n" class="Function">g</a> <a id="2001" class="Symbol">=</a> <a id="2003" class="Hole">{!!}</a>
+
+  <a id="2011" href="vector-and-list-isomorphisms.html#2011" data-type="(n : ℕ) → (g n ∘ f n) ∼ id" class="Function">gf</a> <a id="2014" class="Symbol">:</a> <a id="2016" href="vector-and-list-isomorphisms.html#1981" data-type="(n : ℕ) → Vector&#39; A n → Vector A n" class="Function">g</a> <a id="2018" href="products.html#3388" data-type="((y : B) → C y) → (f : A → B) (x : A) → C (f x)" class="Function Operator">∘</a> <a id="2020" href="vector-and-list-isomorphisms.html#1951" data-type="(n : ℕ) → Vector A n → Vector&#39; A n" class="Function">f</a> <a id="2022" href="identity-type.html#3258" data-type="((x : A) → B x) → ((x : A) → B x) → Type" class="Function Operator">∼</a> <a id="2024" href="products.html#1041" data-type="A → A" class="Function">id</a>
+  <a id="2029" href="vector-and-list-isomorphisms.html#2011" data-type="(n : ℕ) → (g n ∘ f n) ∼ id" class="Function">gf</a> <a id="2032" class="Symbol">=</a> <a id="2034" class="Hole">{!!}</a>
+
+  <a id="2042" href="vector-and-list-isomorphisms.html#2042" data-type="(n : ℕ) → (f n ∘ g n) ∼ id" class="Function">fg</a> <a id="2045" class="Symbol">:</a> <a id="2047" href="vector-and-list-isomorphisms.html#1951" data-type="(n : ℕ) → Vector A n → Vector&#39; A n" class="Function">f</a> <a id="2049" href="products.html#3388" data-type="((y : B) → C y) → (f : A → B) (x : A) → C (f x)" class="Function Operator">∘</a> <a id="2051" href="vector-and-list-isomorphisms.html#1981" data-type="(n : ℕ) → Vector&#39; A n → Vector A n" class="Function">g</a> <a id="2053" href="identity-type.html#3258" data-type="((x : A) → B x) → ((x : A) → B x) → Type" class="Function Operator">∼</a> <a id="2055" href="products.html#1041" data-type="A → A" class="Function">id</a>
+  <a id="2060" href="vector-and-list-isomorphisms.html#2042" data-type="(n : ℕ) → (f n ∘ g n) ∼ id" class="Function">fg</a> <a id="2063" class="Symbol">=</a> <a id="2065" class="Hole">{!!}</a>
+
+  <a id="2073" href="vector-and-list-isomorphisms.html#2073" data-type="(n : ℕ) → is-bijection (f n)" class="Function">f-is-bijection</a> <a id="2088" class="Symbol">:</a> <a id="2090" href="isomorphisms.html#1750" data-type="(f : A → B) → Type" class="Record">is-bijection</a> <a id="2103" href="vector-and-list-isomorphisms.html#1951" data-type="(n : ℕ) → Vector A n → Vector&#39; A n" class="Function">f</a>
+  <a id="2107" href="vector-and-list-isomorphisms.html#2073" data-type="(n : ℕ) → is-bijection (f n)" class="Function">f-is-bijection</a> <a id="2122" class="Symbol">=</a> <a id="2124" class="Keyword">record</a> <a id="2131" class="Symbol">{</a> <a id="2133" href="isomorphisms.html#1833" data-type="is-bijection f → B → A" class="Field">inverse</a> <a id="2141" class="Symbol">=</a> <a id="2143" href="vector-and-list-isomorphisms.html#1981" data-type="(n : ℕ) → Vector&#39; A n → Vector A n" class="Function">g</a> <a id="2145" class="Symbol">;</a> <a id="2147" href="isomorphisms.html#1851" data-type="(r : is-bijection f) → (inverse r ∘ f) ∼ id" class="Field">η</a> <a id="2149" class="Symbol">=</a> <a id="2151" href="vector-and-list-isomorphisms.html#2011" data-type="(n : ℕ) → (g n ∘ f n) ∼ id" class="Function">gf</a> <a id="2154" class="Symbol">;</a> <a id="2156" href="isomorphisms.html#1880" data-type="(r : is-bijection f) → (f ∘ inverse r) ∼ id" class="Field">ε</a> <a id="2158" class="Symbol">=</a> <a id="2160" href="vector-and-list-isomorphisms.html#2042" data-type="(n : ℕ) → (f n ∘ g n) ∼ id" class="Function">fg</a> <a id="2163" class="Symbol">}</a>
+</pre>
+<pre class="Agda"><a id="lists-in-basic-MLTT"></a><a id="2174" href="vector-and-list-isomorphisms.html#2174" data-type="List A ≅ List&#39; A" class="Function">lists-in-basic-MLTT</a> <a id="2194" class="Symbol">:</a> <a id="2196" class="Symbol">{</a><a id="2197" href="vector-and-list-isomorphisms.html#2197" class="Bound">A</a> <a id="2199" class="Symbol">:</a> <a id="2201" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="2205" class="Symbol">}</a> <a id="2207" class="Symbol">→</a> <a id="2209" href="List.html#402" data-type="Type → Set" class="Datatype">List</a> <a id="2214" href="vector-and-list-isomorphisms.html#2197" class="Bound">A</a> <a id="2216" href="isomorphisms.html#1915" data-type="(A B : Type) → Type" class="Record Operator">≅</a> <a id="2218" href="vector-and-list-isomorphisms.html#1720" data-type="Type → Type" class="Function">List&#39;</a> <a id="2224" href="vector-and-list-isomorphisms.html#2197" class="Bound">A</a>
+<a id="2226" href="vector-and-list-isomorphisms.html#2174" data-type="List A ≅ List&#39; A" class="Function">lists-in-basic-MLTT</a> <a id="2246" class="Symbol">{</a><a id="2247" href="vector-and-list-isomorphisms.html#2247" class="Bound">A</a><a id="2248" class="Symbol">}</a> <a id="2250" class="Symbol">=</a> <a id="2252" class="Keyword">record</a> <a id="2259" class="Symbol">{</a> <a id="2261" href="isomorphisms.html#1981" data-type="A ≅ B → A → B" class="Field">bijection</a> <a id="2271" class="Symbol">=</a> <a id="2273" href="vector-and-list-isomorphisms.html#2317" data-type="List A → List&#39; A" class="Function">f</a> <a id="2275" class="Symbol">;</a> <a id="2277" href="isomorphisms.html#2003" data-type="(r : A ≅ B) → is-bijection (bijection r)" class="Field">bijectivity</a> <a id="2289" class="Symbol">=</a> <a id="2291" href="vector-and-list-isomorphisms.html#2439" data-type="is-bijection f" class="Function">f-is-bijection</a> <a id="2306" class="Symbol">}</a>
+ <a id="2309" class="Keyword">where</a>
+  <a id="2317" href="vector-and-list-isomorphisms.html#2317" data-type="List A → List&#39; A" class="Function">f</a> <a id="2319" class="Symbol">:</a> <a id="2321" class="Hole">{!!}</a> <a id="2326" class="Symbol">→</a> <a id="2328" class="Hole">{!!}</a>
+  <a id="2335" href="vector-and-list-isomorphisms.html#2317" data-type="List A → List&#39; A" class="Function">f</a> <a id="2337" class="Symbol">=</a> <a id="2339" class="Hole">{!!}</a>
+
+  <a id="2347" href="vector-and-list-isomorphisms.html#2347" data-type="List&#39; A → List A" class="Function">g</a> <a id="2349" class="Symbol">:</a> <a id="2351" class="Hole">{!!}</a> <a id="2356" class="Symbol">→</a> <a id="2358" class="Hole">{!!}</a>
+  <a id="2365" href="vector-and-list-isomorphisms.html#2347" data-type="List&#39; A → List A" class="Function">g</a> <a id="2367" class="Symbol">=</a> <a id="2369" class="Hole">{!!}</a>
+
+  <a id="2377" href="vector-and-list-isomorphisms.html#2377" data-type="(g ∘ f) ∼ id" class="Function">gf</a> <a id="2380" class="Symbol">:</a> <a id="2382" href="vector-and-list-isomorphisms.html#2347" data-type="List&#39; A → List A" class="Function">g</a> <a id="2384" href="products.html#3388" data-type="((y : B) → C y) → (f : A → B) (x : A) → C (f x)" class="Function Operator">∘</a> <a id="2386" href="vector-and-list-isomorphisms.html#2317" data-type="List A → List&#39; A" class="Function">f</a> <a id="2388" href="identity-type.html#3258" data-type="((x : A) → B x) → ((x : A) → B x) → Type" class="Function Operator">∼</a> <a id="2390" href="products.html#1041" data-type="A → A" class="Function">id</a>
+  <a id="2395" href="vector-and-list-isomorphisms.html#2377" data-type="(g ∘ f) ∼ id" class="Function">gf</a> <a id="2398" class="Symbol">=</a> <a id="2400" class="Hole">{!!}</a>
+
+  <a id="2408" href="vector-and-list-isomorphisms.html#2408" data-type="(f ∘ g) ∼ id" class="Function">fg</a> <a id="2411" class="Symbol">:</a> <a id="2413" href="vector-and-list-isomorphisms.html#2317" data-type="List A → List&#39; A" class="Function">f</a> <a id="2415" href="products.html#3388" data-type="((y : B) → C y) → (f : A → B) (x : A) → C (f x)" class="Function Operator">∘</a> <a id="2417" href="vector-and-list-isomorphisms.html#2347" data-type="List&#39; A → List A" class="Function">g</a> <a id="2419" href="identity-type.html#3258" data-type="((x : A) → B x) → ((x : A) → B x) → Type" class="Function Operator">∼</a> <a id="2421" href="products.html#1041" data-type="A → A" class="Function">id</a>
+  <a id="2426" href="vector-and-list-isomorphisms.html#2408" data-type="(f ∘ g) ∼ id" class="Function">fg</a> <a id="2429" class="Symbol">=</a> <a id="2431" class="Hole">{!!}</a>
+
+  <a id="2439" href="vector-and-list-isomorphisms.html#2439" data-type="is-bijection f" class="Function">f-is-bijection</a> <a id="2454" class="Symbol">:</a> <a id="2456" href="isomorphisms.html#1750" data-type="(f : A → B) → Type" class="Record">is-bijection</a> <a id="2469" href="vector-and-list-isomorphisms.html#2317" data-type="List A → List&#39; A" class="Function">f</a>
+  <a id="2473" href="vector-and-list-isomorphisms.html#2439" data-type="is-bijection f" class="Function">f-is-bijection</a> <a id="2488" class="Symbol">=</a> <a id="2490" class="Keyword">record</a> <a id="2497" class="Symbol">{</a> <a id="2499" href="isomorphisms.html#1833" data-type="is-bijection f → B → A" class="Field">inverse</a> <a id="2507" class="Symbol">=</a> <a id="2509" href="vector-and-list-isomorphisms.html#2347" data-type="List&#39; A → List A" class="Function">g</a> <a id="2511" class="Symbol">;</a> <a id="2513" href="isomorphisms.html#1851" data-type="(r : is-bijection f) → (inverse r ∘ f) ∼ id" class="Field">η</a> <a id="2515" class="Symbol">=</a> <a id="2517" href="vector-and-list-isomorphisms.html#2377" data-type="(g ∘ f) ∼ id" class="Function">gf</a> <a id="2520" class="Symbol">;</a> <a id="2522" href="isomorphisms.html#1880" data-type="(r : is-bijection f) → (f ∘ inverse r) ∼ id" class="Field">ε</a> <a id="2524" class="Symbol">=</a> <a id="2526" href="vector-and-list-isomorphisms.html#2408" data-type="(f ∘ g) ∼ id" class="Function">fg</a> <a id="2529" class="Symbol">}</a>
+</pre>
+<p><a href="https://martinescardo.github.io/HoTTEST-Summer-School/">Go
+back to the table of contents</a></p>
+
+  </article>
+</div>
+</main>
+</body>
+<style>
+
+:root {
+  --text-bg: #fff;
+  --text-fg: #222;
+  --shadow: #000;
+  --primary: #0054F4;
+  --secondary: #9C1BD6;
+  --modal-bg: #ccccccaa;
+  --warning-bg: #fef08a;
+  --code-bg: var(--text-bg);
+  --code-fg: var(--text-fg);
+  --code-keyword: #BB3B13;
+  --code-string:  #d52753;
+  --code-number:  #8A1060;
+  --code-module:  #8A1060;
+  --code-field:   #9C1BD6;
+  --code-constructor: #207B1D;
+  --code-highlight: #F5DEB3;
+  --search-selected: #e2e8f0;
+  --details-summary: #b2ebf2;
+  --details-open:    #80deea;
+  --depgraph-edge: #eee;
+  --blockquote-bg: #d8b4fe; }
+
+.diagram-dark {
+  display: none !important; }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-bg: #282C34;
+    --text-fg: #bfbfbf;
+    --shadow: #475569;
+    --primary: #61AFEF;
+    --secondary: #C878DD;
+    --modal-bg: #282C34aa;
+    --warning-bg: #991b1b;
+    --code-keyword:     #E5C07B;
+    --code-string:      #E06C75;
+    --code-number:      #98C379;
+    --code-module:      #56B6C2;
+    --code-field:       #C878DD;
+    --code-constructor: #98C379;
+    --code-highlight: #ef444499;
+    --search-selected: #474e5e;
+    --details-summary: #5b21b6;
+    --details-open:    #4c1d95;
+    --depgraph-edge: #474e5e;
+    --blockquote-bg: #475569; }
+  div.warning {
+    --shadow: #7f1d1d
+  ; }
+  input {
+    background-color: #334155;
+    border: 1px solid #475569;
+    color: var(--text-fg); }
+  body {
+    scrollbar-color: #3b4454 #2b2e33; }
+  .diagram-dark {
+    display: block !important; }
+  .diagram-light {
+    display: none !important; } }
+
+table {
+  margin: auto;
+  border-collapse: collapse; }
+  table td, table th {
+    text-align: center;
+    padding: 0px 1em 0px 1em;
+    border: 1px solid black; }
+  table th {
+    border-bottom: 2px solid black; }
+  table td {
+    white-space: nowrap; }
+
+html { max-width: 100%; }
+
+body {
+  font-family: "Inria Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  width: 100%;
+  font-size: var(--font-size);
+  overflow-x: clip;
+  background-color: var(--text-bg);
+  color: var(--text-fg);
+}
+
+div#post-toc-container { max-width: 120ch; margin: auto; }
+
+article a[href], div#return > a[href], div#top > a[href], aside#toc > div#toc-container ul a[href] {
+  color: var(--primary);
+  text-decoration: none; }
+  article a[href]:hover, div#return > a[href]:hover, div#top > a[href]:hover, aside#toc > div#toc-container ul a[href]:hover {
+    text-decoration: 2px currentColor underline !important; }
+  article a[href]:visited, div#return > a[href]:visited, div#top > a[href]:visited, aside#toc > div#toc-container ul a[href]:visited {
+    color: var(--secondary); }
+
+/* Aspects. */
+.Agda {
+  /* NameKinds. */
+  /* OtherAspects. */
+  /* Standard attributes. */
+  font-family: 'iosevka', 'Iosevka', 'Fantasque Sans Mono', 'Roboto Mono', monospace;
+  font-weight: 400; }
+  .Agda .Comment {
+    color: var(--code-fg);
+    font-style: italic; }
+  .Agda .Background {
+    background-color: var(--code-bg); }
+  .Agda .Markup {
+    color: var(--code-fg); }
+  .Agda .Keyword {
+    color: var(--code-keyword); }
+  .Agda .String {
+    color: var(--code-string); }
+  .Agda .Number {
+    color: var(--code-number); }
+  .Agda .Symbol {
+    color: var(--code-fg); }
+  .Agda .PrimitiveType {
+    color: var(--primary); }
+  .Agda .Pragma {
+    color: var(--code-fg); }
+  .Agda .Bound {
+    color: var(--code-fg) !important; }
+  .Agda .Generalizable {
+    color: var(--code-fg) !important; }
+  .Agda .InductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .CoinductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .Datatype {
+    color: var(--primary) !important; }
+  .Agda .Field {
+    color: var(--code-field) !important; }
+  .Agda .Function {
+    color: var(--primary) !important; }
+  .Agda .Module {
+    color: var(--code-module) !important; }
+  .Agda .Postulate {
+    color: var(--primary) !important; }
+  .Agda .Primitive {
+    color: var(--primary) !important; }
+  .Agda .Record {
+    color: var(--primary) !important; }
+  .Agda .UnsolvedMeta {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .UnsolvedConstraint {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .TerminationProblem {
+    color: var(--code-fg);
+    background: #FFA07A; }
+  .Agda .IncompletePattern {
+    color: var(--code-fg);
+    background: #F5DEB3; }
+  .Agda .Error {
+    color: red;
+    text-decoration: underline; }
+  .Agda .TypeChecks {
+    color: var(--code-fg);
+    background: #ADD8E6; }
+  .Agda .ShadowingInTelescope {
+    color: var(--code-fg);
+    background: #808080; }
+  .Agda .Deadcode {
+    color: var(--code-keyword);
+    font-weight: bold; }
+  .Agda a {
+    text-decoration: none; }
+  .Agda a[href]:hover {
+    text-decoration: 2px var(--primary) underline; }
+  .Agda a[href]:target {
+    animation: highlight 2.5s; }
+  body.text-page .Agda {
+    font-size: var(--code-font-size); }
+
+pre.Agda, div.sourceCode, pre {
+  border-radius: 0;
+  box-shadow: none;
+  overflow-y: clip;
+  margin: 0;
+  padding: 1em;
+  padding-top: 0.25em;
+  padding-bottom: 0.25em;
+  background-color: var(--code-bg);
+  color: var(--code-fg);
+  font-size: var(--code-font-size);
+  max-width: 100%;
+  overflow-x: auto;
+}
+</style>
+</html>

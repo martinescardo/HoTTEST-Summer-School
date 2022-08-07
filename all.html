@@ -17,59 +17,48 @@
 
   <article>
 
-<h2 id="preferred-link-to-see-these-lecture-notes"><a
-href="https://martinescardo.github.io/HoTTEST-Summer-School/">Preferred
-link to see these lecture notes</a></h2>
-<h2 id="download-the-agda-files-as-a-zip-file"><a
-href="https://github.com/martinescardo/HoTTEST-Summer-School/archive/refs/heads/main.zip">Download
-the Agda files as a zip file</a></h2>
-<h2 id="how-to-install-agda-2.6.2.2"><a
-href="0Agda-installation.html">How to install Agda 2.6.2.2</a></h2>
-<h2 id="agda-manual"><a
-href="https://agda.readthedocs.io/en/latest/">Agda manual</a></h2>
-<h2 id="lecture-notes">Lecture Notes</h2>
-<ul>
-<li><p><a href="1README.html">Lectures 1─3</a> delivered by Martín
-Escardó</p>
-<ol type="1">
-<li><a href="lecture1.html">Introduction to Agda, dependent types and
-dependent functions</a> covers (part of) the <a
-href="introduction.html">introduction to Agda</a> notes.</li>
-<li><a href="lecture2.html">Basic MLTT Types</a> covers the <a
-href="empty-type.html">empty type</a>, <a href="unit-type.html">unit
-type</a>, <a href="binary-type.html">binary type</a>, <a
-href="sums.html">sum types</a>, <a href="binary-sums.html">binary
-sums</a> and <a href="curry-howard.html">propositions-as-types</a>
-notes.</li>
-<li><a href="lecture3.html">Identity types, Σ-types and universes</a>
-covers the <a href="binary-sums.html">binary sums</a>, <a
-href="identity-type.html">the identity type</a> and <a
-href="sums-equality.html">equality in sums</a> notes.</li>
-</ol></li>
-<li><p>Lectures 4─6 delivered by Dan Licata</p>
-<ol start="4" type="1">
-<li><a href="Lecture4-notes.html">Intro to higher inductive
-types</a></li>
-<li><a href="Lecture5-notes.html">Dependent elimination principles for
-HITs</a></li>
-<li><a href="Lecture6-notes.html">Calculating the fundamental group of
-the circle</a></li>
-</ol></li>
-</ul>
-<h2 id="exercise-sheets"><a href="68README.html">Exercise
-Sheets</a></h2>
-<h2 id="auxiliary-files"><a href="87README.html">Auxiliary
-files</a></h2>
-<h2 id="advanced-further-reading">Advanced further reading</h2>
-<ol type="1">
-<li><a
-href="https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#contents">Introduction
-to Homotopy Type Theory and Univalent Foundations (HoTT/UF) with
-Agda</a>.</li>
-</ol>
-<h2 id="hottest-school-github-repository"><a
-href="https://github.com/martinescardo/HoTTEST-Summer-School">HoTTEST
-School github repository</a></h2>
+<p><a href="Https://www.Cs.Bham.Ac.Uk/~mhe/">Martin Escardo</a>. Notes
+originally written for the module <em>Advanced Functional
+Programming</em> of the <a
+href="https://www.birmingham.ac.uk/index.aspx">University of
+Birmingham</a>, UK.</p>
+<pre class="Agda"><a id="217" class="Symbol">{-#</a> <a id="221" class="Keyword">OPTIONS</a> <a id="229" class="Pragma">--without-K</a> <a id="241" class="Pragma">--safe</a> <a id="248" class="Symbol">#-}</a>
+
+<a id="253" class="Keyword">module</a> <a id="260" href="all.html" class="Module">all</a> <a id="264" class="Keyword">where</a>
+
+<a id="271" class="Keyword">import</a> <a id="278" href="Bool.html" class="Module">Bool</a>
+<a id="283" class="Keyword">import</a> <a id="290" href="Bool-functions.html" class="Module">Bool-functions</a>
+<a id="305" class="Keyword">import</a> <a id="312" href="Fin.html" class="Module">Fin</a>
+<a id="316" class="Keyword">import</a> <a id="323" href="Fin-functions.html" class="Module">Fin-functions</a>
+<a id="337" class="Keyword">import</a> <a id="344" href="Hedbergs-Theorem.html" class="Module">Hedbergs-Theorem</a>
+<a id="361" class="Keyword">import</a> <a id="368" href="List.html" class="Module">List</a>
+<a id="373" class="Keyword">import</a> <a id="380" href="List-functions.html" class="Module">List-functions</a>
+<a id="395" class="Keyword">import</a> <a id="402" href="Vector.html" class="Module">Vector</a>
+<a id="409" class="Keyword">import</a> <a id="416" href="Vector-functions.html" class="Module">Vector-functions</a>
+<a id="433" class="Keyword">import</a> <a id="440" href="binary-products.html" class="Module">binary-products</a>
+<a id="456" class="Keyword">import</a> <a id="463" href="binary-products-as-products.html" class="Module">binary-products-as-products</a>
+<a id="491" class="Keyword">import</a> <a id="498" href="binary-sums.html" class="Module">binary-sums</a>
+<a id="510" class="Keyword">import</a> <a id="517" href="binary-sums-as-sums.html" class="Module">binary-sums-as-sums</a>
+<a id="537" class="Keyword">import</a> <a id="544" href="binary-type.html" class="Module">binary-type</a>
+<a id="556" class="Keyword">import</a> <a id="563" href="decidability.html" class="Module">decidability</a>
+<a id="576" class="Keyword">import</a> <a id="583" href="empty-type.html" class="Module">empty-type</a>
+<a id="594" class="Keyword">import</a> <a id="601" href="function-extensionality.html" class="Module">function-extensionality</a>
+<a id="625" class="Keyword">import</a> <a id="632" href="general-notation.html" class="Module">general-notation</a>
+<a id="649" class="Keyword">import</a> <a id="656" href="identity-type.html" class="Module">identity-type</a>
+<a id="670" class="Keyword">import</a> <a id="677" href="isomorphism-functions.html" class="Module">isomorphism-functions</a>
+<a id="699" class="Keyword">import</a> <a id="706" href="isomorphisms.html" class="Module">isomorphisms</a>
+<a id="719" class="Keyword">import</a> <a id="726" href="natural-numbers-functions.html" class="Module">natural-numbers-functions</a>
+<a id="752" class="Keyword">import</a> <a id="759" href="natural-numbers-type.html" class="Module">natural-numbers-type</a>
+<a id="780" class="Keyword">import</a> <a id="787" href="negation.html" class="Module">negation</a>
+<a id="796" class="Keyword">import</a> <a id="803" href="prelude.html" class="Module">prelude</a>
+<a id="811" class="Keyword">import</a> <a id="818" href="products.html" class="Module">products</a>
+<a id="827" class="Keyword">import</a> <a id="834" href="searchability.html" class="Module">searchability</a>
+<a id="848" class="Keyword">import</a> <a id="855" href="sums.html" class="Module">sums</a>
+<a id="860" class="Keyword">import</a> <a id="867" href="sums-equality.html" class="Module">sums-equality</a>
+<a id="881" class="Keyword">import</a> <a id="888" href="unit-type.html" class="Module">unit-type</a>
+<a id="898" class="Comment">-- import vector-and-list-isomorphisms</a>
+</pre>
+<p><a href="50README.html">Go back to the table of contents</a></p>
 
   </article>
 </div>

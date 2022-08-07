@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>HoTTEST Summer School 2022 Lecture Notes</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+</head>
+
+<body class="text-page">
+<main>
+<div id="post-toc-container" style="padding-left: 1em; padding-right: 1em;">
+
+  <article>
+
+<p><a href="Https://www.Cs.Bham.Ac.Uk/~mhe/">Martin Escardo</a>. Notes
+originally written for the module <em>Advanced Functional
+Programming</em> of the <a
+href="https://www.birmingham.ac.uk/index.aspx">University of
+Birmingham</a>, UK.</p>
+<!--
+<pre class="Agda"><a id="222" class="Symbol">{-#</a> <a id="226" class="Keyword">OPTIONS</a> <a id="234" class="Pragma">--without-K</a> <a id="246" class="Pragma">--safe</a> <a id="253" class="Symbol">#-}</a>
+
+<a id="258" class="Keyword">module</a> <a id="265" href="Vector-functions.html" class="Module">Vector-functions</a> <a id="282" class="Keyword">where</a>
+
+<a id="289" class="Keyword">open</a> <a id="294" class="Keyword">import</a> <a id="301" href="prelude.html" class="Module">prelude</a>
+</pre>-->
+<h1 id="some-functions-on-vectors">Some functions on vectors</h1>
+As mentioned in the <a href="introduction.html">introduction</a>,
+vectors allow us to have safe <code>head</code> and <code>tail</code>
+functions.
+<pre class="Agda"><a id="head"></a><a id="472" href="Vector-functions.html#472" data-type="Vector A (suc n) → A" class="Function">head</a> <a id="477" class="Symbol">:</a> <a id="479" class="Symbol">{</a><a id="480" href="Vector-functions.html#480" class="Bound">A</a> <a id="482" class="Symbol">:</a> <a id="484" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="488" class="Symbol">}</a> <a id="490" class="Symbol">{</a><a id="491" href="Vector-functions.html#491" class="Bound">n</a> <a id="493" class="Symbol">:</a> <a id="495" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a><a id="496" class="Symbol">}</a> <a id="498" class="Symbol">→</a> <a id="500" href="Vector.html#498" data-type="Type → ℕ → Set" class="Datatype">Vector</a> <a id="507" href="Vector-functions.html#480" class="Bound">A</a> <a id="509" class="Symbol">(</a><a id="510" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="514" href="Vector-functions.html#491" class="Bound">n</a><a id="515" class="Symbol">)</a> <a id="517" class="Symbol">→</a> <a id="519" href="Vector-functions.html#480" class="Bound">A</a>
+<a id="521" href="Vector-functions.html#472" data-type="Vector A (suc n) → A" class="Function">head</a> <a id="526" class="Symbol">(</a><a id="527" href="Vector-functions.html#527" class="Bound">x</a> <a id="529" href="Vector.html#553" data-type="A → Vector A n → Vector A (suc n)" class="InductiveConstructor Operator">::</a> <a id="532" href="Vector-functions.html#532" class="Bound">xs</a><a id="534" class="Symbol">)</a> <a id="536" class="Symbol">=</a> <a id="538" href="Vector-functions.html#527" class="Bound">x</a>
+
+<a id="tail"></a><a id="541" href="Vector-functions.html#541" data-type="Vector A (suc n) → Vector A n" class="Function">tail</a> <a id="546" class="Symbol">:</a> <a id="548" class="Symbol">{</a><a id="549" href="Vector-functions.html#549" class="Bound">A</a> <a id="551" class="Symbol">:</a> <a id="553" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="557" class="Symbol">}</a> <a id="559" class="Symbol">{</a><a id="560" href="Vector-functions.html#560" class="Bound">n</a> <a id="562" class="Symbol">:</a> <a id="564" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a><a id="565" class="Symbol">}</a> <a id="567" class="Symbol">→</a> <a id="569" href="Vector.html#498" data-type="Type → ℕ → Set" class="Datatype">Vector</a> <a id="576" href="Vector-functions.html#549" class="Bound">A</a> <a id="578" class="Symbol">(</a><a id="579" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="583" href="Vector-functions.html#560" class="Bound">n</a><a id="584" class="Symbol">)</a> <a id="586" class="Symbol">→</a> <a id="588" href="Vector.html#498" data-type="Type → ℕ → Set" class="Datatype">Vector</a> <a id="595" href="Vector-functions.html#549" class="Bound">A</a> <a id="597" href="Vector-functions.html#560" class="Bound">n</a>
+<a id="599" href="Vector-functions.html#541" data-type="Vector A (suc n) → Vector A n" class="Function">tail</a> <a id="604" class="Symbol">(</a><a id="605" href="Vector-functions.html#605" class="Bound">x</a> <a id="607" href="Vector.html#553" data-type="A → Vector A n → Vector A (suc n)" class="InductiveConstructor Operator">::</a> <a id="610" href="Vector-functions.html#610" class="Bound">xs</a><a id="612" class="Symbol">)</a> <a id="614" class="Symbol">=</a> <a id="616" href="Vector-functions.html#610" class="Bound">xs</a>
+</pre>
+We can also define a safe indexing function on vectors using <a
+href="Fin.html">finite types</a> as follows.
+<pre class="Agda"><a id="734" class="Keyword">open</a> <a id="739" class="Keyword">import</a> <a id="746" href="Fin.html" class="Module">Fin</a>
+
+<a id="_!!_"></a><a id="751" href="Vector-functions.html#751" data-type="Vector X n → Fin n → X" class="Function Operator">_!!_</a> <a id="756" class="Symbol">:</a> <a id="758" class="Symbol">∀</a> <a id="760" class="Symbol">{</a><a id="761" href="Vector-functions.html#761" class="Bound">X</a> <a id="763" href="Vector-functions.html#763" class="Bound">n</a><a id="764" class="Symbol">}</a> <a id="766" class="Symbol">→</a> <a id="768" href="Vector.html#498" data-type="Type → ℕ → Set" class="Datatype">Vector</a> <a id="775" href="Vector-functions.html#761" class="Bound">X</a> <a id="777" href="Vector-functions.html#763" class="Bound">n</a> <a id="779" class="Symbol">→</a> <a id="781" href="Fin.html#513" data-type="ℕ → Set" class="Datatype">Fin</a> <a id="785" href="Vector-functions.html#763" class="Bound">n</a> <a id="787" class="Symbol">→</a> <a id="789" href="Vector-functions.html#761" class="Bound">X</a>
+<a id="791" class="Symbol">(</a><a id="792" href="Vector-functions.html#792" class="Bound">x</a> <a id="794" href="Vector.html#553" data-type="A → Vector A n → Vector A (suc n)" class="InductiveConstructor Operator">::</a> <a id="797" href="Vector-functions.html#797" class="Bound">xs</a><a id="799" class="Symbol">)</a> <a id="801" href="Vector-functions.html#751" data-type="Vector X n → Fin n → X" class="Function Operator">!!</a> <a id="804" href="Fin.html#535" data-type="Fin (suc n)" class="InductiveConstructor">zero</a>  <a id="810" class="Symbol">=</a> <a id="812" href="Vector-functions.html#792" class="Bound">x</a>
+<a id="814" class="Symbol">(</a><a id="815" href="Vector-functions.html#815" class="Bound">x</a> <a id="817" href="Vector.html#553" data-type="A → Vector A n → Vector A (suc n)" class="InductiveConstructor Operator">::</a> <a id="820" href="Vector-functions.html#820" class="Bound">xs</a><a id="822" class="Symbol">)</a> <a id="824" href="Vector-functions.html#751" data-type="Vector X n → Fin n → X" class="Function Operator">!!</a> <a id="827" href="Fin.html#565" data-type="Fin n → Fin (suc n)" class="InductiveConstructor">suc</a> <a id="831" href="Vector-functions.html#831" class="Bound">n</a> <a id="833" class="Symbol">=</a> <a id="835" href="Vector-functions.html#820" class="Bound">xs</a> <a id="838" href="Vector-functions.html#751" data-type="Vector X n → Fin n → X" class="Function Operator">!!</a> <a id="841" href="Vector-functions.html#831" class="Bound">n</a>
+</pre>
+Alternatively, this can be defined as follows:
+<pre class="Agda"><a id="_!!&#39;_"></a><a id="902" href="Vector-functions.html#902" data-type="Vector X n → Fin n → X" class="Function Operator">_!!&#39;_</a> <a id="908" class="Symbol">:</a> <a id="910" class="Symbol">{</a><a id="911" href="Vector-functions.html#911" class="Bound">X</a> <a id="913" class="Symbol">:</a> <a id="915" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="919" class="Symbol">}</a> <a id="921" class="Symbol">{</a><a id="922" href="Vector-functions.html#922" class="Bound">n</a> <a id="924" class="Symbol">:</a> <a id="926" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a><a id="927" class="Symbol">}</a> <a id="929" class="Symbol">→</a> <a id="931" href="Vector.html#498" data-type="Type → ℕ → Set" class="Datatype">Vector</a> <a id="938" href="Vector-functions.html#911" class="Bound">X</a> <a id="940" href="Vector-functions.html#922" class="Bound">n</a> <a id="942" class="Symbol">→</a> <a id="944" href="Fin.html#513" data-type="ℕ → Set" class="Datatype">Fin</a> <a id="948" href="Vector-functions.html#922" class="Bound">n</a> <a id="950" class="Symbol">→</a> <a id="952" href="Vector-functions.html#911" class="Bound">X</a>
+<a id="954" href="Vector.html#534" data-type="Vector A 0" class="InductiveConstructor">[]</a>        <a id="964" href="Vector-functions.html#902" data-type="Vector X n → Fin n → X" class="Function Operator">!!&#39;</a> <a id="968" class="Symbol">()</a>
+<a id="971" class="Symbol">(</a><a id="972" href="Vector-functions.html#972" class="Bound">x</a> <a id="974" href="Vector.html#553" data-type="A → Vector A n → Vector A (suc n)" class="InductiveConstructor Operator">::</a> <a id="977" href="Vector-functions.html#977" class="Bound">xs</a><a id="979" class="Symbol">)</a> <a id="981" href="Vector-functions.html#902" data-type="Vector X n → Fin n → X" class="Function Operator">!!&#39;</a> <a id="985" href="Fin.html#535" data-type="Fin (suc n)" class="InductiveConstructor">zero</a>  <a id="991" class="Symbol">=</a> <a id="993" href="Vector-functions.html#972" class="Bound">x</a>
+<a id="995" class="Symbol">(</a><a id="996" href="Vector-functions.html#996" class="Bound">x</a> <a id="998" href="Vector.html#553" data-type="A → Vector A n → Vector A (suc n)" class="InductiveConstructor Operator">::</a> <a id="1001" href="Vector-functions.html#1001" class="Bound">xs</a><a id="1003" class="Symbol">)</a> <a id="1005" href="Vector-functions.html#902" data-type="Vector X n → Fin n → X" class="Function Operator">!!&#39;</a> <a id="1009" href="Fin.html#565" data-type="Fin n → Fin (suc n)" class="InductiveConstructor">suc</a> <a id="1013" href="Vector-functions.html#1013" class="Bound">n</a> <a id="1015" class="Symbol">=</a> <a id="1017" href="Vector-functions.html#1001" class="Bound">xs</a> <a id="1020" href="Vector-functions.html#902" data-type="Vector X n → Fin n → X" class="Function Operator">!!&#39;</a> <a id="1024" href="Vector-functions.html#1013" class="Bound">n</a>
+</pre>
+We can also do vector concatenation:
+<pre class="Agda"><a id="_++_"></a><a id="1076" href="Vector-functions.html#1076" data-type="Vector X m → Vector X n → Vector X (m + n)" class="Function Operator">_++_</a> <a id="1081" class="Symbol">:</a> <a id="1083" class="Symbol">{</a><a id="1084" href="Vector-functions.html#1084" class="Bound">X</a> <a id="1086" class="Symbol">:</a> <a id="1088" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="1092" class="Symbol">}</a> <a id="1094" class="Symbol">{</a><a id="1095" href="Vector-functions.html#1095" class="Bound">m</a> <a id="1097" href="Vector-functions.html#1097" class="Bound">n</a> <a id="1099" class="Symbol">:</a> <a id="1101" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a><a id="1102" class="Symbol">}</a> <a id="1104" class="Symbol">→</a> <a id="1106" href="Vector.html#498" data-type="Type → ℕ → Set" class="Datatype">Vector</a> <a id="1113" href="Vector-functions.html#1084" class="Bound">X</a> <a id="1115" href="Vector-functions.html#1095" class="Bound">m</a> <a id="1117" class="Symbol">→</a> <a id="1119" href="Vector.html#498" data-type="Type → ℕ → Set" class="Datatype">Vector</a> <a id="1126" href="Vector-functions.html#1084" class="Bound">X</a> <a id="1128" href="Vector-functions.html#1097" class="Bound">n</a> <a id="1130" class="Symbol">→</a> <a id="1132" href="Vector.html#498" data-type="Type → ℕ → Set" class="Datatype">Vector</a> <a id="1139" href="Vector-functions.html#1084" class="Bound">X</a> <a id="1141" class="Symbol">(</a><a id="1142" href="Vector-functions.html#1095" class="Bound">m</a> <a id="1144" href="natural-numbers-type.html#2879" data-type="ℕ → ℕ → ℕ" class="Function Operator">+</a> <a id="1146" href="Vector-functions.html#1097" class="Bound">n</a><a id="1147" class="Symbol">)</a>
+<a id="1149" href="Vector.html#534" data-type="Vector A 0" class="InductiveConstructor">[]</a>        <a id="1159" href="Vector-functions.html#1076" data-type="Vector X m → Vector X n → Vector X (m + n)" class="Function Operator">++</a> <a id="1162" href="Vector-functions.html#1162" class="Bound">ys</a> <a id="1165" class="Symbol">=</a> <a id="1167" href="Vector-functions.html#1162" class="Bound">ys</a>
+<a id="1170" class="Symbol">(</a><a id="1171" href="Vector-functions.html#1171" class="Bound">x</a> <a id="1173" href="Vector.html#553" data-type="A → Vector A n → Vector A (suc n)" class="InductiveConstructor Operator">::</a> <a id="1176" href="Vector-functions.html#1176" class="Bound">xs</a><a id="1178" class="Symbol">)</a> <a id="1180" href="Vector-functions.html#1076" data-type="Vector X m → Vector X n → Vector X (m + n)" class="Function Operator">++</a> <a id="1183" href="Vector-functions.html#1183" class="Bound">ys</a> <a id="1186" class="Symbol">=</a> <a id="1188" href="Vector-functions.html#1171" class="Bound">x</a> <a id="1190" href="Vector.html#553" data-type="A → Vector A n → Vector A (suc n)" class="InductiveConstructor Operator">::</a> <a id="1193" class="Symbol">(</a><a id="1194" href="Vector-functions.html#1176" class="Bound">xs</a> <a id="1197" href="Vector-functions.html#1076" data-type="Vector X m → Vector X n → Vector X (m + n)" class="Function Operator">++</a> <a id="1200" href="Vector-functions.html#1183" class="Bound">ys</a><a id="1202" class="Symbol">)</a>
+
+<a id="1205" class="Keyword">infixr</a> <a id="1212" class="Number">20</a> <a id="1215" href="Vector-functions.html#1076" data-type="Vector X m → Vector X n → Vector X (m + n)" class="Function Operator">_++_</a>
+</pre>
+<h2 id="vectors-represented-as-a-basic-mltt-type">Vectors represented as
+a Basic MLTT type</h2>
+<pre class="Agda"><a id="1278" class="Keyword">open</a> <a id="1283" class="Keyword">import</a> <a id="1290" href="unit-type.html" class="Module">unit-type</a>
+<a id="1300" class="Keyword">open</a> <a id="1305" class="Keyword">import</a> <a id="1312" href="binary-products.html" class="Module">binary-products</a>
+
+<a id="Vector&#39;"></a><a id="1329" href="Vector-functions.html#1329" data-type="Type → ℕ → Type" class="Function">Vector&#39;</a> <a id="1337" class="Symbol">:</a> <a id="1339" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a> <a id="1344" class="Symbol">→</a> <a id="1346" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a> <a id="1348" class="Symbol">→</a> <a id="1350" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a>
+<a id="1355" href="Vector-functions.html#1329" data-type="Type → ℕ → Type" class="Function">Vector&#39;</a> <a id="1363" href="Vector-functions.html#1363" class="Bound">A</a> <a id="1365" class="Number">0</a>       <a id="1373" class="Symbol">=</a> <a id="1375" href="unit-type.html#396" data-type="Type" class="Record">𝟙</a>
+<a id="1377" href="Vector-functions.html#1329" data-type="Type → ℕ → Type" class="Function">Vector&#39;</a> <a id="1385" href="Vector-functions.html#1385" class="Bound">A</a> <a id="1387" class="Symbol">(</a><a id="1388" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="1392" href="Vector-functions.html#1392" class="Bound">n</a><a id="1393" class="Symbol">)</a> <a id="1395" class="Symbol">=</a> <a id="1397" href="Vector-functions.html#1385" class="Bound">A</a> <a id="1399" href="binary-products.html#670" data-type="Type → Type → Type" class="Function Operator">×</a> <a id="1401" href="Vector-functions.html#1329" data-type="Type → ℕ → Type" class="Function">Vector&#39;</a> <a id="1409" href="Vector-functions.html#1385" class="Bound">A</a> <a id="1411" href="Vector-functions.html#1392" class="Bound">n</a>
+
+<a id="[]&#39;"></a><a id="1414" href="Vector-functions.html#1414" data-type="Vector&#39; A 0" class="Function">[]&#39;</a> <a id="1418" class="Symbol">:</a> <a id="1420" class="Symbol">{</a><a id="1421" href="Vector-functions.html#1421" class="Bound">A</a> <a id="1423" class="Symbol">:</a> <a id="1425" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="1429" class="Symbol">}</a> <a id="1431" class="Symbol">→</a> <a id="1433" href="Vector-functions.html#1329" data-type="Type → ℕ → Type" class="Function">Vector&#39;</a> <a id="1441" href="Vector-functions.html#1421" class="Bound">A</a> <a id="1443" class="Number">0</a>
+<a id="1445" href="Vector-functions.html#1414" data-type="Vector&#39; A 0" class="Function">[]&#39;</a> <a id="1449" class="Symbol">=</a> <a id="1451" href="unit-type.html#426" data-type="𝟙" class="InductiveConstructor">⋆</a>
+
+<a id="_::&#39;_"></a><a id="1454" href="Vector-functions.html#1454" data-type="A → Vector&#39; A n → Vector&#39; A (suc n)" class="Function Operator">_::&#39;_</a> <a id="1460" class="Symbol">:</a> <a id="1462" class="Symbol">{</a><a id="1463" href="Vector-functions.html#1463" class="Bound">A</a> <a id="1465" class="Symbol">:</a> <a id="1467" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="1471" class="Symbol">}</a> <a id="1473" class="Symbol">{</a><a id="1474" href="Vector-functions.html#1474" class="Bound">n</a> <a id="1476" class="Symbol">:</a> <a id="1478" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a><a id="1479" class="Symbol">}</a> <a id="1481" class="Symbol">→</a> <a id="1483" href="Vector-functions.html#1463" class="Bound">A</a> <a id="1485" class="Symbol">→</a> <a id="1487" href="Vector-functions.html#1329" data-type="Type → ℕ → Type" class="Function">Vector&#39;</a> <a id="1495" href="Vector-functions.html#1463" class="Bound">A</a> <a id="1497" href="Vector-functions.html#1474" class="Bound">n</a> <a id="1499" class="Symbol">→</a> <a id="1501" href="Vector-functions.html#1329" data-type="Type → ℕ → Type" class="Function">Vector&#39;</a> <a id="1509" href="Vector-functions.html#1463" class="Bound">A</a> <a id="1511" class="Symbol">(</a><a id="1512" class="InductiveConstructor">suc</a> <a id="1516" href="Vector-functions.html#1474" class="Bound">n</a><a id="1517" class="Symbol">)</a>
+<a id="1519" href="Vector-functions.html#1519" class="Bound">x</a> <a id="1521" href="Vector-functions.html#1454" data-type="A → Vector&#39; A n → Vector&#39; A (suc n)" class="Function Operator">::&#39;</a> <a id="1525" href="Vector-functions.html#1525" class="Bound">xs</a> <a id="1528" class="Symbol">=</a> <a id="1530" href="Vector-functions.html#1519" class="Bound">x</a> <a id="1532" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="1534" href="Vector-functions.html#1525" class="Bound">xs</a>
+
+<a id="1538" class="Keyword">infixr</a> <a id="1545" class="Number">10</a> <a id="1548" href="Vector-functions.html#1454" data-type="A → Vector&#39; A n → Vector&#39; A (suc n)" class="Function Operator">_::&#39;_</a>
+
+<a id="1555" class="Keyword">private</a>
+ <a id="example₀"></a><a id="1564" href="Vector-functions.html#1564" class="Function">example₀</a> <a id="1573" class="Symbol">:</a> <a id="1575" href="Vector-functions.html#1329" data-type="Type → ℕ → Type" class="Function">Vector&#39;</a> <a id="1583" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a> <a id="1585" class="Number">3</a>
+ <a id="1588" href="Vector-functions.html#1564" class="Function">example₀</a> <a id="1597" class="Symbol">=</a> <a id="1599" class="Number">1</a> <a id="1601" href="Vector-functions.html#1454" data-type="A → Vector&#39; A n → Vector&#39; A (suc n)" class="Function Operator">::&#39;</a> <a id="1605" class="Number">2</a> <a id="1607" href="Vector-functions.html#1454" data-type="A → Vector&#39; A n → Vector&#39; A (suc n)" class="Function Operator">::&#39;</a> <a id="1611" class="Number">3</a> <a id="1613" href="Vector-functions.html#1454" data-type="A → Vector&#39; A n → Vector&#39; A (suc n)" class="Function Operator">::&#39;</a> <a id="1617" class="Symbol">(</a><a id="1618" href="Vector-functions.html#1414" data-type="Vector&#39; A 0" class="Function">[]&#39;</a> <a id="1622" class="Symbol">{</a><a id="1623" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a><a id="1624" class="Symbol">})</a>
+
+ <a id="example₁"></a><a id="1629" href="Vector-functions.html#1629" class="Function">example₁</a> <a id="1638" class="Symbol">:</a> <a id="1640" href="Vector-functions.html#1564" class="Function">example₀</a> <a id="1649" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="1651" class="Symbol">(</a><a id="1652" class="Number">1</a> <a id="1654" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="1656" class="Number">2</a> <a id="1658" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="1660" class="Number">3</a> <a id="1662" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="1664" href="unit-type.html#426" data-type="𝟙" class="InductiveConstructor">⋆</a><a id="1665" class="Symbol">)</a>
+ <a id="1668" href="Vector-functions.html#1629" class="Function">example₁</a> <a id="1677" class="Symbol">=</a> <a id="1679" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="1684" class="Symbol">_</a>
+
+<a id="1687" class="Keyword">open</a> <a id="1692" class="Keyword">import</a> <a id="1699" href="isomorphisms.html" class="Module">isomorphisms</a>
+
+<a id="Vector-iso"></a><a id="1713" href="Vector-functions.html#1713" data-type="Vector A n ≅ Vector&#39; A n" class="Function">Vector-iso</a> <a id="1724" class="Symbol">:</a> <a id="1726" class="Symbol">{</a><a id="1727" href="Vector-functions.html#1727" class="Bound">A</a> <a id="1729" class="Symbol">:</a> <a id="1731" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="1735" class="Symbol">}</a> <a id="1737" class="Symbol">{</a><a id="1738" href="Vector-functions.html#1738" class="Bound">n</a> <a id="1740" class="Symbol">:</a> <a id="1742" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a><a id="1743" class="Symbol">}</a> <a id="1745" class="Symbol">→</a> <a id="1747" href="Vector.html#498" data-type="Type → ℕ → Set" class="Datatype">Vector</a> <a id="1754" href="Vector-functions.html#1727" class="Bound">A</a> <a id="1756" href="Vector-functions.html#1738" class="Bound">n</a> <a id="1758" href="isomorphisms.html#1915" data-type="(A B : Type) → Type" class="Record Operator">≅</a> <a id="1760" href="Vector-functions.html#1329" data-type="Type → ℕ → Type" class="Function">Vector&#39;</a> <a id="1768" href="Vector-functions.html#1727" class="Bound">A</a> <a id="1770" href="Vector-functions.html#1738" class="Bound">n</a>
+<a id="1772" href="Vector-functions.html#1713" data-type="Vector A n ≅ Vector&#39; A n" class="Function">Vector-iso</a> <a id="1783" class="Symbol">{</a><a id="1784" href="Vector-functions.html#1784" class="Bound">A</a><a id="1785" class="Symbol">}</a> <a id="1787" class="Symbol">{</a><a id="1788" href="Vector-functions.html#1788" class="Bound">n</a><a id="1789" class="Symbol">}</a> <a id="1791" class="Symbol">=</a> <a id="1793" class="Keyword">record</a> <a id="1800" class="Symbol">{</a> <a id="1802" href="isomorphisms.html#1981" data-type="A ≅ B → A → B" class="Field">bijection</a> <a id="1812" class="Symbol">=</a> <a id="1814" href="Vector-functions.html#1862" data-type="(n : ℕ) → Vector A n → Vector&#39; A n" class="Function">f</a> <a id="1816" href="Vector-functions.html#1788" class="Bound">n</a> <a id="1818" class="Symbol">;</a> <a id="1820" href="isomorphisms.html#2003" data-type="(r : A ≅ B) → is-bijection (bijection r)" class="Field">bijectivity</a> <a id="1832" class="Symbol">=</a> <a id="1834" href="Vector-functions.html#2296" data-type="(n : ℕ) → is-bijection (f n)" class="Function">f-is-bijection</a> <a id="1849" href="Vector-functions.html#1788" class="Bound">n</a> <a id="1851" class="Symbol">}</a>
+ <a id="1854" class="Keyword">where</a>
+  <a id="1862" href="Vector-functions.html#1862" data-type="(n : ℕ) → Vector A n → Vector&#39; A n" class="Function">f</a> <a id="1864" class="Symbol">:</a> <a id="1866" class="Symbol">(</a><a id="1867" href="Vector-functions.html#1867" class="Bound">n</a> <a id="1869" class="Symbol">:</a> <a id="1871" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a><a id="1872" class="Symbol">)</a> <a id="1874" class="Symbol">→</a> <a id="1876" href="Vector.html#498" data-type="Type → ℕ → Set" class="Datatype">Vector</a> <a id="1883" href="Vector-functions.html#1784" class="Bound">A</a> <a id="1885" href="Vector-functions.html#1867" class="Bound">n</a> <a id="1887" class="Symbol">→</a> <a id="1889" href="Vector-functions.html#1329" data-type="Type → ℕ → Type" class="Function">Vector&#39;</a> <a id="1897" href="Vector-functions.html#1784" class="Bound">A</a> <a id="1899" href="Vector-functions.html#1867" class="Bound">n</a>
+  <a id="1903" href="Vector-functions.html#1862" data-type="(n : ℕ) → Vector A n → Vector&#39; A n" class="Function">f</a> <a id="1905" class="Number">0</a>       <a id="1913" href="Vector.html#534" data-type="Vector A 0" class="InductiveConstructor">[]</a>        <a id="1923" class="Symbol">=</a> <a id="1925" href="Vector-functions.html#1414" data-type="Vector&#39; A 0" class="Function">[]&#39;</a> <a id="1929" class="Symbol">{</a><a id="1930" href="Vector-functions.html#1784" class="Bound">A</a><a id="1931" class="Symbol">}</a>
+  <a id="1935" href="Vector-functions.html#1862" data-type="(n : ℕ) → Vector A n → Vector&#39; A n" class="Function">f</a> <a id="1937" class="Symbol">(</a><a id="1938" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="1942" href="Vector-functions.html#1942" class="Bound">n</a><a id="1943" class="Symbol">)</a> <a id="1945" class="Symbol">(</a><a id="1946" href="Vector-functions.html#1946" class="Bound">x</a> <a id="1948" href="Vector.html#553" data-type="A → Vector A n → Vector A (suc n)" class="InductiveConstructor Operator">::</a> <a id="1951" href="Vector-functions.html#1951" class="Bound">xs</a><a id="1953" class="Symbol">)</a> <a id="1955" class="Symbol">=</a> <a id="1957" href="Vector-functions.html#1946" class="Bound">x</a> <a id="1959" href="Vector-functions.html#1454" data-type="A → Vector&#39; A n → Vector&#39; A (suc n)" class="Function Operator">::&#39;</a> <a id="1963" href="Vector-functions.html#1862" data-type="(n : ℕ) → Vector A n → Vector&#39; A n" class="Function">f</a> <a id="1965" href="Vector-functions.html#1942" class="Bound">n</a> <a id="1967" href="Vector-functions.html#1951" class="Bound">xs</a>
+
+  <a id="1973" href="Vector-functions.html#1973" data-type="(n : ℕ) → Vector&#39; A n → Vector A n" class="Function">g</a> <a id="1975" class="Symbol">:</a> <a id="1977" class="Symbol">(</a><a id="1978" href="Vector-functions.html#1978" class="Bound">n</a> <a id="1980" class="Symbol">:</a> <a id="1982" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a><a id="1983" class="Symbol">)</a> <a id="1985" class="Symbol">→</a> <a id="1987" href="Vector-functions.html#1329" data-type="Type → ℕ → Type" class="Function">Vector&#39;</a> <a id="1995" href="Vector-functions.html#1784" class="Bound">A</a> <a id="1997" href="Vector-functions.html#1978" class="Bound">n</a> <a id="1999" class="Symbol">→</a> <a id="2001" href="Vector.html#498" data-type="Type → ℕ → Set" class="Datatype">Vector</a> <a id="2008" href="Vector-functions.html#1784" class="Bound">A</a> <a id="2010" href="Vector-functions.html#1978" class="Bound">n</a>
+  <a id="2014" href="Vector-functions.html#1973" data-type="(n : ℕ) → Vector&#39; A n → Vector A n" class="Function">g</a> <a id="2016" class="Number">0</a>       <a id="2024" href="unit-type.html#426" data-type="𝟙" class="InductiveConstructor">⋆</a>        <a id="2033" class="Symbol">=</a> <a id="2035" href="Vector.html#534" data-type="Vector A 0" class="InductiveConstructor">[]</a>
+  <a id="2040" href="Vector-functions.html#1973" data-type="(n : ℕ) → Vector&#39; A n → Vector A n" class="Function">g</a> <a id="2042" class="Symbol">(</a><a id="2043" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="2047" href="Vector-functions.html#2047" class="Bound">n</a><a id="2048" class="Symbol">)</a> <a id="2050" class="Symbol">(</a><a id="2051" href="Vector-functions.html#2051" class="Bound">x</a> <a id="2053" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="2055" href="Vector-functions.html#2055" class="Bound">xs</a><a id="2057" class="Symbol">)</a> <a id="2059" class="Symbol">=</a> <a id="2061" href="Vector-functions.html#2051" class="Bound">x</a> <a id="2063" href="Vector.html#553" data-type="A → Vector A n → Vector A (suc n)" class="InductiveConstructor Operator">::</a> <a id="2066" href="Vector-functions.html#1973" data-type="(n : ℕ) → Vector&#39; A n → Vector A n" class="Function">g</a> <a id="2068" href="Vector-functions.html#2047" class="Bound">n</a> <a id="2070" href="Vector-functions.html#2055" class="Bound">xs</a>
+
+  <a id="2076" href="Vector-functions.html#2076" data-type="(n : ℕ) → (g n ∘ f n) ∼ id" class="Function">gf</a> <a id="2079" class="Symbol">:</a> <a id="2081" class="Symbol">(</a><a id="2082" href="Vector-functions.html#2082" class="Bound">n</a> <a id="2084" class="Symbol">:</a> <a id="2086" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a><a id="2087" class="Symbol">)</a> <a id="2089" class="Symbol">→</a> <a id="2091" href="Vector-functions.html#1973" data-type="(n : ℕ) → Vector&#39; A n → Vector A n" class="Function">g</a> <a id="2093" href="Vector-functions.html#2082" class="Bound">n</a> <a id="2095" href="products.html#3388" data-type="((y : B) → C y) → (f : A → B) (x : A) → C (f x)" class="Function Operator">∘</a> <a id="2097" href="Vector-functions.html#1862" data-type="(n : ℕ) → Vector A n → Vector&#39; A n" class="Function">f</a> <a id="2099" href="Vector-functions.html#2082" class="Bound">n</a> <a id="2101" href="identity-type.html#3258" data-type="((x : A) → B x) → ((x : A) → B x) → Type" class="Function Operator">∼</a> <a id="2103" href="products.html#1041" data-type="A → A" class="Function">id</a>
+  <a id="2108" href="Vector-functions.html#2076" data-type="(n : ℕ) → (g n ∘ f n) ∼ id" class="Function">gf</a> <a id="2111" class="Number">0</a>       <a id="2119" href="Vector.html#534" data-type="Vector A 0" class="InductiveConstructor">[]</a>        <a id="2129" class="Symbol">=</a> <a id="2131" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="2136" href="Vector.html#534" data-type="Vector A 0" class="InductiveConstructor">[]</a>
+  <a id="2141" href="Vector-functions.html#2076" data-type="(n : ℕ) → (g n ∘ f n) ∼ id" class="Function">gf</a> <a id="2144" class="Symbol">(</a><a id="2145" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="2149" href="Vector-functions.html#2149" class="Bound">n</a><a id="2150" class="Symbol">)</a> <a id="2152" class="Symbol">(</a><a id="2153" href="Vector-functions.html#2153" class="Bound">x</a> <a id="2155" href="Vector.html#553" data-type="A → Vector A n → Vector A (suc n)" class="InductiveConstructor Operator">::</a> <a id="2158" href="Vector-functions.html#2158" class="Bound">xs</a><a id="2160" class="Symbol">)</a> <a id="2162" class="Symbol">=</a> <a id="2164" href="identity-type.html#2307" data-type="(f : A → B) → x ≡ y → f x ≡ f y" class="Function">ap</a> <a id="2167" class="Symbol">(</a><a id="2168" href="Vector-functions.html#2153" class="Bound">x</a> <a id="2170" href="Vector.html#553" data-type="A → Vector A n → Vector A (suc n)" class="InductiveConstructor Operator">::_</a><a id="2173" class="Symbol">)</a> <a id="2175" class="Symbol">(</a><a id="2176" href="Vector-functions.html#2076" data-type="(n : ℕ) → (g n ∘ f n) ∼ id" class="Function">gf</a> <a id="2179" href="Vector-functions.html#2149" class="Bound">n</a> <a id="2181" href="Vector-functions.html#2158" class="Bound">xs</a><a id="2183" class="Symbol">)</a>
+
+  <a id="2188" href="Vector-functions.html#2188" data-type="(n : ℕ) → (f n ∘ g n) ∼ id" class="Function">fg</a> <a id="2191" class="Symbol">:</a> <a id="2193" class="Symbol">(</a><a id="2194" href="Vector-functions.html#2194" class="Bound">n</a> <a id="2196" class="Symbol">:</a> <a id="2198" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a><a id="2199" class="Symbol">)</a> <a id="2201" class="Symbol">→</a> <a id="2203" href="Vector-functions.html#1862" data-type="(n : ℕ) → Vector A n → Vector&#39; A n" class="Function">f</a> <a id="2205" href="Vector-functions.html#2194" class="Bound">n</a> <a id="2207" href="products.html#3388" data-type="((y : B) → C y) → (f : A → B) (x : A) → C (f x)" class="Function Operator">∘</a> <a id="2209" href="Vector-functions.html#1973" data-type="(n : ℕ) → Vector&#39; A n → Vector A n" class="Function">g</a> <a id="2211" href="Vector-functions.html#2194" class="Bound">n</a> <a id="2213" href="identity-type.html#3258" data-type="((x : A) → B x) → ((x : A) → B x) → Type" class="Function Operator">∼</a> <a id="2215" href="products.html#1041" data-type="A → A" class="Function">id</a>
+  <a id="2220" href="Vector-functions.html#2188" data-type="(n : ℕ) → (f n ∘ g n) ∼ id" class="Function">fg</a> <a id="2223" class="Number">0</a>       <a id="2231" href="unit-type.html#426" data-type="𝟙" class="InductiveConstructor">⋆</a>        <a id="2240" class="Symbol">=</a> <a id="2242" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="2247" href="unit-type.html#426" data-type="𝟙" class="InductiveConstructor">⋆</a>
+  <a id="2251" href="Vector-functions.html#2188" data-type="(n : ℕ) → (f n ∘ g n) ∼ id" class="Function">fg</a> <a id="2254" class="Symbol">(</a><a id="2255" href="introduction.html#1060" data-type="ℕ → ℕ" class="InductiveConstructor">suc</a> <a id="2259" href="Vector-functions.html#2259" class="Bound">n</a><a id="2260" class="Symbol">)</a> <a id="2262" class="Symbol">(</a><a id="2263" href="Vector-functions.html#2263" class="Bound">x</a> <a id="2265" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="2267" href="Vector-functions.html#2267" class="Bound">xs</a><a id="2269" class="Symbol">)</a> <a id="2271" class="Symbol">=</a> <a id="2273" href="identity-type.html#2307" data-type="(f : A → B) → x ≡ y → f x ≡ f y" class="Function">ap</a> <a id="2276" class="Symbol">(</a><a id="2277" href="Vector-functions.html#2263" class="Bound">x</a> <a id="2279" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,_</a><a id="2281" class="Symbol">)</a> <a id="2283" class="Symbol">(</a><a id="2284" href="Vector-functions.html#2188" data-type="(n : ℕ) → (f n ∘ g n) ∼ id" class="Function">fg</a> <a id="2287" href="Vector-functions.html#2259" class="Bound">n</a> <a id="2289" href="Vector-functions.html#2267" class="Bound">xs</a><a id="2291" class="Symbol">)</a>
+
+  <a id="2296" href="Vector-functions.html#2296" data-type="(n : ℕ) → is-bijection (f n)" class="Function">f-is-bijection</a> <a id="2311" class="Symbol">:</a> <a id="2313" class="Symbol">(</a><a id="2314" href="Vector-functions.html#2314" class="Bound">n</a> <a id="2316" class="Symbol">:</a> <a id="2318" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a><a id="2319" class="Symbol">)</a> <a id="2321" class="Symbol">→</a> <a id="2323" href="isomorphisms.html#1750" data-type="(f : A → B) → Type" class="Record">is-bijection</a> <a id="2336" class="Symbol">(</a><a id="2337" href="Vector-functions.html#1862" data-type="(n : ℕ) → Vector A n → Vector&#39; A n" class="Function">f</a> <a id="2339" href="Vector-functions.html#2314" class="Bound">n</a><a id="2340" class="Symbol">)</a>
+  <a id="2344" href="Vector-functions.html#2296" data-type="(n : ℕ) → is-bijection (f n)" class="Function">f-is-bijection</a> <a id="2359" href="Vector-functions.html#2359" class="Bound">n</a> <a id="2361" class="Symbol">=</a> <a id="2363" class="Keyword">record</a> <a id="2370" class="Symbol">{</a> <a id="2372" href="isomorphisms.html#1833" data-type="is-bijection f → B → A" class="Field">inverse</a> <a id="2380" class="Symbol">=</a> <a id="2382" href="Vector-functions.html#1973" data-type="(n : ℕ) → Vector&#39; A n → Vector A n" class="Function">g</a> <a id="2384" href="Vector-functions.html#2359" class="Bound">n</a> <a id="2386" class="Symbol">;</a> <a id="2388" href="isomorphisms.html#1851" data-type="(r : is-bijection f) → (inverse r ∘ f) ∼ id" class="Field">η</a> <a id="2390" class="Symbol">=</a> <a id="2392" href="Vector-functions.html#2076" data-type="(n : ℕ) → (g n ∘ f n) ∼ id" class="Function">gf</a> <a id="2395" href="Vector-functions.html#2359" class="Bound">n</a> <a id="2397" class="Symbol">;</a> <a id="2399" href="isomorphisms.html#1880" data-type="(r : is-bijection f) → (f ∘ inverse r) ∼ id" class="Field">ε</a> <a id="2401" class="Symbol">=</a> <a id="2403" href="Vector-functions.html#2188" data-type="(n : ℕ) → (f n ∘ g n) ∼ id" class="Function">fg</a> <a id="2406" href="Vector-functions.html#2359" class="Bound">n</a> <a id="2408" class="Symbol">}</a>
+
+<a id="2411" class="Keyword">private</a>
+ <a id="2420" class="Keyword">open</a> <a id="2425" href="isomorphisms.html#1915" data-type="(A B : Type) → Type" class="Module Operator">_≅_</a>
+ <a id="2430" class="Keyword">open</a> <a id="2435" href="isomorphisms.html#1750" data-type="(f : A → B) → Type" class="Module">is-bijection</a>
+
+ <a id="example₂"></a><a id="2450" href="Vector-functions.html#2450" class="Function">example₂</a> <a id="2459" class="Symbol">:</a> <a id="2461" href="isomorphisms.html#1981" data-type="A ≅ B → A → B" class="Field">bijection</a> <a id="2471" href="Vector-functions.html#1713" data-type="Vector A n ≅ Vector&#39; A n" class="Function">Vector-iso</a> <a id="2482" class="Symbol">(</a><a id="2483" class="Number">1</a> <a id="2485" class="InductiveConstructor Operator">::</a> <a id="2488" class="Number">2</a> <a id="2490" class="InductiveConstructor Operator">::</a> <a id="2493" class="Number">3</a> <a id="2495" class="InductiveConstructor Operator">::</a> <a id="2498" class="InductiveConstructor">[]</a><a id="2500" class="Symbol">)</a> <a id="2502" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="2504" class="Symbol">(</a><a id="2505" class="Number">1</a> <a id="2507" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="2509" class="Number">2</a> <a id="2511" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="2513" class="Number">3</a> <a id="2515" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="2517" href="unit-type.html#426" data-type="𝟙" class="InductiveConstructor">⋆</a><a id="2518" class="Symbol">)</a>
+ <a id="2521" href="Vector-functions.html#2450" class="Function">example₂</a> <a id="2530" class="Symbol">=</a> <a id="2532" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="2537" class="Symbol">_</a>
+
+ <a id="example₄"></a><a id="2541" href="Vector-functions.html#2541" class="Function">example₄</a> <a id="2550" class="Symbol">:</a> <a id="2552" href="Vector.html#498" data-type="Type → ℕ → Set" class="Datatype">Vector</a> <a id="2559" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a> <a id="2561" class="Number">3</a>
+ <a id="2564" href="Vector-functions.html#2541" class="Function">example₄</a> <a id="2573" class="Symbol">=</a> <a id="2575" href="isomorphisms.html#1833" data-type="is-bijection f → B → A" class="Field">inverse</a> <a id="2583" class="Symbol">(</a><a id="2584" href="isomorphisms.html#2003" data-type="(r : A ≅ B) → is-bijection (bijection r)" class="Field">bijectivity</a> <a id="2596" href="Vector-functions.html#1713" data-type="Vector A n ≅ Vector&#39; A n" class="Function">Vector-iso</a><a id="2606" class="Symbol">)</a> <a id="2608" class="Symbol">(</a><a id="2609" class="Number">1</a> <a id="2611" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="2613" class="Number">2</a> <a id="2615" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="2617" class="Number">3</a> <a id="2619" href="sums.html#2522" data-type="(pr₁ : A) (pr₂ : B pr₁) → Σ B" class="InductiveConstructor Operator">,</a> <a id="2621" href="unit-type.html#426" data-type="𝟙" class="InductiveConstructor">⋆</a><a id="2622" class="Symbol">)</a>
+
+ <a id="example₅"></a><a id="2626" href="Vector-functions.html#2626" class="Function">example₅</a> <a id="2635" class="Symbol">:</a> <a id="2637" href="Vector-functions.html#2541" class="Function">example₄</a> <a id="2646" href="identity-type.html#627" data-type="A → A → Set" class="Datatype Operator">≡</a> <a id="2648" class="Number">1</a> <a id="2650" class="InductiveConstructor Operator">::</a> <a id="2653" class="Number">2</a> <a id="2655" class="InductiveConstructor Operator">::</a> <a id="2658" class="Number">3</a> <a id="2660" class="InductiveConstructor Operator">::</a> <a id="2663" class="InductiveConstructor">[]</a>
+ <a id="2667" href="Vector-functions.html#2626" class="Function">example₅</a> <a id="2676" class="Symbol">=</a> <a id="2678" href="identity-type.html#664" data-type="(x : A) → x ≡ x" class="InductiveConstructor">refl</a> <a id="2683" class="Symbol">_</a>
+</pre>
+<p><a href="https://martinescardo.github.io/HoTTEST-Summer-School/">Go
+back to the table of contents</a></p>
+
+  </article>
+</div>
+</main>
+</body>
+<style>
+
+:root {
+  --text-bg: #fff;
+  --text-fg: #222;
+  --shadow: #000;
+  --primary: #0054F4;
+  --secondary: #9C1BD6;
+  --modal-bg: #ccccccaa;
+  --warning-bg: #fef08a;
+  --code-bg: var(--text-bg);
+  --code-fg: var(--text-fg);
+  --code-keyword: #BB3B13;
+  --code-string:  #d52753;
+  --code-number:  #8A1060;
+  --code-module:  #8A1060;
+  --code-field:   #9C1BD6;
+  --code-constructor: #207B1D;
+  --code-highlight: #F5DEB3;
+  --search-selected: #e2e8f0;
+  --details-summary: #b2ebf2;
+  --details-open:    #80deea;
+  --depgraph-edge: #eee;
+  --blockquote-bg: #d8b4fe; }
+
+.diagram-dark {
+  display: none !important; }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-bg: #282C34;
+    --text-fg: #bfbfbf;
+    --shadow: #475569;
+    --primary: #61AFEF;
+    --secondary: #C878DD;
+    --modal-bg: #282C34aa;
+    --warning-bg: #991b1b;
+    --code-keyword:     #E5C07B;
+    --code-string:      #E06C75;
+    --code-number:      #98C379;
+    --code-module:      #56B6C2;
+    --code-field:       #C878DD;
+    --code-constructor: #98C379;
+    --code-highlight: #ef444499;
+    --search-selected: #474e5e;
+    --details-summary: #5b21b6;
+    --details-open:    #4c1d95;
+    --depgraph-edge: #474e5e;
+    --blockquote-bg: #475569; }
+  div.warning {
+    --shadow: #7f1d1d
+  ; }
+  input {
+    background-color: #334155;
+    border: 1px solid #475569;
+    color: var(--text-fg); }
+  body {
+    scrollbar-color: #3b4454 #2b2e33; }
+  .diagram-dark {
+    display: block !important; }
+  .diagram-light {
+    display: none !important; } }
+
+table {
+  margin: auto;
+  border-collapse: collapse; }
+  table td, table th {
+    text-align: center;
+    padding: 0px 1em 0px 1em;
+    border: 1px solid black; }
+  table th {
+    border-bottom: 2px solid black; }
+  table td {
+    white-space: nowrap; }
+
+html { max-width: 100%; }
+
+body {
+  font-family: "Inria Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  width: 100%;
+  font-size: var(--font-size);
+  overflow-x: clip;
+  background-color: var(--text-bg);
+  color: var(--text-fg);
+}
+
+div#post-toc-container { max-width: 120ch; margin: auto; }
+
+article a[href], div#return > a[href], div#top > a[href], aside#toc > div#toc-container ul a[href] {
+  color: var(--primary);
+  text-decoration: none; }
+  article a[href]:hover, div#return > a[href]:hover, div#top > a[href]:hover, aside#toc > div#toc-container ul a[href]:hover {
+    text-decoration: 2px currentColor underline !important; }
+  article a[href]:visited, div#return > a[href]:visited, div#top > a[href]:visited, aside#toc > div#toc-container ul a[href]:visited {
+    color: var(--secondary); }
+
+/* Aspects. */
+.Agda {
+  /* NameKinds. */
+  /* OtherAspects. */
+  /* Standard attributes. */
+  font-family: 'iosevka', 'Iosevka', 'Fantasque Sans Mono', 'Roboto Mono', monospace;
+  font-weight: 400; }
+  .Agda .Comment {
+    color: var(--code-fg);
+    font-style: italic; }
+  .Agda .Background {
+    background-color: var(--code-bg); }
+  .Agda .Markup {
+    color: var(--code-fg); }
+  .Agda .Keyword {
+    color: var(--code-keyword); }
+  .Agda .String {
+    color: var(--code-string); }
+  .Agda .Number {
+    color: var(--code-number); }
+  .Agda .Symbol {
+    color: var(--code-fg); }
+  .Agda .PrimitiveType {
+    color: var(--primary); }
+  .Agda .Pragma {
+    color: var(--code-fg); }
+  .Agda .Bound {
+    color: var(--code-fg) !important; }
+  .Agda .Generalizable {
+    color: var(--code-fg) !important; }
+  .Agda .InductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .CoinductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .Datatype {
+    color: var(--primary) !important; }
+  .Agda .Field {
+    color: var(--code-field) !important; }
+  .Agda .Function {
+    color: var(--primary) !important; }
+  .Agda .Module {
+    color: var(--code-module) !important; }
+  .Agda .Postulate {
+    color: var(--primary) !important; }
+  .Agda .Primitive {
+    color: var(--primary) !important; }
+  .Agda .Record {
+    color: var(--primary) !important; }
+  .Agda .UnsolvedMeta {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .UnsolvedConstraint {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .TerminationProblem {
+    color: var(--code-fg);
+    background: #FFA07A; }
+  .Agda .IncompletePattern {
+    color: var(--code-fg);
+    background: #F5DEB3; }
+  .Agda .Error {
+    color: red;
+    text-decoration: underline; }
+  .Agda .TypeChecks {
+    color: var(--code-fg);
+    background: #ADD8E6; }
+  .Agda .ShadowingInTelescope {
+    color: var(--code-fg);
+    background: #808080; }
+  .Agda .Deadcode {
+    color: var(--code-keyword);
+    font-weight: bold; }
+  .Agda a {
+    text-decoration: none; }
+  .Agda a[href]:hover {
+    text-decoration: 2px var(--primary) underline; }
+  .Agda a[href]:target {
+    animation: highlight 2.5s; }
+  body.text-page .Agda {
+    font-size: var(--code-font-size); }
+
+pre.Agda, div.sourceCode, pre {
+  border-radius: 0;
+  box-shadow: none;
+  overflow-y: clip;
+  margin: 0;
+  padding: 1em;
+  padding-top: 0.25em;
+  padding-bottom: 0.25em;
+  background-color: var(--code-bg);
+  color: var(--code-fg);
+  font-size: var(--code-font-size);
+  max-width: 100%;
+  overflow-x: auto;
+}
+</style>
+</html>
