@@ -73,7 +73,7 @@ apply0 : (A : Type ℓ) (p : I → A) → A
 apply0 A p = p i0
 ```
 
-The equality type _≡_ is not inductively defined in Cubical Agda,
+The equality type `_≡_` is not inductively defined in Cubical Agda,
 instead it's a builtin primitive notion defined using the interval. An
 element of x ≡ y consists of a function p : I → A such that p i0 is
 definitionally x and p i1 is definitionally y. The check that the
@@ -128,7 +128,7 @@ This will make A and B elements of different universes (all
 arguments is maximally generalized) and all definitions that use
 them will have them as implicit arguments.
 
-We can now implement some basic operations on _≡_. Let's start with
+We can now implement some basic operations on `_≡_`. Let's start with
 `ap`:
 
 ```agda
@@ -262,20 +262,22 @@ isContrSingl x = ctr , prf
 ```
 
 As we saw in the second component of prf we often need squares when
-proving things. In fact, pax (i ∧ j) is a path relating refl to pax
-*over* another path "λ j → x ≡ pax j". This notion of path over a path
-is very useful when working in Book HoTT as well as cubically. In Book
-HoTT these are called path-overs and are defined using transport, but
-in Cubical Agda they are a primitive notion called PathP ("Path over a
-Path"). In general PathP A x y has
+proving things. In fact, `pax (i ∧ j)` is a path relating `refl` to
+`pax` *over* another path `λ j → x ≡ pax j`. This notion of path over
+a path is very useful when working in Book HoTT as well as
+cubically. In Book HoTT these are called path-overs and are defined
+using transport, but in Cubical Agda they are a primitive notion
+called `PathP` ("Path over a Path"). In general `PathP A x y` has
 
+```text
    A : I → Type ℓ
    x : A i0
    y : A i1
+```
 
 So PathP lets us natively define heteorgeneous paths, i.e. paths
 where the endpoints are in different types. This allows us to
-specify the type of the second component of prf:
+specify the type of the second component of `prf`:
 
 ```agda
 prf' : (x : A) (s : singl x) → (x , refl) ≡ s
@@ -285,9 +287,9 @@ prf' x (y , pax) i = (pax i) , λ j → goal i j
   goal i j = pax (i ∧ j)
 ```
 
-Just like _×_ is a special case of Σ-types we have that _≡_ is a
-special case of PathP. In fact, x ≡ y is just short for
-PathP (λ _ → A) x y:
+Just like `_×_` is a special case of Σ-types we have that `_≡_` is a
+special case of PathP. In fact, `x ≡ y` is just short for
+`PathP (λ _ → A) x y`:
 
 ```agda
 reflP : {x : A} → PathP (λ _ → A) x x
@@ -392,6 +394,7 @@ data Torus : Type₀ where
 
 The square corresponds to the usual folding diagram from topology:
 
+```text
              line1
         p ----------> p
         ^             ^
@@ -400,6 +403,7 @@ The square corresponds to the usual folding diagram from topology:
         ¦             ¦
         p ----------> p
              line1
+```
 
 Proving that it is equivalent to two circles is pretty much trivial:
 
