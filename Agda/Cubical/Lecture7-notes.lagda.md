@@ -124,8 +124,9 @@ assume that we have some types (in fact, we've already assumed that
 `ℓ` is a `Level` in the cubical-prelude):
 
 ```agda
-variable
-  A B : Type ℓ
+private
+  variable
+    A B : Type ℓ
 ```
 
 This will make `A` and `B` elements of different universes (all
