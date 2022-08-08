@@ -77,6 +77,8 @@ _∙_ {x = x} p q i = hcomp (λ j → λ { (i = i0) → x
                                    ; (i = i1) → q j })
                           (p i)
 
+infixr 30 _∙_
+
 _[_↦_] : ∀ {ℓ} (A : Type ℓ) (φ : I) (u : Partial φ A) → SSet ℓ
 A [ φ ↦ u ] = Sub A φ u
 
