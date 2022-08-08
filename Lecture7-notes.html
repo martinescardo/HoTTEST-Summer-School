@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>HoTTEST Summer School 2022 Lecture Notes</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+</head>
+
+<body class="text-page">
+<main>
+<div id="post-toc-container" style="padding-left: 1em; padding-right: 1em;">
+
+  <article>
+
+<h1 id="lecture-7-cubical-agda">Lecture 7: Cubical Agda</h1>
+<p>Contents:</p>
+<ul>
+<li>The interval and Path/PathP types</li>
+<li>Cubical higher inductive types</li>
+</ul>
+<h2 id="some-introductory-pointers-for-further-reading">Some
+introductory pointers for further reading</h2>
+<p>Documentation of the Cubical Agda mode can be found <a
+href="https://agda.readthedocs.io/en/v2.6.2.2/language/cubical.html">here</a>.</p>
+<p>These lectures about Cubical Agda will be inspired by my material
+from the <a
+href="https://github.com/HoTT/EPIT-2020/tree/main/04-cubical-type-theory">2020
+EPIT school on HoTT</a>.</p>
+<p>For students interested in a more in depth introduction to cubical
+type theory see <a
+href="https://www.cambridge.org/core/journals/mathematical-structures-in-computer-science/article/cubical-methods-in-homotopy-type-theory-and-univalent-foundations/ECB3FE6B4A0B19AED2D3A2D785C38AF9">my
+lecture notes for the 2019 HoTT school</a>. Those notes contain a lot
+more background and motivation to cubical methods in HoTT and an
+extensive list of references for those that want to read more background
+material.</p>
+<p>If one wants a library to work with when doing Cubical Agda there is
+the <a href="https://github.com/agda/cubical/">agda/cubical</a> library
+that I started developing with Andrea Vezzosi (the implementor of
+Cubical Agda) in 2018 and which has now over 70 contributors. It
+contains a variety of things, including data structures, algebra,
+synthetic homotopy and cohomology theory, etc..</p>
+<p>For a slower-paced introduction to mathematics in Cubical Agda, there
+is the more recent <a href="https://1lab.dev/">1lab</a>. Although meant
+to be read on the web, it also doubles as a community-maintained library
+of formalized mathematics, most notably category theory.</p>
+<h1 id="cubical-agda">Cubical Agda</h1>
+<p>To make Agda cubical simply add the following option:</p>
+<pre class="Agda"><a id="1668" class="Symbol">{-#</a> <a id="1672" class="Keyword">OPTIONS</a> <a id="1680" class="Pragma">--cubical</a> <a id="1690" class="Symbol">#-}</a>
+
+<a id="1695" class="Keyword">module</a> <a id="1702" href="Lecture7-notes.html" class="Module">Lecture7-notes</a> <a id="1717" class="Keyword">where</a>
+</pre>
+<p>We also have a small cubical prelude which sets things up to work
+nicely and which provides whatever we might need for the lectures.</p>
+<pre class="Agda"><a id="1870" class="Keyword">open</a> <a id="1875" class="Keyword">import</a> <a id="1882" href="cubical-prelude.html" class="Module">cubical-prelude</a>
+</pre>
+<p>The key idea in cubical type theories like Cubical Agda is to not
+have equality be inductively defined as in Book HoTT, but rather we
+assume that there is a primitive interval and define equality literally
+as paths, i.e. as functions out of the interval. By iterating these
+paths we get squares, cubes, hypercubes, …, making the type theory
+inherently cubical.</p>
+<h1 id="the-interval-and-path-types">The interval and path types</h1>
+<p>The interval is a primitive concept in Cubical Agda. It’s written
+<code>I</code>. It has two endpoints:</p>
+<pre class="text"><code>  i0 : I
+  i1 : I</code></pre>
+<p>These stand for “interval 0” and “interval 1”.</p>
+<p>We can apply a function out of the interval to an endpoint just like
+we would with any Agda function:</p>
+<pre class="Agda"><a id="apply0"></a><a id="2582" href="Lecture7-notes.html#2582" data-type="(A : Set ℓ) → (I → A) → A" class="Function">apply0</a> <a id="2589" class="Symbol">:</a> <a id="2591" class="Symbol">(</a><a id="2592" href="Lecture7-notes.html#2592" class="Bound">A</a> <a id="2594" class="Symbol">:</a> <a id="2596" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="2601" href="cubical-prelude.html#2241" data-type="Level" class="Generalizable">ℓ</a><a id="2602" class="Symbol">)</a> <a id="2604" class="Symbol">(</a><a id="2605" href="Lecture7-notes.html#2605" class="Bound">p</a> <a id="2607" class="Symbol">:</a> <a id="2609" href="Agda.Primitive.Cubical.html#108" data-type="SSet lzero" class="Datatype">I</a> <a id="2611" class="Symbol">→</a> <a id="2613" href="Lecture7-notes.html#2592" class="Bound">A</a><a id="2614" class="Symbol">)</a> <a id="2616" class="Symbol">→</a> <a id="2618" href="Lecture7-notes.html#2592" class="Bound">A</a>
+<a id="2620" href="Lecture7-notes.html#2582" data-type="(A : Set ℓ) → (I → A) → A" class="Function">apply0</a> <a id="2627" href="Lecture7-notes.html#2627" class="Bound">A</a> <a id="2629" href="Lecture7-notes.html#2629" class="Bound">p</a> <a id="2631" class="Symbol">=</a> <a id="2633" href="Lecture7-notes.html#2629" class="Bound">p</a> <a id="2635" href="Agda.Primitive.Cubical.html#150" data-type="I" class="InductiveConstructor">i0</a>
+</pre>
+<p>The equality type <code>_≡_</code> is not inductively defined in
+Cubical Agda, instead it’s a builtin primitive notion defined using the
+interval. An element of <code>x ≡ y</code> consists of a function
+<code>p : I → A</code> such that <code>p i0</code> is definitionally
+<code>x</code> and <code>p i1</code> is definitionally <code>y</code>.
+The check that the endpoints are correct when we provide a
+<code>p : I → A</code> is automatically performed by Agda during
+typechecking, so introducing an element of <code>x ≡ y</code> is done
+just like how we introduce elements of <code>I → A</code> but Agda will
+check the side conditions.</p>
+<p>We can hence write paths using λ-abstraction:</p>
+<pre class="Agda"><a id="mypath"></a><a id="3225" href="Lecture7-notes.html#3225" data-type="(x : A) → x ≡ x" class="Function">mypath</a> <a id="3232" class="Symbol">:</a> <a id="3234" class="Symbol">{</a><a id="3235" href="Lecture7-notes.html#3235" class="Bound">A</a> <a id="3237" class="Symbol">:</a> <a id="3239" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="3244" href="cubical-prelude.html#2241" data-type="Level" class="Generalizable">ℓ</a><a id="3245" class="Symbol">}</a> <a id="3247" class="Symbol">(</a><a id="3248" href="Lecture7-notes.html#3248" class="Bound">x</a> <a id="3250" class="Symbol">:</a> <a id="3252" href="Lecture7-notes.html#3235" class="Bound">A</a><a id="3253" class="Symbol">)</a> <a id="3255" class="Symbol">→</a> <a id="3257" href="Lecture7-notes.html#3248" class="Bound">x</a> <a id="3259" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="3261" href="Lecture7-notes.html#3248" class="Bound">x</a>
+<a id="3263" href="Lecture7-notes.html#3225" data-type="(x : A) → x ≡ x" class="Function">mypath</a> <a id="3270" href="Lecture7-notes.html#3270" class="Bound">x</a> <a id="3272" class="Symbol">=</a> <a id="3274" class="Symbol">λ</a> <a id="3276" href="Lecture7-notes.html#3276" class="Bound">i</a> <a id="3278" class="Symbol">→</a> <a id="3280" href="Lecture7-notes.html#3270" class="Bound">x</a>
+</pre>
+<p>As explained above Agda checks that whatever we written as definition
+matches the path that we have provided (so the endpoints have to be
+correct). In this case everything is fine and mypath can be thought of
+as a proof reflexivity. Let’s give it a nicer name and more implicit
+arguments:</p>
+<pre class="Agda"><a id="refl"></a><a id="3585" href="Lecture7-notes.html#3585" data-type="x ≡ x" class="Function">refl</a> <a id="3590" class="Symbol">:</a> <a id="3592" class="Symbol">{</a><a id="3593" href="Lecture7-notes.html#3593" class="Bound">A</a> <a id="3595" class="Symbol">:</a> <a id="3597" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="3602" href="cubical-prelude.html#2241" data-type="Level" class="Generalizable">ℓ</a><a id="3603" class="Symbol">}</a> <a id="3605" class="Symbol">{</a><a id="3606" href="Lecture7-notes.html#3606" class="Bound">x</a> <a id="3608" class="Symbol">:</a> <a id="3610" href="Lecture7-notes.html#3593" class="Bound">A</a><a id="3611" class="Symbol">}</a> <a id="3613" class="Symbol">→</a> <a id="3615" href="Lecture7-notes.html#3606" class="Bound">x</a> <a id="3617" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="3619" href="Lecture7-notes.html#3606" class="Bound">x</a>
+<a id="3621" href="Lecture7-notes.html#3585" data-type="x ≡ x" class="Function">refl</a> <a id="3626" class="Symbol">{</a><a id="3627" class="Argument">x</a> <a id="3629" class="Symbol">=</a> <a id="3631" href="Lecture7-notes.html#3631" class="Bound">x</a><a id="3632" class="Symbol">}</a> <a id="3634" class="Symbol">=</a> <a id="3636" class="Symbol">λ</a> <a id="3638" href="Lecture7-notes.html#3638" class="Bound">i</a> <a id="3640" class="Symbol">→</a> <a id="3642" href="Lecture7-notes.html#3631" class="Bound">x</a>
+</pre>
+<p>The notation <code>{x = x}</code> lets us access the implicit
+argument <code>x</code> (the <code>x</code> in the LHS of
+<code>x = x</code>) and rename it to <code>x</code> (the <code>x</code>
+in the RHS <code>x = x</code>) in the body of <code>refl</code>. We
+could just as well have written:</p>
+<pre class="text"><code>refl : {A : Type ℓ} {x : A} → x ≡ x
+refl {x = y} = λ i → y</code></pre>
+<p>Note that we cannot pattern-match on interval variables as
+<code>I</code> is not inductively defined. Try uncommenting and typing
+<code>C-c C-c</code> in the hole:</p>
+<pre class="text"><code>oops : {A : Type} → I → A
+oops r = {!r!}</code></pre>
+<p>It quickly gets tiring to write <code>{A : Type ℓ}</code> everywhere,
+so let’s assume that we have some types (in fact, we’ve already assumed
+that <code>ℓ</code> is a <code>Level</code> in the cubical-prelude):</p>
+<pre class="Agda"><a id="4311" class="Keyword">private</a>
+  <a id="4321" class="Keyword">variable</a>
+    <a id="4334" href="Lecture7-notes.html#4334" class="Generalizable">A</a> <a id="4336" href="Lecture7-notes.html#4336" class="Generalizable">B</a> <a id="4338" class="Symbol">:</a> <a id="4340" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="4345" href="cubical-prelude.html#2241" data-type="Level" class="Generalizable">ℓ</a>
+</pre>
+<p>This will make <code>A</code> and <code>B</code> elements of
+different universes (all arguments is maximally generalized) and all
+definitions that use them will have them as implicit arguments.</p>
+<p>We can now implement some basic operations on <code>_≡_</code>. Let’s
+start with <code>ap</code>:</p>
+<pre class="Agda"><a id="ap"></a><a id="4610" href="Lecture7-notes.html#4610" data-type="(f : A → B) → x ≡ y → f x ≡ f y" class="Function">ap</a> <a id="4613" class="Symbol">:</a> <a id="4615" class="Symbol">(</a><a id="4616" href="Lecture7-notes.html#4616" class="Bound">f</a> <a id="4618" class="Symbol">:</a> <a id="4620" href="Lecture7-notes.html#4334" class="Generalizable">A</a> <a id="4622" class="Symbol">→</a> <a id="4624" href="Lecture7-notes.html#4336" class="Generalizable">B</a><a id="4625" class="Symbol">)</a> <a id="4627" class="Symbol">{</a><a id="4628" href="Lecture7-notes.html#4628" class="Bound">x</a> <a id="4630" href="Lecture7-notes.html#4630" class="Bound">y</a> <a id="4632" class="Symbol">:</a> <a id="4634" href="Lecture7-notes.html#4334" class="Generalizable">A</a><a id="4635" class="Symbol">}</a> <a id="4637" class="Symbol">→</a> <a id="4639" href="Lecture7-notes.html#4628" class="Bound">x</a> <a id="4641" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="4643" href="Lecture7-notes.html#4630" class="Bound">y</a> <a id="4645" class="Symbol">→</a> <a id="4647" href="Lecture7-notes.html#4616" class="Bound">f</a> <a id="4649" href="Lecture7-notes.html#4628" class="Bound">x</a> <a id="4651" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="4653" href="Lecture7-notes.html#4616" class="Bound">f</a> <a id="4655" href="Lecture7-notes.html#4630" class="Bound">y</a>
+<a id="4657" href="Lecture7-notes.html#4610" data-type="(f : A → B) → x ≡ y → f x ≡ f y" class="Function">ap</a> <a id="4660" href="Lecture7-notes.html#4660" class="Bound">f</a> <a id="4662" href="Lecture7-notes.html#4662" class="Bound">p</a> <a id="4664" href="Lecture7-notes.html#4664" class="Bound">i</a> <a id="4666" class="Symbol">=</a> <a id="4668" href="Lecture7-notes.html#4660" class="Bound">f</a> <a id="4670" class="Symbol">(</a><a id="4671" href="Lecture7-notes.html#4662" class="Bound">p</a> <a id="4673" href="Lecture7-notes.html#4664" class="Bound">i</a><a id="4674" class="Symbol">)</a>
+</pre>
+<p>Note that the definition differs from the Book HoTT definition in
+that it is not defined by path induction or pattern-matching on
+<code>p</code>, but rather it’s just a direct definition as a
+composition of functions. Agda treats <code>p : x ≡ y</code> like any
+function, so we can apply it to <code>i</code> to get an element of
+<code>A</code> which at <code>i0</code> is <code>x</code> and at
+<code>i1</code> is <code>y</code>. By applying <code>f</code> to this
+element we hence get an element of <code>B</code> which at
+<code>i0</code> is <code>f x</code> and at <code>i1</code> is
+<code>f y</code>.</p>
+<p>As this is just function composition it satisfies lots of nice
+definitional equalities, see the exercises. Some of these are not
+satisfied by the Book HoTT definition of <code>ap</code>.</p>
+<p>In Book HoTT function extensionality is proved as a consequence of
+univalence using a rather ingenious proof due to Voevodsky, but in
+cubical systems it has a much more direct proof. As paths are just
+functions we can get it by swapping the arguments to <code>p</code>:</p>
+<pre class="Agda"><a id="funExt"></a><a id="5577" href="Lecture7-notes.html#5577" data-type="((x : A) → f x ≡ g x) → f ≡ g" class="Function">funExt</a> <a id="5584" class="Symbol">:</a> <a id="5586" class="Symbol">{</a><a id="5587" href="Lecture7-notes.html#5587" class="Bound">f</a> <a id="5589" href="Lecture7-notes.html#5589" class="Bound">g</a> <a id="5591" class="Symbol">:</a> <a id="5593" href="Lecture7-notes.html#4334" class="Generalizable">A</a> <a id="5595" class="Symbol">→</a> <a id="5597" href="Lecture7-notes.html#4336" class="Generalizable">B</a><a id="5598" class="Symbol">}</a> <a id="5600" class="Symbol">(</a><a id="5601" href="Lecture7-notes.html#5601" class="Bound">p</a> <a id="5603" class="Symbol">:</a> <a id="5605" class="Symbol">(</a><a id="5606" href="Lecture7-notes.html#5606" class="Bound">x</a> <a id="5608" class="Symbol">:</a> <a id="5610" href="Lecture7-notes.html#4334" class="Generalizable">A</a><a id="5611" class="Symbol">)</a> <a id="5613" class="Symbol">→</a> <a id="5615" href="Lecture7-notes.html#5587" class="Bound">f</a> <a id="5617" href="Lecture7-notes.html#5606" class="Bound">x</a> <a id="5619" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="5621" href="Lecture7-notes.html#5589" class="Bound">g</a> <a id="5623" href="Lecture7-notes.html#5606" class="Bound">x</a><a id="5624" class="Symbol">)</a> <a id="5626" class="Symbol">→</a> <a id="5628" href="Lecture7-notes.html#5587" class="Bound">f</a> <a id="5630" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="5632" href="Lecture7-notes.html#5589" class="Bound">g</a>
+<a id="5634" href="Lecture7-notes.html#5577" data-type="((x : A) → f x ≡ g x) → f ≡ g" class="Function">funExt</a> <a id="5641" href="Lecture7-notes.html#5641" class="Bound">p</a> <a id="5643" href="Lecture7-notes.html#5643" class="Bound">i</a> <a id="5645" href="Lecture7-notes.html#5645" class="Bound">x</a> <a id="5647" class="Symbol">=</a> <a id="5649" href="Lecture7-notes.html#5641" class="Bound">p</a> <a id="5651" href="Lecture7-notes.html#5645" class="Bound">x</a> <a id="5653" href="Lecture7-notes.html#5643" class="Bound">i</a>
+</pre>
+<p>To see that this has the correct type, note that when <code>i</code>
+is <code>i0</code> we have <code>p x i0 = f x</code> and when
+<code>i</code> is <code>i1</code> we have <code>p x i1 = g x</code>, so
+by η for function types we have a path <code>f ≡ g</code> as
+desired.</p>
+<p>The interval has additional operations:</p>
+<pre class="text"><code>Minimum:     _∧_ : I → I → I             (corresponds to min(i,j))
+Maximum:     _∨_ : I → I → I             (corresponds to max(i,j))
+Symmetry:     ~_ : I → I                 (corresponds to 1 - i)</code></pre>
+<p>These satisfy the equations of a De Morgan algebra (i.e. a
+distributive lattice (<em>∧</em> , <em>∨</em> , i0 , i1) with an “De
+Morgan” involution ~). This just means that we have the following kinds
+of equations definitionally:</p>
+<pre class="text"><code>i0 ∨ i    = i
+i  ∨ i1   = i1
+i  ∨ j    = j ∨ i
+i0 ∧ i    = i0
+i1 ∧ i    = i
+i  ∧ j    = j ∧ i
+~ (~ i)   = i
+i0        = ~ i1
+~ (i ∨ j) = ~ i ∧ ~ j
+~ (i ∧ j) = ~ i ∨ ~ j</code></pre>
+<p>However, we do not have <code>i ∨ ~ i = i1</code> and
+<code>i ∧ ~ i = i0</code>. The reason is that I represents an abstract
+interval, so we if we think of it as the real interval [0,1] ⊂ ℝ we
+clearly don’t always have “max(i,1-i) = 1” or “min(i,1-i) = 0)” for all
+i ∈ [0,1].</p>
+<p>These operations on <code>I</code> are very useful as they let us
+define even more things directly. For example symmetry of paths is
+easily defined using <code>~_</code>.</p>
+<pre class="Agda"><a id="sym"></a><a id="6920" href="Lecture7-notes.html#6920" data-type="x ≡ y → y ≡ x" class="Function">sym</a> <a id="6924" class="Symbol">:</a> <a id="6926" class="Symbol">{</a><a id="6927" href="Lecture7-notes.html#6927" class="Bound">x</a> <a id="6929" href="Lecture7-notes.html#6929" class="Bound">y</a> <a id="6931" class="Symbol">:</a> <a id="6933" href="Lecture7-notes.html#4334" class="Generalizable">A</a><a id="6934" class="Symbol">}</a> <a id="6936" class="Symbol">→</a> <a id="6938" href="Lecture7-notes.html#6927" class="Bound">x</a> <a id="6940" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="6942" href="Lecture7-notes.html#6929" class="Bound">y</a> <a id="6944" class="Symbol">→</a> <a id="6946" href="Lecture7-notes.html#6929" class="Bound">y</a> <a id="6948" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="6950" href="Lecture7-notes.html#6927" class="Bound">x</a>
+<a id="6952" href="Lecture7-notes.html#6920" data-type="x ≡ y → y ≡ x" class="Function">sym</a> <a id="6956" href="Lecture7-notes.html#6956" class="Bound">p</a> <a id="6958" href="Lecture7-notes.html#6958" class="Bound">i</a> <a id="6960" class="Symbol">=</a> <a id="6962" href="Lecture7-notes.html#6956" class="Bound">p</a> <a id="6964" class="Symbol">(</a><a id="6965" href="cubical-prelude.html#547" class="Primitive Operator">~</a> <a id="6967" href="Lecture7-notes.html#6958" class="Bound">i</a><a id="6968" class="Symbol">)</a>
+</pre>
+<p>Remark: this has been called <code>!</code> in the previous lectures.
+Here we stick to <code>sym</code> for the cubical version following the
+agda/cubical notation.</p>
+<p>The operations <code>_∧_</code> and <code>_∨_</code> are called
+<em>connections</em> and let us build higher dimensional cubes from
+lower dimensional ones, for example if we have a path
+<code>p : x ≡ y</code> then</p>
+<pre class="text"><code>  sq i j = p (i ∧ j)</code></pre>
+<p>is a square (as we’ve parametrized by <code>i</code> and
+<code>j</code>) with the following boundary:</p>
+<pre class="text"><code>   sq i0 j = p (i0 ∧ j) = p i0 = x
+   sq i1 j = p (i1 ∧ j) = p j
+   sq i i0 = p (i ∧ i0) = p i0 = x
+   sq i i1 = p (i ∧ i1) = p i</code></pre>
+<p>If we draw this we get:</p>
+<pre class="text"><code>             p
+       x --------&gt; y
+       ^           ^
+       ¦           ¦
+  refl ¦     sq    ¦ p
+       ¦           ¦
+       ¦           ¦
+       x --------&gt; x
+           refl</code></pre>
+<p>Being able to make this square directly is very useful. It for
+example let’s prove that singletons are contractible (a.k.a. based path
+induction).</p>
+<p>We define the type of singletons as follows</p>
+<pre class="Agda"><a id="singl"></a><a id="7971" href="Lecture7-notes.html#7971" data-type="A → Set ℓ" class="Function">singl</a> <a id="7977" class="Symbol">:</a> <a id="7979" class="Symbol">{</a><a id="7980" href="Lecture7-notes.html#7980" class="Bound">A</a> <a id="7982" class="Symbol">:</a> <a id="7984" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="7989" href="cubical-prelude.html#2241" data-type="Level" class="Generalizable">ℓ</a><a id="7990" class="Symbol">}</a> <a id="7992" class="Symbol">(</a><a id="7993" href="Lecture7-notes.html#7993" class="Bound">a</a> <a id="7995" class="Symbol">:</a> <a id="7997" href="Lecture7-notes.html#7980" class="Bound">A</a><a id="7998" class="Symbol">)</a> <a id="8000" class="Symbol">→</a> <a id="8002" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="8007" href="cubical-prelude.html#2241" data-type="Level" class="Generalizable">ℓ</a>
+<a id="8009" href="Lecture7-notes.html#7971" data-type="A → Set ℓ" class="Function">singl</a> <a id="8015" class="Symbol">{</a><a id="8016" class="Argument">A</a> <a id="8018" class="Symbol">=</a> <a id="8020" href="Lecture7-notes.html#8020" class="Bound">A</a><a id="8021" class="Symbol">}</a> <a id="8023" href="Lecture7-notes.html#8023" class="Bound">a</a> <a id="8025" class="Symbol">=</a> <a id="8027" href="cubical-prelude.html#3251" data-type="(A : Set l1) → (A → Set l2) → Set (l1 ⊔ l2)" class="Function">Σ</a> <a id="8029" href="Lecture7-notes.html#8029" class="Bound">x</a> <a id="8031" href="cubical-prelude.html#3251" data-type="(A : Set l1) → (A → Set l2) → Set (l1 ⊔ l2)" class="Function">꞉</a> <a id="8033" href="Lecture7-notes.html#8020" class="Bound">A</a> <a id="8035" href="cubical-prelude.html#3251" data-type="(A : Set l1) → (A → Set l2) → Set (l1 ⊔ l2)" class="Function">,</a> <a id="8037" href="Lecture7-notes.html#8023" class="Bound">a</a> <a id="8039" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="8041" href="Lecture7-notes.html#8029" class="Bound">x</a>
+</pre>
+<p>To show that this type is contractible we need to provide a center of
+contraction and the fact that any element of it is path-equal to the
+center</p>
+<pre class="Agda"><a id="isContrSingl"></a><a id="8203" href="Lecture7-notes.html#8203" data-type="(x : A) → isContr (singl x)" class="Function">isContrSingl</a> <a id="8216" class="Symbol">:</a> <a id="8218" class="Symbol">(</a><a id="8219" href="Lecture7-notes.html#8219" class="Bound">x</a> <a id="8221" class="Symbol">:</a> <a id="8223" href="Lecture7-notes.html#4334" class="Generalizable">A</a><a id="8224" class="Symbol">)</a> <a id="8226" class="Symbol">→</a> <a id="8228" href="cubical-prelude.html#3560" data-type="Set ℓ → Set ℓ" class="Function">isContr</a> <a id="8236" class="Symbol">(</a><a id="8237" href="Lecture7-notes.html#7971" data-type="A → Set ℓ" class="Function">singl</a> <a id="8243" href="Lecture7-notes.html#8219" class="Bound">x</a><a id="8244" class="Symbol">)</a>
+<a id="8246" href="Lecture7-notes.html#8203" data-type="(x : A) → isContr (singl x)" class="Function">isContrSingl</a> <a id="8259" href="Lecture7-notes.html#8259" class="Bound">x</a> <a id="8261" class="Symbol">=</a> <a id="8263" href="Lecture7-notes.html#8330" data-type="(x : A) → singl x" class="Function">ctr</a> <a id="8267" href="Agda.Builtin.Sigma.html#236" data-type="(fst : A) (snd : B fst) → Σ A B" class="InductiveConstructor Operator">,</a> <a id="8269" href="Lecture7-notes.html#8748" data-type="(x : A) (s : singl x) → ctr x ≡ s" class="Function">prf</a>
+  <a id="8275" class="Keyword">where</a>
+  <a id="8283" class="Comment">-- The center is just a pair with x and refl</a>
+  <a id="8330" href="Lecture7-notes.html#8330" data-type="(x : A) → singl x" class="Function">ctr</a> <a id="8334" class="Symbol">:</a> <a id="8336" href="Lecture7-notes.html#7971" data-type="A → Set ℓ" class="Function">singl</a> <a id="8342" href="Lecture7-notes.html#8259" class="Bound">x</a>
+  <a id="8346" href="Lecture7-notes.html#8330" data-type="(x : A) → singl x" class="Function">ctr</a> <a id="8350" class="Symbol">=</a> <a id="8352" href="Lecture7-notes.html#8259" class="Bound">x</a> <a id="8354" href="Agda.Builtin.Sigma.html#236" data-type="(fst : A) (snd : B fst) → Σ A B" class="InductiveConstructor Operator">,</a> <a id="8356" href="Lecture7-notes.html#3585" data-type="x ≡ x" class="Function">refl</a>
+
+  <a id="8364" class="Comment">-- We then need to prove that ctr is equal to any element s : singl x.</a>
+  <a id="8437" class="Comment">-- This is an equality in a Σ-type, so the first component is a path</a>
+  <a id="8508" class="Comment">-- and the second is a path over the path we pick as first argument,</a>
+  <a id="8579" class="Comment">-- i.e. the second component is a square. In fact, we need a square</a>
+  <a id="8649" class="Comment">-- relating refl and pax over a path between refl and pax, so we can</a>
+  <a id="8720" class="Comment">-- use an _∧_ connection.</a>
+  <a id="8748" href="Lecture7-notes.html#8748" data-type="(x : A) (s : singl x) → ctr x ≡ s" class="Function">prf</a> <a id="8752" class="Symbol">:</a> <a id="8754" class="Symbol">(</a><a id="8755" href="Lecture7-notes.html#8755" class="Bound">s</a> <a id="8757" class="Symbol">:</a> <a id="8759" href="Lecture7-notes.html#7971" data-type="A → Set ℓ" class="Function">singl</a> <a id="8765" href="Lecture7-notes.html#8259" class="Bound">x</a><a id="8766" class="Symbol">)</a> <a id="8768" class="Symbol">→</a> <a id="8770" href="Lecture7-notes.html#8330" data-type="(x : A) → singl x" class="Function">ctr</a> <a id="8774" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="8776" href="Lecture7-notes.html#8755" class="Bound">s</a>
+  <a id="8780" href="Lecture7-notes.html#8748" data-type="(x : A) (s : singl x) → ctr x ≡ s" class="Function">prf</a> <a id="8784" class="Symbol">(</a><a id="8785" href="Lecture7-notes.html#8785" class="Bound">y</a> <a id="8787" href="Agda.Builtin.Sigma.html#236" data-type="(fst : A) (snd : B fst) → Σ A B" class="InductiveConstructor Operator">,</a> <a id="8789" href="Lecture7-notes.html#8789" class="Bound">pax</a><a id="8792" class="Symbol">)</a> <a id="8794" href="Lecture7-notes.html#8794" class="Bound">i</a> <a id="8796" class="Symbol">=</a> <a id="8798" class="Symbol">(</a><a id="8799" href="Lecture7-notes.html#8789" class="Bound">pax</a> <a id="8803" href="Lecture7-notes.html#8794" class="Bound">i</a><a id="8804" class="Symbol">)</a> <a id="8806" href="Agda.Builtin.Sigma.html#236" data-type="(fst : A) (snd : B fst) → Σ A B" class="InductiveConstructor Operator">,</a> <a id="8808" class="Symbol">λ</a> <a id="8810" href="Lecture7-notes.html#8810" class="Bound">j</a> <a id="8812" class="Symbol">→</a> <a id="8814" href="Lecture7-notes.html#8789" class="Bound">pax</a> <a id="8818" class="Symbol">(</a><a id="8819" href="Lecture7-notes.html#8794" class="Bound">i</a> <a id="8821" href="cubical-prelude.html#449" class="Primitive Operator">∧</a> <a id="8823" href="Lecture7-notes.html#8810" class="Bound">j</a><a id="8824" class="Symbol">)</a>
+</pre>
+<p>As we saw in the second component of prf we often need squares when
+proving things. In fact, <code>pax (i ∧ j)</code> is a path relating
+<code>refl</code> to <code>pax</code> <em>over</em> another path
+<code>λ j → x ≡ pax j</code>. This notion of path over a path is very
+useful when working in Book HoTT as well as cubically. In Book HoTT
+these are called path-overs and are defined using transport, but in
+Cubical Agda they are a primitive notion called <code>PathP</code>
+(“Path over a Path”). In general <code>PathP A x y</code> has</p>
+<pre class="text"><code>   A : I → Type ℓ
+   x : A i0
+   y : A i1</code></pre>
+<p>So PathP lets us natively define heteorgeneous paths, i.e. paths
+where the endpoints are in different types. This allows us to specify
+the type of the second component of <code>prf</code>:</p>
+<pre class="Agda"><a id="prf&#39;"></a><a id="9538" href="Lecture7-notes.html#9538" data-type="(x : A) (s : singl x) → (x , refl) ≡ s" class="Function">prf&#39;</a> <a id="9543" class="Symbol">:</a> <a id="9545" class="Symbol">(</a><a id="9546" href="Lecture7-notes.html#9546" class="Bound">x</a> <a id="9548" class="Symbol">:</a> <a id="9550" href="Lecture7-notes.html#4334" class="Generalizable">A</a><a id="9551" class="Symbol">)</a> <a id="9553" class="Symbol">(</a><a id="9554" href="Lecture7-notes.html#9554" class="Bound">s</a> <a id="9556" class="Symbol">:</a> <a id="9558" href="Lecture7-notes.html#7971" data-type="A → Set ℓ" class="Function">singl</a> <a id="9564" href="Lecture7-notes.html#9546" class="Bound">x</a><a id="9565" class="Symbol">)</a> <a id="9567" class="Symbol">→</a> <a id="9569" class="Symbol">(</a><a id="9570" href="Lecture7-notes.html#9546" class="Bound">x</a> <a id="9572" href="Agda.Builtin.Sigma.html#236" data-type="(fst : A) (snd : B fst) → Σ A B" class="InductiveConstructor Operator">,</a> <a id="9574" href="Lecture7-notes.html#3585" data-type="x ≡ x" class="Function">refl</a><a id="9578" class="Symbol">)</a> <a id="9580" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="9582" href="Lecture7-notes.html#9554" class="Bound">s</a>
+<a id="9584" href="Lecture7-notes.html#9538" data-type="(x : A) (s : singl x) → (x , refl) ≡ s" class="Function">prf&#39;</a> <a id="9589" href="Lecture7-notes.html#9589" class="Bound">x</a> <a id="9591" class="Symbol">(</a><a id="9592" href="Lecture7-notes.html#9592" class="Bound">y</a> <a id="9594" href="Agda.Builtin.Sigma.html#236" data-type="(fst : A) (snd : B fst) → Σ A B" class="InductiveConstructor Operator">,</a> <a id="9596" href="Lecture7-notes.html#9596" class="Bound">pax</a><a id="9599" class="Symbol">)</a> <a id="9601" href="Lecture7-notes.html#9601" class="Bound">i</a> <a id="9603" class="Symbol">=</a> <a id="9605" class="Symbol">(</a><a id="9606" href="Lecture7-notes.html#9596" class="Bound">pax</a> <a id="9610" href="Lecture7-notes.html#9601" class="Bound">i</a><a id="9611" class="Symbol">)</a> <a id="9613" href="Agda.Builtin.Sigma.html#236" data-type="(fst : A) (snd : B fst) → Σ A B" class="InductiveConstructor Operator">,</a> <a id="9615" class="Symbol">λ</a> <a id="9617" href="Lecture7-notes.html#9617" class="Bound">j</a> <a id="9619" class="Symbol">→</a> <a id="9621" href="Lecture7-notes.html#9640" data-type="(x y : A) (pax : x ≡ y) (i : I) → PathP (λ j → x ≡ pax j) refl pax" class="Function">goal</a> <a id="9626" href="Lecture7-notes.html#9601" class="Bound">i</a> <a id="9628" href="Lecture7-notes.html#9617" class="Bound">j</a>
+  <a id="9632" class="Keyword">where</a>
+  <a id="9640" href="Lecture7-notes.html#9640" data-type="(x y : A) (pax : x ≡ y) (i : I) → PathP (λ j → x ≡ pax j) refl pax" class="Function">goal</a> <a id="9645" class="Symbol">:</a> <a id="9647" href="Agda.Builtin.Cubical.Path.html#197" data-type="(A : I → Set ℓ) → A i0 → A i1 → Set ℓ" class="Postulate">PathP</a> <a id="9653" class="Symbol">(λ</a> <a id="9656" href="Lecture7-notes.html#9656" class="Bound">j</a> <a id="9658" class="Symbol">→</a> <a id="9660" href="Lecture7-notes.html#9589" class="Bound">x</a> <a id="9662" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="9664" href="Lecture7-notes.html#9596" class="Bound">pax</a> <a id="9668" href="Lecture7-notes.html#9656" class="Bound">j</a><a id="9669" class="Symbol">)</a> <a id="9671" href="Lecture7-notes.html#3585" data-type="x ≡ x" class="Function">refl</a> <a id="9676" href="Lecture7-notes.html#9596" class="Bound">pax</a>
+  <a id="9682" href="Lecture7-notes.html#9640" data-type="(x y : A) (pax : x ≡ y) (i : I) → PathP (λ j → x ≡ pax j) refl pax" class="Function">goal</a> <a id="9687" href="Lecture7-notes.html#9687" class="Bound">i</a> <a id="9689" href="Lecture7-notes.html#9689" class="Bound">j</a> <a id="9691" class="Symbol">=</a> <a id="9693" href="Lecture7-notes.html#9596" class="Bound">pax</a> <a id="9697" class="Symbol">(</a><a id="9698" href="Lecture7-notes.html#9687" class="Bound">i</a> <a id="9700" href="cubical-prelude.html#449" class="Primitive Operator">∧</a> <a id="9702" href="Lecture7-notes.html#9689" class="Bound">j</a><a id="9703" class="Symbol">)</a>
+</pre>
+<p>Just like <code>_×_</code> is a special case of Σ-types we have that
+<code>_≡_</code> is a special case of PathP. In fact, <code>x ≡ y</code>
+is just short for <code>PathP (λ _ → A) x y</code>:</p>
+<pre class="Agda"><a id="reflP"></a><a id="9869" href="Lecture7-notes.html#9869" data-type="x ≡ x" class="Function">reflP</a> <a id="9875" class="Symbol">:</a> <a id="9877" class="Symbol">{</a><a id="9878" href="Lecture7-notes.html#9878" class="Bound">x</a> <a id="9880" class="Symbol">:</a> <a id="9882" href="Lecture7-notes.html#4334" class="Generalizable">A</a><a id="9883" class="Symbol">}</a> <a id="9885" class="Symbol">→</a> <a id="9887" href="Agda.Builtin.Cubical.Path.html#197" data-type="(A : I → Set ℓ) → A i0 → A i1 → Set ℓ" class="Postulate">PathP</a> <a id="9893" class="Symbol">(λ</a> <a id="9896" href="Lecture7-notes.html#9896" class="Bound">_</a> <a id="9898" class="Symbol">→</a> <a id="9900" href="Lecture7-notes.html#4334" class="Generalizable">A</a><a id="9901" class="Symbol">)</a> <a id="9903" href="Lecture7-notes.html#9878" class="Bound">x</a> <a id="9905" href="Lecture7-notes.html#9878" class="Bound">x</a>
+<a id="9907" href="Lecture7-notes.html#9869" data-type="x ≡ x" class="Function">reflP</a> <a id="9913" class="Symbol">=</a> <a id="9915" href="Lecture7-notes.html#3585" data-type="x ≡ x" class="Function">refl</a>
+</pre>
+<p>Working directly with paths and equalities makes many proofs from
+Book HoTT very short:</p>
+<pre class="Agda"><a id="isContrΠ"></a><a id="10022" href="Lecture7-notes.html#10022" data-type="((x : A) → isContr (B x)) → isContr ((x : A) → B x)" class="Function">isContrΠ</a> <a id="10031" class="Symbol">:</a> <a id="10033" class="Symbol">{</a><a id="10034" href="Lecture7-notes.html#10034" class="Bound">B</a> <a id="10036" class="Symbol">:</a> <a id="10038" href="Lecture7-notes.html#4334" class="Generalizable">A</a> <a id="10040" class="Symbol">→</a> <a id="10042" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="10047" href="cubical-prelude.html#2241" data-type="Level" class="Generalizable">ℓ</a><a id="10048" class="Symbol">}</a> <a id="10050" class="Symbol">(</a><a id="10051" href="Lecture7-notes.html#10051" class="Bound">h</a> <a id="10053" class="Symbol">:</a> <a id="10055" class="Symbol">(</a><a id="10056" href="Lecture7-notes.html#10056" class="Bound">x</a> <a id="10058" class="Symbol">:</a> <a id="10060" href="Lecture7-notes.html#4334" class="Generalizable">A</a><a id="10061" class="Symbol">)</a> <a id="10063" class="Symbol">→</a> <a id="10065" href="cubical-prelude.html#3560" data-type="Set ℓ → Set ℓ" class="Function">isContr</a> <a id="10073" class="Symbol">(</a><a id="10074" href="Lecture7-notes.html#10034" class="Bound">B</a> <a id="10076" href="Lecture7-notes.html#10056" class="Bound">x</a><a id="10077" class="Symbol">))</a>
+         <a id="10089" class="Symbol">→</a> <a id="10091" href="cubical-prelude.html#3560" data-type="Set ℓ → Set ℓ" class="Function">isContr</a> <a id="10099" class="Symbol">((</a><a id="10101" href="Lecture7-notes.html#10101" class="Bound">x</a> <a id="10103" class="Symbol">:</a> <a id="10105" href="Lecture7-notes.html#4334" class="Generalizable">A</a><a id="10106" class="Symbol">)</a> <a id="10108" class="Symbol">→</a> <a id="10110" href="Lecture7-notes.html#10034" class="Bound">B</a> <a id="10112" href="Lecture7-notes.html#10101" class="Bound">x</a><a id="10113" class="Symbol">)</a>
+<a id="10115" href="Lecture7-notes.html#10022" data-type="((x : A) → isContr (B x)) → isContr ((x : A) → B x)" class="Function">isContrΠ</a> <a id="10124" href="Lecture7-notes.html#10124" class="Bound">h</a> <a id="10126" class="Symbol">=</a> <a id="10128" class="Symbol">(λ</a> <a id="10131" href="Lecture7-notes.html#10131" class="Bound">x</a> <a id="10133" class="Symbol">→</a> <a id="10135" href="cubical-prelude.html#3232" class="Field">pr₁</a> <a id="10139" class="Symbol">(</a><a id="10140" href="Lecture7-notes.html#10124" class="Bound">h</a> <a id="10142" href="Lecture7-notes.html#10131" class="Bound">x</a><a id="10143" class="Symbol">))</a> <a id="10146" href="Agda.Builtin.Sigma.html#236" data-type="(fst : A) (snd : B fst) → Σ A B" class="InductiveConstructor Operator">,</a> <a id="10148" class="Symbol">(λ</a> <a id="10151" href="Lecture7-notes.html#10151" class="Bound">f</a> <a id="10153" href="Lecture7-notes.html#10153" class="Bound">i</a> <a id="10155" href="Lecture7-notes.html#10155" class="Bound">x</a> <a id="10157" class="Symbol">→</a> <a id="10159" href="cubical-prelude.html#3245" class="Field">pr₂</a> <a id="10163" class="Symbol">(</a><a id="10164" href="Lecture7-notes.html#10124" class="Bound">h</a> <a id="10166" href="Lecture7-notes.html#10155" class="Bound">x</a><a id="10167" class="Symbol">)</a> <a id="10169" class="Symbol">(</a><a id="10170" href="Lecture7-notes.html#10151" class="Bound">f</a> <a id="10172" href="Lecture7-notes.html#10155" class="Bound">x</a><a id="10173" class="Symbol">)</a> <a id="10175" href="Lecture7-notes.html#10153" class="Bound">i</a><a id="10176" class="Symbol">)</a>
+</pre>
+<h1 id="cubical-higher-inductive-types">Cubical higher inductive
+types</h1>
+<p>We have seen various HITs earlier in the course. These were added
+axiomatically to Agda by postulating there existence together with
+suitable elimination/induction principles. In Cubical Agda they are
+instead added just like any inductive data type, but with path
+constructors. This is made possible by the fact that paths in Cubical
+Agda are just fancy functions.</p>
+<h2 id="the-circle">The circle</h2>
+<p>We can define the circle as the following simple data
+declaration:</p>
+<pre class="Agda"><a id="10674" class="Keyword">data</a> <a id="S¹"></a><a id="10679" href="Lecture7-notes.html#10679" data-type="Set" class="Datatype">S¹</a> <a id="10682" class="Symbol">:</a> <a id="10684" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type₀</a> <a id="10690" class="Keyword">where</a>
+  <a id="S¹.base"></a><a id="10698" href="Lecture7-notes.html#10698" data-type="S¹" class="InductiveConstructor">base</a> <a id="10703" class="Symbol">:</a> <a id="10705" href="Lecture7-notes.html#10679" data-type="Set" class="Datatype">S¹</a>
+  <a id="S¹.loop"></a><a id="10710" href="Lecture7-notes.html#10710" data-type="base ≡ base" class="InductiveConstructor">loop</a> <a id="10715" class="Symbol">:</a> <a id="10717" href="Lecture7-notes.html#10698" data-type="S¹" class="InductiveConstructor">base</a> <a id="10722" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="10724" href="Lecture7-notes.html#10698" data-type="S¹" class="InductiveConstructor">base</a>
+</pre>
+<p>We can write functions on <code>S¹</code> using pattern-matching:</p>
+<pre class="Agda"><a id="double"></a><a id="10798" href="Lecture7-notes.html#10798" data-type="S¹ → S¹" class="Function">double</a> <a id="10805" class="Symbol">:</a> <a id="10807" href="Lecture7-notes.html#10679" data-type="Set" class="Datatype">S¹</a> <a id="10810" class="Symbol">→</a> <a id="10812" href="Lecture7-notes.html#10679" data-type="Set" class="Datatype">S¹</a>
+<a id="10815" href="Lecture7-notes.html#10798" data-type="S¹ → S¹" class="Function">double</a> <a id="10822" href="Lecture7-notes.html#10698" data-type="S¹" class="InductiveConstructor">base</a> <a id="10827" class="Symbol">=</a> <a id="10829" href="Lecture7-notes.html#10698" data-type="S¹" class="InductiveConstructor">base</a>
+<a id="10834" href="Lecture7-notes.html#10798" data-type="S¹ → S¹" class="Function">double</a> <a id="10841" class="Symbol">(</a><a id="10842" href="Lecture7-notes.html#10710" data-type="base ≡ base" class="InductiveConstructor">loop</a> <a id="10847" href="Lecture7-notes.html#10847" class="Bound">i</a><a id="10848" class="Symbol">)</a> <a id="10850" class="Symbol">=</a> <a id="10852" class="Symbol">(</a><a id="10853" href="Lecture7-notes.html#10710" data-type="base ≡ base" class="InductiveConstructor">loop</a> <a id="10858" href="cubical-prelude.html#2538" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function Operator">∙</a> <a id="10860" href="Lecture7-notes.html#10710" data-type="base ≡ base" class="InductiveConstructor">loop</a><a id="10864" class="Symbol">)</a> <a id="10866" href="Lecture7-notes.html#10847" class="Bound">i</a>
+</pre>
+<p>Note that loop takes an <code>i : I</code> argument. This is not very
+surprising as it’s a path of type <code>base ≡ base</code>, but it’s an
+important difference to Book HoTT. Having the native notion of equality
+be heterogeneous makes it possible to quite directly define a general
+schema for a large class of HITs and add it to a system like Cubical
+Agda.</p>
+<p>Let’s use univalence to compute some winding numbers on the circle.
+We first define a family of types over the circle with fibers being the
+integers.</p>
+<pre class="Agda"><a id="helix"></a><a id="11370" href="Lecture7-notes.html#11370" data-type="S¹ → Set" class="Function">helix</a> <a id="11376" class="Symbol">:</a> <a id="11378" href="Lecture7-notes.html#10679" data-type="Set" class="Datatype">S¹</a> <a id="11381" class="Symbol">→</a> <a id="11383" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type₀</a>
+<a id="11389" href="Lecture7-notes.html#11370" data-type="S¹ → Set" class="Function">helix</a> <a id="11395" href="Lecture7-notes.html#10698" data-type="S¹" class="InductiveConstructor">base</a>     <a id="11404" class="Symbol">=</a> <a id="11406" href="cubical-prelude.html#7489" data-type="Set" class="Datatype">ℤ</a>
+<a id="11408" href="Lecture7-notes.html#11370" data-type="S¹ → Set" class="Function">helix</a> <a id="11414" class="Symbol">(</a><a id="11415" href="Lecture7-notes.html#10710" data-type="base ≡ base" class="InductiveConstructor">loop</a> <a id="11420" href="Lecture7-notes.html#11420" class="Bound">i</a><a id="11421" class="Symbol">)</a> <a id="11423" class="Symbol">=</a> <a id="11425" href="cubical-prelude.html#8106" data-type="ℤ ≡ ℤ" class="Function">sucPath</a> <a id="11433" href="Lecture7-notes.html#11420" class="Bound">i</a>
+</pre>
+<p>Here univalence is baked into <code>sucPath : ℤ ≡ ℤ</code>. The
+loopspace of the circle is then defined as</p>
+<pre class="Agda"><a id="ΩS¹"></a><a id="11545" href="Lecture7-notes.html#11545" data-type="Set" class="Function">ΩS¹</a> <a id="11549" class="Symbol">:</a> <a id="11551" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type₀</a>
+<a id="11557" href="Lecture7-notes.html#11545" data-type="Set" class="Function">ΩS¹</a> <a id="11561" class="Symbol">=</a> <a id="11563" href="Lecture7-notes.html#10698" data-type="S¹" class="InductiveConstructor">base</a> <a id="11568" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="11570" href="Lecture7-notes.html#10698" data-type="S¹" class="InductiveConstructor">base</a>
+</pre>
+<p>and we can then define a function computing how many times we’ve
+looped around the circle by:</p>
+<pre class="Agda"><a id="winding"></a><a id="11683" href="Lecture7-notes.html#11683" data-type="ΩS¹ → ℤ" class="Function">winding</a> <a id="11691" class="Symbol">:</a> <a id="11693" href="Lecture7-notes.html#11545" data-type="Set" class="Function">ΩS¹</a> <a id="11697" class="Symbol">→</a> <a id="11699" href="cubical-prelude.html#7489" data-type="Set" class="Datatype">ℤ</a>
+<a id="11701" href="Lecture7-notes.html#11683" data-type="ΩS¹ → ℤ" class="Function">winding</a> <a id="11709" href="Lecture7-notes.html#11709" class="Bound">p</a> <a id="11711" class="Symbol">=</a> <a id="11713" href="cubical-prelude.html#702" class="Primitive">transp</a> <a id="11720" class="Symbol">(λ</a> <a id="11723" href="Lecture7-notes.html#11723" class="Bound">i</a> <a id="11725" class="Symbol">→</a> <a id="11727" href="Lecture7-notes.html#11370" data-type="S¹ → Set" class="Function">helix</a> <a id="11733" class="Symbol">(</a><a id="11734" href="Lecture7-notes.html#11709" class="Bound">p</a> <a id="11736" href="Lecture7-notes.html#11723" class="Bound">i</a><a id="11737" class="Symbol">))</a> <a id="11740" href="Agda.Primitive.Cubical.html#150" data-type="I" class="InductiveConstructor">i0</a> <a id="11743" class="Symbol">(</a><a id="11744" href="cubical-prelude.html#7507" data-type="ℕ → ℤ" class="InductiveConstructor">pos</a> <a id="11748" class="Number">0</a><a id="11749" class="Symbol">)</a>
+</pre>
+<p>Here <code>transp</code> is a cubical transport function. We’ll talk
+about it in more detail in the next lecture, but for now we can observe
+that it reduces as expected:</p>
+<pre class="Agda"><a id="11924" href="Lecture7-notes.html#11924" class="Function">_</a> <a id="11926" class="Symbol">:</a> <a id="11928" href="Lecture7-notes.html#11683" data-type="ΩS¹ → ℤ" class="Function">winding</a> <a id="11936" class="Symbol">(λ</a> <a id="11939" href="Lecture7-notes.html#11939" class="Bound">i</a> <a id="11941" class="Symbol">→</a> <a id="11943" href="Lecture7-notes.html#10798" data-type="S¹ → S¹" class="Function">double</a> <a id="11950" class="Symbol">((</a><a id="11952" href="Lecture7-notes.html#10710" data-type="base ≡ base" class="InductiveConstructor">loop</a> <a id="11957" href="cubical-prelude.html#2538" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function Operator">∙</a> <a id="11959" href="Lecture7-notes.html#10710" data-type="base ≡ base" class="InductiveConstructor">loop</a><a id="11963" class="Symbol">)</a> <a id="11965" href="Lecture7-notes.html#11939" class="Bound">i</a><a id="11966" class="Symbol">))</a> <a id="11969" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="11971" href="cubical-prelude.html#7507" data-type="ℕ → ℤ" class="InductiveConstructor">pos</a> <a id="11975" class="Number">4</a>
+<a id="11977" class="Symbol">_</a> <a id="11979" class="Symbol">=</a> <a id="11981" href="Lecture7-notes.html#3585" data-type="x ≡ x" class="Function">refl</a>
+</pre>
+<p>This would not reduce definitionally in Book HoTT as univalence is an
+axiom. Having things compute definitionally makes it possible to
+substantially simplify many proofs from Book HoTT in Cubical Agda.</p>
+<p>We can in fact prove that <code>winding</code> is an equivalence,
+this is very similar to the Book HoTT proof and uses the encode-decode
+method. For details about how this proof looks in Cubical Agda see the
+Cubical.HITs.S1.Base file in the agda/cubical library.</p>
+<h2 id="the-torus">The torus</h2>
+<p>We can define the torus as:</p>
+<pre class="Agda"><a id="12498" class="Keyword">data</a> <a id="Torus"></a><a id="12503" href="Lecture7-notes.html#12503" data-type="Set" class="Datatype">Torus</a> <a id="12509" class="Symbol">:</a> <a id="12511" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type₀</a> <a id="12517" class="Keyword">where</a>
+  <a id="Torus.point"></a><a id="12525" href="Lecture7-notes.html#12525" data-type="Torus" class="InductiveConstructor">point</a> <a id="12531" class="Symbol">:</a> <a id="12533" href="Lecture7-notes.html#12503" data-type="Set" class="Datatype">Torus</a>
+  <a id="Torus.line1"></a><a id="12541" href="Lecture7-notes.html#12541" data-type="point ≡ point" class="InductiveConstructor">line1</a> <a id="12547" class="Symbol">:</a> <a id="12549" href="Lecture7-notes.html#12525" data-type="Torus" class="InductiveConstructor">point</a> <a id="12555" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="12557" href="Lecture7-notes.html#12525" data-type="Torus" class="InductiveConstructor">point</a>
+  <a id="Torus.line2"></a><a id="12565" href="Lecture7-notes.html#12565" data-type="point ≡ point" class="InductiveConstructor">line2</a> <a id="12571" class="Symbol">:</a> <a id="12573" href="Lecture7-notes.html#12525" data-type="Torus" class="InductiveConstructor">point</a> <a id="12579" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="12581" href="Lecture7-notes.html#12525" data-type="Torus" class="InductiveConstructor">point</a>
+  <a id="Torus.square"></a><a id="12589" href="Lecture7-notes.html#12589" data-type="PathP (λ i → line1 i ≡ line1 i) line2 line2" class="InductiveConstructor">square</a> <a id="12596" class="Symbol">:</a> <a id="12598" href="Agda.Builtin.Cubical.Path.html#197" data-type="(A : I → Set ℓ) → A i0 → A i1 → Set ℓ" class="Postulate">PathP</a> <a id="12604" class="Symbol">(λ</a> <a id="12607" href="Lecture7-notes.html#12607" class="Bound">i</a> <a id="12609" class="Symbol">→</a> <a id="12611" href="Lecture7-notes.html#12541" data-type="point ≡ point" class="InductiveConstructor">line1</a> <a id="12617" href="Lecture7-notes.html#12607" class="Bound">i</a> <a id="12619" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="12621" href="Lecture7-notes.html#12541" data-type="point ≡ point" class="InductiveConstructor">line1</a> <a id="12627" href="Lecture7-notes.html#12607" class="Bound">i</a><a id="12628" class="Symbol">)</a> <a id="12630" href="Lecture7-notes.html#12565" data-type="point ≡ point" class="InductiveConstructor">line2</a> <a id="12636" href="Lecture7-notes.html#12565" data-type="point ≡ point" class="InductiveConstructor">line2</a>
+</pre>
+<p>The square corresponds to the usual folding diagram from topology
+(where <code>p</code> is short for <code>point</code>):</p>
+<pre class="text"><code>             line1
+        p ----------&gt; p
+        ^             ^
+        ¦             ¦
+  line2 ¦             ¦ line2
+        ¦             ¦
+        p ----------&gt; p
+             line1</code></pre>
+<p>Proving that it is equivalent to two circles is pretty much trivial
+as we have definitional computation rules for all constructors,
+including higher:</p>
+<pre class="Agda"><a id="t2c"></a><a id="13108" href="Lecture7-notes.html#13108" data-type="Torus → S¹ × S¹" class="Function">t2c</a> <a id="13112" class="Symbol">:</a> <a id="13114" href="Lecture7-notes.html#12503" data-type="Set" class="Datatype">Torus</a> <a id="13120" class="Symbol">→</a> <a id="13122" href="Lecture7-notes.html#10679" data-type="Set" class="Datatype">S¹</a> <a id="13125" href="cubical-prelude.html#3419" data-type="Set l1 → Set l2 → Set (l1 ⊔ l2)" class="Function Operator">×</a> <a id="13127" href="Lecture7-notes.html#10679" data-type="Set" class="Datatype">S¹</a>
+<a id="13130" href="Lecture7-notes.html#13108" data-type="Torus → S¹ × S¹" class="Function">t2c</a> <a id="13134" href="Lecture7-notes.html#12525" data-type="Torus" class="InductiveConstructor">point</a>        <a id="13147" class="Symbol">=</a> <a id="13149" class="Symbol">(</a><a id="13150" href="Lecture7-notes.html#10698" data-type="S¹" class="InductiveConstructor">base</a> <a id="13155" href="Agda.Builtin.Sigma.html#236" data-type="(fst : A) (snd : B fst) → Σ A B" class="InductiveConstructor Operator">,</a> <a id="13157" href="Lecture7-notes.html#10698" data-type="S¹" class="InductiveConstructor">base</a><a id="13161" class="Symbol">)</a>
+<a id="13163" href="Lecture7-notes.html#13108" data-type="Torus → S¹ × S¹" class="Function">t2c</a> <a id="13167" class="Symbol">(</a><a id="13168" href="Lecture7-notes.html#12541" data-type="point ≡ point" class="InductiveConstructor">line1</a> <a id="13174" href="Lecture7-notes.html#13174" class="Bound">i</a><a id="13175" class="Symbol">)</a>    <a id="13180" class="Symbol">=</a> <a id="13182" class="Symbol">(</a><a id="13183" href="Lecture7-notes.html#10710" data-type="base ≡ base" class="InductiveConstructor">loop</a> <a id="13188" href="Lecture7-notes.html#13174" class="Bound">i</a> <a id="13190" href="Agda.Builtin.Sigma.html#236" data-type="(fst : A) (snd : B fst) → Σ A B" class="InductiveConstructor Operator">,</a> <a id="13192" href="Lecture7-notes.html#10698" data-type="S¹" class="InductiveConstructor">base</a><a id="13196" class="Symbol">)</a>
+<a id="13198" href="Lecture7-notes.html#13108" data-type="Torus → S¹ × S¹" class="Function">t2c</a> <a id="13202" class="Symbol">(</a><a id="13203" href="Lecture7-notes.html#12565" data-type="point ≡ point" class="InductiveConstructor">line2</a> <a id="13209" href="Lecture7-notes.html#13209" class="Bound">j</a><a id="13210" class="Symbol">)</a>    <a id="13215" class="Symbol">=</a> <a id="13217" class="Symbol">(</a><a id="13218" href="Lecture7-notes.html#10698" data-type="S¹" class="InductiveConstructor">base</a> <a id="13223" href="Agda.Builtin.Sigma.html#236" data-type="(fst : A) (snd : B fst) → Σ A B" class="InductiveConstructor Operator">,</a> <a id="13225" href="Lecture7-notes.html#10710" data-type="base ≡ base" class="InductiveConstructor">loop</a> <a id="13230" href="Lecture7-notes.html#13209" class="Bound">j</a><a id="13231" class="Symbol">)</a>
+<a id="13233" href="Lecture7-notes.html#13108" data-type="Torus → S¹ × S¹" class="Function">t2c</a> <a id="13237" class="Symbol">(</a><a id="13238" href="Lecture7-notes.html#12589" data-type="PathP (λ i → line1 i ≡ line1 i) line2 line2" class="InductiveConstructor">square</a> <a id="13245" href="Lecture7-notes.html#13245" class="Bound">i</a> <a id="13247" href="Lecture7-notes.html#13247" class="Bound">j</a><a id="13248" class="Symbol">)</a> <a id="13250" class="Symbol">=</a> <a id="13252" class="Symbol">(</a><a id="13253" href="Lecture7-notes.html#10710" data-type="base ≡ base" class="InductiveConstructor">loop</a> <a id="13258" href="Lecture7-notes.html#13245" class="Bound">i</a> <a id="13260" href="Agda.Builtin.Sigma.html#236" data-type="(fst : A) (snd : B fst) → Σ A B" class="InductiveConstructor Operator">,</a> <a id="13262" href="Lecture7-notes.html#10710" data-type="base ≡ base" class="InductiveConstructor">loop</a> <a id="13267" href="Lecture7-notes.html#13247" class="Bound">j</a><a id="13268" class="Symbol">)</a>
+
+<a id="c2t"></a><a id="13271" href="Lecture7-notes.html#13271" data-type="S¹ × S¹ → Torus" class="Function">c2t</a> <a id="13275" class="Symbol">:</a> <a id="13277" href="Lecture7-notes.html#10679" data-type="Set" class="Datatype">S¹</a> <a id="13280" href="cubical-prelude.html#3419" data-type="Set l1 → Set l2 → Set (l1 ⊔ l2)" class="Function Operator">×</a> <a id="13282" href="Lecture7-notes.html#10679" data-type="Set" class="Datatype">S¹</a> <a id="13285" class="Symbol">→</a> <a id="13287" href="Lecture7-notes.html#12503" data-type="Set" class="Datatype">Torus</a>
+<a id="13293" href="Lecture7-notes.html#13271" data-type="S¹ × S¹ → Torus" class="Function">c2t</a> <a id="13297" class="Symbol">(</a><a id="13298" href="Lecture7-notes.html#10698" data-type="S¹" class="InductiveConstructor">base</a>   <a id="13305" href="Agda.Builtin.Sigma.html#236" data-type="(fst : A) (snd : B fst) → Σ A B" class="InductiveConstructor Operator">,</a> <a id="13307" href="Lecture7-notes.html#10698" data-type="S¹" class="InductiveConstructor">base</a><a id="13311" class="Symbol">)</a>   <a id="13315" class="Symbol">=</a> <a id="13317" href="Lecture7-notes.html#12525" data-type="Torus" class="InductiveConstructor">point</a>
+<a id="13323" href="Lecture7-notes.html#13271" data-type="S¹ × S¹ → Torus" class="Function">c2t</a> <a id="13327" class="Symbol">(</a><a id="13328" href="Lecture7-notes.html#10710" data-type="base ≡ base" class="InductiveConstructor">loop</a> <a id="13333" href="Lecture7-notes.html#13333" class="Bound">i</a> <a id="13335" href="Agda.Builtin.Sigma.html#236" data-type="(fst : A) (snd : B fst) → Σ A B" class="InductiveConstructor Operator">,</a> <a id="13337" href="Lecture7-notes.html#10698" data-type="S¹" class="InductiveConstructor">base</a><a id="13341" class="Symbol">)</a>   <a id="13345" class="Symbol">=</a> <a id="13347" href="Lecture7-notes.html#12541" data-type="point ≡ point" class="InductiveConstructor">line1</a> <a id="13353" href="Lecture7-notes.html#13333" class="Bound">i</a>
+<a id="13355" href="Lecture7-notes.html#13271" data-type="S¹ × S¹ → Torus" class="Function">c2t</a> <a id="13359" class="Symbol">(</a><a id="13360" href="Lecture7-notes.html#10698" data-type="S¹" class="InductiveConstructor">base</a>   <a id="13367" href="Agda.Builtin.Sigma.html#236" data-type="(fst : A) (snd : B fst) → Σ A B" class="InductiveConstructor Operator">,</a> <a id="13369" href="Lecture7-notes.html#10710" data-type="base ≡ base" class="InductiveConstructor">loop</a> <a id="13374" href="Lecture7-notes.html#13374" class="Bound">j</a><a id="13375" class="Symbol">)</a> <a id="13377" class="Symbol">=</a> <a id="13379" href="Lecture7-notes.html#12565" data-type="point ≡ point" class="InductiveConstructor">line2</a> <a id="13385" href="Lecture7-notes.html#13374" class="Bound">j</a>
+<a id="13387" href="Lecture7-notes.html#13271" data-type="S¹ × S¹ → Torus" class="Function">c2t</a> <a id="13391" class="Symbol">(</a><a id="13392" href="Lecture7-notes.html#10710" data-type="base ≡ base" class="InductiveConstructor">loop</a> <a id="13397" href="Lecture7-notes.html#13397" class="Bound">i</a> <a id="13399" href="Agda.Builtin.Sigma.html#236" data-type="(fst : A) (snd : B fst) → Σ A B" class="InductiveConstructor Operator">,</a> <a id="13401" href="Lecture7-notes.html#10710" data-type="base ≡ base" class="InductiveConstructor">loop</a> <a id="13406" href="Lecture7-notes.html#13406" class="Bound">j</a><a id="13407" class="Symbol">)</a> <a id="13409" class="Symbol">=</a> <a id="13411" href="Lecture7-notes.html#12589" data-type="PathP (λ i → line1 i ≡ line1 i) line2 line2" class="InductiveConstructor">square</a> <a id="13418" href="Lecture7-notes.html#13397" class="Bound">i</a> <a id="13420" href="Lecture7-notes.html#13406" class="Bound">j</a>
+
+<a id="c2t-t2c"></a><a id="13423" href="Lecture7-notes.html#13423" data-type="(t : Torus) → c2t (t2c t) ≡ t" class="Function">c2t-t2c</a> <a id="13431" class="Symbol">:</a> <a id="13433" class="Symbol">(</a><a id="13434" href="Lecture7-notes.html#13434" class="Bound">t</a> <a id="13436" class="Symbol">:</a> <a id="13438" href="Lecture7-notes.html#12503" data-type="Set" class="Datatype">Torus</a><a id="13443" class="Symbol">)</a> <a id="13445" class="Symbol">→</a> <a id="13447" href="Lecture7-notes.html#13271" data-type="S¹ × S¹ → Torus" class="Function">c2t</a> <a id="13451" class="Symbol">(</a><a id="13452" href="Lecture7-notes.html#13108" data-type="Torus → S¹ × S¹" class="Function">t2c</a> <a id="13456" href="Lecture7-notes.html#13434" class="Bound">t</a><a id="13457" class="Symbol">)</a> <a id="13459" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="13461" href="Lecture7-notes.html#13434" class="Bound">t</a>
+<a id="13463" href="Lecture7-notes.html#13423" data-type="(t : Torus) → c2t (t2c t) ≡ t" class="Function">c2t-t2c</a> <a id="13471" href="Lecture7-notes.html#12525" data-type="Torus" class="InductiveConstructor">point</a>        <a id="13484" class="Symbol">=</a> <a id="13486" href="Lecture7-notes.html#3585" data-type="x ≡ x" class="Function">refl</a>
+<a id="13491" href="Lecture7-notes.html#13423" data-type="(t : Torus) → c2t (t2c t) ≡ t" class="Function">c2t-t2c</a> <a id="13499" class="Symbol">(</a><a id="13500" href="Lecture7-notes.html#12541" data-type="point ≡ point" class="InductiveConstructor">line1</a> <a id="13506" class="Symbol">_)</a>    <a id="13512" class="Symbol">=</a> <a id="13514" href="Lecture7-notes.html#3585" data-type="x ≡ x" class="Function">refl</a>
+<a id="13519" href="Lecture7-notes.html#13423" data-type="(t : Torus) → c2t (t2c t) ≡ t" class="Function">c2t-t2c</a> <a id="13527" class="Symbol">(</a><a id="13528" href="Lecture7-notes.html#12565" data-type="point ≡ point" class="InductiveConstructor">line2</a> <a id="13534" class="Symbol">_)</a>    <a id="13540" class="Symbol">=</a> <a id="13542" href="Lecture7-notes.html#3585" data-type="x ≡ x" class="Function">refl</a>
+<a id="13547" href="Lecture7-notes.html#13423" data-type="(t : Torus) → c2t (t2c t) ≡ t" class="Function">c2t-t2c</a> <a id="13555" class="Symbol">(</a><a id="13556" href="Lecture7-notes.html#12589" data-type="PathP (λ i → line1 i ≡ line1 i) line2 line2" class="InductiveConstructor">square</a> <a id="13563" class="Symbol">_</a> <a id="13565" class="Symbol">_)</a> <a id="13568" class="Symbol">=</a> <a id="13570" href="Lecture7-notes.html#3585" data-type="x ≡ x" class="Function">refl</a>
+
+<a id="t2c-c2t"></a><a id="13576" href="Lecture7-notes.html#13576" data-type="(p : S¹ × S¹) → t2c (c2t p) ≡ p" class="Function">t2c-c2t</a> <a id="13584" class="Symbol">:</a> <a id="13586" class="Symbol">(</a><a id="13587" href="Lecture7-notes.html#13587" class="Bound">p</a> <a id="13589" class="Symbol">:</a> <a id="13591" href="Lecture7-notes.html#10679" data-type="Set" class="Datatype">S¹</a> <a id="13594" href="cubical-prelude.html#3419" data-type="Set l1 → Set l2 → Set (l1 ⊔ l2)" class="Function Operator">×</a> <a id="13596" href="Lecture7-notes.html#10679" data-type="Set" class="Datatype">S¹</a><a id="13598" class="Symbol">)</a> <a id="13600" class="Symbol">→</a> <a id="13602" href="Lecture7-notes.html#13108" data-type="Torus → S¹ × S¹" class="Function">t2c</a> <a id="13606" class="Symbol">(</a><a id="13607" href="Lecture7-notes.html#13271" data-type="S¹ × S¹ → Torus" class="Function">c2t</a> <a id="13611" href="Lecture7-notes.html#13587" class="Bound">p</a><a id="13612" class="Symbol">)</a> <a id="13614" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="13616" href="Lecture7-notes.html#13587" class="Bound">p</a>
+<a id="13618" href="Lecture7-notes.html#13576" data-type="(p : S¹ × S¹) → t2c (c2t p) ≡ p" class="Function">t2c-c2t</a> <a id="13626" class="Symbol">(</a><a id="13627" href="Lecture7-notes.html#10698" data-type="S¹" class="InductiveConstructor">base</a>   <a id="13634" href="Agda.Builtin.Sigma.html#236" data-type="(fst : A) (snd : B fst) → Σ A B" class="InductiveConstructor Operator">,</a> <a id="13636" href="Lecture7-notes.html#10698" data-type="S¹" class="InductiveConstructor">base</a><a id="13640" class="Symbol">)</a>   <a id="13644" class="Symbol">=</a> <a id="13646" href="Lecture7-notes.html#3585" data-type="x ≡ x" class="Function">refl</a>
+<a id="13651" href="Lecture7-notes.html#13576" data-type="(p : S¹ × S¹) → t2c (c2t p) ≡ p" class="Function">t2c-c2t</a> <a id="13659" class="Symbol">(</a><a id="13660" href="Lecture7-notes.html#10698" data-type="S¹" class="InductiveConstructor">base</a>   <a id="13667" href="Agda.Builtin.Sigma.html#236" data-type="(fst : A) (snd : B fst) → Σ A B" class="InductiveConstructor Operator">,</a> <a id="13669" href="Lecture7-notes.html#10710" data-type="base ≡ base" class="InductiveConstructor">loop</a> <a id="13674" class="Symbol">_)</a> <a id="13677" class="Symbol">=</a> <a id="13679" href="Lecture7-notes.html#3585" data-type="x ≡ x" class="Function">refl</a>
+<a id="13684" href="Lecture7-notes.html#13576" data-type="(p : S¹ × S¹) → t2c (c2t p) ≡ p" class="Function">t2c-c2t</a> <a id="13692" class="Symbol">(</a><a id="13693" href="Lecture7-notes.html#10710" data-type="base ≡ base" class="InductiveConstructor">loop</a> <a id="13698" class="Symbol">_</a> <a id="13700" href="Agda.Builtin.Sigma.html#236" data-type="(fst : A) (snd : B fst) → Σ A B" class="InductiveConstructor Operator">,</a> <a id="13702" href="Lecture7-notes.html#10698" data-type="S¹" class="InductiveConstructor">base</a><a id="13706" class="Symbol">)</a>   <a id="13710" class="Symbol">=</a> <a id="13712" href="Lecture7-notes.html#3585" data-type="x ≡ x" class="Function">refl</a>
+<a id="13717" href="Lecture7-notes.html#13576" data-type="(p : S¹ × S¹) → t2c (c2t p) ≡ p" class="Function">t2c-c2t</a> <a id="13725" class="Symbol">(</a><a id="13726" href="Lecture7-notes.html#10710" data-type="base ≡ base" class="InductiveConstructor">loop</a> <a id="13731" class="Symbol">_</a> <a id="13733" href="Agda.Builtin.Sigma.html#236" data-type="(fst : A) (snd : B fst) → Σ A B" class="InductiveConstructor Operator">,</a> <a id="13735" href="Lecture7-notes.html#10710" data-type="base ≡ base" class="InductiveConstructor">loop</a> <a id="13740" class="Symbol">_)</a> <a id="13743" class="Symbol">=</a> <a id="13745" href="Lecture7-notes.html#3585" data-type="x ≡ x" class="Function">refl</a>
+</pre>
+<p>Using univalence we get the following equality:</p>
+<pre class="Agda"><a id="Torus≡S¹×S¹"></a><a id="13812" href="Lecture7-notes.html#13812" data-type="Torus ≡ (S¹ × S¹)" class="Function">Torus≡S¹×S¹</a> <a id="13824" class="Symbol">:</a> <a id="13826" href="Lecture7-notes.html#12503" data-type="Set" class="Datatype">Torus</a> <a id="13832" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="13834" href="Lecture7-notes.html#10679" data-type="Set" class="Datatype">S¹</a> <a id="13837" href="cubical-prelude.html#3419" data-type="Set l1 → Set l2 → Set (l1 ⊔ l2)" class="Function Operator">×</a> <a id="13839" href="Lecture7-notes.html#10679" data-type="Set" class="Datatype">S¹</a>
+<a id="13842" href="Lecture7-notes.html#13812" data-type="Torus ≡ (S¹ × S¹)" class="Function">Torus≡S¹×S¹</a> <a id="13854" class="Symbol">=</a> <a id="13856" href="cubical-prelude.html#6933" data-type="Iso A B → A ≡ B" class="Function">isoToPath</a> <a id="13866" class="Symbol">(</a><a id="13867" href="cubical-prelude.html#4530" data-type="(fun : A → B) (inv : B → A) (rightInv : section fun inv)
+(leftInv : retract fun inv) →
+Iso A B" class="InductiveConstructor">iso</a> <a id="13871" href="Lecture7-notes.html#13108" data-type="Torus → S¹ × S¹" class="Function">t2c</a> <a id="13875" href="Lecture7-notes.html#13271" data-type="S¹ × S¹ → Torus" class="Function">c2t</a> <a id="13879" href="Lecture7-notes.html#13576" data-type="(p : S¹ × S¹) → t2c (c2t p) ≡ p" class="Function">t2c-c2t</a> <a id="13887" href="Lecture7-notes.html#13423" data-type="(t : Torus) → c2t (t2c t) ≡ t" class="Function">c2t-t2c</a><a id="13894" class="Symbol">)</a>
+</pre>
+<p>We can also directly compute winding numbers on the torus</p>
+<pre class="Agda"><a id="windingTorus"></a><a id="13968" href="Lecture7-notes.html#13968" data-type="point ≡ point → ℤ × ℤ" class="Function">windingTorus</a> <a id="13981" class="Symbol">:</a> <a id="13983" href="Lecture7-notes.html#12525" data-type="Torus" class="InductiveConstructor">point</a> <a id="13989" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="13991" href="Lecture7-notes.html#12525" data-type="Torus" class="InductiveConstructor">point</a> <a id="13997" class="Symbol">→</a> <a id="13999" href="cubical-prelude.html#7489" data-type="Set" class="Datatype">ℤ</a> <a id="14001" href="cubical-prelude.html#3419" data-type="Set l1 → Set l2 → Set (l1 ⊔ l2)" class="Function Operator">×</a> <a id="14003" href="cubical-prelude.html#7489" data-type="Set" class="Datatype">ℤ</a>
+<a id="14005" href="Lecture7-notes.html#13968" data-type="point ≡ point → ℤ × ℤ" class="Function">windingTorus</a> <a id="14018" href="Lecture7-notes.html#14018" class="Bound">l</a> <a id="14020" class="Symbol">=</a> <a id="14022" class="Symbol">(</a> <a id="14024" href="Lecture7-notes.html#11683" data-type="ΩS¹ → ℤ" class="Function">winding</a> <a id="14032" class="Symbol">(λ</a> <a id="14035" href="Lecture7-notes.html#14035" class="Bound">i</a> <a id="14037" class="Symbol">→</a> <a id="14039" href="cubical-prelude.html#3232" class="Field">pr₁</a> <a id="14043" class="Symbol">(</a><a id="14044" href="Lecture7-notes.html#13108" data-type="Torus → S¹ × S¹" class="Function">t2c</a> <a id="14048" class="Symbol">(</a><a id="14049" href="Lecture7-notes.html#14018" class="Bound">l</a> <a id="14051" href="Lecture7-notes.html#14035" class="Bound">i</a><a id="14052" class="Symbol">)))</a>
+                 <a id="14073" href="Agda.Builtin.Sigma.html#236" data-type="(fst : A) (snd : B fst) → Σ A B" class="InductiveConstructor Operator">,</a> <a id="14075" href="Lecture7-notes.html#11683" data-type="ΩS¹ → ℤ" class="Function">winding</a> <a id="14083" class="Symbol">(λ</a> <a id="14086" href="Lecture7-notes.html#14086" class="Bound">i</a> <a id="14088" class="Symbol">→</a> <a id="14090" href="cubical-prelude.html#3245" class="Field">pr₂</a> <a id="14094" class="Symbol">(</a><a id="14095" href="Lecture7-notes.html#13108" data-type="Torus → S¹ × S¹" class="Function">t2c</a> <a id="14099" class="Symbol">(</a><a id="14100" href="Lecture7-notes.html#14018" class="Bound">l</a> <a id="14102" href="Lecture7-notes.html#14086" class="Bound">i</a><a id="14103" class="Symbol">))))</a>
+
+<a id="14109" href="Lecture7-notes.html#14109" class="Function">_</a> <a id="14111" class="Symbol">:</a> <a id="14113" href="Lecture7-notes.html#13968" data-type="point ≡ point → ℤ × ℤ" class="Function">windingTorus</a> <a id="14126" class="Symbol">(</a><a id="14127" href="Lecture7-notes.html#12541" data-type="point ≡ point" class="InductiveConstructor">line1</a> <a id="14133" href="cubical-prelude.html#2538" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function Operator">∙</a> <a id="14135" href="Lecture7-notes.html#6920" data-type="x ≡ y → y ≡ x" class="Function">sym</a> <a id="14139" href="Lecture7-notes.html#12565" data-type="point ≡ point" class="InductiveConstructor">line2</a><a id="14144" class="Symbol">)</a> <a id="14146" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="14148" class="Symbol">(</a><a id="14149" href="cubical-prelude.html#7507" data-type="ℕ → ℤ" class="InductiveConstructor">pos</a> <a id="14153" class="Number">1</a> <a id="14155" href="Agda.Builtin.Sigma.html#236" data-type="(fst : A) (snd : B fst) → Σ A B" class="InductiveConstructor Operator">,</a> <a id="14157" href="cubical-prelude.html#7530" data-type="ℕ → ℤ" class="InductiveConstructor">negsuc</a> <a id="14164" class="Number">0</a><a id="14165" class="Symbol">)</a>
+<a id="14167" class="Symbol">_</a> <a id="14169" class="Symbol">=</a> <a id="14171" href="Lecture7-notes.html#3585" data-type="x ≡ x" class="Function">refl</a>
+</pre>
+<h1 id="bonus-content-if-there-is-time">Bonus content if there is
+time</h1>
+<h2 id="interval">Interval</h2>
+<pre class="Agda"><a id="14236" class="Keyword">data</a> <a id="Interval"></a><a id="14241" href="Lecture7-notes.html#14241" data-type="Set" class="Datatype">Interval</a> <a id="14250" class="Symbol">:</a> <a id="14252" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type₀</a> <a id="14258" class="Keyword">where</a>
+  <a id="Interval.zero"></a><a id="14266" href="Lecture7-notes.html#14266" data-type="Interval" class="InductiveConstructor">zero</a> <a id="14271" class="Symbol">:</a> <a id="14273" href="Lecture7-notes.html#14241" data-type="Set" class="Datatype">Interval</a>
+  <a id="Interval.one"></a><a id="14284" href="Lecture7-notes.html#14284" data-type="Interval" class="InductiveConstructor">one</a>  <a id="14289" class="Symbol">:</a> <a id="14291" href="Lecture7-notes.html#14241" data-type="Set" class="Datatype">Interval</a>
+  <a id="Interval.seg"></a><a id="14302" href="Lecture7-notes.html#14302" data-type="zero ≡ one" class="InductiveConstructor">seg</a>  <a id="14307" class="Symbol">:</a> <a id="14309" href="Lecture7-notes.html#14266" data-type="Interval" class="InductiveConstructor">zero</a> <a id="14314" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="14316" href="Lecture7-notes.html#14284" data-type="Interval" class="InductiveConstructor">one</a>
+</pre>
+<h2 id="suspension">Suspension</h2>
+<pre class="Agda"><a id="14348" class="Keyword">data</a> <a id="Susp"></a><a id="14353" href="Lecture7-notes.html#14353" data-type="Set ℓ → Set ℓ" class="Datatype">Susp</a> <a id="14358" class="Symbol">(</a><a id="14359" href="Lecture7-notes.html#14359" class="Bound">A</a> <a id="14361" class="Symbol">:</a> <a id="14363" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="14368" href="cubical-prelude.html#2241" data-type="Level" class="Generalizable">ℓ</a><a id="14369" class="Symbol">)</a> <a id="14371" class="Symbol">:</a> <a id="14373" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="14378" href="Lecture7-notes.html#14368" class="Bound">ℓ</a> <a id="14380" class="Keyword">where</a>
+  <a id="Susp.north"></a><a id="14388" href="Lecture7-notes.html#14388" data-type="Susp A" class="InductiveConstructor">north</a> <a id="14394" class="Symbol">:</a> <a id="14396" href="Lecture7-notes.html#14353" data-type="Set ℓ → Set ℓ" class="Datatype">Susp</a> <a id="14401" href="Lecture7-notes.html#14359" class="Bound">A</a>
+  <a id="Susp.south"></a><a id="14405" href="Lecture7-notes.html#14405" data-type="Susp A" class="InductiveConstructor">south</a> <a id="14411" class="Symbol">:</a> <a id="14413" href="Lecture7-notes.html#14353" data-type="Set ℓ → Set ℓ" class="Datatype">Susp</a> <a id="14418" href="Lecture7-notes.html#14359" class="Bound">A</a>
+  <a id="Susp.merid"></a><a id="14422" href="Lecture7-notes.html#14422" data-type="(a : A) → north ≡ south" class="InductiveConstructor">merid</a> <a id="14428" class="Symbol">:</a> <a id="14430" class="Symbol">(</a><a id="14431" href="Lecture7-notes.html#14431" class="Bound">a</a> <a id="14433" class="Symbol">:</a> <a id="14435" href="Lecture7-notes.html#14359" class="Bound">A</a><a id="14436" class="Symbol">)</a> <a id="14438" class="Symbol">→</a> <a id="14440" href="Lecture7-notes.html#14388" data-type="Susp A" class="InductiveConstructor">north</a> <a id="14446" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="14448" href="Lecture7-notes.html#14405" data-type="Susp A" class="InductiveConstructor">south</a>
+</pre>
+<p>We can define Dan’s Circle2 as the suspension of Bool.</p>
+<h2 id="pushouts">Pushouts</h2>
+<pre class="Agda"><a id="14536" class="Keyword">data</a> <a id="Pushout"></a><a id="14541" href="Lecture7-notes.html#14541" data-type="(A → B) → (A → C) → Set (ℓ ⊔ ℓ&#39; ⊔ ℓ&#39;&#39;)" class="Datatype">Pushout</a> <a id="14549" class="Symbol">{</a><a id="14550" href="Lecture7-notes.html#14550" class="Bound">ℓ</a> <a id="14552" href="Lecture7-notes.html#14552" class="Bound">ℓ&#39;</a> <a id="14555" href="Lecture7-notes.html#14555" class="Bound">ℓ&#39;&#39;</a><a id="14558" class="Symbol">}</a> <a id="14560" class="Symbol">{</a><a id="14561" href="Lecture7-notes.html#14561" class="Bound">A</a> <a id="14563" class="Symbol">:</a> <a id="14565" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="14570" href="Lecture7-notes.html#14550" class="Bound">ℓ</a><a id="14571" class="Symbol">}</a> <a id="14573" class="Symbol">{</a><a id="14574" href="Lecture7-notes.html#14574" class="Bound">B</a> <a id="14576" class="Symbol">:</a> <a id="14578" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="14583" href="Lecture7-notes.html#14552" class="Bound">ℓ&#39;</a><a id="14585" class="Symbol">}</a> <a id="14587" class="Symbol">{</a><a id="14588" href="Lecture7-notes.html#14588" class="Bound">C</a> <a id="14590" class="Symbol">:</a> <a id="14592" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="14597" href="Lecture7-notes.html#14555" class="Bound">ℓ&#39;&#39;</a><a id="14600" class="Symbol">}</a>
+             <a id="14615" class="Symbol">(</a><a id="14616" href="Lecture7-notes.html#14616" class="Bound">f</a> <a id="14618" class="Symbol">:</a> <a id="14620" href="Lecture7-notes.html#14561" class="Bound">A</a> <a id="14622" class="Symbol">→</a> <a id="14624" href="Lecture7-notes.html#14574" class="Bound">B</a><a id="14625" class="Symbol">)</a> <a id="14627" class="Symbol">(</a><a id="14628" href="Lecture7-notes.html#14628" class="Bound">g</a> <a id="14630" class="Symbol">:</a> <a id="14632" href="Lecture7-notes.html#14561" class="Bound">A</a> <a id="14634" class="Symbol">→</a> <a id="14636" href="Lecture7-notes.html#14588" class="Bound">C</a><a id="14637" class="Symbol">)</a> <a id="14639" class="Symbol">:</a> <a id="14641" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="14646" class="Symbol">(</a><a id="14647" href="Lecture7-notes.html#14550" class="Bound">ℓ</a> <a id="14649" href="Agda.Primitive.html#810" data-type="Level → Level → Level" class="Primitive Operator">⊔</a> <a id="14651" href="Lecture7-notes.html#14552" class="Bound">ℓ&#39;</a> <a id="14654" href="Agda.Primitive.html#810" data-type="Level → Level → Level" class="Primitive Operator">⊔</a> <a id="14656" href="Lecture7-notes.html#14555" class="Bound">ℓ&#39;&#39;</a><a id="14659" class="Symbol">)</a> <a id="14661" class="Keyword">where</a>
+  <a id="Pushout.inl"></a><a id="14669" href="Lecture7-notes.html#14669" data-type="B → Pushout f g" class="InductiveConstructor">inl</a> <a id="14673" class="Symbol">:</a> <a id="14675" href="Lecture7-notes.html#14574" class="Bound">B</a> <a id="14677" class="Symbol">→</a> <a id="14679" href="Lecture7-notes.html#14541" data-type="(A → B) → (A → C) → Set (ℓ ⊔ ℓ&#39; ⊔ ℓ&#39;&#39;)" class="Datatype">Pushout</a> <a id="14687" href="Lecture7-notes.html#14616" class="Bound">f</a> <a id="14689" href="Lecture7-notes.html#14628" class="Bound">g</a>
+  <a id="Pushout.inr"></a><a id="14693" href="Lecture7-notes.html#14693" data-type="C → Pushout f g" class="InductiveConstructor">inr</a> <a id="14697" class="Symbol">:</a> <a id="14699" href="Lecture7-notes.html#14588" class="Bound">C</a> <a id="14701" class="Symbol">→</a> <a id="14703" href="Lecture7-notes.html#14541" data-type="(A → B) → (A → C) → Set (ℓ ⊔ ℓ&#39; ⊔ ℓ&#39;&#39;)" class="Datatype">Pushout</a> <a id="14711" href="Lecture7-notes.html#14616" class="Bound">f</a> <a id="14713" href="Lecture7-notes.html#14628" class="Bound">g</a>
+  <a id="Pushout.push"></a><a id="14717" href="Lecture7-notes.html#14717" data-type="(a : A) → inl (f a) ≡ inr (g a)" class="InductiveConstructor">push</a> <a id="14722" class="Symbol">:</a> <a id="14724" class="Symbol">(</a><a id="14725" href="Lecture7-notes.html#14725" class="Bound">a</a> <a id="14727" class="Symbol">:</a> <a id="14729" href="Lecture7-notes.html#14561" class="Bound">A</a><a id="14730" class="Symbol">)</a> <a id="14732" class="Symbol">→</a> <a id="14734" href="Lecture7-notes.html#14669" data-type="B → Pushout f g" class="InductiveConstructor">inl</a> <a id="14738" class="Symbol">(</a><a id="14739" href="Lecture7-notes.html#14616" class="Bound">f</a> <a id="14741" href="Lecture7-notes.html#14725" class="Bound">a</a><a id="14742" class="Symbol">)</a> <a id="14744" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="14746" href="Lecture7-notes.html#14693" data-type="C → Pushout f g" class="InductiveConstructor">inr</a> <a id="14750" class="Symbol">(</a><a id="14751" href="Lecture7-notes.html#14628" class="Bound">g</a> <a id="14753" href="Lecture7-notes.html#14725" class="Bound">a</a><a id="14754" class="Symbol">)</a>
+</pre>
+<h2 id="relation-quotient">Relation quotient</h2>
+<pre class="Agda"><a id="14791" class="Keyword">data</a> <a id="_/ₜ_"></a><a id="14796" href="Lecture7-notes.html#14796" data-type="(A : Set ℓ) → (A → A → Set ℓ&#39;) → Set (ℓ ⊔ ℓ&#39;)" class="Datatype Operator">_/ₜ_</a> <a id="14801" class="Symbol">{</a><a id="14802" href="Lecture7-notes.html#14802" class="Bound">ℓ</a> <a id="14804" href="Lecture7-notes.html#14804" class="Bound">ℓ&#39;</a><a id="14806" class="Symbol">}</a> <a id="14808" class="Symbol">(</a><a id="14809" href="Lecture7-notes.html#14809" class="Bound">A</a> <a id="14811" class="Symbol">:</a> <a id="14813" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="14818" href="Lecture7-notes.html#14802" class="Bound">ℓ</a><a id="14819" class="Symbol">)</a> <a id="14821" class="Symbol">(</a><a id="14822" href="Lecture7-notes.html#14822" class="Bound">R</a> <a id="14824" class="Symbol">:</a> <a id="14826" href="Lecture7-notes.html#14809" class="Bound">A</a> <a id="14828" class="Symbol">→</a> <a id="14830" href="Lecture7-notes.html#14809" class="Bound">A</a> <a id="14832" class="Symbol">→</a> <a id="14834" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="14839" href="Lecture7-notes.html#14804" class="Bound">ℓ&#39;</a><a id="14841" class="Symbol">)</a> <a id="14843" class="Symbol">:</a> <a id="14845" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="14850" class="Symbol">(</a><a id="14851" href="Lecture7-notes.html#14802" class="Bound">ℓ</a> <a id="14853" href="Agda.Primitive.html#810" data-type="Level → Level → Level" class="Primitive Operator">⊔</a> <a id="14855" href="Lecture7-notes.html#14804" class="Bound">ℓ&#39;</a><a id="14857" class="Symbol">)</a> <a id="14859" class="Keyword">where</a>
+  <a id="_/ₜ_.[_]"></a><a id="14867" href="Lecture7-notes.html#14867" data-type="A → A /ₜ R" class="InductiveConstructor Operator">[_]</a> <a id="14871" class="Symbol">:</a> <a id="14873" class="Symbol">(</a><a id="14874" href="Lecture7-notes.html#14874" class="Bound">a</a> <a id="14876" class="Symbol">:</a> <a id="14878" href="Lecture7-notes.html#14809" class="Bound">A</a><a id="14879" class="Symbol">)</a> <a id="14881" class="Symbol">→</a> <a id="14883" href="Lecture7-notes.html#14809" class="Bound">A</a> <a id="14885" href="Lecture7-notes.html#14796" data-type="(A : Set ℓ) → (A → A → Set ℓ&#39;) → Set (ℓ ⊔ ℓ&#39;)" class="Datatype Operator">/ₜ</a> <a id="14888" href="Lecture7-notes.html#14822" class="Bound">R</a>
+  <a id="_/ₜ_.eq/"></a><a id="14892" href="Lecture7-notes.html#14892" data-type="(a b : A) (r : R a b) → [ a ] ≡ [ b ]" class="InductiveConstructor">eq/</a> <a id="14896" class="Symbol">:</a> <a id="14898" class="Symbol">(</a><a id="14899" href="Lecture7-notes.html#14899" class="Bound">a</a> <a id="14901" href="Lecture7-notes.html#14901" class="Bound">b</a> <a id="14903" class="Symbol">:</a> <a id="14905" href="Lecture7-notes.html#14809" class="Bound">A</a><a id="14906" class="Symbol">)</a> <a id="14908" class="Symbol">→</a> <a id="14910" class="Symbol">(</a><a id="14911" href="Lecture7-notes.html#14911" class="Bound">r</a> <a id="14913" class="Symbol">:</a> <a id="14915" href="Lecture7-notes.html#14822" class="Bound">R</a> <a id="14917" href="Lecture7-notes.html#14899" class="Bound">a</a> <a id="14919" href="Lecture7-notes.html#14901" class="Bound">b</a><a id="14920" class="Symbol">)</a> <a id="14922" class="Symbol">→</a> <a id="14924" href="Lecture7-notes.html#14867" data-type="A → A /ₜ R" class="InductiveConstructor Operator">[</a> <a id="14926" href="Lecture7-notes.html#14899" class="Bound">a</a> <a id="14928" href="Lecture7-notes.html#14867" data-type="A → A /ₜ R" class="InductiveConstructor Operator">]</a> <a id="14930" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="14932" href="Lecture7-notes.html#14867" data-type="A → A /ₜ R" class="InductiveConstructor Operator">[</a> <a id="14934" href="Lecture7-notes.html#14901" class="Bound">b</a> <a id="14936" href="Lecture7-notes.html#14867" data-type="A → A /ₜ R" class="InductiveConstructor Operator">]</a>
+</pre>
+<h2 id="propositional-truncation">Propositional truncation</h2>
+<pre class="Agda"><a id="14980" class="Keyword">data</a> <a id="∥_∥₋₁"></a><a id="14985" href="Lecture7-notes.html#14985" data-type="Set ℓ → Set ℓ" class="Datatype Operator">∥_∥₋₁</a> <a id="14991" class="Symbol">{</a><a id="14992" href="Lecture7-notes.html#14992" class="Bound">ℓ</a><a id="14993" class="Symbol">}</a> <a id="14995" class="Symbol">(</a><a id="14996" href="Lecture7-notes.html#14996" class="Bound">A</a> <a id="14998" class="Symbol">:</a> <a id="15000" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="15005" href="Lecture7-notes.html#14992" class="Bound">ℓ</a><a id="15006" class="Symbol">)</a> <a id="15008" class="Symbol">:</a> <a id="15010" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="15015" href="Lecture7-notes.html#14992" class="Bound">ℓ</a> <a id="15017" class="Keyword">where</a>
+  <a id="∥_∥₋₁.∣_∣₋₁"></a><a id="15025" href="Lecture7-notes.html#15025" data-type="A → ∥ A ∥₋₁" class="InductiveConstructor Operator">∣_∣₋₁</a> <a id="15031" class="Symbol">:</a> <a id="15033" href="Lecture7-notes.html#14996" class="Bound">A</a> <a id="15035" class="Symbol">→</a> <a id="15037" href="Lecture7-notes.html#14985" data-type="Set ℓ → Set ℓ" class="Datatype Operator">∥</a> <a id="15039" href="Lecture7-notes.html#14996" class="Bound">A</a> <a id="15041" href="Lecture7-notes.html#14985" data-type="Set ℓ → Set ℓ" class="Datatype Operator">∥₋₁</a>
+  <a id="∥_∥₋₁.squash₁"></a><a id="15047" href="Lecture7-notes.html#15047" data-type="(x y : ∥ A ∥₋₁) → x ≡ y" class="InductiveConstructor">squash₁</a> <a id="15055" class="Symbol">:</a> <a id="15057" class="Symbol">(</a><a id="15058" href="Lecture7-notes.html#15058" class="Bound">x</a> <a id="15060" href="Lecture7-notes.html#15060" class="Bound">y</a> <a id="15062" class="Symbol">:</a> <a id="15064" href="Lecture7-notes.html#14985" data-type="Set ℓ → Set ℓ" class="Datatype Operator">∥</a> <a id="15066" href="Lecture7-notes.html#14996" class="Bound">A</a> <a id="15068" href="Lecture7-notes.html#14985" data-type="Set ℓ → Set ℓ" class="Datatype Operator">∥₋₁</a><a id="15071" class="Symbol">)</a> <a id="15073" class="Symbol">→</a> <a id="15075" href="Lecture7-notes.html#15058" class="Bound">x</a> <a id="15077" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="15079" href="Lecture7-notes.html#15060" class="Bound">y</a>
+</pre>
+
+  </article>
+</div>
+</main>
+</body>
+<style>
+
+:root {
+  --text-bg: #fff;
+  --text-fg: #222;
+  --shadow: #000;
+  --primary: #0054F4;
+  --secondary: #9C1BD6;
+  --modal-bg: #ccccccaa;
+  --warning-bg: #fef08a;
+  --code-bg: var(--text-bg);
+  --code-fg: var(--text-fg);
+  --code-keyword: #BB3B13;
+  --code-string:  #d52753;
+  --code-number:  #8A1060;
+  --code-module:  #8A1060;
+  --code-field:   #9C1BD6;
+  --code-constructor: #207B1D;
+  --code-highlight: #F5DEB3;
+  --search-selected: #e2e8f0;
+  --details-summary: #b2ebf2;
+  --details-open:    #80deea;
+  --depgraph-edge: #eee;
+  --blockquote-bg: #d8b4fe; }
+
+.diagram-dark {
+  display: none !important; }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-bg: #282C34;
+    --text-fg: #bfbfbf;
+    --shadow: #475569;
+    --primary: #61AFEF;
+    --secondary: #C878DD;
+    --modal-bg: #282C34aa;
+    --warning-bg: #991b1b;
+    --code-keyword:     #E5C07B;
+    --code-string:      #E06C75;
+    --code-number:      #98C379;
+    --code-module:      #56B6C2;
+    --code-field:       #C878DD;
+    --code-constructor: #98C379;
+    --code-highlight: #ef444499;
+    --search-selected: #474e5e;
+    --details-summary: #5b21b6;
+    --details-open:    #4c1d95;
+    --depgraph-edge: #474e5e;
+    --blockquote-bg: #475569; }
+  div.warning {
+    --shadow: #7f1d1d
+  ; }
+  input {
+    background-color: #334155;
+    border: 1px solid #475569;
+    color: var(--text-fg); }
+  body {
+    scrollbar-color: #3b4454 #2b2e33; }
+  .diagram-dark {
+    display: block !important; }
+  .diagram-light {
+    display: none !important; } }
+
+table {
+  margin: auto;
+  border-collapse: collapse; }
+  table td, table th {
+    text-align: center;
+    padding: 0px 1em 0px 1em;
+    border: 1px solid black; }
+  table th {
+    border-bottom: 2px solid black; }
+  table td {
+    white-space: nowrap; }
+
+html { max-width: 100%; }
+
+body {
+  font-family: "Inria Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  width: 100%;
+  font-size: var(--font-size);
+  overflow-x: clip;
+  background-color: var(--text-bg);
+  color: var(--text-fg);
+}
+
+div#post-toc-container { max-width: 120ch; margin: auto; }
+
+article a[href], div#return > a[href], div#top > a[href], aside#toc > div#toc-container ul a[href] {
+  color: var(--primary);
+  text-decoration: none; }
+  article a[href]:hover, div#return > a[href]:hover, div#top > a[href]:hover, aside#toc > div#toc-container ul a[href]:hover {
+    text-decoration: 2px currentColor underline !important; }
+  article a[href]:visited, div#return > a[href]:visited, div#top > a[href]:visited, aside#toc > div#toc-container ul a[href]:visited {
+    color: var(--secondary); }
+
+/* Aspects. */
+.Agda {
+  /* NameKinds. */
+  /* OtherAspects. */
+  /* Standard attributes. */
+  font-family: 'iosevka', 'Iosevka', 'Fantasque Sans Mono', 'Roboto Mono', monospace;
+  font-weight: 400; }
+  .Agda .Comment {
+    color: var(--code-fg);
+    font-style: italic; }
+  .Agda .Background {
+    background-color: var(--code-bg); }
+  .Agda .Markup {
+    color: var(--code-fg); }
+  .Agda .Keyword {
+    color: var(--code-keyword); }
+  .Agda .String {
+    color: var(--code-string); }
+  .Agda .Number {
+    color: var(--code-number); }
+  .Agda .Symbol {
+    color: var(--code-fg); }
+  .Agda .PrimitiveType {
+    color: var(--primary); }
+  .Agda .Pragma {
+    color: var(--code-fg); }
+  .Agda .Bound {
+    color: var(--code-fg) !important; }
+  .Agda .Generalizable {
+    color: var(--code-fg) !important; }
+  .Agda .InductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .CoinductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .Datatype {
+    color: var(--primary) !important; }
+  .Agda .Field {
+    color: var(--code-field) !important; }
+  .Agda .Function {
+    color: var(--primary) !important; }
+  .Agda .Module {
+    color: var(--code-module) !important; }
+  .Agda .Postulate {
+    color: var(--primary) !important; }
+  .Agda .Primitive {
+    color: var(--primary) !important; }
+  .Agda .Record {
+    color: var(--primary) !important; }
+  .Agda .UnsolvedMeta {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .UnsolvedConstraint {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .TerminationProblem {
+    color: var(--code-fg);
+    background: #FFA07A; }
+  .Agda .IncompletePattern {
+    color: var(--code-fg);
+    background: #F5DEB3; }
+  .Agda .Error {
+    color: red;
+    text-decoration: underline; }
+  .Agda .TypeChecks {
+    color: var(--code-fg);
+    background: #ADD8E6; }
+  .Agda .ShadowingInTelescope {
+    color: var(--code-fg);
+    background: #808080; }
+  .Agda .Deadcode {
+    color: var(--code-keyword);
+    font-weight: bold; }
+  .Agda a {
+    text-decoration: none; }
+  .Agda a[href]:hover {
+    text-decoration: 2px var(--primary) underline; }
+  .Agda a[href]:target {
+    animation: highlight 2.5s; }
+  body.text-page .Agda {
+    font-size: var(--code-font-size); }
+
+pre.Agda, div.sourceCode, pre {
+  border-radius: 0;
+  box-shadow: none;
+  overflow-y: clip;
+  margin: 0;
+  padding: 1em;
+  padding-top: 0.25em;
+  padding-bottom: 0.25em;
+  background-color: var(--code-bg);
+  color: var(--code-fg);
+  font-size: var(--code-font-size);
+  max-width: 100%;
+  overflow-x: auto;
+}
+</style>
+</html>
