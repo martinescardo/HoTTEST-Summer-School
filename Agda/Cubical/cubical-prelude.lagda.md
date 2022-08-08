@@ -217,9 +217,17 @@ isoToPath {A = A} {B = B} f i =
 
 -- Natural numbers. We use the built in ones to be able to use
 -- numerals.
-open import Agda.Builtin.Nat public
-  using (zero; suc; _+_)
-  renaming (Nat to ℕ; _-_ to _∸_; _*_ to _·_)
+open import introduction public
+  using (ℕ; zero; suc; _+_)
+  renaming (_*_ to _·_)
+
+_-_ : ℕ → ℕ → ℕ
+n     - zero = n
+zero  - suc m = zero
+suc n - suc m = n - m
+
+{-# BUILTIN NATMINUS _-_ #-}
+
 
 -- Integers (slightly different from how Dan did them in order to have
 -- one less constructor to pattern match on)
