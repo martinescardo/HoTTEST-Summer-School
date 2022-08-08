@@ -249,4 +249,17 @@ predSuc (negsuc (suc n)) = λ i → negsuc (suc n)
 
 sucPath : ℤ ≡ ℤ
 sucPath = isoToPath (iso sucℤ predℤ sucPred predSuc)
+
+
+
+-- 'Data' types from Martín's prelude
+record Unit : Type where
+ constructor
+  ⋆
+
+open Unit public
+
+data Bool : Type where
+ true false : Bool
+
 ```
