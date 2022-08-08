@@ -60,8 +60,10 @@ inherently cubical.
 The interval is a primitive concept in Cubical Agda. It's written `I`.
 It has two endpoints:
 
+```text
   i0 : I
   i1 : I
+```
 
 These stand for "interval 0" and "interval 1".
 
@@ -75,12 +77,12 @@ apply0 A p = p i0
 
 The equality type `_≡_` is not inductively defined in Cubical Agda,
 instead it's a builtin primitive notion defined using the interval. An
-element of x ≡ y consists of a function p : I → A such that p i0 is
-definitionally x and p i1 is definitionally y. The check that the
-endpoints are correct when we provide a p : I → A is automatically
-performed by Agda during typechecking, so introducing an element of x
-≡ y is done just like how we introduce elements of I → A but Agda will
-check the side conditions.
+element of `x ≡ y` consists of a function `p : I → A` such that `p i0`
+is definitionally `x` and `p i1` is definitionally `y`. The check that
+the endpoints are correct when we provide a `p : I → A` is
+automatically performed by Agda during typechecking, so introducing an
+element of `x ≡ y` is done just like how we introduce elements of
+`I → A` but Agda will check the side conditions.
 
 We can hence write paths using λ-abstraction:
 
@@ -100,33 +102,35 @@ refl : {A : Type ℓ} {x : A} → x ≡ x
 refl {x = x} = λ i → x
 ```
 
-The notation {x = x} lets us access the implicit argument x (the x
-in the LHS of x = x) and rename it to x (the x in the RHS x = x) in
-the body of refl. We could just as well have written:
+The notation `{x = x}` lets us access the implicit argument `x` (the
+`x` in the LHS of `x = x`) and rename it to `x` (the `x` in the RHS
+`x = x`) in the body of `refl`. We could just as well have written:
 
+```text
 refl : {A : Type ℓ} {x : A} → x ≡ x
 refl {x = y} = λ i → y
-
-Note that we cannot pattern-match on interval variables as I is not
-inductively defined. Try uncommenting and typing C-c C-c in the hole:
-
-```agda
--- oops : {A : Type} → I → A
--- oops r = {!r!}
 ```
 
-It often gets tiring to write {A : Type ℓ} everywhere, so let's assume
-that we have some types (in fact, we've already assumed that ℓ is a
-Level in the cubical-prelude):
+Note that we cannot pattern-match on interval variables as `I` is not
+inductively defined. Try uncommenting and typing `C-c C-c` in the hole:
+
+```text
+oops : {A : Type} → I → A
+oops r = {!r!}
+```
+
+It quickly gets tiring to write `{A : Type ℓ}` everywhere, so let's
+assume that we have some types (in fact, we've already assumed that
+`ℓ` is a `Level` in the cubical-prelude):
 
 ```agda
 variable
   A B : Type ℓ
 ```
 
-This will make A and B elements of different universes (all
-arguments is maximally generalized) and all definitions that use
-them will have them as implicit arguments.
+This will make `A` and `B` elements of different universes (all
+arguments is maximally generalized) and all definitions that use them
+will have them as implicit arguments.
 
 We can now implement some basic operations on `_≡_`. Let's start with
 `ap`:
@@ -137,42 +141,45 @@ ap f p i = f (p i)
 ```
 
 Note that the definition differs from the Book HoTT definition in that
-it is not defined by path induction or pattern-matching on p, but
+it is not defined by path induction or pattern-matching on `p`, but
 rather it's just a direct definition as a composition of functions.
-Agda treats p : x ≡ y like any function, so we can apply it to i to
-get an element of A which at i0 is x and at i1 is y. By applying f to
-this element we hence get an element of B which at i0 is f x and at i1
-is f y.
+Agda treats `p : x ≡ y` like any function, so we can apply it to `i`
+to get an element of `A` which at `i0` is `x` and at `i1` is `y`. By
+applying `f` to this element we hence get an element of `B` which at
+`i0` is `f x` and at `i1` is `f y`.
 
 As this is just function composition it satisfies lots of nice
 definitional equalities, see the exercises. Some of these are not
-satisfied by the Book HoTT definition of ap.
+satisfied by the Book HoTT definition of `ap`.
 
 In Book HoTT function extensionality is proved as a consequence of
 univalence using a rather ingenious proof due to Voevodsky, but in
 cubical systems it has a much more direct proof. As paths are just
-functions we can get it by swapping the arguments to p:
+functions we can get it by swapping the arguments to `p`:
 
 ```agda
 funExt : {f g : A → B} (p : (x : A) → f x ≡ g x) → f ≡ g
 funExt p i x = p x i
 ```
 
-To see that this has the correct type, note that when i is i0 we have
-"p x i0 = f x" and when i is i1 we have "p x i1 = g x", so by η for
-function types we have a path f ≡ g as desired.
+To see that this has the correct type, note that when `i` is `i0` we
+have `p x i0 = f x` and when `i` is `i1` we have `p x i1 = g x`, so by
+η for function types we have a path `f ≡ g` as desired.
 
 The interval has additional operations:
 
+```text
 Minimum:     _∧_ : I → I → I             (corresponds to min(i,j))
 Maximum:     _∨_ : I → I → I             (corresponds to max(i,j))
 Symmetry:     ~_ : I → I                 (corresponds to 1 - i)
+```
 
 These satisfy the equations of a De Morgan algebra (i.e. a
 distributive lattice (_∧_ , _∨_ , i0 , i1) with an "De Morgan"
 involution ~). This just means that we have the following kinds of
 equations definitionally:
 
+```text
 i0 ∨ i    = i
 i  ∨ i1   = i1
 i  ∨ j    = j ∨ i
@@ -183,41 +190,47 @@ i  ∧ j    = j ∧ i
 i0        = ~ i1
 ~ (i ∨ j) = ~ i ∧ ~ j
 ~ (i ∧ j) = ~ i ∨ ~ j
+```
 
-However, we do not have i ∨ ~ i = i1 and i ∧ ~ i = i0. The reason
-is that I represents an abstract interval, so we if we think of it
-as the real interval [0,1] ⊂ ℝ we clearly don't always have
+However, we do not have `i ∨ ~ i = i1` and `i ∧ ~ i = i0`. The reason
+is that I represents an abstract interval, so we if we think of it as
+the real interval [0,1] ⊂ ℝ we clearly don't always have
 "max(i,1-i) = 1" or "min(i,1-i) = 0)" for all i ∈ [0,1].
 
-These operations on I are very useful as they let us define even
-more things directly. For example symmetry of paths is easily
-defined using ~_.
+These operations on `I` are very useful as they let us define even
+more things directly. For example symmetry of paths is easily defined
+using `~_`.
 
 ```agda
 sym : {x y : A} → x ≡ y → y ≡ x
 sym p i = p (~ i)
 ```
 
-Remark: this has been called "!" in the previous lectures. Here we
-stick to sym for the cubical version following the agda/cubical
+Remark: this has been called `!` in the previous lectures. Here we
+stick to `sym` for the cubical version following the agda/cubical
 notation.
 
-The operations _∧_ and _∨_ are called "connections" and let us
+The operations `_∧_` and `_∨_` are called *connections* and let us
 build higher dimensional cubes from lower dimensional ones, for
-example if we have a path p : x ≡ y then
+example if we have a path `p : x ≡ y` then
 
+```text
   sq i j = p (i ∧ j)
+```
 
-is a square (as we've parametrized by i and j) with the following
+is a square (as we've parametrized by `i` and `j`) with the following
 boundary:
 
+```text
    sq i0 j = p (i0 ∧ j) = p i0 = x
    sq i1 j = p (i1 ∧ j) = p j
    sq i i0 = p (i ∧ i0) = p i0 = x
    sq i i1 = p (i ∧ i1) = p i
+```
 
 If we draw this we get:
 
+```text
              p
        x --------> y
        ^           ^
@@ -227,6 +240,7 @@ If we draw this we get:
        ¦           ¦
        x --------> x
            refl
+```
 
 Being able to make this square directly is very useful. It for
 example let's prove that singletons are contractible (a.k.a. based
@@ -324,7 +338,7 @@ data S¹ : Type₀ where
   loop : base ≡ base
 ```
 
-We can write functions on S¹ using pattern-matching:
+We can write functions on `S¹` using pattern-matching:
 
 ```agda
 double : S¹ → S¹
@@ -332,15 +346,15 @@ double base = base
 double (loop i) = (loop ∙ loop) i
 ```
 
-Note that loop takes an i : I argument. This is not very surprising as
-it's a path base ≡ base, but it's an important difference to Book
-HoTT. Having the native notion of equality be heterogeneous makes it
-possible to quite directly define a general schema for a large class
-of HITs and add it to a system like Cubical Agda.
+Note that loop takes an `i : I` argument. This is not very surprising
+as it's a path of type `base ≡ base`, but it's an important difference
+to Book HoTT. Having the native notion of equality be heterogeneous
+makes it possible to quite directly define a general schema for a
+large class of HITs and add it to a system like Cubical Agda.
 
 Let's use univalence to compute some winding numbers on the
-circle. We first define a family of types over the circle whos
-fibers are the integers.
+circle. We first define a family of types over the circle with
+fibers being the integers.
 
 ```agda
 helix : S¹ → Type₀
@@ -348,41 +362,43 @@ helix base     = ℤ
 helix (loop i) = sucPath i
 ```
 
-The loopspace of the circle
+Here univalence is baked into `sucPath : ℤ ≡ ℤ`. The loopspace of the
+circle is then defined as
 
 ```agda
 ΩS¹ : Type₀
 ΩS¹ = base ≡ base
 ```
 
-We can then define a function computing how many times we've looped
-around the circle by:
+and we can then define a function computing how many times we've
+looped around the circle by:
 
 ```agda
 winding : ΩS¹ → ℤ
 winding p = transp (λ i → helix (p i)) i0 (pos 0)
 ```
 
-Here "transp" is a cubical transport function. We'll talk about it in
+Here `transp` is a cubical transport function. We'll talk about it in
 more detail in the next lecture, but for now we can observe that it
-reduces just fine:
+reduces as expected:
 
 ```agda
 _ : winding (λ i → double ((loop ∙ loop) i)) ≡ pos 4
 _ = refl
 ```
 
-This would not reduce in Book HoTT as univalence is an axiom. Having
-things compute definitionally makes it possible to substantially
-simplify many proofs from Bool HoTT in Cubical Agda.
+This would not reduce definitionally in Book HoTT as univalence is an
+axiom. Having things compute definitionally makes it possible to
+substantially simplify many proofs from Book HoTT in Cubical Agda.
 
-We can in fact prove that winding is an equivalence, this relies on
-the encode-decode method. For details about how this proof looks in
-Cubical Agda see Cubical.HITs.S1.Base in the agda/cubical library.
+We can in fact prove that `winding` is an equivalence, this is very
+similar to the Book HoTT proof and uses the encode-decode method. For
+details about how this proof looks in Cubical Agda see the
+Cubical.HITs.S1.Base file in the agda/cubical library.
 
 ## The torus
 
-We can define the Torus as:
+We can define the torus as:
 
 ```agda
 data Torus : Type₀ where
@@ -392,7 +408,8 @@ data Torus : Type₀ where
   square : PathP (λ i → line1 i ≡ line1 i) line2 line2
 ```
 
-The square corresponds to the usual folding diagram from topology:
+The square corresponds to the usual folding diagram from topology
+(where `p` is short for `point`):
 
 ```text
              line1
@@ -405,7 +422,9 @@ The square corresponds to the usual folding diagram from topology:
              line1
 ```
 
-Proving that it is equivalent to two circles is pretty much trivial:
+Proving that it is equivalent to two circles is pretty much trivial as
+we have definitional computation rules for all constructors, including
+higher:
 
 ```agda
 t2c : Torus → S¹ × S¹
