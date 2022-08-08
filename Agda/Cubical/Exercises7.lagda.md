@@ -154,7 +154,16 @@ complicated reasoning about transport.
 Now we want prove some identity of HITs analogous to `Torus ≡ S¹ × S¹`
 Hint: you can just `isoToPath` in all of them.
 
-### Exercise 10 (★★★)
+
+### Exercise 10 (★★)
+
+We saw two definitions of the torus:
+`Torus` having a dependent path constructor `square`
+and `Torus'` with a path constructor `square` that involves composition.
+
+Using these two ideas, define the *Klein bottle* in two different ways.
+
+### Exercise 11 (★★★)
 
 Prove the following facts about suspensions:
 
@@ -169,6 +178,6 @@ suspBoolChar = {!!}
 ```
 
 
-### Exercise 11 (★★★)
+### Exercise 12 (★★★)
 
 Define suspension using the Pushout HIT and prove that it's equal to Susp.
