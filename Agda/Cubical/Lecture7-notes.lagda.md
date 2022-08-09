@@ -207,9 +207,9 @@ sym : {x y : A} → x ≡ y → y ≡ x
 sym p i = p (~ i)
 ```
 
-Remark: this has been called `!` in the previous lectures. Here we
-stick to `sym` for the cubical version following the agda/cubical
-notation.
+Remark: this has been called `⁻¹` and `!` in the previous
+lectures. Here we stick to `sym` for the cubical version following the
+agda/cubical notation.
 
 The operations `_∧_` and `_∨_` are called *connections* and let us
 build higher dimensional cubes from lower dimensional ones, for
@@ -279,10 +279,10 @@ isContrSingl x = ctr , prf
 As we saw in the second component of prf we often need squares when
 proving things. In fact, `pax (i ∧ j)` is a path relating `refl` to
 `pax` *over* another path `λ j → x ≡ pax j`. This notion of path over
-a path is very useful when working in Book HoTT as well as
-cubically. In Book HoTT these are called path-overs and are defined
-using transport, but in Cubical Agda they are a primitive notion
-called `PathP` ("Path over a Path"). In general `PathP A x y` has
+a path is very useful when working in Book HoTT as we've seen in the
+previous lectures, this is also the case when working cubically. In
+Cubical Agda path-overs are a primitive notion called `PathP` ("Path
+over a Path"). In general `PathP A x y` has
 
 ```text
    A : I → Type ℓ
@@ -323,7 +323,7 @@ isContrΠ h = (λ x → pr₁ (h x)) , (λ f i x → pr₂ (h x) (f x) i)
 # Cubical higher inductive types
 
 We have seen various HITs earlier in the course. These were added
-axiomatically to Agda by postulating there existence together with
+axiomatically to Agda by postulating their existence together with
 suitable elimination/induction principles. In Cubical Agda they are
 instead added just like any inductive data type, but with path
 constructors. This is made possible by the fact that paths in Cubical
@@ -349,9 +349,10 @@ double (loop i) = (loop ∙ loop) i
 
 Note that loop takes an `i : I` argument. This is not very surprising
 as it's a path of type `base ≡ base`, but it's an important difference
-to Book HoTT. Having the native notion of equality be heterogeneous
-makes it possible to quite directly define a general schema for a
-large class of HITs and add it to a system like Cubical Agda.
+to Book HoTT where we instead would have to state the equation using
+`ap`. Having the native notion of equality be heterogeneous makes it
+possible to quite directly define a general schema for a large class
+of HITs and use it in the implementation of a system like Cubical Agda.
 
 Let's use univalence to compute some winding numbers on the
 circle. We first define a family of types over the circle with
@@ -425,7 +426,7 @@ The square corresponds to the usual folding diagram from topology
 
 Proving that it is equivalent to two circles is pretty much trivial as
 we have definitional computation rules for all constructors, including
-higher:
+higher ones:
 
 ```agda
 t2c : Torus → S¹ × S¹
@@ -491,7 +492,15 @@ data Susp (A : Type ℓ) : Type ℓ where
   merid : (a : A) → north ≡ south
 ```
 
-We can define Dan's Circle2 as the suspension of Bool.
+We can define Dan's Circle2 as the suspension of Bool, or we can do it directly as:
+
+```agda
+data Circle2 : Type₀ where
+  north : Circle2
+  south : Circle2
+  west  : north ≡ south
+  east  : north ≡ south
+```
 
 ## Pushouts
 

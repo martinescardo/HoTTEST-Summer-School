@@ -58,20 +58,8 @@ are defined in `cubical-prelude` in the usual way
 
 State and prove that inhabited propositions are contractible
 
-### Exercise 4 (★★)
 
-We could have stated isProp as follows:
-
-```agda
-isProp' : Type ℓ → Type ℓ
-isProp' A = (x y : A) → isContr (x ≡ y)
-```
-
-Prove that isProp' A implies isProp A and vice versa.
-Hint: for one direction you need path composition `_·_`, which one?
-
-
-### Exercise 5 (★)
+### Exercise 4 (★)
 
 Prove
 
@@ -80,7 +68,7 @@ isPropΠ : (h : (x : A) → isProp (B x)) → isProp ((x : A) → B x)
 isPropΠ = {!!}
 ```
 
-### Exercise 6 (★)
+### Exercise 5 (★)
 
 Prove the inverse of `funExt` (sometimes called `happly`):
 
@@ -89,7 +77,7 @@ funExt⁻ : {f g : (x : A) → B x} → f ≡ g → ((x : A) → f x ≡ g x)
 funExt⁻  = {!!}
 ```
 
-### Exercise 7 (★★)
+### Exercise 6 (★★)
 
 Use funExt⁻ to prove isSetΠ:
 
@@ -98,7 +86,7 @@ isSetΠ : (h : (x : A) → isSet (B x)) → isSet ((x : A) → B x)
 isSetΠ = {!!}
 ```
 
-### Exercise 8 (★★★): alternative contractibility of singletons
+### Exercise 7 (★★★): alternative contractibility of singletons
 
 We could have defined the type of singletons as follows
 
@@ -116,7 +104,7 @@ isContrSingl' x = {!!}
 ```
 
 ## Part III: Equality in Σ-types
-### Exercise 9 (★★)
+### Exercise 8 (★★)
 
 Having the primitive notion of equality be heterogeneous is an
 easily overlooked, but very important, strength of cubical type
@@ -153,6 +141,15 @@ complicated reasoning about transport.
 
 Now we want prove some identity of HITs analogous to `Torus ≡ S¹ × S¹`
 Hint: you can just `isoToPath` in all of them.
+
+
+### Exercise 9 (★★)
+
+We saw two definitions of the torus:
+`Torus` having a dependent path constructor `square`
+and `Torus'` with a path constructor `square` that involves composition.
+
+Using these two ideas, define the *Klein bottle* in two different ways.
 
 ### Exercise 10 (★★★)
 
