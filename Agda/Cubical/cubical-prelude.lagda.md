@@ -79,6 +79,26 @@ _∙_ {x = x} p q i = hcomp (λ j → λ { (i = i0) → x
 
 infixr 30 _∙_
 
+
+-- Equality reasoning
+infix  3 _∎
+infixr 2 _≡⟨_⟩_ _≡⟨⟩_
+
+_≡⟨_⟩_ : {A : Type ℓ} (x : A) {y z : A} → x ≡ y → y ≡ z → x ≡ z
+_ ≡⟨ x≡y ⟩ y≡z = x≡y ∙ y≡z
+
+≡⟨⟩-syntax : {A : Type ℓ} (x : A) {y z : A} → x ≡ y → y ≡ z → x ≡ z
+≡⟨⟩-syntax = _≡⟨_⟩_
+infixr 2 ≡⟨⟩-syntax
+syntax ≡⟨⟩-syntax x (λ i → B) y = x ≡[ i ]⟨ B ⟩ y
+
+_≡⟨⟩_ : {A : Type ℓ} (x : A) {y : A} → x ≡ y → x ≡ y
+_ ≡⟨⟩ x≡y = x≡y
+
+_∎ : {A : Type ℓ} (x : A) → x ≡ x
+x ∎ = λ _ → x
+
+
 _[_↦_] : ∀ {ℓ} (A : Type ℓ) (φ : I) (u : Partial φ A) → SSet ℓ
 A [ φ ↦ u ] = Sub A φ u
 
