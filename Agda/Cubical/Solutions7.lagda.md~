@@ -1,0 +1,20 @@
+
+```agda
+{-# OPTIONS --cubical --allow-unsolved-metas #-}
+
+module Solutions7 where
+
+open import cubical-prelude
+open import Lecture7-notes
+```
+
+```agda
+private
+  variable
+    A : Type ℓ
+    B : A → Type ℓ
+```
+
+## Part I: Generalizing to dependent functions
+
+### Exercise 1 (★)

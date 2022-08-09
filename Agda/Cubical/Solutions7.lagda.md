@@ -1,5 +1,7 @@
+# Week 7 - Cubical Agda Exercises - Solutions
+
 ```agda
-{-# OPTIONS --cubical --allow-unsolved-metas #-}
+{-# OPTIONS --cubical #-}
 
 module Solutions7 where
 
