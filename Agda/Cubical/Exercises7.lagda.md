@@ -137,10 +137,10 @@ cubically and simplifies many proofs which in Book HoTT requires long
 complicated reasoning about transport.
 
 
-## Part III: Some HITs
+## Part IV: Some HITs
 
-Now we want prove some identity of HITs analogous to `Torus ≡ S¹ × S¹`
-Hint: you can just `isoToPath` in all of them.
+Now we want prove some identities of HITs analogous to `Torus ≡ S¹ × S¹`
+Hint: you can just use `isoToPath` in all of them.
 
 
 ### Exercise 9 (★★)
@@ -151,21 +151,74 @@ and `Torus'` with a path constructor `square` that involves composition.
 
 Using these two ideas, define the *Klein bottle* in two different ways.
 
-### Exercise 10 (★★★)
+### Exercise 10 (★★)
 
-Prove the following facts about suspensions:
+Prove
 
 ```agda
-
 suspUnitChar : Susp Unit ≡ Interval
 suspUnitChar = {!!}
-
-suspBoolChar : Susp Bool ≡ S¹
-suspBoolChar = {!!}
-
 ```
 
 
 ### Exercise 11 (★★★)
 
 Define suspension using the Pushout HIT and prove that it's equal to Susp.
+
+
+### Exercise 12 (🌶)
+
+The goal of this exercise is to prove
+
+```agda
+suspBoolChar : Susp Bool ≡ S¹
+suspBoolChar = {!!}
+```
+
+For the map `Susp Bool → S¹`, we have to specify the behavior of two
+path constructors. The idea is to map one to `loop` and one to `refl`.
+
+For the other direction, we have to fix one base point in `Susp Bool`
+and give a non-trivial loop on it, i.e. one that shouldn't cancel out
+to `refl`.
+
+Proving that the two maps cancel each other requires some primitives
+of `Cubical Agda` that we won't really discuss in the lectures,
+namely `hcomp` and `hfill`. These are used (among other things)
+to define path composition and ensure that it behaves correctly.
+
+Path composition corresponds to the top of the following square:
+
+```text
+            p∙q
+       x --------> z
+       ^           ^
+       ¦           ¦
+  refl ¦     sq    ¦ q
+       ¦           ¦
+       ¦           ¦
+       x --------> y
+             p
+```
+
+The type of `sq` is a `PathP` sending `p` to `p ∙ q`
+over `q` and the following lemma lets us construct such a *square*:
+
+```agda
+comp-filler : {x y z : A} (p : x ≡ y) (q : y ≡ z)
+            → PathP (λ j → refl {x = x} j ≡ q j) p (p ∙ q)
+comp-filler {x = x} p q j i = hfill (λ k → λ { (i = i0) → x
+                                              ; (i = i1) → q k })
+                                    (inS (p i)) j
+```
+
+You can use this `comp-filler` as a black-box for proving the round-trips
+in this exercise.
+
+**Hint:** For one of the round-trips you only need the following familiar
+result, that is a direct consequence of `comp-filler` in `Cubical Agda`
+
+```agda
+rUnit : {x y : A} (p : x ≡ y) → p ∙ refl ≡ p
+rUnit p = sym (comp-filler p refl)
+```
