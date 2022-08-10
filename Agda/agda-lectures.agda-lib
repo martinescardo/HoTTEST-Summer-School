@@ -1,0 +1,6 @@
+name: agda-lectures
+include: Lecture-Notes/files
+         Lecture-Log
+         Exercises
+         Auxiliary
+         Cubical

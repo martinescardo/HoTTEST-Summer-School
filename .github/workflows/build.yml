@@ -1,0 +1,39 @@
+name: Build
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: pltamy/hottest-lecture-notes:latest
+
+    steps:
+      - name: Checkout ⬇️
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Get Shakefile version
+        run: sha256sum /bin/1lab-shake | cut -d' ' -f1 > .shake-version
+
+      - name: Cache _build
+        id: cache-build
+        uses: actions/cache@v3
+        with:
+          path: _build
+          key: shake-${{ hashFiles('.shake-version' )}}
+
+      - name: Build 🛠️
+        run: |
+          git config --global --add safe.directory /__w/HoTTEST-Summer-School/HoTTEST-Summer-School
+          cd Agda/
+          build-agda-index README.md
+          mkdir -p _build/site
+          cp -v _build/html0/*.html _build/site/
+          cp -v README.html _build/site/index.html
+          cd ..
+
+      - name: Deploy 🚀
+        if: ${{ github.ref_name == 'main' }}
+        uses: JamesIves/github-pages-deploy-action@4.1.7
+        with:
+          branch: gh-pages
+          folder: /__w/HoTTEST-Summer-School/HoTTEST-Summer-School/Agda/_build/site
