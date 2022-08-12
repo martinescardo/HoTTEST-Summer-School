@@ -1,5 +1,3 @@
-**WARNING:** these notes are work in progress and might change before the lecture
-
 # Lecture 8
 
 Contents:
@@ -27,7 +25,7 @@ Last time we saw some HITs that are useful for topology and homotopy
 theory. Now we'll look at some HITs that are not very interesting from
 a homotopical perspective, but still very useful for other purposes.
 In particular we will look at how we can construct quotient types and
-in order for the result to be a set we will set truncate the
+in order for the result to be a set we will also set truncate the
 type. This kind of types has many applications in both computer
 science and mathematics.
 
@@ -40,7 +38,7 @@ data _/_ (A : Type ℓ) (R : A → A → Type ℓ') : Type (ℓ ⊔ ℓ') where
   trunc : (a b : A / R) (p q : a ≡ b) → p ≡ q
 ```
 
-The type of the `trunc` constructor can be simply be written as:
+The type of the `trunc` constructor can simply be written as:
 
 ```agda
 data _/_ (A : Type ℓ) (R : A → A → Type ℓ') : Type (ℓ ⊔ ℓ') where
@@ -56,21 +54,23 @@ for this to be a set quotient. If we leave out the `trunc` constructor
 quite weird things can happen, for example if one quotients the unit
 type by the total relation then one obtains a type which is equivalent
 to the circle! The `trunc` constructor is hence crucial to ensure that
-the result is a set even if `A` is.
+the result is a set **even** if `A` is one already (so quotienting can
+raise the truncation level).
 
-Various sources (Egbert's book?) require that `R` is
-proposition-valued. However this is not necessary for many examples
-and it is often a bit easier to avoid it. There are however various
-important properties that are only satisfied when one quotient by
-prop-valued relations. The key example being effectivity, i.e. that
+Various sources require that `R` is proposition-valued, i.e. `R : A →
+A → hProp`. However this is not necessary to define `_/_` as seen
+above. There are however various important properties that are only
+satisfied when one quotients by a prop-valued relation. The key
+example being effectivity, i.e. that
 
 ```text
 (a b : A) → [ a ] ≡ [ b ] → R a b
 ```
 
 To prove this one first of all needs that `R` is prop-valued and the
-proof then uses univalence for propositions (logically equivalent
-propositions are equal, a.k.a. "propositional extensionality").
+proof then uses univalence for propositions (i.e., logically
+equivalent propositions are equal, a.k.a. "propositional
+extensionality").
 
 Having the ability to define set quotients using `_/_` lets us do many
 examples from mathematics and computer science. For example we can
@@ -87,11 +87,21 @@ define the integers as:
 If you haven't seen this construction before see
 https://en.wikipedia.org/wiki/Integer#Construction
 
-Exercises: define 0, 1, +, -, *
+Exercises: define `0`, `1`, `+`, `-`, `*`
 
 Similarly we can define the rational numbers as a quotient of pairs of
-a number and a nonzero number. More generally we can define the field
-of fractions of a commutative ring R.
+a number and a nonzero number (and more generally we can define the
+field of fractions of a commutative ring R using `_/_`). Both the
+integers and rationals can of course be defined without using
+quotients in type theory, but in the case of the rationals this has
+some efficiency problems. Indeed, when defining the rationals not as a
+quotient we need to do it as normalized fractions, that is, pairs of
+coprime numbers. All operations, like addition and multiplication,
+then have to ensure that the resulting fractions are normalized which
+can become quite inefficient because of repeated GCD computations. A
+more efficient way is to work with the equivalence classes of
+not-necessarily-normalized fractions and then normalize whenever one
+wants to. This can be done when defining the rationals using `_/_`.
 
 Let us now look at a more computer science inspired example: finite
 multisets. These can be represented as lists modulo permutations.
@@ -113,7 +123,7 @@ Programming and proving with this is quite straightforward:
 ```agda
 infixr 30 _++_
 
-_++_ : ∀ (xs ys : FMSet A) → FMSet A
+_++_ : (xs ys : FMSet A) → FMSet A
 [] ++ ys = ys
 (x ∷ xs) ++ ys = x ∷ xs ++ ys
 comm x y xs i ++ ys = comm x y (xs ++ ys) i
@@ -127,30 +137,30 @@ unitr-++ : (xs : FMSet A) → xs ++ [] ≡ xs
 unitr-++ [] = refl
 unitr-++ (x ∷ xs) = ap (x ∷_) (unitr-++ xs)
 unitr-++ (comm x y xs i) j = comm x y (unitr-++ xs j) i
-unitr-++ (trunc xs ys p q i k) j =
-  trunc (unitr-++ xs j) (unitr-++ ys j)
-        (λ k → unitr-++ (p k) j) (λ k → unitr-++ (q k) j) i k
+unitr-++ (trunc xs ys p q i j) k =
+  trunc (unitr-++ xs k) (unitr-++ ys k)
+        (λ l → unitr-++ (p l) k) (λ l → unitr-++ (q l) k) i j
 ```
 
 Filling the goals for `comm` and `trunc` quickly gets tiresome and
 when working with HITs like this it's very strongly recommended to
 prove special lemmas for eliminating into propositions (which is the
-case above as `FMSet` is a set, so its `≡` is a proposition). If we
-do this the proof of `unitr-++` can be simplified to a one-liner:
+case above as `FMSet` is a set, so its `≡`-type is a proposition). If
+we do this the proof of `unitr-++` can be simplified to a one-liner:
 
 ```text
-unitr-++ : ∀ (xs : FMSet A) → xs ++ [] ≡ xs
+unitr-++ : (xs : FMSet A) → xs ++ [] ≡ xs
 unitr-++ = ElimProp.f (trunc _ _) refl (λ x p → cong (_∷_ x) p)
 ```
 
 We recommend the interested reader to look at the code in
 Cubical.HITs.FiniteMultiset.Base and
-Cubical.HITs.FiniteMultiset.Properties to see how these lemmas are
-stated and proved. This is a very common pattern when working with set
-truncated HITs: first define the HIT, then prove special purpose
-recursors and eliminators for eliminating into types of different
-truncation levels. All definitions are then written using these
-recursors and eliminators and one get very short proofs.
+Cubical.HITs.FiniteMultiset.Properties in agda/cubical to see how
+these lemmas are stated and proved. This is a very common pattern when
+working with set truncated HITs: first define the HIT, then prove
+special purpose recursors and eliminators for eliminating into types
+of different truncation levels. All definitions are then written using
+these recursors and eliminators and one get very short proofs.
 
 A more efficient version of finite multisets based on association
 lists can be found in Cubical.HITs.AssocList.Base. It looks like this:
@@ -172,8 +182,9 @@ to `FMSet`. This kind of example occurs a lot in programming and
 mathematics: one representation is easier to work with, but not
 efficient, while another is efficient but difficult to work with.
 Next time we will see how we can use univalence and the structure
-identity principle (SIP) to get the best of both worlds (see
-https://arxiv.org/abs/2009.05547 for more details).
+identity principle (SIP) to get the best of both worlds (if someone
+can't wait they can look at https://dl.acm.org/doi/10.1145/3434293 for
+more details).
 
 It's sometimes easier to work directly with `_/_` instead of defining
 special HITs as one can reuse lemmas for `_/_` instead of reproving
@@ -182,10 +193,10 @@ propositions have already been proved for `_/_` so we do not have to
 reprove them for our special purpose HIT. However on the other hand it
 can sometimes be much easier to write the HIT directly (imagine
 implementing `AssocList` using `_/_`...) and one also gets the benefit
-that one can pattern-match directly on it with nice names for the
+that one can pattern-match directly with nice names for the
 constructors (it might still be better to use the handcrafted
-recursor/eliminator to avoid having to give cases for path construtors
-though).
+recursor/eliminator for the HIT to avoid having to give cases for path
+construtors though).
 
 ## Cubical transport and path induction
 
@@ -217,8 +228,9 @@ subst B p pa = transport (λ i → B (p i)) pa
 ```
 
 The `transp` operation is a generalized transport in the sense that it
-lets us specify where the transport is the identity function. The
-general type of transp is:
+lets us specify where the transport is the identity function (this is
+why there is an `i0` in the definition of `transport` above). The
+general type of `transp` is:
 
 ```text
 transp : (A : I → Type ℓ) (r : I) (a : A i0) → A i1
@@ -355,11 +367,13 @@ p ∙ q = refl ∙∙ p ∙∙ q
 ```
 
 To prove algebraic properties of this operation (in particular that
-it's a groupoid) we need to talk about filling using the hfill
+it's a groupoid) we need to talk about filling using the `hfill`
 operation. There is no time for this today, but the interested reader
-can consult Cubical.Foundations.GroupoidLaws. The following YouTube
-video might be even more helpful:
-[https://www.youtube.com/watch?v=MVtlD22Y8SQ](https://www.youtube.com/watch?v=MVtlD22Y8SQ)
+can consult Cubical.Foundations.GroupoidLaws and the documentation for
+`hcomp`:
+https://agda.readthedocs.io/en/v2.6.2.2/language/cubical.html#homogeneous-composition. The
+following YouTube video might also be very helpful
+https://www.youtube.com/watch?v=MVtlD22Y8SQ
 
 Having `hcomp` as a primitive operation lets us prove many things very
 directly. For instance, we can prove that any proposition is also a
@@ -388,18 +402,20 @@ isPropIsSet : isProp (isSet A)
 isPropIsSet h1 h2 i x y = isPropIsProp (h1 x y) (h2 x y) i
 ```
 
-In order to understand what the second argument to `hcomp` is one
-should read about partial elements. We refer the interested reader
-to the Cubical Agda documentation:
+In order to really understand what the second argument to `hcomp` is
+and how to use `hfill` one should read about partial elements and
+cubical subtypes. We refer the interested reader to the Cubical Agda
+documentation:
 
 https://agda.readthedocs.io/en/v2.6.2.2/language/cubical.html#partial-elements
 
-However, for beginners one doesn't need to write `hcomp` to prove
-everything as the library provides many basic lemmas. In particular,
-the library provides equational reasoning combinators as in regular
-Agda.
-
-**TODO:** were there any hcomps in exercise session 7? Maybe revisit
+However, beginners often doesn't have to write `hcomp` to prove things
+as the library provides many basic lemmas. This is especially true
+when reasoning about sets. However, when reasoning about types that
+have higher truncation level it's very convenient to be able to
+construct squares and cubes directly and being able to use `hcomp` is
+quite necessary (see exercise 12 on
+[Exercises7](https://github.com/martinescardo/HoTTEST-Summer-School/blob/main/Agda/Cubical/Exercises7.lagda.md)).
 
 References
 ==========
