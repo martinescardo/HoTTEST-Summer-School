@@ -21,7 +21,7 @@ apply0 : (A : Type) → (p : I → A) → A
 apply0 A p = p i0
 
 -- Path types:
--- p : x ≡ y consists of  p : I → A   s.t. p i0 == x  and  p i1 == y
+-- p : x ≡ y consists of  p : I → A   s.t.  p i0 ≐ x  and  p i1 ≐ y
 
 refl : {A : Type} {x : A} → x ≡ x
 refl {x = x} = λ i → x
