@@ -52,13 +52,12 @@ transport computes away at `i = i1`.
 ```text
    x ----(p i)----> y
   A i0    A i      A i1
-
 ```
 
 ```
 fromPathP : {A : I → Type ℓ} {x : A i0} {y : A i1} →
   PathP A x y → transport (λ i → A i) x ≡ y
-fromPathP {A = A} p i = transp (λ j → A (i ∨ j)) i (p i)
+fromPathP {A = A} p i = {!!}
 ```
 
 ### Exercise 3 (★★★)
@@ -72,7 +71,7 @@ to `transport A x`. This requires writing a `transp` that computes away at
 `i = i0`.
 
 ```text
-       x  - - - - > y
+       x  - - - -> y
        ^           ^
        ¦           ¦
   refl ¦           ¦ p i
@@ -103,3 +102,5 @@ isProp→PathP : {A : I → Type ℓ} (p : (i : I) → isProp (A i))
   (a₀ : A i0) (a₁ : A i1) → PathP A a₀ a₁
 isProp→PathP p a₀ a₁ = {!!}
 ```
+
+
