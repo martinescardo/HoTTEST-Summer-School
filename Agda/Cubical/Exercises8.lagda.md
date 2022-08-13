@@ -28,6 +28,7 @@ module Exercises8 where
 open import cubical-prelude
 open import Lecture7-notes
 open import Lecture8-notes
+open import Solutions7
 ```
 
 ## Part I: `transp` and `hcomp`
@@ -103,4 +104,24 @@ isProp→PathP : {A : I → Type ℓ} (p : (i : I) → isProp (A i))
 isProp→PathP p a₀ a₁ = {!!}
 ```
 
+### Exercise 5 (★★)
 
+Prove the following lemma charictarising equality in subtypes:
+
+```
+Σ≡Prop : {A : Type ℓ} {B : A → Type ℓ'} {u v : Σ A B} (h : (x : A) → isProp (B x))
+       → (p : pr₁ u ≡ pr₁ v) → u ≡ v
+Σ≡Prop {B = B} {u = u} {v = v} h p = {!!}
+```
+
+### Exercise 6 (★★★)
+
+Prove that `isContr` is a proposition:
+
+**Hint**:
+This requires drawing a cube (yes, an actual 3D one)!
+
+```
+isPropIsContr : {A : Type ℓ} → isProp (isContr A)
+isPropIsContr (c0 , h0) (c1 , h1) j = {!!} 
+```
