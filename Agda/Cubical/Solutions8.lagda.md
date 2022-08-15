@@ -28,7 +28,6 @@ module Solutions8 where
 open import cubical-prelude
 open import Lecture7-notes
 open import Lecture8-notes
-open import Solutions7
 ```
 
 ## Part I: `transp` and `hcomp`
