@@ -1,24 +1,4 @@
-# Week 8 - Cubical Agda Exercises
-
-## Standard disclaimer:
-
-**The exercises are designed to increase in difficulty so that we can cater to
-our large and diverse audience. This also means that it is *perfectly fine* if
-you don't manage to do all exercises: some of them are definitely a bit hard for
-beginners and there are likely too many exercises! You *may* wish to come back
-to them later when you have learned more.**
-
-Having said that, here we go!
-
-In case you haven't done the other Agda exercises:
-This is a markdown file with Agda code, which means that it displays nicely on
-GitHub, but at the same time you can load this file in Agda and fill the holes
-to solve exercises.
-
-**When solving the problems,
-please make a copy of this file to work in, so that it doesn't get overwritten
-(in case we update the exercises through `git`)!**
-
+# Week 8 - Cubical Agda Exercises - Solutions
 
 ```agda
 {-# OPTIONS --cubical #-}
@@ -64,7 +44,7 @@ fromPathP {A = A} p i = transp (λ j → A (i ∨ j)) i (p i)
 
 ### Exercise 3 (★★★)
 
-Using `hcomp`, cunstruct a method for turning paths into dependent paths.
+Using `hcomp`, construct a method for turning paths into dependent paths.
 
 **Hint**:
 At each point `i`, the verical fibre of the following diagram should lie in
@@ -109,7 +89,7 @@ isProp→PathP p a₀ a₁ = toPathP (p i1 _ a₁)
 
 ### Exercise 5 (★★)
 
-Prove the following lemma charictarising equality in subtypes:
+Prove the following lemma characterizing equality in subtypes:
 
 ```agda
 Σ≡Prop : {A : Type ℓ} {B : A → Type ℓ'} {u v : Σ A B} (h : (x : A) → isProp (B x))
