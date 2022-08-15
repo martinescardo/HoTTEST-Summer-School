@@ -245,10 +245,10 @@ above. However, when `r` is equal to `i1` the `transp` function will
 compute as the identity function.
 
 ```text
-transp A i1 a == a
+transp A i1 a ≐ a
 ```
 
-(Here `==` is definitional/judgmental equality)
+(Here `≐` is definitional/judgmental equality)
 
 Having this extra generality is useful for quite technical reasons,
 for instance we can easily relate a term `a` with its transport over a

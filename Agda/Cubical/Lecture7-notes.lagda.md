@@ -181,16 +181,16 @@ involution ~). This just means that we have the following kinds of
 equations definitionally:
 
 ```text
-i0 ∨ i    = i
-i  ∨ i1   = i1
-i  ∨ j    = j ∨ i
-i0 ∧ i    = i0
-i1 ∧ i    = i
-i  ∧ j    = j ∧ i
-~ (~ i)   = i
-i0        = ~ i1
-~ (i ∨ j) = ~ i ∧ ~ j
-~ (i ∧ j) = ~ i ∨ ~ j
+i0 ∨ i    ≐ i
+i  ∨ i1   ≐ i1
+i  ∨ j    ≐ j ∨ i
+i0 ∧ i    ≐ i0
+i1 ∧ i    ≐ i
+i  ∧ j    ≐ j ∧ i
+~ (~ i)   ≐ i
+i0        ≐ ~ i1
+~ (i ∨ j) ≐ ~ i ∧ ~ j
+~ (i ∧ j) ≐ ~ i ∨ ~ j
 ```
 
 However, we do not have `i ∨ ~ i = i1` and `i ∧ ~ i = i0`. The reason
