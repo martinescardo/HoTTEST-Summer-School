@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>HoTTEST Summer School 2022 Lecture Notes</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+</head>
+
+<body class="text-page">
+<main>
+<div id="post-toc-container" style="padding-left: 1em; padding-right: 1em;">
+
+  <article>
+
+<h1 id="week-8---cubical-agda-exercises">Week 8 - Cubical Agda
+Exercises</h1>
+<h2 id="standard-disclaimer">Standard disclaimer:</h2>
+<p><strong>The exercises are designed to increase in difficulty so that
+we can cater to our large and diverse audience. This also means that it
+is <em>perfectly fine</em> if you don’t manage to do all exercises: some
+of them are definitely a bit hard for beginners and there are likely too
+many exercises! You <em>may</em> wish to come back to them later when
+you have learned more.</strong></p>
+<p>Having said that, here we go!</p>
+<p>In case you haven’t done the other Agda exercises: This is a markdown
+file with Agda code, which means that it displays nicely on GitHub, but
+at the same time you can load this file in Agda and fill the holes to
+solve exercises.</p>
+<p><strong>When solving the problems, please make a copy of this file to
+work in, so that it doesn’t get overwritten (in case we update the
+exercises through <code>git</code>)!</strong></p>
+<pre class="Agda"><a id="854" class="Symbol">{-#</a> <a id="858" class="Keyword">OPTIONS</a> <a id="866" class="Pragma">--cubical</a> <a id="876" class="Pragma">--allow-unsolved-metas</a> <a id="899" class="Symbol">#-}</a>
+
+<a id="904" class="Keyword">module</a> <a id="911" href="Exercises8.html" class="Module">Exercises8</a> <a id="922" class="Keyword">where</a>
+
+<a id="929" class="Keyword">open</a> <a id="934" class="Keyword">import</a> <a id="941" href="cubical-prelude.html" class="Module">cubical-prelude</a>
+<a id="957" class="Keyword">open</a> <a id="962" class="Keyword">import</a> <a id="969" href="Lecture7-notes.html" class="Module">Lecture7-notes</a>
+<a id="984" class="Keyword">open</a> <a id="989" class="Keyword">import</a> <a id="996" href="Lecture8-notes.html" class="Module">Lecture8-notes</a>
+<a id="1011" class="Keyword">open</a> <a id="1016" class="Keyword">import</a> <a id="1023" href="Solutions7.html" class="Module">Solutions7</a>
+</pre>
+<h2 id="part-i-transp-and-hcomp">Part I: <code>transp</code> and
+<code>hcomp</code></h2>
+<h3 id="exercise-1">Exercise 1 (★)</h3>
+<p>Prove the propositional computation law for <code>J</code>:</p>
+<pre class="Agda"><a id="JRefl"></a><a id="1150" href="Exercises8.html#1150" data-type="(P : (z : A) → x ≡ z → Set ℓ&#39;&#39;) (d : P x refl) → J P d refl ≡ d" class="Function">JRefl</a> <a id="1156" class="Symbol">:</a> <a id="1158" class="Symbol">{</a><a id="1159" href="Exercises8.html#1159" class="Bound">A</a> <a id="1161" class="Symbol">:</a> <a id="1163" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="1168" href="cubical-prelude.html#2241" data-type="Level" class="Generalizable">ℓ</a><a id="1169" class="Symbol">}</a> <a id="1171" class="Symbol">{</a><a id="1172" href="Exercises8.html#1172" class="Bound">x</a> <a id="1174" class="Symbol">:</a> <a id="1176" href="Exercises8.html#1159" class="Bound">A</a><a id="1177" class="Symbol">}</a> <a id="1179" class="Symbol">(</a><a id="1180" href="Exercises8.html#1180" class="Bound">P</a> <a id="1182" class="Symbol">:</a> <a id="1184" class="Symbol">(</a><a id="1185" href="Exercises8.html#1185" class="Bound">z</a> <a id="1187" class="Symbol">:</a> <a id="1189" href="Exercises8.html#1159" class="Bound">A</a><a id="1190" class="Symbol">)</a> <a id="1192" class="Symbol">→</a> <a id="1194" href="Exercises8.html#1172" class="Bound">x</a> <a id="1196" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="1198" href="Exercises8.html#1185" class="Bound">z</a> <a id="1200" class="Symbol">→</a> <a id="1202" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="1207" href="cubical-prelude.html#2246" data-type="Level" class="Generalizable">ℓ&#39;&#39;</a><a id="1210" class="Symbol">)</a>
+  <a id="1214" class="Symbol">(</a><a id="1215" href="Exercises8.html#1215" class="Bound">d</a> <a id="1217" class="Symbol">:</a> <a id="1219" href="Exercises8.html#1180" class="Bound">P</a> <a id="1221" href="Exercises8.html#1172" class="Bound">x</a> <a id="1223" href="Lecture7-notes.html#3585" data-type="x ≡ x" class="Function">refl</a><a id="1227" class="Symbol">)</a> <a id="1229" class="Symbol">→</a> <a id="1231" href="Lecture8-notes.html#10338" data-type="(P : (y : A) → x ≡ y → Set ℓ&#39;&#39;) → P x refl → (p : x ≡ y) → P y p" class="Function">J</a> <a id="1233" href="Exercises8.html#1180" class="Bound">P</a> <a id="1235" href="Exercises8.html#1215" class="Bound">d</a> <a id="1237" href="Lecture7-notes.html#3585" data-type="x ≡ x" class="Function">refl</a> <a id="1242" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="1244" href="Exercises8.html#1215" class="Bound">d</a>
+<a id="1246" href="Exercises8.html#1150" data-type="(P : (z : A) → x ≡ z → Set ℓ&#39;&#39;) (d : P x refl) → J P d refl ≡ d" class="Function">JRefl</a> <a id="1252" href="Exercises8.html#1252" class="Bound">P</a> <a id="1254" href="Exercises8.html#1254" class="Bound">d</a> <a id="1256" class="Symbol">=</a> <a id="1258" class="Hole">{!!}</a>
+</pre>
+<h3 id="exercise-2">Exercise 2 (★★)</h3>
+<p>Using <code>transp</code>, construct a method for turning dependent
+paths into paths.</p>
+<p><strong>Hint</strong>: Transport the point <code>p i</code> to the
+fibre <code>A i1</code>, and set <code>φ = i</code> such that the
+transport computes away at <code>i = i1</code>.</p>
+<pre class="text"><code>   x ----(p i)----&gt; y
+  A i0    A i      A i1</code></pre>
+<pre class="Agda"><a id="fromPathP"></a><a id="1556" href="Exercises8.html#1556" data-type="PathP A x y → transport A x ≡ y" class="UnsolvedConstraint Function">fromPathP</a> <a id="1566" class="Symbol">:</a> <a id="1568" class="Symbol">{</a><a id="1569" href="Exercises8.html#1569" class="Bound">A</a> <a id="1571" class="Symbol">:</a> <a id="1573" href="Agda.Primitive.Cubical.html#108" data-type="SSet lzero" class="Datatype">I</a> <a id="1575" class="Symbol">→</a> <a id="1577" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="1582" href="cubical-prelude.html#2241" data-type="Level" class="Generalizable">ℓ</a><a id="1583" class="Symbol">}</a> <a id="1585" class="Symbol">{</a><a id="1586" href="Exercises8.html#1586" class="Bound">x</a> <a id="1588" class="Symbol">:</a> <a id="1590" href="Exercises8.html#1569" class="Bound">A</a> <a id="1592" href="Agda.Primitive.Cubical.html#150" data-type="I" class="InductiveConstructor">i0</a><a id="1594" class="Symbol">}</a> <a id="1596" class="Symbol">{</a><a id="1597" href="Exercises8.html#1597" class="Bound">y</a> <a id="1599" class="Symbol">:</a> <a id="1601" href="Exercises8.html#1569" class="Bound">A</a> <a id="1603" href="Agda.Primitive.Cubical.html#178" data-type="I" class="InductiveConstructor">i1</a><a id="1605" class="Symbol">}</a> <a id="1607" class="Symbol">→</a>
+  <a id="1611" href="Agda.Builtin.Cubical.Path.html#197" data-type="(A : I → Set ℓ) → A i0 → A i1 → Set ℓ" class="Postulate">PathP</a> <a id="1617" href="Exercises8.html#1569" class="Bound">A</a> <a id="1619" href="Exercises8.html#1586" class="Bound">x</a> <a id="1621" href="Exercises8.html#1597" class="Bound">y</a> <a id="1623" class="Symbol">→</a> <a id="1625" href="Lecture8-notes.html#8148" data-type="A ≡ B → A → B" class="Function">transport</a> <a id="1635" class="Symbol">(λ</a> <a id="1638" href="Exercises8.html#1638" class="Bound">i</a> <a id="1640" class="Symbol">→</a> <a id="1642" href="Exercises8.html#1569" class="Bound">A</a> <a id="1644" href="Exercises8.html#1638" class="Bound">i</a><a id="1645" class="Symbol">)</a> <a id="1647" href="Exercises8.html#1586" class="Bound">x</a> <a id="1649" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="1651" href="Exercises8.html#1597" class="Bound">y</a>
+<a id="1653" href="Exercises8.html#1556" data-type="PathP A x y → transport A x ≡ y" class="Function">fromPathP</a> <a id="1663" class="Symbol">{</a><a id="1664" class="Argument">A</a> <a id="1666" class="Symbol">=</a> <a id="1668" href="Exercises8.html#1668" class="Bound">A</a><a id="1669" class="Symbol">}</a> <a id="1671" href="Exercises8.html#1671" class="Bound">p</a> <a id="1673" href="Exercises8.html#1673" class="Bound">i</a> <a id="1675" class="Symbol">=</a> <a id="1677" class="Hole">{!!}</a>
+</pre>
+<h3 id="exercise-3">Exercise 3 (★★★)</h3>
+<p>Using <code>hcomp</code>, cunstruct a method for turning paths into
+dependent paths.</p>
+<p><strong>Hint</strong>: At each point <code>i</code>, the verical
+fibre of the following diagram should lie in <code>A i</code>. The key
+is to parametrise the bottom line with a dependent path from
+<code>x</code> to <code>transport A x</code>. This requires writing a
+<code>transp</code> that computes away at <code>i = i0</code>.</p>
+<pre class="text"><code>       x  - - - -&gt; y
+       ^           ^
+       ¦           ¦
+  refl ¦           ¦ p i
+       ¦           ¦
+       ¦           ¦
+       x ---&gt; transport A x</code></pre>
+<pre class="Agda"><a id="toPathP"></a><a id="2216" href="Exercises8.html#2216" data-type="transport A x ≡ y → PathP A x y" class="UnsolvedConstraint Function">toPathP</a> <a id="2224" class="Symbol">:</a> <a id="2226" class="Symbol">{</a><a id="2227" href="Exercises8.html#2227" class="Bound">A</a> <a id="2229" class="Symbol">:</a> <a id="2231" href="Agda.Primitive.Cubical.html#108" data-type="SSet lzero" class="Datatype">I</a> <a id="2233" class="Symbol">→</a> <a id="2235" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="2240" href="cubical-prelude.html#2241" data-type="Level" class="Generalizable">ℓ</a><a id="2241" class="Symbol">}</a> <a id="2243" class="Symbol">{</a><a id="2244" href="Exercises8.html#2244" class="Bound">x</a> <a id="2246" class="Symbol">:</a> <a id="2248" href="Exercises8.html#2227" class="Bound">A</a> <a id="2250" href="Agda.Primitive.Cubical.html#150" data-type="I" class="InductiveConstructor">i0</a><a id="2252" class="Symbol">}</a> <a id="2254" class="Symbol">{</a><a id="2255" href="Exercises8.html#2255" class="Bound">y</a> <a id="2257" class="Symbol">:</a> <a id="2259" href="Exercises8.html#2227" class="Bound">A</a> <a id="2261" href="Agda.Primitive.Cubical.html#178" data-type="I" class="InductiveConstructor">i1</a><a id="2263" class="Symbol">}</a> <a id="2265" class="Symbol">→</a>
+  <a id="2269" href="Lecture8-notes.html#8148" data-type="A ≡ B → A → B" class="Function">transport</a> <a id="2279" class="Symbol">(λ</a> <a id="2282" href="Exercises8.html#2282" class="Bound">i</a> <a id="2284" class="Symbol">→</a> <a id="2286" href="Exercises8.html#2227" class="Bound">A</a> <a id="2288" href="Exercises8.html#2282" class="Bound">i</a><a id="2289" class="Symbol">)</a> <a id="2291" href="Exercises8.html#2244" class="Bound">x</a> <a id="2293" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="2295" href="Exercises8.html#2255" class="Bound">y</a> <a id="2297" class="Symbol">→</a> <a id="2299" href="Agda.Builtin.Cubical.Path.html#197" data-type="(A : I → Set ℓ) → A i0 → A i1 → Set ℓ" class="Postulate">PathP</a> <a id="2305" href="Exercises8.html#2227" class="Bound">A</a> <a id="2307" href="Exercises8.html#2244" class="Bound">x</a> <a id="2309" href="Exercises8.html#2255" class="Bound">y</a>
+<a id="2311" href="Exercises8.html#2216" data-type="transport A x ≡ y → PathP A x y" class="Function">toPathP</a> <a id="2319" class="Symbol">{</a><a id="2320" class="Argument">A</a> <a id="2322" class="Symbol">=</a> <a id="2324" href="Exercises8.html#2324" class="Bound">A</a><a id="2325" class="Symbol">}</a> <a id="2327" class="Symbol">{</a><a id="2328" class="Argument">x</a> <a id="2330" class="Symbol">=</a> <a id="2332" href="Exercises8.html#2332" class="Bound">x</a><a id="2333" class="Symbol">}</a> <a id="2335" href="Exercises8.html#2335" class="Bound">p</a> <a id="2337" href="Exercises8.html#2337" class="Bound">i</a> <a id="2339" class="Symbol">=</a>
+  <a id="2343" href="cubical-prelude.html#665" class="Primitive">hcomp</a>
+    <a id="2353" class="Symbol">(λ</a> <a id="2356" class="Symbol">{</a><a id="2357" href="Exercises8.html#2357" class="Bound">j</a> <a id="2359" class="Symbol">(</a><a id="2360" href="Exercises8.html#2337" class="Bound">i</a> <a id="2362" class="Symbol">=</a> <a id="2364" href="Agda.Primitive.Cubical.html#150" data-type="I" class="InductiveConstructor">i0</a><a id="2366" class="Symbol">)</a> <a id="2368" class="Symbol">→</a> <a id="2370" class="Hole">{!!}</a> <a id="2375" class="Symbol">;</a>
+        <a id="2385" href="Exercises8.html#2385" class="Bound">j</a> <a id="2387" class="Symbol">(</a><a id="2388" href="Exercises8.html#2337" class="Bound">i</a> <a id="2390" class="Symbol">=</a> <a id="2392" href="Agda.Primitive.Cubical.html#178" data-type="I" class="InductiveConstructor">i1</a><a id="2394" class="Symbol">)</a> <a id="2396" class="Symbol">→</a> <a id="2398" class="Hole">{!!}</a> <a id="2403" class="Symbol">})</a>
+   <a id="2409" class="UnsolvedMeta UnsolvedConstraint Hole">{!!}</a>
+</pre>
+<h3 id="exercise-4">Exercise 4 (★)</h3>
+<p>Using <code>toPathP</code>, prove the following lemma, which lets you
+fill in dependent lines in hProps, provided their boundary.</p>
+<pre class="Agda"><a id="isProp→PathP"></a><a id="2567" href="Exercises8.html#2567" data-type="((i : I) → isProp (A i)) → (a₀ : A i0) (a₁ : A i1) → PathP A a₀ a₁" class="Function">isProp→PathP</a> <a id="2580" class="Symbol">:</a> <a id="2582" class="Symbol">{</a><a id="2583" href="Exercises8.html#2583" class="Bound">A</a> <a id="2585" class="Symbol">:</a> <a id="2587" href="Agda.Primitive.Cubical.html#108" data-type="SSet lzero" class="Datatype">I</a> <a id="2589" class="Symbol">→</a> <a id="2591" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="2596" href="cubical-prelude.html#2241" data-type="Level" class="Generalizable">ℓ</a><a id="2597" class="Symbol">}</a> <a id="2599" class="Symbol">(</a><a id="2600" href="Exercises8.html#2600" class="Bound">p</a> <a id="2602" class="Symbol">:</a> <a id="2604" class="Symbol">(</a><a id="2605" href="Exercises8.html#2605" class="Bound">i</a> <a id="2607" class="Symbol">:</a> <a id="2609" href="Agda.Primitive.Cubical.html#108" data-type="SSet lzero" class="Datatype">I</a><a id="2610" class="Symbol">)</a> <a id="2612" class="Symbol">→</a> <a id="2614" href="cubical-prelude.html#4071" data-type="Set ℓ → Set ℓ" class="Function">isProp</a> <a id="2621" class="Symbol">(</a><a id="2622" href="Exercises8.html#2583" class="Bound">A</a> <a id="2624" href="Exercises8.html#2605" class="Bound">i</a><a id="2625" class="Symbol">))</a>
+  <a id="2630" class="Symbol">(</a><a id="2631" href="Exercises8.html#2631" class="Bound">a₀</a> <a id="2634" class="Symbol">:</a> <a id="2636" href="Exercises8.html#2583" class="Bound">A</a> <a id="2638" href="Agda.Primitive.Cubical.html#150" data-type="I" class="InductiveConstructor">i0</a><a id="2640" class="Symbol">)</a> <a id="2642" class="Symbol">(</a><a id="2643" href="Exercises8.html#2643" class="Bound">a₁</a> <a id="2646" class="Symbol">:</a> <a id="2648" href="Exercises8.html#2583" class="Bound">A</a> <a id="2650" href="Agda.Primitive.Cubical.html#178" data-type="I" class="InductiveConstructor">i1</a><a id="2652" class="Symbol">)</a> <a id="2654" class="Symbol">→</a> <a id="2656" href="Agda.Builtin.Cubical.Path.html#197" data-type="(A : I → Set ℓ) → A i0 → A i1 → Set ℓ" class="Postulate">PathP</a> <a id="2662" href="Exercises8.html#2583" class="Bound">A</a> <a id="2664" href="Exercises8.html#2631" class="Bound">a₀</a> <a id="2667" href="Exercises8.html#2643" class="Bound">a₁</a>
+<a id="2670" href="Exercises8.html#2567" data-type="((i : I) → isProp (A i)) → (a₀ : A i0) (a₁ : A i1) → PathP A a₀ a₁" class="Function">isProp→PathP</a> <a id="2683" href="Exercises8.html#2683" class="Bound">p</a> <a id="2685" href="Exercises8.html#2685" class="Bound">a₀</a> <a id="2688" href="Exercises8.html#2688" class="Bound">a₁</a> <a id="2691" class="Symbol">=</a> <a id="2693" class="Hole">{!!}</a>
+</pre>
+<h3 id="exercise-5">Exercise 5 (★★)</h3>
+<p>Prove the following lemma charictarising equality in subtypes:</p>
+<pre class="Agda"><a id="Σ≡Prop"></a><a id="2796" href="Exercises8.html#2796" data-type="((x : A) → isProp (B x)) → fst u ≡ fst v → u ≡ v" class="Function">Σ≡Prop</a> <a id="2803" class="Symbol">:</a> <a id="2805" class="Symbol">{</a><a id="2806" href="Exercises8.html#2806" class="Bound">A</a> <a id="2808" class="Symbol">:</a> <a id="2810" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="2815" href="cubical-prelude.html#2241" data-type="Level" class="Generalizable">ℓ</a><a id="2816" class="Symbol">}</a> <a id="2818" class="Symbol">{</a><a id="2819" href="Exercises8.html#2819" class="Bound">B</a> <a id="2821" class="Symbol">:</a> <a id="2823" href="Exercises8.html#2806" class="Bound">A</a> <a id="2825" class="Symbol">→</a> <a id="2827" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="2832" href="cubical-prelude.html#2243" data-type="Level" class="Generalizable">ℓ&#39;</a><a id="2834" class="Symbol">}</a> <a id="2836" class="Symbol">{</a><a id="2837" href="Exercises8.html#2837" class="Bound">u</a> <a id="2839" href="Exercises8.html#2839" class="Bound">v</a> <a id="2841" class="Symbol">:</a> <a id="2843" href="Agda.Builtin.Sigma.html#166" data-type="(A : Set a) (B : A → Set b) → Set (a ⊔ b)" class="Record">Σ</a> <a id="2845" href="Exercises8.html#2806" class="Bound">A</a> <a id="2847" href="Exercises8.html#2819" class="Bound">B</a><a id="2848" class="Symbol">}</a> <a id="2850" class="Symbol">(</a><a id="2851" href="Exercises8.html#2851" class="Bound">h</a> <a id="2853" class="Symbol">:</a> <a id="2855" class="Symbol">(</a><a id="2856" href="Exercises8.html#2856" class="Bound">x</a> <a id="2858" class="Symbol">:</a> <a id="2860" href="Exercises8.html#2806" class="Bound">A</a><a id="2861" class="Symbol">)</a> <a id="2863" class="Symbol">→</a> <a id="2865" href="cubical-prelude.html#4071" data-type="Set ℓ → Set ℓ" class="Function">isProp</a> <a id="2872" class="Symbol">(</a><a id="2873" href="Exercises8.html#2819" class="Bound">B</a> <a id="2875" href="Exercises8.html#2856" class="Bound">x</a><a id="2876" class="Symbol">))</a>
+       <a id="2886" class="Symbol">→</a> <a id="2888" class="Symbol">(</a><a id="2889" href="Exercises8.html#2889" class="Bound">p</a> <a id="2891" class="Symbol">:</a> <a id="2893" href="cubical-prelude.html#3676" class="Field">pr₁</a> <a id="2897" href="Exercises8.html#2837" class="Bound">u</a> <a id="2899" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="2901" href="cubical-prelude.html#3676" class="Field">pr₁</a> <a id="2905" href="Exercises8.html#2839" class="Bound">v</a><a id="2906" class="Symbol">)</a> <a id="2908" class="Symbol">→</a> <a id="2910" href="Exercises8.html#2837" class="Bound">u</a> <a id="2912" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="2914" href="Exercises8.html#2839" class="Bound">v</a>
+<a id="2916" href="Exercises8.html#2796" data-type="((x : A) → isProp (B x)) → fst u ≡ fst v → u ≡ v" class="Function">Σ≡Prop</a> <a id="2923" class="Symbol">{</a><a id="2924" class="Argument">B</a> <a id="2926" class="Symbol">=</a> <a id="2928" href="Exercises8.html#2928" class="Bound">B</a><a id="2929" class="Symbol">}</a> <a id="2931" class="Symbol">{</a><a id="2932" class="Argument">u</a> <a id="2934" class="Symbol">=</a> <a id="2936" href="Exercises8.html#2936" class="Bound">u</a><a id="2937" class="Symbol">}</a> <a id="2939" class="Symbol">{</a><a id="2940" class="Argument">v</a> <a id="2942" class="Symbol">=</a> <a id="2944" href="Exercises8.html#2944" class="Bound">v</a><a id="2945" class="Symbol">}</a> <a id="2947" href="Exercises8.html#2947" class="Bound">h</a> <a id="2949" href="Exercises8.html#2949" class="Bound">p</a> <a id="2951" class="Symbol">=</a> <a id="2953" class="Hole">{!!}</a>
+</pre>
+<h3 id="exercise-6">Exercise 6 (★★★)</h3>
+<p>Prove that <code>isContr</code> is a proposition:</p>
+<p><strong>Hint</strong>: This requires drawing a cube (yes, an actual
+3D one)!</p>
+<pre class="Agda"><a id="isPropIsContr"></a><a id="3098" href="Exercises8.html#3098" data-type="isProp (isContr A)" class="UnsolvedConstraint Function">isPropIsContr</a> <a id="3112" class="Symbol">:</a> <a id="3114" class="Symbol">{</a><a id="3115" href="Exercises8.html#3115" class="Bound">A</a> <a id="3117" class="Symbol">:</a> <a id="3119" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="3124" href="cubical-prelude.html#2241" data-type="Level" class="Generalizable">ℓ</a><a id="3125" class="Symbol">}</a> <a id="3127" class="Symbol">→</a> <a id="3129" href="cubical-prelude.html#4071" data-type="Set ℓ → Set ℓ" class="Function">isProp</a> <a id="3136" class="Symbol">(</a><a id="3137" href="cubical-prelude.html#4004" data-type="Set ℓ → Set ℓ" class="Function">isContr</a> <a id="3145" href="Exercises8.html#3115" class="Bound">A</a><a id="3146" class="Symbol">)</a>
+<a id="3148" href="Exercises8.html#3098" data-type="isProp (isContr A)" class="Function">isPropIsContr</a> <a id="3162" class="Symbol">(</a><a id="3163" href="Exercises8.html#3163" class="Bound">c0</a> <a id="3166" href="Agda.Builtin.Sigma.html#236" data-type="(fst : A) (snd : B fst) → Σ A B" class="InductiveConstructor Operator">,</a> <a id="3168" href="Exercises8.html#3168" class="Bound">h0</a><a id="3170" class="Symbol">)</a> <a id="3172" class="Symbol">(</a><a id="3173" href="Exercises8.html#3173" class="Bound">c1</a> <a id="3176" href="Agda.Builtin.Sigma.html#236" data-type="(fst : A) (snd : B fst) → Σ A B" class="InductiveConstructor Operator">,</a> <a id="3178" href="Exercises8.html#3178" class="Bound">h1</a><a id="3180" class="Symbol">)</a> <a id="3182" href="Exercises8.html#3182" class="Bound">j</a> <a id="3184" class="Symbol">=</a> <a id="3186" class="Hole">{!!}</a> 
+</pre>
+
+  </article>
+</div>
+</main>
+</body>
+<style>
+
+:root {
+  --text-bg: #fff;
+  --text-fg: #222;
+  --shadow: #000;
+  --primary: #0054F4;
+  --secondary: #9C1BD6;
+  --modal-bg: #ccccccaa;
+  --warning-bg: #fef08a;
+  --code-bg: var(--text-bg);
+  --code-fg: var(--text-fg);
+  --code-keyword: #BB3B13;
+  --code-string:  #d52753;
+  --code-number:  #8A1060;
+  --code-module:  #8A1060;
+  --code-field:   #9C1BD6;
+  --code-constructor: #207B1D;
+  --code-highlight: #F5DEB3;
+  --search-selected: #e2e8f0;
+  --details-summary: #b2ebf2;
+  --details-open:    #80deea;
+  --depgraph-edge: #eee;
+  --blockquote-bg: #d8b4fe; }
+
+.diagram-dark {
+  display: none !important; }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-bg: #282C34;
+    --text-fg: #bfbfbf;
+    --shadow: #475569;
+    --primary: #61AFEF;
+    --secondary: #C878DD;
+    --modal-bg: #282C34aa;
+    --warning-bg: #991b1b;
+    --code-keyword:     #E5C07B;
+    --code-string:      #E06C75;
+    --code-number:      #98C379;
+    --code-module:      #56B6C2;
+    --code-field:       #C878DD;
+    --code-constructor: #98C379;
+    --code-highlight: #ef444499;
+    --search-selected: #474e5e;
+    --details-summary: #5b21b6;
+    --details-open:    #4c1d95;
+    --depgraph-edge: #474e5e;
+    --blockquote-bg: #475569; }
+  div.warning {
+    --shadow: #7f1d1d
+  ; }
+  input {
+    background-color: #334155;
+    border: 1px solid #475569;
+    color: var(--text-fg); }
+  body {
+    scrollbar-color: #3b4454 #2b2e33; }
+  .diagram-dark {
+    display: block !important; }
+  .diagram-light {
+    display: none !important; } }
+
+table {
+  margin: auto;
+  border-collapse: collapse; }
+  table td, table th {
+    text-align: center;
+    padding: 0px 1em 0px 1em;
+    border: 1px solid black; }
+  table th {
+    border-bottom: 2px solid black; }
+  table td {
+    white-space: nowrap; }
+
+html { max-width: 100%; }
+
+body {
+  font-family: "Inria Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  width: 100%;
+  font-size: var(--font-size);
+  overflow-x: clip;
+  background-color: var(--text-bg);
+  color: var(--text-fg);
+}
+
+div#post-toc-container { max-width: 120ch; margin: auto; }
+
+article a[href], div#return > a[href], div#top > a[href], aside#toc > div#toc-container ul a[href] {
+  color: var(--primary);
+  text-decoration: none; }
+  article a[href]:hover, div#return > a[href]:hover, div#top > a[href]:hover, aside#toc > div#toc-container ul a[href]:hover {
+    text-decoration: 2px currentColor underline !important; }
+  article a[href]:visited, div#return > a[href]:visited, div#top > a[href]:visited, aside#toc > div#toc-container ul a[href]:visited {
+    color: var(--secondary); }
+
+/* Aspects. */
+.Agda {
+  /* NameKinds. */
+  /* OtherAspects. */
+  /* Standard attributes. */
+  font-family: 'iosevka', 'Iosevka', 'Fantasque Sans Mono', 'Roboto Mono', monospace;
+  font-weight: 400; }
+  .Agda .Comment {
+    color: var(--code-fg);
+    font-style: italic; }
+  .Agda .Background {
+    background-color: var(--code-bg); }
+  .Agda .Markup {
+    color: var(--code-fg); }
+  .Agda .Keyword {
+    color: var(--code-keyword); }
+  .Agda .String {
+    color: var(--code-string); }
+  .Agda .Number {
+    color: var(--code-number); }
+  .Agda .Symbol {
+    color: var(--code-fg); }
+  .Agda .PrimitiveType {
+    color: var(--primary); }
+  .Agda .Pragma {
+    color: var(--code-fg); }
+  .Agda .Bound {
+    color: var(--code-fg) !important; }
+  .Agda .Generalizable {
+    color: var(--code-fg) !important; }
+  .Agda .InductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .CoinductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .Datatype {
+    color: var(--primary) !important; }
+  .Agda .Field {
+    color: var(--code-field) !important; }
+  .Agda .Function {
+    color: var(--primary) !important; }
+  .Agda .Module {
+    color: var(--code-module) !important; }
+  .Agda .Postulate {
+    color: var(--primary) !important; }
+  .Agda .Primitive {
+    color: var(--primary) !important; }
+  .Agda .Record {
+    color: var(--primary) !important; }
+  .Agda .UnsolvedMeta {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .UnsolvedConstraint {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .TerminationProblem {
+    color: var(--code-fg);
+    background: #FFA07A; }
+  .Agda .IncompletePattern {
+    color: var(--code-fg);
+    background: #F5DEB3; }
+  .Agda .Error {
+    color: red;
+    text-decoration: underline; }
+  .Agda .TypeChecks {
+    color: var(--code-fg);
+    background: #ADD8E6; }
+  .Agda .ShadowingInTelescope {
+    color: var(--code-fg);
+    background: #808080; }
+  .Agda .Deadcode {
+    color: var(--code-keyword);
+    font-weight: bold; }
+  .Agda a {
+    text-decoration: none; }
+  .Agda a[href]:hover {
+    text-decoration: 2px var(--primary) underline; }
+  .Agda a[href]:target {
+    animation: highlight 2.5s; }
+  body.text-page .Agda {
+    font-size: var(--code-font-size); }
+
+pre.Agda, div.sourceCode, pre {
+  border-radius: 0;
+  box-shadow: none;
+  overflow-y: clip;
+  margin: 0;
+  padding: 1em;
+  padding-top: 0.25em;
+  padding-bottom: 0.25em;
+  background-color: var(--code-bg);
+  color: var(--code-fg);
+  font-size: var(--code-font-size);
+  max-width: 100%;
+  overflow-x: auto;
+}
+</style>
+</html>

@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>HoTTEST Summer School 2022 Lecture Notes</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+</head>
+
+<body class="text-page">
+<main>
+<div id="post-toc-container" style="padding-left: 1em; padding-right: 1em;">
+
+  <article>
+
+<h1 id="lecture-8">Lecture 8</h1>
+<p>Contents:</p>
+<ul>
+<li>Set quotients</li>
+<li>Cubical transport and path induction</li>
+<li>Homogeneous composition (<code>hcomp</code>)</li>
+</ul>
+<pre class="Agda"><a id="125" class="Symbol">{-#</a> <a id="129" class="Keyword">OPTIONS</a> <a id="137" class="Pragma">--cubical</a> <a id="147" class="Symbol">#-}</a>
+
+<a id="152" class="Keyword">module</a> <a id="159" href="Lecture8-notes.html" class="Module">Lecture8-notes</a> <a id="174" class="Keyword">where</a>
+
+<a id="181" class="Keyword">open</a> <a id="186" class="Keyword">import</a> <a id="193" href="cubical-prelude.html" class="Module">cubical-prelude</a>
+<a id="209" class="Keyword">open</a> <a id="214" class="Keyword">import</a> <a id="221" href="Lecture7-notes.html" class="Module">Lecture7-notes</a>
+
+<a id="237" class="Keyword">private</a>
+  <a id="247" class="Keyword">variable</a>
+    <a id="260" href="Lecture8-notes.html#260" class="Generalizable">A</a> <a id="262" href="Lecture8-notes.html#262" class="Generalizable">B</a> <a id="264" class="Symbol">:</a> <a id="266" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="271" href="cubical-prelude.html#2241" data-type="Level" class="Generalizable">ℓ</a>
+</pre>
+<h2 id="set-quotients">Set quotients</h2>
+<p>Last time we saw some HITs that are useful for topology and homotopy
+theory. Now we’ll look at some HITs that are not very interesting from a
+homotopical perspective, but still very useful for other purposes. In
+particular we will look at how we can construct quotient types and in
+order for the result to be a set we will also set truncate the type.
+This kind of types has many applications in both computer science and
+mathematics.</p>
+<p>In general these are written as:</p>
+<pre class="text"><code>data _/_ (A : Type ℓ) (R : A → A → Type ℓ&#39;) : Type (ℓ ⊔ ℓ&#39;) where
+  [_] : A → A / R
+  eq/ : (a b : A) → R a b → [ a ] ≡ [ b ]
+  trunc : (a b : A / R) (p q : a ≡ b) → p ≡ q</code></pre>
+<p>The type of the <code>trunc</code> constructor can simply be written
+as:</p>
+<pre class="Agda"><a id="1021" class="Keyword">data</a> <a id="_/_"></a><a id="1026" href="Lecture8-notes.html#1026" data-type="(A : Set ℓ) → (A → A → Set ℓ&#39;) → Set (ℓ ⊔ ℓ&#39;)" class="Datatype Operator">_/_</a> <a id="1030" class="Symbol">(</a><a id="1031" href="Lecture8-notes.html#1031" class="Bound">A</a> <a id="1033" class="Symbol">:</a> <a id="1035" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="1040" href="cubical-prelude.html#2241" data-type="Level" class="Generalizable">ℓ</a><a id="1041" class="Symbol">)</a> <a id="1043" class="Symbol">(</a><a id="1044" href="Lecture8-notes.html#1044" class="Bound">R</a> <a id="1046" class="Symbol">:</a> <a id="1048" href="Lecture8-notes.html#1031" class="Bound">A</a> <a id="1050" class="Symbol">→</a> <a id="1052" href="Lecture8-notes.html#1031" class="Bound">A</a> <a id="1054" class="Symbol">→</a> <a id="1056" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="1061" href="cubical-prelude.html#2243" data-type="Level" class="Generalizable">ℓ&#39;</a><a id="1063" class="Symbol">)</a> <a id="1065" class="Symbol">:</a> <a id="1067" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="1072" class="Symbol">(</a><a id="1073" href="Lecture8-notes.html#1040" class="Bound">ℓ</a> <a id="1075" href="Agda.Primitive.html#810" data-type="Level → Level → Level" class="Primitive Operator">⊔</a> <a id="1077" href="Lecture8-notes.html#1061" class="Bound">ℓ&#39;</a><a id="1079" class="Symbol">)</a> <a id="1081" class="Keyword">where</a>
+  <a id="_/_.[_]"></a><a id="1089" href="Lecture8-notes.html#1089" data-type="A → A / R" class="InductiveConstructor Operator">[_]</a> <a id="1093" class="Symbol">:</a> <a id="1095" href="Lecture8-notes.html#1031" class="Bound">A</a> <a id="1097" class="Symbol">→</a> <a id="1099" href="Lecture8-notes.html#1031" class="Bound">A</a> <a id="1101" href="Lecture8-notes.html#1026" data-type="(A : Set ℓ) → (A → A → Set ℓ&#39;) → Set (ℓ ⊔ ℓ&#39;)" class="Datatype Operator">/</a> <a id="1103" href="Lecture8-notes.html#1044" class="Bound">R</a>
+  <a id="_/_.eq/"></a><a id="1107" href="Lecture8-notes.html#1107" data-type="(a b : A) → R a b → [ a ] ≡ [ b ]" class="InductiveConstructor">eq/</a> <a id="1111" class="Symbol">:</a> <a id="1113" class="Symbol">(</a><a id="1114" href="Lecture8-notes.html#1114" class="Bound">a</a> <a id="1116" href="Lecture8-notes.html#1116" class="Bound">b</a> <a id="1118" class="Symbol">:</a> <a id="1120" href="Lecture8-notes.html#1031" class="Bound">A</a><a id="1121" class="Symbol">)</a> <a id="1123" class="Symbol">→</a> <a id="1125" href="Lecture8-notes.html#1044" class="Bound">R</a> <a id="1127" href="Lecture8-notes.html#1114" class="Bound">a</a> <a id="1129" href="Lecture8-notes.html#1116" class="Bound">b</a> <a id="1131" class="Symbol">→</a> <a id="1133" href="Lecture8-notes.html#1089" data-type="A → A / R" class="InductiveConstructor Operator">[</a> <a id="1135" href="Lecture8-notes.html#1114" class="Bound">a</a> <a id="1137" href="Lecture8-notes.html#1089" data-type="A → A / R" class="InductiveConstructor Operator">]</a> <a id="1139" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="1141" href="Lecture8-notes.html#1089" data-type="A → A / R" class="InductiveConstructor Operator">[</a> <a id="1143" href="Lecture8-notes.html#1116" class="Bound">b</a> <a id="1145" href="Lecture8-notes.html#1089" data-type="A → A / R" class="InductiveConstructor Operator">]</a>
+  <a id="_/_.trunc"></a><a id="1149" href="Lecture8-notes.html#1149" data-type="isSet (A / R)" class="InductiveConstructor">trunc</a> <a id="1155" class="Symbol">:</a> <a id="1157" href="cubical-prelude.html#4126" data-type="Set ℓ → Set ℓ" class="Function">isSet</a> <a id="1163" class="Symbol">(</a><a id="1164" href="Lecture8-notes.html#1031" class="Bound">A</a> <a id="1166" href="Lecture8-notes.html#1026" data-type="(A : Set ℓ) → (A → A → Set ℓ&#39;) → Set (ℓ ⊔ ℓ&#39;)" class="Datatype Operator">/</a> <a id="1168" href="Lecture8-notes.html#1044" class="Bound">R</a><a id="1169" class="Symbol">)</a>
+</pre>
+<p>The idea is that <code>[_]</code> injects elements of <code>A</code>
+into the quotient while <code>eq/</code> ensures that elements that are
+related by <code>R</code> are sent to equal elements. Finally we have to
+truncate the type to be a set in order for this to be a set quotient. If
+we leave out the <code>trunc</code> constructor quite weird things can
+happen, for example if one quotients the unit type by the total relation
+then one obtains a type which is equivalent to the circle! The
+<code>trunc</code> constructor is hence crucial to ensure that the
+result is a set <strong>even</strong> if <code>A</code> is one already
+(so quotienting can raise the truncation level).</p>
+<p>Various sources require that <code>R</code> is proposition-valued,
+i.e. <code>R : A → A → hProp</code>. However this is not necessary to
+define <code>_/_</code> as seen above. There are however various
+important properties that are only satisfied when one quotients by a
+prop-valued relation. The key example being effectivity, i.e. that</p>
+<pre class="text"><code>(a b : A) → [ a ] ≡ [ b ] → R a b</code></pre>
+<p>To prove this one first of all needs that <code>R</code> is
+prop-valued and the proof then uses univalence for propositions (i.e.,
+logically equivalent propositions are equal, a.k.a. “propositional
+extensionality”).</p>
+<p>Having the ability to define set quotients using <code>_/_</code>
+lets us do many examples from mathematics and computer science. For
+example we can define the integers as:</p>
+<pre class="Agda"><a id="ℤ&#39;"></a><a id="2498" href="Lecture8-notes.html#2498" data-type="Set" class="Function">ℤ&#39;</a> <a id="2501" class="Symbol">:</a> <a id="2503" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a>
+<a id="2508" href="Lecture8-notes.html#2498" data-type="Set" class="Function">ℤ&#39;</a> <a id="2511" class="Symbol">=</a> <a id="2513" class="Symbol">(</a><a id="2514" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a> <a id="2516" href="cubical-prelude.html#3863" data-type="Set l1 → Set l2 → Set (l1 ⊔ l2)" class="Function Operator">×</a> <a id="2518" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a><a id="2519" class="Symbol">)</a> <a id="2521" href="Lecture8-notes.html#1026" data-type="(A : Set ℓ) → (A → A → Set ℓ&#39;) → Set (ℓ ⊔ ℓ&#39;)" class="Datatype Operator">/</a> <a id="2523" href="Lecture8-notes.html#2537" data-type="ℕ × ℕ → ℕ × ℕ → Set" class="Function">rel</a>
+  <a id="2529" class="Keyword">where</a>
+  <a id="2537" href="Lecture8-notes.html#2537" data-type="ℕ × ℕ → ℕ × ℕ → Set" class="Function">rel</a> <a id="2541" class="Symbol">:</a> <a id="2543" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a> <a id="2545" href="cubical-prelude.html#3863" data-type="Set l1 → Set l2 → Set (l1 ⊔ l2)" class="Function Operator">×</a> <a id="2547" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a> <a id="2549" class="Symbol">→</a> <a id="2551" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a> <a id="2553" href="cubical-prelude.html#3863" data-type="Set l1 → Set l2 → Set (l1 ⊔ l2)" class="Function Operator">×</a> <a id="2555" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a> <a id="2557" class="Symbol">→</a> <a id="2559" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a>
+  <a id="2566" href="Lecture8-notes.html#2537" data-type="ℕ × ℕ → ℕ × ℕ → Set" class="Function">rel</a> <a id="2570" class="Symbol">(</a><a id="2571" href="Lecture8-notes.html#2571" class="Bound">x₀</a> <a id="2574" href="Agda.Builtin.Sigma.html#236" data-type="(fst : A) (snd : B fst) → Σ A B" class="InductiveConstructor Operator">,</a> <a id="2576" href="Lecture8-notes.html#2576" class="Bound">y₀</a><a id="2578" class="Symbol">)</a> <a id="2580" class="Symbol">(</a><a id="2581" href="Lecture8-notes.html#2581" class="Bound">x₁</a> <a id="2584" href="Agda.Builtin.Sigma.html#236" data-type="(fst : A) (snd : B fst) → Σ A B" class="InductiveConstructor Operator">,</a> <a id="2586" href="Lecture8-notes.html#2586" class="Bound">y₁</a><a id="2588" class="Symbol">)</a> <a id="2590" class="Symbol">=</a> <a id="2592" href="Lecture8-notes.html#2571" class="Bound">x₀</a> <a id="2595" href="introduction.html#1782" data-type="ℕ → ℕ → ℕ" class="Function Operator">+</a> <a id="2597" href="Lecture8-notes.html#2586" class="Bound">y₁</a> <a id="2600" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="2602" href="Lecture8-notes.html#2581" class="Bound">x₁</a> <a id="2605" href="introduction.html#1782" data-type="ℕ → ℕ → ℕ" class="Function Operator">+</a> <a id="2607" href="Lecture8-notes.html#2576" class="Bound">y₀</a>
+</pre>
+<p>If you haven’t seen this construction before see
+https://en.wikipedia.org/wiki/Integer#Construction</p>
+<p>Exercises: define <code>0</code>, <code>1</code>, <code>+</code>,
+<code>-</code>, <code>*</code></p>
+<p>Similarly we can define the rational numbers as a quotient of pairs
+of a number and a nonzero number (and more generally we can define the
+field of fractions of a commutative ring R using <code>_/_</code>). Both
+the integers and rationals can of course be defined without using
+quotients in type theory, but in the case of the rationals this has some
+efficiency problems. Indeed, when defining the rationals not as a
+quotient we need to do it as normalized fractions, that is, pairs of
+coprime numbers. All operations, like addition and multiplication, then
+have to ensure that the resulting fractions are normalized which can
+become quite inefficient because of repeated GCD computations. A more
+efficient way is to work with the equivalence classes of
+not-necessarily-normalized fractions and then normalize whenever one
+wants to. This can be done when defining the rationals using
+<code>_/_</code>.</p>
+<p>Let us now look at a more computer science inspired example: finite
+multisets. These can be represented as lists modulo permutations.
+Defining these using <code>_/_</code> is a bit annoying, luckily there
+is an easier way:</p>
+<pre class="Agda"><a id="3861" class="Keyword">infixr</a> <a id="3868" class="Number">5</a> <a id="3870" href="Lecture8-notes.html#3931" data-type="A → FMSet A → FMSet A" class="InductiveConstructor Operator">_∷_</a>
+
+<a id="3875" class="Keyword">data</a> <a id="FMSet"></a><a id="3880" href="Lecture8-notes.html#3880" data-type="Set ℓ → Set ℓ" class="Datatype">FMSet</a> <a id="3886" class="Symbol">(</a><a id="3887" href="Lecture8-notes.html#3887" class="Bound">A</a> <a id="3889" class="Symbol">:</a> <a id="3891" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="3896" href="cubical-prelude.html#2241" data-type="Level" class="Generalizable">ℓ</a><a id="3897" class="Symbol">)</a> <a id="3899" class="Symbol">:</a> <a id="3901" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="3906" href="Lecture8-notes.html#3896" class="Bound">ℓ</a> <a id="3908" class="Keyword">where</a>
+  <a id="FMSet.[]"></a><a id="3916" href="Lecture8-notes.html#3916" data-type="FMSet A" class="InductiveConstructor">[]</a> <a id="3919" class="Symbol">:</a> <a id="3921" href="Lecture8-notes.html#3880" data-type="Set ℓ → Set ℓ" class="Datatype">FMSet</a> <a id="3927" href="Lecture8-notes.html#3887" class="Bound">A</a>
+  <a id="FMSet._∷_"></a><a id="3931" href="Lecture8-notes.html#3931" data-type="A → FMSet A → FMSet A" class="InductiveConstructor Operator">_∷_</a> <a id="3935" class="Symbol">:</a> <a id="3937" class="Symbol">(</a><a id="3938" href="Lecture8-notes.html#3938" class="Bound">x</a> <a id="3940" class="Symbol">:</a> <a id="3942" href="Lecture8-notes.html#3887" class="Bound">A</a><a id="3943" class="Symbol">)</a> <a id="3945" class="Symbol">→</a> <a id="3947" class="Symbol">(</a><a id="3948" href="Lecture8-notes.html#3948" class="Bound">xs</a> <a id="3951" class="Symbol">:</a> <a id="3953" href="Lecture8-notes.html#3880" data-type="Set ℓ → Set ℓ" class="Datatype">FMSet</a> <a id="3959" href="Lecture8-notes.html#3887" class="Bound">A</a><a id="3960" class="Symbol">)</a> <a id="3962" class="Symbol">→</a> <a id="3964" href="Lecture8-notes.html#3880" data-type="Set ℓ → Set ℓ" class="Datatype">FMSet</a> <a id="3970" href="Lecture8-notes.html#3887" class="Bound">A</a>
+  <a id="FMSet.comm"></a><a id="3974" href="Lecture8-notes.html#3974" data-type="(x y : A) (xs : FMSet A) → (x ∷ (y ∷ xs)) ≡ (y ∷ (x ∷ xs))" class="InductiveConstructor">comm</a> <a id="3979" class="Symbol">:</a> <a id="3981" class="Symbol">(</a><a id="3982" href="Lecture8-notes.html#3982" class="Bound">x</a> <a id="3984" href="Lecture8-notes.html#3984" class="Bound">y</a> <a id="3986" class="Symbol">:</a> <a id="3988" href="Lecture8-notes.html#3887" class="Bound">A</a><a id="3989" class="Symbol">)</a> <a id="3991" class="Symbol">(</a><a id="3992" href="Lecture8-notes.html#3992" class="Bound">xs</a> <a id="3995" class="Symbol">:</a> <a id="3997" href="Lecture8-notes.html#3880" data-type="Set ℓ → Set ℓ" class="Datatype">FMSet</a> <a id="4003" href="Lecture8-notes.html#3887" class="Bound">A</a><a id="4004" class="Symbol">)</a> <a id="4006" class="Symbol">→</a> <a id="4008" href="Lecture8-notes.html#3982" class="Bound">x</a> <a id="4010" href="Lecture8-notes.html#3931" data-type="A → FMSet A → FMSet A" class="InductiveConstructor Operator">∷</a> <a id="4012" href="Lecture8-notes.html#3984" class="Bound">y</a> <a id="4014" href="Lecture8-notes.html#3931" data-type="A → FMSet A → FMSet A" class="InductiveConstructor Operator">∷</a> <a id="4016" href="Lecture8-notes.html#3992" class="Bound">xs</a> <a id="4019" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="4021" href="Lecture8-notes.html#3984" class="Bound">y</a> <a id="4023" href="Lecture8-notes.html#3931" data-type="A → FMSet A → FMSet A" class="InductiveConstructor Operator">∷</a> <a id="4025" href="Lecture8-notes.html#3982" class="Bound">x</a> <a id="4027" href="Lecture8-notes.html#3931" data-type="A → FMSet A → FMSet A" class="InductiveConstructor Operator">∷</a> <a id="4029" href="Lecture8-notes.html#3992" class="Bound">xs</a>
+  <a id="FMSet.trunc"></a><a id="4034" href="Lecture8-notes.html#4034" data-type="(xs ys : FMSet A) (p q : xs ≡ ys) → p ≡ q" class="InductiveConstructor">trunc</a> <a id="4040" class="Symbol">:</a> <a id="4042" class="Symbol">(</a><a id="4043" href="Lecture8-notes.html#4043" class="Bound">xs</a> <a id="4046" href="Lecture8-notes.html#4046" class="Bound">ys</a> <a id="4049" class="Symbol">:</a> <a id="4051" href="Lecture8-notes.html#3880" data-type="Set ℓ → Set ℓ" class="Datatype">FMSet</a> <a id="4057" href="Lecture8-notes.html#3887" class="Bound">A</a><a id="4058" class="Symbol">)</a> <a id="4060" class="Symbol">(</a><a id="4061" href="Lecture8-notes.html#4061" class="Bound">p</a> <a id="4063" href="Lecture8-notes.html#4063" class="Bound">q</a> <a id="4065" class="Symbol">:</a> <a id="4067" href="Lecture8-notes.html#4043" class="Bound">xs</a> <a id="4070" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="4072" href="Lecture8-notes.html#4046" class="Bound">ys</a><a id="4074" class="Symbol">)</a> <a id="4076" class="Symbol">→</a> <a id="4078" href="Lecture8-notes.html#4061" class="Bound">p</a> <a id="4080" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="4082" href="Lecture8-notes.html#4063" class="Bound">q</a>
+</pre>
+<p>Programming and proving with this is quite straightforward:</p>
+<pre class="Agda"><a id="4158" class="Keyword">infixr</a> <a id="4165" class="Number">30</a> <a id="4168" href="Lecture8-notes.html#4174" data-type="FMSet A → FMSet A → FMSet A" class="Function Operator">_++_</a>
+
+<a id="_++_"></a><a id="4174" href="Lecture8-notes.html#4174" data-type="FMSet A → FMSet A → FMSet A" class="Function Operator">_++_</a> <a id="4179" class="Symbol">:</a> <a id="4181" class="Symbol">(</a><a id="4182" href="Lecture8-notes.html#4182" class="Bound">xs</a> <a id="4185" href="Lecture8-notes.html#4185" class="Bound">ys</a> <a id="4188" class="Symbol">:</a> <a id="4190" href="Lecture8-notes.html#3880" data-type="Set ℓ → Set ℓ" class="Datatype">FMSet</a> <a id="4196" href="Lecture8-notes.html#260" class="Generalizable">A</a><a id="4197" class="Symbol">)</a> <a id="4199" class="Symbol">→</a> <a id="4201" href="Lecture8-notes.html#3880" data-type="Set ℓ → Set ℓ" class="Datatype">FMSet</a> <a id="4207" href="Lecture8-notes.html#260" class="Generalizable">A</a>
+<a id="4209" href="Lecture8-notes.html#3916" data-type="FMSet A" class="InductiveConstructor">[]</a> <a id="4212" href="Lecture8-notes.html#4174" data-type="FMSet A → FMSet A → FMSet A" class="Function Operator">++</a> <a id="4215" href="Lecture8-notes.html#4215" class="Bound">ys</a> <a id="4218" class="Symbol">=</a> <a id="4220" href="Lecture8-notes.html#4215" class="Bound">ys</a>
+<a id="4223" class="Symbol">(</a><a id="4224" href="Lecture8-notes.html#4224" class="Bound">x</a> <a id="4226" href="Lecture8-notes.html#3931" data-type="A → FMSet A → FMSet A" class="InductiveConstructor Operator">∷</a> <a id="4228" href="Lecture8-notes.html#4228" class="Bound">xs</a><a id="4230" class="Symbol">)</a> <a id="4232" href="Lecture8-notes.html#4174" data-type="FMSet A → FMSet A → FMSet A" class="Function Operator">++</a> <a id="4235" href="Lecture8-notes.html#4235" class="Bound">ys</a> <a id="4238" class="Symbol">=</a> <a id="4240" href="Lecture8-notes.html#4224" class="Bound">x</a> <a id="4242" href="Lecture8-notes.html#3931" data-type="A → FMSet A → FMSet A" class="InductiveConstructor Operator">∷</a> <a id="4244" href="Lecture8-notes.html#4228" class="Bound">xs</a> <a id="4247" href="Lecture8-notes.html#4174" data-type="FMSet A → FMSet A → FMSet A" class="Function Operator">++</a> <a id="4250" href="Lecture8-notes.html#4235" class="Bound">ys</a>
+<a id="4253" href="Lecture8-notes.html#3974" data-type="(x y : A) (xs : FMSet A) → (x ∷ (y ∷ xs)) ≡ (y ∷ (x ∷ xs))" class="InductiveConstructor">comm</a> <a id="4258" href="Lecture8-notes.html#4258" class="Bound">x</a> <a id="4260" href="Lecture8-notes.html#4260" class="Bound">y</a> <a id="4262" href="Lecture8-notes.html#4262" class="Bound">xs</a> <a id="4265" href="Lecture8-notes.html#4265" class="Bound">i</a> <a id="4267" href="Lecture8-notes.html#4174" data-type="FMSet A → FMSet A → FMSet A" class="Function Operator">++</a> <a id="4270" href="Lecture8-notes.html#4270" class="Bound">ys</a> <a id="4273" class="Symbol">=</a> <a id="4275" href="Lecture8-notes.html#3974" data-type="(x y : A) (xs : FMSet A) → (x ∷ (y ∷ xs)) ≡ (y ∷ (x ∷ xs))" class="InductiveConstructor">comm</a> <a id="4280" href="Lecture8-notes.html#4258" class="Bound">x</a> <a id="4282" href="Lecture8-notes.html#4260" class="Bound">y</a> <a id="4284" class="Symbol">(</a><a id="4285" href="Lecture8-notes.html#4262" class="Bound">xs</a> <a id="4288" href="Lecture8-notes.html#4174" data-type="FMSet A → FMSet A → FMSet A" class="Function Operator">++</a> <a id="4291" href="Lecture8-notes.html#4270" class="Bound">ys</a><a id="4293" class="Symbol">)</a> <a id="4295" href="Lecture8-notes.html#4265" class="Bound">i</a>
+<a id="4297" href="Lecture8-notes.html#4034" data-type="(xs ys : FMSet A) (p q : xs ≡ ys) → p ≡ q" class="InductiveConstructor">trunc</a> <a id="4303" href="Lecture8-notes.html#4303" class="Bound">xs</a> <a id="4306" href="Lecture8-notes.html#4306" class="Bound">zs</a> <a id="4309" href="Lecture8-notes.html#4309" class="Bound">p</a> <a id="4311" href="Lecture8-notes.html#4311" class="Bound">q</a> <a id="4313" href="Lecture8-notes.html#4313" class="Bound">i</a> <a id="4315" href="Lecture8-notes.html#4315" class="Bound">j</a> <a id="4317" href="Lecture8-notes.html#4174" data-type="FMSet A → FMSet A → FMSet A" class="Function Operator">++</a> <a id="4320" href="Lecture8-notes.html#4320" class="Bound">ys</a> <a id="4323" class="Symbol">=</a>
+  <a id="4327" href="Lecture8-notes.html#4034" data-type="(xs ys : FMSet A) (p q : xs ≡ ys) → p ≡ q" class="InductiveConstructor">trunc</a> <a id="4333" class="Symbol">(</a><a id="4334" href="Lecture8-notes.html#4303" class="Bound">xs</a> <a id="4337" href="Lecture8-notes.html#4174" data-type="FMSet A → FMSet A → FMSet A" class="Function Operator">++</a> <a id="4340" href="Lecture8-notes.html#4320" class="Bound">ys</a><a id="4342" class="Symbol">)</a> <a id="4344" class="Symbol">(</a><a id="4345" href="Lecture8-notes.html#4306" class="Bound">zs</a> <a id="4348" href="Lecture8-notes.html#4174" data-type="FMSet A → FMSet A → FMSet A" class="Function Operator">++</a> <a id="4351" href="Lecture8-notes.html#4320" class="Bound">ys</a><a id="4353" class="Symbol">)</a> <a id="4355" class="Symbol">(λ</a> <a id="4358" href="Lecture8-notes.html#4358" class="Bound">k</a> <a id="4360" class="Symbol">→</a> <a id="4362" href="Lecture8-notes.html#4309" class="Bound">p</a> <a id="4364" href="Lecture8-notes.html#4358" class="Bound">k</a> <a id="4366" href="Lecture8-notes.html#4174" data-type="FMSet A → FMSet A → FMSet A" class="Function Operator">++</a> <a id="4369" href="Lecture8-notes.html#4320" class="Bound">ys</a><a id="4371" class="Symbol">)</a> <a id="4373" class="Symbol">(λ</a> <a id="4376" href="Lecture8-notes.html#4376" class="Bound">k</a> <a id="4378" class="Symbol">→</a> <a id="4380" href="Lecture8-notes.html#4311" class="Bound">q</a> <a id="4382" href="Lecture8-notes.html#4376" class="Bound">k</a> <a id="4384" href="Lecture8-notes.html#4174" data-type="FMSet A → FMSet A → FMSet A" class="Function Operator">++</a> <a id="4387" href="Lecture8-notes.html#4320" class="Bound">ys</a><a id="4389" class="Symbol">)</a> <a id="4391" href="Lecture8-notes.html#4313" class="Bound">i</a> <a id="4393" href="Lecture8-notes.html#4315" class="Bound">j</a>
+
+<a id="unitl-++"></a><a id="4396" href="Lecture8-notes.html#4396" data-type="(xs : FMSet A) → ([] ++ xs) ≡ xs" class="Function">unitl-++</a> <a id="4405" class="Symbol">:</a> <a id="4407" class="Symbol">(</a><a id="4408" href="Lecture8-notes.html#4408" class="Bound">xs</a> <a id="4411" class="Symbol">:</a> <a id="4413" href="Lecture8-notes.html#3880" data-type="Set ℓ → Set ℓ" class="Datatype">FMSet</a> <a id="4419" href="Lecture8-notes.html#260" class="Generalizable">A</a><a id="4420" class="Symbol">)</a> <a id="4422" class="Symbol">→</a> <a id="4424" href="Lecture8-notes.html#3916" data-type="FMSet A" class="InductiveConstructor">[]</a> <a id="4427" href="Lecture8-notes.html#4174" data-type="FMSet A → FMSet A → FMSet A" class="Function Operator">++</a> <a id="4430" href="Lecture8-notes.html#4408" class="Bound">xs</a> <a id="4433" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="4435" href="Lecture8-notes.html#4408" class="Bound">xs</a>
+<a id="4438" href="Lecture8-notes.html#4396" data-type="(xs : FMSet A) → ([] ++ xs) ≡ xs" class="Function">unitl-++</a> <a id="4447" href="Lecture8-notes.html#4447" class="Bound">xs</a> <a id="4450" class="Symbol">=</a> <a id="4452" href="Lecture7-notes.html#3585" data-type="x ≡ x" class="Function">refl</a>
+
+<a id="unitr-++"></a><a id="4458" href="Lecture8-notes.html#4458" data-type="(xs : FMSet A) → (xs ++ []) ≡ xs" class="Function">unitr-++</a> <a id="4467" class="Symbol">:</a> <a id="4469" class="Symbol">(</a><a id="4470" href="Lecture8-notes.html#4470" class="Bound">xs</a> <a id="4473" class="Symbol">:</a> <a id="4475" href="Lecture8-notes.html#3880" data-type="Set ℓ → Set ℓ" class="Datatype">FMSet</a> <a id="4481" href="Lecture8-notes.html#260" class="Generalizable">A</a><a id="4482" class="Symbol">)</a> <a id="4484" class="Symbol">→</a> <a id="4486" href="Lecture8-notes.html#4470" class="Bound">xs</a> <a id="4489" href="Lecture8-notes.html#4174" data-type="FMSet A → FMSet A → FMSet A" class="Function Operator">++</a> <a id="4492" href="Lecture8-notes.html#3916" data-type="FMSet A" class="InductiveConstructor">[]</a> <a id="4495" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="4497" href="Lecture8-notes.html#4470" class="Bound">xs</a>
+<a id="4500" href="Lecture8-notes.html#4458" data-type="(xs : FMSet A) → (xs ++ []) ≡ xs" class="Function">unitr-++</a> <a id="4509" href="Lecture8-notes.html#3916" data-type="FMSet A" class="InductiveConstructor">[]</a> <a id="4512" class="Symbol">=</a> <a id="4514" href="Lecture7-notes.html#3585" data-type="x ≡ x" class="Function">refl</a>
+<a id="4519" href="Lecture8-notes.html#4458" data-type="(xs : FMSet A) → (xs ++ []) ≡ xs" class="Function">unitr-++</a> <a id="4528" class="Symbol">(</a><a id="4529" href="Lecture8-notes.html#4529" class="Bound">x</a> <a id="4531" href="Lecture8-notes.html#3931" data-type="A → FMSet A → FMSet A" class="InductiveConstructor Operator">∷</a> <a id="4533" href="Lecture8-notes.html#4533" class="Bound">xs</a><a id="4535" class="Symbol">)</a> <a id="4537" class="Symbol">=</a> <a id="4539" href="Lecture7-notes.html#4610" data-type="(f : A → B) → x ≡ y → f x ≡ f y" class="Function">ap</a> <a id="4542" class="Symbol">(</a><a id="4543" href="Lecture8-notes.html#4529" class="Bound">x</a> <a id="4545" href="Lecture8-notes.html#3931" data-type="A → FMSet A → FMSet A" class="InductiveConstructor Operator">∷_</a><a id="4547" class="Symbol">)</a> <a id="4549" class="Symbol">(</a><a id="4550" href="Lecture8-notes.html#4458" data-type="(xs : FMSet A) → (xs ++ []) ≡ xs" class="Function">unitr-++</a> <a id="4559" href="Lecture8-notes.html#4533" class="Bound">xs</a><a id="4561" class="Symbol">)</a>
+<a id="4563" href="Lecture8-notes.html#4458" data-type="(xs : FMSet A) → (xs ++ []) ≡ xs" class="Function">unitr-++</a> <a id="4572" class="Symbol">(</a><a id="4573" href="Lecture8-notes.html#3974" data-type="(x y : A) (xs : FMSet A) → (x ∷ (y ∷ xs)) ≡ (y ∷ (x ∷ xs))" class="InductiveConstructor">comm</a> <a id="4578" href="Lecture8-notes.html#4578" class="Bound">x</a> <a id="4580" href="Lecture8-notes.html#4580" class="Bound">y</a> <a id="4582" href="Lecture8-notes.html#4582" class="Bound">xs</a> <a id="4585" href="Lecture8-notes.html#4585" class="Bound">i</a><a id="4586" class="Symbol">)</a> <a id="4588" href="Lecture8-notes.html#4588" class="Bound">j</a> <a id="4590" class="Symbol">=</a> <a id="4592" href="Lecture8-notes.html#3974" data-type="(x y : A) (xs : FMSet A) → (x ∷ (y ∷ xs)) ≡ (y ∷ (x ∷ xs))" class="InductiveConstructor">comm</a> <a id="4597" href="Lecture8-notes.html#4578" class="Bound">x</a> <a id="4599" href="Lecture8-notes.html#4580" class="Bound">y</a> <a id="4601" class="Symbol">(</a><a id="4602" href="Lecture8-notes.html#4458" data-type="(xs : FMSet A) → (xs ++ []) ≡ xs" class="Function">unitr-++</a> <a id="4611" href="Lecture8-notes.html#4582" class="Bound">xs</a> <a id="4614" href="Lecture8-notes.html#4588" class="Bound">j</a><a id="4615" class="Symbol">)</a> <a id="4617" href="Lecture8-notes.html#4585" class="Bound">i</a>
+<a id="4619" href="Lecture8-notes.html#4458" data-type="(xs : FMSet A) → (xs ++ []) ≡ xs" class="Function">unitr-++</a> <a id="4628" class="Symbol">(</a><a id="4629" href="Lecture8-notes.html#4034" data-type="(xs ys : FMSet A) (p q : xs ≡ ys) → p ≡ q" class="InductiveConstructor">trunc</a> <a id="4635" href="Lecture8-notes.html#4635" class="Bound">xs</a> <a id="4638" href="Lecture8-notes.html#4638" class="Bound">ys</a> <a id="4641" href="Lecture8-notes.html#4641" class="Bound">p</a> <a id="4643" href="Lecture8-notes.html#4643" class="Bound">q</a> <a id="4645" href="Lecture8-notes.html#4645" class="Bound">i</a> <a id="4647" href="Lecture8-notes.html#4647" class="Bound">j</a><a id="4648" class="Symbol">)</a> <a id="4650" href="Lecture8-notes.html#4650" class="Bound">k</a> <a id="4652" class="Symbol">=</a>
+  <a id="4656" href="Lecture8-notes.html#4034" data-type="(xs ys : FMSet A) (p q : xs ≡ ys) → p ≡ q" class="InductiveConstructor">trunc</a> <a id="4662" class="Symbol">(</a><a id="4663" href="Lecture8-notes.html#4458" data-type="(xs : FMSet A) → (xs ++ []) ≡ xs" class="Function">unitr-++</a> <a id="4672" href="Lecture8-notes.html#4635" class="Bound">xs</a> <a id="4675" href="Lecture8-notes.html#4650" class="Bound">k</a><a id="4676" class="Symbol">)</a> <a id="4678" class="Symbol">(</a><a id="4679" href="Lecture8-notes.html#4458" data-type="(xs : FMSet A) → (xs ++ []) ≡ xs" class="Function">unitr-++</a> <a id="4688" href="Lecture8-notes.html#4638" class="Bound">ys</a> <a id="4691" href="Lecture8-notes.html#4650" class="Bound">k</a><a id="4692" class="Symbol">)</a>
+        <a id="4702" class="Symbol">(λ</a> <a id="4705" href="Lecture8-notes.html#4705" class="Bound">l</a> <a id="4707" class="Symbol">→</a> <a id="4709" href="Lecture8-notes.html#4458" data-type="(xs : FMSet A) → (xs ++ []) ≡ xs" class="Function">unitr-++</a> <a id="4718" class="Symbol">(</a><a id="4719" href="Lecture8-notes.html#4641" class="Bound">p</a> <a id="4721" href="Lecture8-notes.html#4705" class="Bound">l</a><a id="4722" class="Symbol">)</a> <a id="4724" href="Lecture8-notes.html#4650" class="Bound">k</a><a id="4725" class="Symbol">)</a> <a id="4727" class="Symbol">(λ</a> <a id="4730" href="Lecture8-notes.html#4730" class="Bound">l</a> <a id="4732" class="Symbol">→</a> <a id="4734" href="Lecture8-notes.html#4458" data-type="(xs : FMSet A) → (xs ++ []) ≡ xs" class="Function">unitr-++</a> <a id="4743" class="Symbol">(</a><a id="4744" href="Lecture8-notes.html#4643" class="Bound">q</a> <a id="4746" href="Lecture8-notes.html#4730" class="Bound">l</a><a id="4747" class="Symbol">)</a> <a id="4749" href="Lecture8-notes.html#4650" class="Bound">k</a><a id="4750" class="Symbol">)</a> <a id="4752" href="Lecture8-notes.html#4645" class="Bound">i</a> <a id="4754" href="Lecture8-notes.html#4647" class="Bound">j</a>
+</pre>
+<p>Filling the goals for <code>comm</code> and <code>trunc</code>
+quickly gets tiresome and when working with HITs like this it’s very
+strongly recommended to prove special lemmas for eliminating into
+propositions (which is the case above as <code>FMSet</code> is a set, so
+its <code>≡</code>-type is a proposition). If we do this the proof of
+<code>unitr-++</code> can be simplified to a one-liner:</p>
+<pre class="text"><code>unitr-++ : (xs : FMSet A) → xs ++ [] ≡ xs
+unitr-++ = ElimProp.f (trunc _ _) refl (λ x p → cong (_∷_ x) p)</code></pre>
+<p>We recommend the interested reader to look at the code in
+Cubical.HITs.FiniteMultiset.Base and
+Cubical.HITs.FiniteMultiset.Properties in agda/cubical to see how these
+lemmas are stated and proved. This is a very common pattern when working
+with set truncated HITs: first define the HIT, then prove special
+purpose recursors and eliminators for eliminating into types of
+different truncation levels. All definitions are then written using
+these recursors and eliminators and one get very short proofs.</p>
+<p>A more efficient version of finite multisets based on association
+lists can be found in Cubical.HITs.AssocList.Base. It looks like
+this:</p>
+<pre class="Agda"><a id="5871" class="Keyword">data</a> <a id="AssocList"></a><a id="5876" href="Lecture8-notes.html#5876" data-type="Set ℓ → Set ℓ" class="Datatype">AssocList</a> <a id="5886" class="Symbol">(</a><a id="5887" href="Lecture8-notes.html#5887" class="Bound">A</a> <a id="5889" class="Symbol">:</a> <a id="5891" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="5896" href="cubical-prelude.html#2241" data-type="Level" class="Generalizable">ℓ</a><a id="5897" class="Symbol">)</a> <a id="5899" class="Symbol">:</a> <a id="5901" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="5906" href="Lecture8-notes.html#5896" class="Bound">ℓ</a> <a id="5908" class="Keyword">where</a>
+  <a id="AssocList.⟨⟩"></a><a id="5916" href="Lecture8-notes.html#5916" data-type="AssocList A" class="InductiveConstructor">⟨⟩</a> <a id="5919" class="Symbol">:</a> <a id="5921" href="Lecture8-notes.html#5876" data-type="Set ℓ → Set ℓ" class="Datatype">AssocList</a> <a id="5931" href="Lecture8-notes.html#5887" class="Bound">A</a>
+  <a id="AssocList.⟨_,_⟩∷_"></a><a id="5935" href="Lecture8-notes.html#5935" data-type="A → ℕ → AssocList A → AssocList A" class="InductiveConstructor Operator">⟨_,_⟩∷_</a> <a id="5943" class="Symbol">:</a> <a id="5945" class="Symbol">(</a><a id="5946" href="Lecture8-notes.html#5946" class="Bound">a</a> <a id="5948" class="Symbol">:</a> <a id="5950" href="Lecture8-notes.html#5887" class="Bound">A</a><a id="5951" class="Symbol">)</a> <a id="5953" class="Symbol">(</a><a id="5954" href="Lecture8-notes.html#5954" class="Bound">n</a> <a id="5956" class="Symbol">:</a> <a id="5958" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a><a id="5959" class="Symbol">)</a> <a id="5961" class="Symbol">(</a><a id="5962" href="Lecture8-notes.html#5962" class="Bound">xs</a> <a id="5965" class="Symbol">:</a> <a id="5967" href="Lecture8-notes.html#5876" data-type="Set ℓ → Set ℓ" class="Datatype">AssocList</a> <a id="5977" href="Lecture8-notes.html#5887" class="Bound">A</a><a id="5978" class="Symbol">)</a> <a id="5980" class="Symbol">→</a> <a id="5982" href="Lecture8-notes.html#5876" data-type="Set ℓ → Set ℓ" class="Datatype">AssocList</a> <a id="5992" href="Lecture8-notes.html#5887" class="Bound">A</a>
+  <a id="AssocList.per"></a><a id="5996" href="Lecture8-notes.html#5996" data-type="(a b : A) (m n : ℕ) (xs : AssocList A) →
+(⟨ a , m ⟩∷ (⟨ b , n ⟩∷ xs)) ≡ (⟨ b , n ⟩∷ (⟨ a , m ⟩∷ xs))" class="InductiveConstructor">per</a> <a id="6000" class="Symbol">:</a> <a id="6002" class="Symbol">(</a><a id="6003" href="Lecture8-notes.html#6003" class="Bound">a</a> <a id="6005" href="Lecture8-notes.html#6005" class="Bound">b</a> <a id="6007" class="Symbol">:</a> <a id="6009" href="Lecture8-notes.html#5887" class="Bound">A</a><a id="6010" class="Symbol">)</a> <a id="6012" class="Symbol">(</a><a id="6013" href="Lecture8-notes.html#6013" class="Bound">m</a> <a id="6015" href="Lecture8-notes.html#6015" class="Bound">n</a> <a id="6017" class="Symbol">:</a> <a id="6019" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a><a id="6020" class="Symbol">)</a> <a id="6022" class="Symbol">(</a><a id="6023" href="Lecture8-notes.html#6023" class="Bound">xs</a> <a id="6026" class="Symbol">:</a> <a id="6028" href="Lecture8-notes.html#5876" data-type="Set ℓ → Set ℓ" class="Datatype">AssocList</a> <a id="6038" href="Lecture8-notes.html#5887" class="Bound">A</a><a id="6039" class="Symbol">)</a>
+      <a id="6047" class="Symbol">→</a> <a id="6049" href="Lecture8-notes.html#5935" data-type="A → ℕ → AssocList A → AssocList A" class="InductiveConstructor Operator">⟨</a> <a id="6051" href="Lecture8-notes.html#6003" class="Bound">a</a> <a id="6053" href="Lecture8-notes.html#5935" data-type="A → ℕ → AssocList A → AssocList A" class="InductiveConstructor Operator">,</a> <a id="6055" href="Lecture8-notes.html#6013" class="Bound">m</a> <a id="6057" href="Lecture8-notes.html#5935" data-type="A → ℕ → AssocList A → AssocList A" class="InductiveConstructor Operator">⟩∷</a> <a id="6060" href="Lecture8-notes.html#5935" data-type="A → ℕ → AssocList A → AssocList A" class="InductiveConstructor Operator">⟨</a> <a id="6062" href="Lecture8-notes.html#6005" class="Bound">b</a> <a id="6064" href="Lecture8-notes.html#5935" data-type="A → ℕ → AssocList A → AssocList A" class="InductiveConstructor Operator">,</a> <a id="6066" href="Lecture8-notes.html#6015" class="Bound">n</a> <a id="6068" href="Lecture8-notes.html#5935" data-type="A → ℕ → AssocList A → AssocList A" class="InductiveConstructor Operator">⟩∷</a> <a id="6071" href="Lecture8-notes.html#6023" class="Bound">xs</a> <a id="6074" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="6076" href="Lecture8-notes.html#5935" data-type="A → ℕ → AssocList A → AssocList A" class="InductiveConstructor Operator">⟨</a> <a id="6078" href="Lecture8-notes.html#6005" class="Bound">b</a> <a id="6080" href="Lecture8-notes.html#5935" data-type="A → ℕ → AssocList A → AssocList A" class="InductiveConstructor Operator">,</a> <a id="6082" href="Lecture8-notes.html#6015" class="Bound">n</a> <a id="6084" href="Lecture8-notes.html#5935" data-type="A → ℕ → AssocList A → AssocList A" class="InductiveConstructor Operator">⟩∷</a> <a id="6087" href="Lecture8-notes.html#5935" data-type="A → ℕ → AssocList A → AssocList A" class="InductiveConstructor Operator">⟨</a> <a id="6089" href="Lecture8-notes.html#6003" class="Bound">a</a> <a id="6091" href="Lecture8-notes.html#5935" data-type="A → ℕ → AssocList A → AssocList A" class="InductiveConstructor Operator">,</a> <a id="6093" href="Lecture8-notes.html#6013" class="Bound">m</a> <a id="6095" href="Lecture8-notes.html#5935" data-type="A → ℕ → AssocList A → AssocList A" class="InductiveConstructor Operator">⟩∷</a> <a id="6098" href="Lecture8-notes.html#6023" class="Bound">xs</a>
+  <a id="AssocList.agg"></a><a id="6103" href="Lecture8-notes.html#6103" data-type="(a : A) (m n : ℕ) (xs : AssocList A) →
+(⟨ a , m ⟩∷ (⟨ a , n ⟩∷ xs)) ≡ (⟨ a , m + n ⟩∷ xs)" class="InductiveConstructor">agg</a> <a id="6107" class="Symbol">:</a> <a id="6109" class="Symbol">(</a><a id="6110" href="Lecture8-notes.html#6110" class="Bound">a</a> <a id="6112" class="Symbol">:</a> <a id="6114" href="Lecture8-notes.html#5887" class="Bound">A</a><a id="6115" class="Symbol">)</a> <a id="6117" class="Symbol">(</a><a id="6118" href="Lecture8-notes.html#6118" class="Bound">m</a> <a id="6120" href="Lecture8-notes.html#6120" class="Bound">n</a> <a id="6122" class="Symbol">:</a> <a id="6124" href="introduction.html#1034" data-type="Set" class="Datatype">ℕ</a><a id="6125" class="Symbol">)</a> <a id="6127" class="Symbol">(</a><a id="6128" href="Lecture8-notes.html#6128" class="Bound">xs</a> <a id="6131" class="Symbol">:</a> <a id="6133" href="Lecture8-notes.html#5876" data-type="Set ℓ → Set ℓ" class="Datatype">AssocList</a> <a id="6143" href="Lecture8-notes.html#5887" class="Bound">A</a><a id="6144" class="Symbol">)</a>
+      <a id="6152" class="Symbol">→</a> <a id="6154" href="Lecture8-notes.html#5935" data-type="A → ℕ → AssocList A → AssocList A" class="InductiveConstructor Operator">⟨</a> <a id="6156" href="Lecture8-notes.html#6110" class="Bound">a</a> <a id="6158" href="Lecture8-notes.html#5935" data-type="A → ℕ → AssocList A → AssocList A" class="InductiveConstructor Operator">,</a> <a id="6160" href="Lecture8-notes.html#6118" class="Bound">m</a> <a id="6162" href="Lecture8-notes.html#5935" data-type="A → ℕ → AssocList A → AssocList A" class="InductiveConstructor Operator">⟩∷</a> <a id="6165" href="Lecture8-notes.html#5935" data-type="A → ℕ → AssocList A → AssocList A" class="InductiveConstructor Operator">⟨</a> <a id="6167" href="Lecture8-notes.html#6110" class="Bound">a</a> <a id="6169" href="Lecture8-notes.html#5935" data-type="A → ℕ → AssocList A → AssocList A" class="InductiveConstructor Operator">,</a> <a id="6171" href="Lecture8-notes.html#6120" class="Bound">n</a> <a id="6173" href="Lecture8-notes.html#5935" data-type="A → ℕ → AssocList A → AssocList A" class="InductiveConstructor Operator">⟩∷</a> <a id="6176" href="Lecture8-notes.html#6128" class="Bound">xs</a> <a id="6179" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="6181" href="Lecture8-notes.html#5935" data-type="A → ℕ → AssocList A → AssocList A" class="InductiveConstructor Operator">⟨</a> <a id="6183" href="Lecture8-notes.html#6110" class="Bound">a</a> <a id="6185" href="Lecture8-notes.html#5935" data-type="A → ℕ → AssocList A → AssocList A" class="InductiveConstructor Operator">,</a> <a id="6187" href="Lecture8-notes.html#6118" class="Bound">m</a> <a id="6189" href="introduction.html#1782" data-type="ℕ → ℕ → ℕ" class="Function Operator">+</a> <a id="6191" href="Lecture8-notes.html#6120" class="Bound">n</a> <a id="6193" href="Lecture8-notes.html#5935" data-type="A → ℕ → AssocList A → AssocList A" class="InductiveConstructor Operator">⟩∷</a> <a id="6196" href="Lecture8-notes.html#6128" class="Bound">xs</a>
+  <a id="AssocList.del"></a><a id="6201" href="Lecture8-notes.html#6201" data-type="(a : A) (xs : AssocList A) → (⟨ a , 0 ⟩∷ xs) ≡ xs" class="InductiveConstructor">del</a> <a id="6205" class="Symbol">:</a> <a id="6207" class="Symbol">(</a><a id="6208" href="Lecture8-notes.html#6208" class="Bound">a</a> <a id="6210" class="Symbol">:</a> <a id="6212" href="Lecture8-notes.html#5887" class="Bound">A</a><a id="6213" class="Symbol">)</a> <a id="6215" class="Symbol">(</a><a id="6216" href="Lecture8-notes.html#6216" class="Bound">xs</a> <a id="6219" class="Symbol">:</a> <a id="6221" href="Lecture8-notes.html#5876" data-type="Set ℓ → Set ℓ" class="Datatype">AssocList</a> <a id="6231" href="Lecture8-notes.html#5887" class="Bound">A</a><a id="6232" class="Symbol">)</a> <a id="6234" class="Symbol">→</a> <a id="6236" href="Lecture8-notes.html#5935" data-type="A → ℕ → AssocList A → AssocList A" class="InductiveConstructor Operator">⟨</a> <a id="6238" href="Lecture8-notes.html#6208" class="Bound">a</a> <a id="6240" href="Lecture8-notes.html#5935" data-type="A → ℕ → AssocList A → AssocList A" class="InductiveConstructor Operator">,</a> <a id="6242" class="Number">0</a> <a id="6244" href="Lecture8-notes.html#5935" data-type="A → ℕ → AssocList A → AssocList A" class="InductiveConstructor Operator">⟩∷</a> <a id="6247" href="Lecture8-notes.html#6216" class="Bound">xs</a> <a id="6250" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="6252" href="Lecture8-notes.html#6216" class="Bound">xs</a>
+  <a id="AssocList.trunc"></a><a id="6257" href="Lecture8-notes.html#6257" data-type="(xs ys : AssocList A) (p q : xs ≡ ys) → p ≡ q" class="InductiveConstructor">trunc</a> <a id="6263" class="Symbol">:</a> <a id="6265" class="Symbol">(</a><a id="6266" href="Lecture8-notes.html#6266" class="Bound">xs</a> <a id="6269" href="Lecture8-notes.html#6269" class="Bound">ys</a> <a id="6272" class="Symbol">:</a> <a id="6274" href="Lecture8-notes.html#5876" data-type="Set ℓ → Set ℓ" class="Datatype">AssocList</a> <a id="6284" href="Lecture8-notes.html#5887" class="Bound">A</a><a id="6285" class="Symbol">)</a> <a id="6287" class="Symbol">(</a><a id="6288" href="Lecture8-notes.html#6288" class="Bound">p</a> <a id="6290" href="Lecture8-notes.html#6290" class="Bound">q</a> <a id="6292" class="Symbol">:</a> <a id="6294" href="Lecture8-notes.html#6266" class="Bound">xs</a> <a id="6297" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="6299" href="Lecture8-notes.html#6269" class="Bound">ys</a><a id="6301" class="Symbol">)</a> <a id="6303" class="Symbol">→</a> <a id="6305" href="Lecture8-notes.html#6288" class="Bound">p</a> <a id="6307" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="6309" href="Lecture8-notes.html#6290" class="Bound">q</a>
+</pre>
+<p>Programming and proving is more complicated with
+<code>AssocList</code> compared to <code>FMSet</code>. This kind of
+example occurs a lot in programming and mathematics: one representation
+is easier to work with, but not efficient, while another is efficient
+but difficult to work with. Next time we will see how we can use
+univalence and the structure identity principle (SIP) to get the best of
+both worlds (if someone can’t wait they can look at
+https://dl.acm.org/doi/10.1145/3434293 for more details).</p>
+<p>It’s sometimes easier to work directly with <code>_/_</code> instead
+of defining special HITs as one can reuse lemmas for <code>_/_</code>
+instead of reproving things. For example, general lemmas about
+eliminating into propositions have already been proved for
+<code>_/_</code> so we do not have to reprove them for our special
+purpose HIT. However on the other hand it can sometimes be much easier
+to write the HIT directly (imagine implementing <code>AssocList</code>
+using <code>_/_</code>…) and one also gets the benefit that one can
+pattern-match directly with nice names for the constructors (it might
+still be better to use the handcrafted recursor/eliminator for the HIT
+to avoid having to give cases for path construtors though).</p>
+<h2 id="cubical-transport-and-path-induction">Cubical transport and path
+induction</h2>
+<p>While path types are great for reasoning about equality they don’t
+let us transport along paths between types or even compose paths.
+Furthermore, as paths are not inductively defined we don’t automatically
+get an induction principle for them. In order to remedy this Cubical
+Agda also has a built-in cubical transport operation and homogeneous
+composition operation from which the induction principle is derivable
+(and much more!).</p>
+<p>The basic operation is called <code>transp</code> and we will soon
+explain it, but let’s first focus on the special case of cubical
+transport which we used to define <code>winding</code> last time:</p>
+<pre class="Agda"><a id="transport"></a><a id="8148" href="Lecture8-notes.html#8148" data-type="A ≡ B → A → B" class="Function">transport</a> <a id="8158" class="Symbol">:</a> <a id="8160" href="Lecture8-notes.html#260" class="Generalizable">A</a> <a id="8162" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="8164" href="Lecture8-notes.html#262" class="Generalizable">B</a> <a id="8166" class="Symbol">→</a> <a id="8168" href="Lecture8-notes.html#260" class="Generalizable">A</a> <a id="8170" class="Symbol">→</a> <a id="8172" href="Lecture8-notes.html#262" class="Generalizable">B</a>
+<a id="8174" href="Lecture8-notes.html#8148" data-type="A ≡ B → A → B" class="Function">transport</a> <a id="8184" href="Lecture8-notes.html#8184" class="Bound">p</a> <a id="8186" href="Lecture8-notes.html#8186" class="Bound">a</a> <a id="8188" class="Symbol">=</a> <a id="8190" href="cubical-prelude.html#702" class="Primitive">transp</a> <a id="8197" class="Symbol">(λ</a> <a id="8200" href="Lecture8-notes.html#8200" class="Bound">i</a> <a id="8202" class="Symbol">→</a> <a id="8204" href="Lecture8-notes.html#8184" class="Bound">p</a> <a id="8206" href="Lecture8-notes.html#8200" class="Bound">i</a><a id="8207" class="Symbol">)</a> <a id="8209" href="Agda.Primitive.Cubical.html#150" data-type="I" class="InductiveConstructor">i0</a> <a id="8212" href="Lecture8-notes.html#8186" class="Bound">a</a>
+</pre>
+<p>This is a more primitive operation than “transport” in Book HoTT as
+it only lets us turn a path into a function. However, the transport of
+HoTT can easily be proved from cubical transport and in order to avoid a
+name clash we call it “subst”:</p>
+<pre class="Agda"><a id="subst"></a><a id="8471" href="Lecture8-notes.html#8471" data-type="(B : A → Set ℓ&#39;) → x ≡ y → B x → B y" class="Function">subst</a> <a id="8477" class="Symbol">:</a> <a id="8479" class="Symbol">(</a><a id="8480" href="Lecture8-notes.html#8480" class="Bound">B</a> <a id="8482" class="Symbol">:</a> <a id="8484" href="Lecture8-notes.html#260" class="Generalizable">A</a> <a id="8486" class="Symbol">→</a> <a id="8488" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="8493" href="cubical-prelude.html#2243" data-type="Level" class="Generalizable">ℓ&#39;</a><a id="8495" class="Symbol">)</a> <a id="8497" class="Symbol">{</a><a id="8498" href="Lecture8-notes.html#8498" class="Bound">x</a> <a id="8500" href="Lecture8-notes.html#8500" class="Bound">y</a> <a id="8502" class="Symbol">:</a> <a id="8504" href="Lecture8-notes.html#260" class="Generalizable">A</a><a id="8505" class="Symbol">}</a> <a id="8507" class="Symbol">(</a><a id="8508" href="Lecture8-notes.html#8508" class="Bound">p</a> <a id="8510" class="Symbol">:</a> <a id="8512" href="Lecture8-notes.html#8498" class="Bound">x</a> <a id="8514" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="8516" href="Lecture8-notes.html#8500" class="Bound">y</a><a id="8517" class="Symbol">)</a> <a id="8519" class="Symbol">→</a> <a id="8521" href="Lecture8-notes.html#8480" class="Bound">B</a> <a id="8523" href="Lecture8-notes.html#8498" class="Bound">x</a> <a id="8525" class="Symbol">→</a> <a id="8527" href="Lecture8-notes.html#8480" class="Bound">B</a> <a id="8529" href="Lecture8-notes.html#8500" class="Bound">y</a>
+<a id="8531" href="Lecture8-notes.html#8471" data-type="(B : A → Set ℓ&#39;) → x ≡ y → B x → B y" class="Function">subst</a> <a id="8537" href="Lecture8-notes.html#8537" class="Bound">B</a> <a id="8539" href="Lecture8-notes.html#8539" class="Bound">p</a> <a id="8541" href="Lecture8-notes.html#8541" class="Bound">pa</a> <a id="8544" class="Symbol">=</a> <a id="8546" href="Lecture8-notes.html#8148" data-type="A ≡ B → A → B" class="Function">transport</a> <a id="8556" class="Symbol">(λ</a> <a id="8559" href="Lecture8-notes.html#8559" class="Bound">i</a> <a id="8561" class="Symbol">→</a> <a id="8563" href="Lecture8-notes.html#8537" class="Bound">B</a> <a id="8565" class="Symbol">(</a><a id="8566" href="Lecture8-notes.html#8539" class="Bound">p</a> <a id="8568" href="Lecture8-notes.html#8559" class="Bound">i</a><a id="8569" class="Symbol">))</a> <a id="8572" href="Lecture8-notes.html#8541" class="Bound">pa</a>
+</pre>
+<p>The <code>transp</code> operation is a generalized transport in the
+sense that it lets us specify where the transport is the identity
+function (this is why there is an <code>i0</code> in the definition of
+<code>transport</code> above). The general type of <code>transp</code>
+is:</p>
+<pre class="text"><code>transp : (A : I → Type ℓ) (r : I) (a : A i0) → A i1</code></pre>
+<p>There is an additional side condition which has to be satisfied for
+Cubical Agda to typecheck <code>transp A r a</code>. This is that
+<code>A</code> has to be “constant” on <code>r</code>. This means that
+<code>A</code> should be a constant function whenever
+<code>r = i1</code> is satisfied. This side condition is vacuously true
+when <code>r = i0</code>, so there is nothing to check when writing
+transport as above. However, when <code>r</code> is equal to
+<code>i1</code> the <code>transp</code> function will compute as the
+identity function.</p>
+<pre class="text"><code>transp A i1 a == a</code></pre>
+<p>(Here <code>==</code> is definitional/judgmental equality)</p>
+<p>Having this extra generality is useful for quite technical reasons,
+for instance we can easily relate a term <code>a</code> with its
+transport over a path <code>p</code>:</p>
+<pre class="Agda"><a id="transportFill"></a><a id="9571" href="Lecture8-notes.html#9571" data-type="(p : A ≡ B) (a : A) → PathP (λ i → p i) a (transport p a)" class="Function">transportFill</a> <a id="9585" class="Symbol">:</a> <a id="9587" class="Symbol">(</a><a id="9588" href="Lecture8-notes.html#9588" class="Bound">p</a> <a id="9590" class="Symbol">:</a> <a id="9592" href="Lecture8-notes.html#260" class="Generalizable">A</a> <a id="9594" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="9596" href="Lecture8-notes.html#262" class="Generalizable">B</a><a id="9597" class="Symbol">)</a> <a id="9599" class="Symbol">(</a><a id="9600" href="Lecture8-notes.html#9600" class="Bound">a</a> <a id="9602" class="Symbol">:</a> <a id="9604" href="Lecture8-notes.html#260" class="Generalizable">A</a><a id="9605" class="Symbol">)</a> <a id="9607" class="Symbol">→</a> <a id="9609" href="Agda.Builtin.Cubical.Path.html#197" data-type="(A : I → Set ℓ) → A i0 → A i1 → Set ℓ" class="Postulate">PathP</a> <a id="9615" class="Symbol">(λ</a> <a id="9618" href="Lecture8-notes.html#9618" class="Bound">i</a> <a id="9620" class="Symbol">→</a> <a id="9622" href="Lecture8-notes.html#9588" class="Bound">p</a> <a id="9624" href="Lecture8-notes.html#9618" class="Bound">i</a><a id="9625" class="Symbol">)</a> <a id="9627" href="Lecture8-notes.html#9600" class="Bound">a</a> <a id="9629" class="Symbol">(</a><a id="9630" href="Lecture8-notes.html#8148" data-type="A ≡ B → A → B" class="Function">transport</a> <a id="9640" href="Lecture8-notes.html#9588" class="Bound">p</a> <a id="9642" href="Lecture8-notes.html#9600" class="Bound">a</a><a id="9643" class="Symbol">)</a>
+<a id="9645" href="Lecture8-notes.html#9571" data-type="(p : A ≡ B) (a : A) → PathP (λ i → p i) a (transport p a)" class="Function">transportFill</a> <a id="9659" href="Lecture8-notes.html#9659" class="Bound">p</a> <a id="9661" href="Lecture8-notes.html#9661" class="Bound">a</a> <a id="9663" href="Lecture8-notes.html#9663" class="Bound">i</a> <a id="9665" class="Symbol">=</a> <a id="9667" href="cubical-prelude.html#702" class="Primitive">transp</a> <a id="9674" class="Symbol">(λ</a> <a id="9677" href="Lecture8-notes.html#9677" class="Bound">j</a> <a id="9679" class="Symbol">→</a> <a id="9681" href="Lecture8-notes.html#9659" class="Bound">p</a> <a id="9683" class="Symbol">(</a><a id="9684" href="Lecture8-notes.html#9663" class="Bound">i</a> <a id="9686" href="cubical-prelude.html#449" class="Primitive Operator">∧</a> <a id="9688" href="Lecture8-notes.html#9677" class="Bound">j</a><a id="9689" class="Symbol">))</a> <a id="9692" class="Symbol">(</a><a id="9693" href="cubical-prelude.html#547" class="Primitive Operator">~</a> <a id="9695" href="Lecture8-notes.html#9663" class="Bound">i</a><a id="9696" class="Symbol">)</a> <a id="9698" href="Lecture8-notes.html#9661" class="Bound">a</a>
+</pre>
+<p>Another result that follows easily from <code>transp</code> is that
+transporting in a constant family is the identity function (up to a
+path). Note that this is <em>not</em> proved by <code>refl</code>. This
+is maybe not so surprising as <code>transport</code> is not defined by
+pattern-matching on <code>p</code>.</p>
+<pre class="Agda"><a id="transportRefl"></a><a id="9978" href="Lecture8-notes.html#9978" data-type="(x : A) → transport refl x ≡ x" class="Function">transportRefl</a> <a id="9992" class="Symbol">:</a> <a id="9994" class="Symbol">(</a><a id="9995" href="Lecture8-notes.html#9995" class="Bound">x</a> <a id="9997" class="Symbol">:</a> <a id="9999" href="Lecture8-notes.html#260" class="Generalizable">A</a><a id="10000" class="Symbol">)</a> <a id="10002" class="Symbol">→</a> <a id="10004" href="Lecture8-notes.html#8148" data-type="A ≡ B → A → B" class="Function">transport</a> <a id="10014" href="Lecture7-notes.html#3585" data-type="x ≡ x" class="Function">refl</a> <a id="10019" href="Lecture8-notes.html#9995" class="Bound">x</a> <a id="10021" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="10023" href="Lecture8-notes.html#9995" class="Bound">x</a>
+<a id="10025" href="Lecture8-notes.html#9978" data-type="(x : A) → transport refl x ≡ x" class="Function">transportRefl</a> <a id="10039" class="Symbol">{</a><a id="10040" class="Argument">A</a> <a id="10042" class="Symbol">=</a> <a id="10044" href="Lecture8-notes.html#10044" class="Bound">A</a><a id="10045" class="Symbol">}</a> <a id="10047" href="Lecture8-notes.html#10047" class="Bound">x</a> <a id="10049" href="Lecture8-notes.html#10049" class="Bound">i</a> <a id="10051" class="Symbol">=</a> <a id="10053" href="cubical-prelude.html#702" class="Primitive">transp</a> <a id="10060" class="Symbol">(λ</a> <a id="10063" href="Lecture8-notes.html#10063" class="Bound">_</a> <a id="10065" class="Symbol">→</a> <a id="10067" href="Lecture8-notes.html#10044" class="Bound">A</a><a id="10068" class="Symbol">)</a> <a id="10070" href="Lecture8-notes.html#10049" class="Bound">i</a> <a id="10072" href="Lecture8-notes.html#10047" class="Bound">x</a>
+</pre>
+<p>Having <code>transp</code> lets us prove many more useful lemmas like
+this. For details see Cubical.Foundations.Transport in the agda/cubical
+library.</p>
+<p>Using contractibility of singletons we can also define the
+<code>J</code> eliminator for paths (a.k.a. path induction):</p>
+<pre class="Agda"><a id="J"></a><a id="10338" href="Lecture8-notes.html#10338" data-type="(P : (y : A) → x ≡ y → Set ℓ&#39;&#39;) → P x refl → (p : x ≡ y) → P y p" class="Function">J</a> <a id="10340" class="Symbol">:</a> <a id="10342" class="Symbol">{</a><a id="10343" href="Lecture8-notes.html#10343" class="Bound">x</a> <a id="10345" class="Symbol">:</a> <a id="10347" href="Lecture8-notes.html#260" class="Generalizable">A</a><a id="10348" class="Symbol">}</a> <a id="10350" class="Symbol">(</a><a id="10351" href="Lecture8-notes.html#10351" class="Bound">P</a> <a id="10353" class="Symbol">:</a> <a id="10355" class="Symbol">(</a><a id="10356" href="Lecture8-notes.html#10356" class="Bound">y</a> <a id="10358" class="Symbol">:</a> <a id="10360" href="Lecture8-notes.html#260" class="Generalizable">A</a><a id="10361" class="Symbol">)</a> <a id="10363" class="Symbol">→</a> <a id="10365" href="Lecture8-notes.html#10343" class="Bound">x</a> <a id="10367" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="10369" href="Lecture8-notes.html#10356" class="Bound">y</a> <a id="10371" class="Symbol">→</a> <a id="10373" href="Agda.Primitive.html#326" data-type="Set₁" class="Primitive">Type</a> <a id="10378" href="cubical-prelude.html#2246" data-type="Level" class="Generalizable">ℓ&#39;&#39;</a><a id="10381" class="Symbol">)</a>
+    <a id="10387" class="Symbol">(</a><a id="10388" href="Lecture8-notes.html#10388" class="Bound">d</a> <a id="10390" class="Symbol">:</a> <a id="10392" href="Lecture8-notes.html#10351" class="Bound">P</a> <a id="10394" href="Lecture8-notes.html#10343" class="Bound">x</a> <a id="10396" href="Lecture7-notes.html#3585" data-type="x ≡ x" class="Function">refl</a><a id="10400" class="Symbol">)</a> <a id="10402" class="Symbol">{</a><a id="10403" href="Lecture8-notes.html#10403" class="Bound">y</a> <a id="10405" class="Symbol">:</a> <a id="10407" href="Lecture8-notes.html#260" class="Generalizable">A</a><a id="10408" class="Symbol">}</a> <a id="10410" class="Symbol">(</a><a id="10411" href="Lecture8-notes.html#10411" class="Bound">p</a> <a id="10413" class="Symbol">:</a> <a id="10415" href="Lecture8-notes.html#10343" class="Bound">x</a> <a id="10417" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="10419" href="Lecture8-notes.html#10403" class="Bound">y</a><a id="10420" class="Symbol">)</a> <a id="10422" class="Symbol">→</a> <a id="10424" href="Lecture8-notes.html#10351" class="Bound">P</a> <a id="10426" href="Lecture8-notes.html#10403" class="Bound">y</a> <a id="10428" href="Lecture8-notes.html#10411" class="Bound">p</a>
+<a id="10430" href="Lecture8-notes.html#10338" data-type="(P : (y : A) → x ≡ y → Set ℓ&#39;&#39;) → P x refl → (p : x ≡ y) → P y p" class="Function">J</a> <a id="10432" class="Symbol">{</a><a id="10433" class="Argument">x</a> <a id="10435" class="Symbol">=</a> <a id="10437" href="Lecture8-notes.html#10437" class="Bound">x</a><a id="10438" class="Symbol">}</a> <a id="10440" href="Lecture8-notes.html#10440" class="Bound">P</a> <a id="10442" href="Lecture8-notes.html#10442" class="Bound">d</a> <a id="10444" href="Lecture8-notes.html#10444" class="Bound">p</a> <a id="10446" class="Symbol">=</a> <a id="10448" href="Lecture8-notes.html#8471" data-type="(B : A → Set ℓ&#39;) → x ≡ y → B x → B y" class="Function">subst</a> <a id="10454" class="Symbol">(λ</a> <a id="10457" href="Lecture8-notes.html#10457" class="Bound">X</a> <a id="10459" class="Symbol">→</a> <a id="10461" href="Lecture8-notes.html#10440" class="Bound">P</a> <a id="10463" class="Symbol">(</a><a id="10464" href="cubical-prelude.html#3676" class="Field">pr₁</a> <a id="10468" href="Lecture8-notes.html#10457" class="Bound">X</a><a id="10469" class="Symbol">)</a> <a id="10471" class="Symbol">(</a><a id="10472" href="cubical-prelude.html#3689" class="Field">pr₂</a> <a id="10476" href="Lecture8-notes.html#10457" class="Bound">X</a><a id="10477" class="Symbol">))</a> <a id="10480" class="Symbol">(</a><a id="10481" href="Lecture7-notes.html#8212" data-type="(x : A) → isContr (singl x)" class="Function">isContrSingl</a> <a id="10494" href="Lecture8-notes.html#10437" class="Bound">x</a> <a id="10496" class="Symbol">.</a><a id="10497" href="cubical-prelude.html#3689" class="Field">pr₂</a> <a id="10501" class="Symbol">(_</a> <a id="10504" href="Agda.Builtin.Sigma.html#236" data-type="(fst : A) (snd : B fst) → Σ A B" class="InductiveConstructor Operator">,</a> <a id="10506" href="Lecture8-notes.html#10444" class="Bound">p</a><a id="10507" class="Symbol">))</a> <a id="10510" href="Lecture8-notes.html#10442" class="Bound">d</a>
+</pre>
+<p>Unfolded version:</p>
+<pre class="text"><code>transport (λ i → P (p i) (λ j → p (i ∧ j))) d</code></pre>
+<p>So <code>J</code> is provable, but it doesn’t satisfy the computation
+rule of <code>refl</code> definitionally as <code>_≡_</code> is not
+inductively defined. See exercises for how to prove it. Not having this
+hold definitionally is almost never a problem in practice as the cubical
+primitives satisfy many new definitional equalities (c.f.
+<code>ap</code>).</p>
+<h2 id="homogeneous-composition-hcomp">Homogeneous composition
+(<code>hcomp</code>)</h2>
+<p>As we now have <code>J</code> we can define path concatenation and
+many more things, however this is not the way to do things in Cubical
+Agda. One of the key features of cubical type theory is that the
+<code>transp</code> primitive reduces differently for different types
+formers (see CCHM [1] or the Cubical Agda paper [2] for details). For
+paths it reduces to another primitive operation called
+<code>hcomp</code>. This primitive is much better suited for
+concatenating paths than <code>J</code> as it is much more general. In
+particular, it lets us compose multiple higher dimensional cubes
+directly. We will explain it by example.</p>
+<p>In order to compose two paths we write:</p>
+<pre class="Agda"><a id="compPath"></a><a id="11590" href="Lecture8-notes.html#11590" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function">compPath</a> <a id="11599" class="Symbol">:</a> <a id="11601" class="Symbol">{</a><a id="11602" href="Lecture8-notes.html#11602" class="Bound">x</a> <a id="11604" href="Lecture8-notes.html#11604" class="Bound">y</a> <a id="11606" href="Lecture8-notes.html#11606" class="Bound">z</a> <a id="11608" class="Symbol">:</a> <a id="11610" href="Lecture8-notes.html#260" class="Generalizable">A</a><a id="11611" class="Symbol">}</a> <a id="11613" class="Symbol">→</a> <a id="11615" href="Lecture8-notes.html#11602" class="Bound">x</a> <a id="11617" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="11619" href="Lecture8-notes.html#11604" class="Bound">y</a> <a id="11621" class="Symbol">→</a> <a id="11623" href="Lecture8-notes.html#11604" class="Bound">y</a> <a id="11625" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="11627" href="Lecture8-notes.html#11606" class="Bound">z</a> <a id="11629" class="Symbol">→</a> <a id="11631" href="Lecture8-notes.html#11602" class="Bound">x</a> <a id="11633" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="11635" href="Lecture8-notes.html#11606" class="Bound">z</a>
+<a id="11637" href="Lecture8-notes.html#11590" data-type="x ≡ y → y ≡ z → x ≡ z" class="Function">compPath</a> <a id="11646" class="Symbol">{</a><a id="11647" class="Argument">x</a> <a id="11649" class="Symbol">=</a> <a id="11651" href="Lecture8-notes.html#11651" class="Bound">x</a><a id="11652" class="Symbol">}</a> <a id="11654" href="Lecture8-notes.html#11654" class="Bound">p</a> <a id="11656" href="Lecture8-notes.html#11656" class="Bound">q</a> <a id="11658" href="Lecture8-notes.html#11658" class="Bound">i</a> <a id="11660" class="Symbol">=</a> <a id="11662" href="cubical-prelude.html#665" class="Primitive">hcomp</a> <a id="11668" class="Symbol">(λ</a> <a id="11671" href="Lecture8-notes.html#11671" class="Bound">j</a> <a id="11673" class="Symbol">→</a> <a id="11675" class="Symbol">λ</a> <a id="11677" class="Symbol">{</a> <a id="11679" class="Symbol">(</a><a id="11680" href="Lecture8-notes.html#11658" class="Bound">i</a> <a id="11682" class="Symbol">=</a> <a id="11684" href="Agda.Primitive.Cubical.html#150" data-type="I" class="InductiveConstructor">i0</a><a id="11686" class="Symbol">)</a> <a id="11688" class="Symbol">→</a> <a id="11690" href="Lecture8-notes.html#11651" class="Bound">x</a>
+                                        <a id="11732" class="Symbol">;</a> <a id="11734" class="Symbol">(</a><a id="11735" href="Lecture8-notes.html#11658" class="Bound">i</a> <a id="11737" class="Symbol">=</a> <a id="11739" href="Agda.Primitive.Cubical.html#178" data-type="I" class="InductiveConstructor">i1</a><a id="11741" class="Symbol">)</a> <a id="11743" class="Symbol">→</a> <a id="11745" href="Lecture8-notes.html#11656" class="Bound">q</a> <a id="11747" href="Lecture8-notes.html#11671" class="Bound">j</a> <a id="11749" class="Symbol">})</a>
+                               <a id="11783" class="Symbol">(</a><a id="11784" href="Lecture8-notes.html#11654" class="Bound">p</a> <a id="11786" href="Lecture8-notes.html#11658" class="Bound">i</a><a id="11787" class="Symbol">)</a>
+</pre>
+<p>This is best understood with the following drawing:</p>
+<pre class="text"><code>    x             z
+    ^             ^
+    ¦             ¦
+  x ¦             ¦ q j
+    ¦             ¦
+    x ----------&gt; y
+          p i</code></pre>
+<p>In the drawing the direction <code>i</code> goes left-to-right and
+<code>j</code> goes bottom-to-top. As we are constructing a path from
+<code>x</code> to <code>z</code> along <code>i</code> we have
+<code>i : I</code> in the context already and we put <code>p i</code> as
+bottom. The direction <code>j</code> that we are doing the composition
+in is abstracted in the first argument to <code>hcomp</code>.</p>
+<p>Side remark: this operation is related to lifting conditions for Kan
+cubical sets, i.e. it’s a form of open box filling analogous to horn
+filling in Kan complexes.</p>
+<p>A more natural form of composition of paths in Cubical Agda is
+ternary composition:</p>
+<pre class="text"><code>         x             w
+         ^             ^
+         ¦             ¦
+ p (~ j) ¦             ¦ r j
+         ¦             ¦
+         y ----------&gt; z
+               q i</code></pre>
+<p>This is written <code>p ∙∙ q ∙∙ r</code> in the agda/cubical library
+and implemented by:</p>
+<pre class="Agda"><a id="_∙∙_∙∙_"></a><a id="12828" href="Lecture8-notes.html#12828" data-type="x ≡ y → y ≡ z → z ≡ w → x ≡ w" class="Function Operator">_∙∙_∙∙_</a> <a id="12836" class="Symbol">:</a> <a id="12838" class="Symbol">{</a><a id="12839" href="Lecture8-notes.html#12839" class="Bound">x</a> <a id="12841" href="Lecture8-notes.html#12841" class="Bound">y</a> <a id="12843" href="Lecture8-notes.html#12843" class="Bound">z</a> <a id="12845" href="Lecture8-notes.html#12845" class="Bound">w</a> <a id="12847" class="Symbol">:</a> <a id="12849" href="Lecture8-notes.html#260" class="Generalizable">A</a><a id="12850" class="Symbol">}</a> <a id="12852" class="Symbol">→</a> <a id="12854" href="Lecture8-notes.html#12839" class="Bound">x</a> <a id="12856" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="12858" href="Lecture8-notes.html#12841" class="Bound">y</a> <a id="12860" class="Symbol">→</a> <a id="12862" href="Lecture8-notes.html#12841" class="Bound">y</a> <a id="12864" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="12866" href="Lecture8-notes.html#12843" class="Bound">z</a> <a id="12868" class="Symbol">→</a> <a id="12870" href="Lecture8-notes.html#12843" class="Bound">z</a> <a id="12872" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="12874" href="Lecture8-notes.html#12845" class="Bound">w</a> <a id="12876" class="Symbol">→</a> <a id="12878" href="Lecture8-notes.html#12839" class="Bound">x</a> <a id="12880" href="Agda.Builtin.Cubical.Path.html#388" data-type="A → A → Set ℓ" class="Function Operator">≡</a> <a id="12882" href="Lecture8-notes.html#12845" class="Bound">w</a>
+<a id="12884" class="Symbol">(</a><a id="12885" href="Lecture8-notes.html#12885" class="Bound">p</a> <a id="12887" href="Lecture8-notes.html#12828" data-type="x ≡ y → y ≡ z → z ≡ w → x ≡ w" class="Function Operator">∙∙</a> <a id="12890" href="Lecture8-notes.html#12890" class="Bound">q</a> <a id="12892" href="Lecture8-notes.html#12828" data-type="x ≡ y → y ≡ z → z ≡ w → x ≡ w" class="Function Operator">∙∙</a> <a id="12895" href="Lecture8-notes.html#12895" class="Bound">r</a><a id="12896" class="Symbol">)</a> <a id="12898" href="Lecture8-notes.html#12898" class="Bound">i</a> <a id="12900" class="Symbol">=</a> <a id="12902" href="cubical-prelude.html#665" class="Primitive">hcomp</a> <a id="12908" class="Symbol">(λ</a> <a id="12911" href="Lecture8-notes.html#12911" class="Bound">j</a> <a id="12913" class="Symbol">→</a> <a id="12915" class="Symbol">λ</a> <a id="12917" class="Symbol">{</a> <a id="12919" class="Symbol">(</a><a id="12920" href="Lecture8-notes.html#12898" class="Bound">i</a> <a id="12922" class="Symbol">=</a> <a id="12924" href="Agda.Primitive.Cubical.html#150" data-type="I" class="InductiveConstructor">i0</a><a id="12926" class="Symbol">)</a> <a id="12928" class="Symbol">→</a> <a id="12930" href="Lecture8-notes.html#12885" class="Bound">p</a> <a id="12932" class="Symbol">(</a><a id="12933" href="cubical-prelude.html#547" class="Primitive Operator">~</a> <a id="12935" href="Lecture8-notes.html#12911" class="Bound">j</a><a id="12936" class="Symbol">)</a>
+                                 <a id="12971" class="Symbol">;</a> <a id="12973" class="Symbol">(</a><a id="12974" href="Lecture8-notes.html#12898" class="Bound">i</a> <a id="12976" class="Symbol">=</a> <a id="12978" href="Agda.Primitive.Cubical.html#178" data-type="I" class="InductiveConstructor">i1</a><a id="12980" class="Symbol">)</a> <a id="12982" class="Symbol">→</a> <a id="12984" href="Lecture8-notes.html#12895" class="Bound">r</a> <a id="12986" href="Lecture8-notes.html#12911" class="Bound">j</a> <a id="12988" class="Symbol">})</a>
+                        <a id="13015" class="Symbol">(</a><a id="13016" href="Lecture8-notes.html#12890" class="Bound">q</a> <a id="13018" href="Lecture8-notes.html#12898" class="Bound">i</a><a id="13019" class="Symbol">)</a>
+</pre>
+<p>Using this we can define compPath much slicker:</p>
+<pre class="text"><code>_∙_ : {x y z : A} → x ≡ y → y ≡ z → x ≡ z
+p ∙ q = refl ∙∙ p ∙∙ q</code></pre>
+<p>To prove algebraic properties of this operation (in particular that
+it’s a groupoid) we need to talk about filling using the
+<code>hfill</code> operation. There is no time for this today, but the
+interested reader can consult Cubical.Foundations.GroupoidLaws and the
+documentation for <code>hcomp</code>:
+https://agda.readthedocs.io/en/v2.6.2.2/language/cubical.html#homogeneous-composition.
+The following YouTube video might also be very helpful
+https://www.youtube.com/watch?v=MVtlD22Y8SQ</p>
+<p>Having <code>hcomp</code> as a primitive operation lets us prove many
+things very directly. For instance, we can prove that any proposition is
+also a set using a higher dimensional hcomp.</p>
+<pre class="Agda"><a id="isProp→isSet"></a><a id="13809" href="Lecture8-notes.html#13809" data-type="isProp A → isSet A" class="Function">isProp→isSet</a> <a id="13822" class="Symbol">:</a> <a id="13824" href="cubical-prelude.html#4071" data-type="Set ℓ → Set ℓ" class="Function">isProp</a> <a id="13831" href="Lecture8-notes.html#260" class="Generalizable">A</a> <a id="13833" class="Symbol">→</a> <a id="13835" href="cubical-prelude.html#4126" data-type="Set ℓ → Set ℓ" class="Function">isSet</a> <a id="13841" href="Lecture8-notes.html#260" class="Generalizable">A</a>
+<a id="13843" href="Lecture8-notes.html#13809" data-type="isProp A → isSet A" class="Function">isProp→isSet</a> <a id="13856" href="Lecture8-notes.html#13856" class="Bound">h</a> <a id="13858" href="Lecture8-notes.html#13858" class="Bound">a</a> <a id="13860" href="Lecture8-notes.html#13860" class="Bound">b</a> <a id="13862" href="Lecture8-notes.html#13862" class="Bound">p</a> <a id="13864" href="Lecture8-notes.html#13864" class="Bound">q</a> <a id="13866" href="Lecture8-notes.html#13866" class="Bound">j</a> <a id="13868" href="Lecture8-notes.html#13868" class="Bound">i</a> <a id="13870" class="Symbol">=</a>
+  <a id="13874" href="cubical-prelude.html#665" class="Primitive">hcomp</a> <a id="13880" class="Symbol">(λ</a> <a id="13883" href="Lecture8-notes.html#13883" class="Bound">k</a> <a id="13885" class="Symbol">→</a> <a id="13887" class="Symbol">λ</a> <a id="13889" class="Symbol">{</a> <a id="13891" class="Symbol">(</a><a id="13892" href="Lecture8-notes.html#13868" class="Bound">i</a> <a id="13894" class="Symbol">=</a> <a id="13896" href="Agda.Primitive.Cubical.html#150" data-type="I" class="InductiveConstructor">i0</a><a id="13898" class="Symbol">)</a> <a id="13900" class="Symbol">→</a> <a id="13902" href="Lecture8-notes.html#13856" class="Bound">h</a> <a id="13904" href="Lecture8-notes.html#13858" class="Bound">a</a> <a id="13906" href="Lecture8-notes.html#13858" class="Bound">a</a> <a id="13908" href="Lecture8-notes.html#13883" class="Bound">k</a>
+                 <a id="13927" class="Symbol">;</a> <a id="13929" class="Symbol">(</a><a id="13930" href="Lecture8-notes.html#13868" class="Bound">i</a> <a id="13932" class="Symbol">=</a> <a id="13934" href="Agda.Primitive.Cubical.html#178" data-type="I" class="InductiveConstructor">i1</a><a id="13936" class="Symbol">)</a> <a id="13938" class="Symbol">→</a> <a id="13940" href="Lecture8-notes.html#13856" class="Bound">h</a> <a id="13942" href="Lecture8-notes.html#13858" class="Bound">a</a> <a id="13944" href="Lecture8-notes.html#13860" class="Bound">b</a> <a id="13946" href="Lecture8-notes.html#13883" class="Bound">k</a>
+                 <a id="13965" class="Symbol">;</a> <a id="13967" class="Symbol">(</a><a id="13968" href="Lecture8-notes.html#13866" class="Bound">j</a> <a id="13970" class="Symbol">=</a> <a id="13972" href="Agda.Primitive.Cubical.html#150" data-type="I" class="InductiveConstructor">i0</a><a id="13974" class="Symbol">)</a> <a id="13976" class="Symbol">→</a> <a id="13978" href="Lecture8-notes.html#13856" class="Bound">h</a> <a id="13980" href="Lecture8-notes.html#13858" class="Bound">a</a> <a id="13982" class="Symbol">(</a><a id="13983" href="Lecture8-notes.html#13862" class="Bound">p</a> <a id="13985" href="Lecture8-notes.html#13868" class="Bound">i</a><a id="13986" class="Symbol">)</a> <a id="13988" href="Lecture8-notes.html#13883" class="Bound">k</a>
+                 <a id="14007" class="Symbol">;</a> <a id="14009" class="Symbol">(</a><a id="14010" href="Lecture8-notes.html#13866" class="Bound">j</a> <a id="14012" class="Symbol">=</a> <a id="14014" href="Agda.Primitive.Cubical.html#178" data-type="I" class="InductiveConstructor">i1</a><a id="14016" class="Symbol">)</a> <a id="14018" class="Symbol">→</a> <a id="14020" href="Lecture8-notes.html#13856" class="Bound">h</a> <a id="14022" href="Lecture8-notes.html#13858" class="Bound">a</a> <a id="14024" class="Symbol">(</a><a id="14025" href="Lecture8-notes.html#13864" class="Bound">q</a> <a id="14027" href="Lecture8-notes.html#13868" class="Bound">i</a><a id="14028" class="Symbol">)</a> <a id="14030" href="Lecture8-notes.html#13883" class="Bound">k</a> <a id="14032" class="Symbol">})</a> <a id="14035" href="Lecture8-notes.html#13858" class="Bound">a</a>
+</pre>
+<p>Geometric picture: start with a square with <code>a</code> everywhere
+as base, then change its sides so that they connect <code>p</code> with
+<code>q</code> over <code>refl a</code> and <code>refl b</code>.</p>
+<p>This has some useful consequences:</p>
+<pre class="Agda"><a id="isPropIsProp"></a><a id="14239" href="Lecture8-notes.html#14239" data-type="isProp (isProp A)" class="Function">isPropIsProp</a> <a id="14252" class="Symbol">:</a> <a id="14254" href="cubical-prelude.html#4071" data-type="Set ℓ → Set ℓ" class="Function">isProp</a> <a id="14261" class="Symbol">(</a><a id="14262" href="cubical-prelude.html#4071" data-type="Set ℓ → Set ℓ" class="Function">isProp</a> <a id="14269" href="Lecture8-notes.html#260" class="Generalizable">A</a><a id="14270" class="Symbol">)</a>
+<a id="14272" href="Lecture8-notes.html#14239" data-type="isProp (isProp A)" class="Function">isPropIsProp</a> <a id="14285" href="Lecture8-notes.html#14285" class="Bound">f</a> <a id="14287" href="Lecture8-notes.html#14287" class="Bound">g</a> <a id="14289" href="Lecture8-notes.html#14289" class="Bound">i</a> <a id="14291" href="Lecture8-notes.html#14291" class="Bound">a</a> <a id="14293" href="Lecture8-notes.html#14293" class="Bound">b</a> <a id="14295" class="Symbol">=</a> <a id="14297" href="Lecture8-notes.html#13809" data-type="isProp A → isSet A" class="Function">isProp→isSet</a> <a id="14310" href="Lecture8-notes.html#14285" class="Bound">f</a> <a id="14312" href="Lecture8-notes.html#14291" class="Bound">a</a> <a id="14314" href="Lecture8-notes.html#14293" class="Bound">b</a> <a id="14316" class="Symbol">(</a><a id="14317" href="Lecture8-notes.html#14285" class="Bound">f</a> <a id="14319" href="Lecture8-notes.html#14291" class="Bound">a</a> <a id="14321" href="Lecture8-notes.html#14293" class="Bound">b</a><a id="14322" class="Symbol">)</a> <a id="14324" class="Symbol">(</a><a id="14325" href="Lecture8-notes.html#14287" class="Bound">g</a> <a id="14327" href="Lecture8-notes.html#14291" class="Bound">a</a> <a id="14329" href="Lecture8-notes.html#14293" class="Bound">b</a><a id="14330" class="Symbol">)</a> <a id="14332" href="Lecture8-notes.html#14289" class="Bound">i</a>
+
+<a id="isPropIsSet"></a><a id="14335" href="Lecture8-notes.html#14335" data-type="isProp (isSet A)" class="Function">isPropIsSet</a> <a id="14347" class="Symbol">:</a> <a id="14349" href="cubical-prelude.html#4071" data-type="Set ℓ → Set ℓ" class="Function">isProp</a> <a id="14356" class="Symbol">(</a><a id="14357" href="cubical-prelude.html#4126" data-type="Set ℓ → Set ℓ" class="Function">isSet</a> <a id="14363" href="Lecture8-notes.html#260" class="Generalizable">A</a><a id="14364" class="Symbol">)</a>
+<a id="14366" href="Lecture8-notes.html#14335" data-type="isProp (isSet A)" class="Function">isPropIsSet</a> <a id="14378" href="Lecture8-notes.html#14378" class="Bound">h1</a> <a id="14381" href="Lecture8-notes.html#14381" class="Bound">h2</a> <a id="14384" href="Lecture8-notes.html#14384" class="Bound">i</a> <a id="14386" href="Lecture8-notes.html#14386" class="Bound">x</a> <a id="14388" href="Lecture8-notes.html#14388" class="Bound">y</a> <a id="14390" class="Symbol">=</a> <a id="14392" href="Lecture8-notes.html#14239" data-type="isProp (isProp A)" class="Function">isPropIsProp</a> <a id="14405" class="Symbol">(</a><a id="14406" href="Lecture8-notes.html#14378" class="Bound">h1</a> <a id="14409" href="Lecture8-notes.html#14386" class="Bound">x</a> <a id="14411" href="Lecture8-notes.html#14388" class="Bound">y</a><a id="14412" class="Symbol">)</a> <a id="14414" class="Symbol">(</a><a id="14415" href="Lecture8-notes.html#14381" class="Bound">h2</a> <a id="14418" href="Lecture8-notes.html#14386" class="Bound">x</a> <a id="14420" href="Lecture8-notes.html#14388" class="Bound">y</a><a id="14421" class="Symbol">)</a> <a id="14423" href="Lecture8-notes.html#14384" class="Bound">i</a>
+</pre>
+<p>In order to really understand what the second argument to
+<code>hcomp</code> is and how to use <code>hfill</code> one should read
+about partial elements and cubical subtypes. We refer the interested
+reader to the Cubical Agda documentation:</p>
+<p>https://agda.readthedocs.io/en/v2.6.2.2/language/cubical.html#partial-elements</p>
+<p>However, beginners often doesn’t have to write <code>hcomp</code> to
+prove things as the library provides many basic lemmas. This is
+especially true when reasoning about sets. However, when reasoning about
+types that have higher truncation level it’s very convenient to be able
+to construct squares and cubes directly and being able to use
+<code>hcomp</code> is quite necessary (see exercise 12 on <a
+href="https://github.com/martinescardo/HoTTEST-Summer-School/blob/main/Agda/Cubical/Exercises7.lagda.md">Exercises7</a>).</p>
+<h1 id="references">References</h1>
+<p>[1] https://arxiv.org/abs/1611.02108 [2]
+https://staff.math.su.se/anders.mortberg/papers/cubicalagda2.pdf</p>
+
+  </article>
+</div>
+</main>
+</body>
+<style>
+
+:root {
+  --text-bg: #fff;
+  --text-fg: #222;
+  --shadow: #000;
+  --primary: #0054F4;
+  --secondary: #9C1BD6;
+  --modal-bg: #ccccccaa;
+  --warning-bg: #fef08a;
+  --code-bg: var(--text-bg);
+  --code-fg: var(--text-fg);
+  --code-keyword: #BB3B13;
+  --code-string:  #d52753;
+  --code-number:  #8A1060;
+  --code-module:  #8A1060;
+  --code-field:   #9C1BD6;
+  --code-constructor: #207B1D;
+  --code-highlight: #F5DEB3;
+  --search-selected: #e2e8f0;
+  --details-summary: #b2ebf2;
+  --details-open:    #80deea;
+  --depgraph-edge: #eee;
+  --blockquote-bg: #d8b4fe; }
+
+.diagram-dark {
+  display: none !important; }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-bg: #282C34;
+    --text-fg: #bfbfbf;
+    --shadow: #475569;
+    --primary: #61AFEF;
+    --secondary: #C878DD;
+    --modal-bg: #282C34aa;
+    --warning-bg: #991b1b;
+    --code-keyword:     #E5C07B;
+    --code-string:      #E06C75;
+    --code-number:      #98C379;
+    --code-module:      #56B6C2;
+    --code-field:       #C878DD;
+    --code-constructor: #98C379;
+    --code-highlight: #ef444499;
+    --search-selected: #474e5e;
+    --details-summary: #5b21b6;
+    --details-open:    #4c1d95;
+    --depgraph-edge: #474e5e;
+    --blockquote-bg: #475569; }
+  div.warning {
+    --shadow: #7f1d1d
+  ; }
+  input {
+    background-color: #334155;
+    border: 1px solid #475569;
+    color: var(--text-fg); }
+  body {
+    scrollbar-color: #3b4454 #2b2e33; }
+  .diagram-dark {
+    display: block !important; }
+  .diagram-light {
+    display: none !important; } }
+
+table {
+  margin: auto;
+  border-collapse: collapse; }
+  table td, table th {
+    text-align: center;
+    padding: 0px 1em 0px 1em;
+    border: 1px solid black; }
+  table th {
+    border-bottom: 2px solid black; }
+  table td {
+    white-space: nowrap; }
+
+html { max-width: 100%; }
+
+body {
+  font-family: "Inria Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  width: 100%;
+  font-size: var(--font-size);
+  overflow-x: clip;
+  background-color: var(--text-bg);
+  color: var(--text-fg);
+}
+
+div#post-toc-container { max-width: 120ch; margin: auto; }
+
+article a[href], div#return > a[href], div#top > a[href], aside#toc > div#toc-container ul a[href] {
+  color: var(--primary);
+  text-decoration: none; }
+  article a[href]:hover, div#return > a[href]:hover, div#top > a[href]:hover, aside#toc > div#toc-container ul a[href]:hover {
+    text-decoration: 2px currentColor underline !important; }
+  article a[href]:visited, div#return > a[href]:visited, div#top > a[href]:visited, aside#toc > div#toc-container ul a[href]:visited {
+    color: var(--secondary); }
+
+/* Aspects. */
+.Agda {
+  /* NameKinds. */
+  /* OtherAspects. */
+  /* Standard attributes. */
+  font-family: 'iosevka', 'Iosevka', 'Fantasque Sans Mono', 'Roboto Mono', monospace;
+  font-weight: 400; }
+  .Agda .Comment {
+    color: var(--code-fg);
+    font-style: italic; }
+  .Agda .Background {
+    background-color: var(--code-bg); }
+  .Agda .Markup {
+    color: var(--code-fg); }
+  .Agda .Keyword {
+    color: var(--code-keyword); }
+  .Agda .String {
+    color: var(--code-string); }
+  .Agda .Number {
+    color: var(--code-number); }
+  .Agda .Symbol {
+    color: var(--code-fg); }
+  .Agda .PrimitiveType {
+    color: var(--primary); }
+  .Agda .Pragma {
+    color: var(--code-fg); }
+  .Agda .Bound {
+    color: var(--code-fg) !important; }
+  .Agda .Generalizable {
+    color: var(--code-fg) !important; }
+  .Agda .InductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .CoinductiveConstructor {
+    color: var(--code-constructor) !important; }
+  .Agda .Datatype {
+    color: var(--primary) !important; }
+  .Agda .Field {
+    color: var(--code-field) !important; }
+  .Agda .Function {
+    color: var(--primary) !important; }
+  .Agda .Module {
+    color: var(--code-module) !important; }
+  .Agda .Postulate {
+    color: var(--primary) !important; }
+  .Agda .Primitive {
+    color: var(--primary) !important; }
+  .Agda .Record {
+    color: var(--primary) !important; }
+  .Agda .UnsolvedMeta {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .UnsolvedConstraint {
+    color: var(--code-fg);
+    background: yellow; }
+  .Agda .TerminationProblem {
+    color: var(--code-fg);
+    background: #FFA07A; }
+  .Agda .IncompletePattern {
+    color: var(--code-fg);
+    background: #F5DEB3; }
+  .Agda .Error {
+    color: red;
+    text-decoration: underline; }
+  .Agda .TypeChecks {
+    color: var(--code-fg);
+    background: #ADD8E6; }
+  .Agda .ShadowingInTelescope {
+    color: var(--code-fg);
+    background: #808080; }
+  .Agda .Deadcode {
+    color: var(--code-keyword);
+    font-weight: bold; }
+  .Agda a {
+    text-decoration: none; }
+  .Agda a[href]:hover {
+    text-decoration: 2px var(--primary) underline; }
+  .Agda a[href]:target {
+    animation: highlight 2.5s; }
+  body.text-page .Agda {
+    font-size: var(--code-font-size); }
+
+pre.Agda, div.sourceCode, pre {
+  border-radius: 0;
+  box-shadow: none;
+  overflow-y: clip;
+  margin: 0;
+  padding: 1em;
+  padding-top: 0.25em;
+  padding-bottom: 0.25em;
+  background-color: var(--code-bg);
+  color: var(--code-fg);
+  font-size: var(--code-font-size);
+  max-width: 100%;
+  overflow-x: auto;
+}
+</style>
+</html>
