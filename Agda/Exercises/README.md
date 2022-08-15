@@ -15,3 +15,5 @@
    	    [Solutions](../HITs/Solutions6.lagda.md).
 1. Week 07: [Exercises](../Cubical/Exercises7.lagda.md);
    	    [Solutions](../Cubical/Solutions7.lagda.md).
+1. Week 08: [Exercises](../Cubical/Exercises8.lagda.md);
+   	    [Solutions](../Cubical/Solutions8.lagda.md).
