@@ -157,6 +157,29 @@ module _ {ℓ ℓ'} {A : Type ℓ} {B : Type ℓ'} where
   retract : (f : A → B) → (g : B → A) → Type ℓ
   retract f g = ∀ a → g (f a) ≡ a
 
+module _ {A B : Type} {f : A → B} (equivF : isEquiv f) where
+  funIsEq : A → B
+  funIsEq = f
+
+  invIsEq : B → A
+  invIsEq y = equivF .equiv-proof y .pr₁ .pr₁
+
+  secIsEq : section f invIsEq
+  secIsEq y = equivF .equiv-proof y .pr₁ .pr₂
+
+  retIsEq : retract f invIsEq
+  retIsEq a i = equivF .equiv-proof (f a) .pr₂ (a , λ _ → f a) i .pr₁
+
+module _ {A B : Type} (w : A ≃ B) where
+  invEq : B → A
+  invEq = invIsEq (pr₂ w)
+
+  retEq : retract (w .pr₁) invEq
+  retEq = retIsEq (pr₂ w)
+
+  secEq : section (w .pr₁) invEq
+  secEq = secIsEq (pr₂ w)
+
 -- Isomorphisms
 record Iso {ℓ ℓ'} (A : Type ℓ) (B : Type ℓ') : Type (ℓ ⊔ ℓ') where
   no-eta-equality
@@ -280,6 +303,18 @@ predSuc (negsuc (suc n)) = λ i → negsuc (suc n)
 sucPath : ℤ ≡ ℤ
 sucPath = isoToPath (iso sucℤ predℤ sucPred predSuc)
 
+_+ℤ_ : ℤ → ℤ → ℤ
+m +ℤ pos n = m +pos n
+  where
+  _+pos_ : ℤ → ℕ  → ℤ
+  z +pos 0 = z
+  z +pos (suc n) = sucℤ (z +pos n)
+m +ℤ negsuc n = m +negsuc n
+  where
+  _+negsuc_ : ℤ → ℕ → ℤ
+  z +negsuc 0 = predℤ z
+  z +negsuc (suc n) = predℤ (z +negsuc n)
+
 
 
 -- 'Data' types from Martín's prelude
@@ -291,5 +326,46 @@ open Unit public
 
 data Bool : Type where
  true false : Bool
+
+if_then_else_ : {A : Type ℓ} → Bool → A → A → A
+if true  then x else y = x
+if false then x else y = y
+```
+
+
+```agda
+
+
+funExt₂ : {A : Type ℓ} {B : A → Type} {C : (x : A) → B x → I → Type}
+          {f : (x : A) → (y : B x) → C x y i0}
+          {g : (x : A) → (y : B x) → C x y i1}
+          → ((x : A) (y : B x) → PathP (C x y) (f x y) (g x y))
+          → PathP (λ i → ∀ x y → C x y i) f g
+funExt₂ p i x y = p x y i
+
+doubleℕ : ℕ → ℕ
+doubleℕ zero = zero
+doubleℕ (suc x) = suc (suc (doubleℕ x))
+
++-zero : ∀ m → m + 0 ≡ m
++-zero zero i = zero
++-zero (suc m) i = suc (+-zero m i)
+
++-assoc : ∀ m n o → m + (n + o) ≡ (m + n) + o
++-assoc zero n o i    = n + o
++-assoc (suc m) n o i = suc (+-assoc m n o i)
+
+
+data ⊥ : Type₀ where
+
+
+⊥-elim : {A : ⊥ → Type ℓ} → (x : ⊥) → A x
+⊥-elim ()
+
+⊥-rec : {A : Type ℓ} → ⊥ → A
+⊥-rec ()
+
+¬_ : Type ℓ → Type ℓ
+¬ A = A → ⊥
 
 ```

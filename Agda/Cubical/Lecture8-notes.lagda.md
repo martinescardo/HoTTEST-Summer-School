@@ -369,15 +369,14 @@ p ∙ q = refl ∙∙ p ∙∙ q
 To prove algebraic properties of this operation (in particular that
 it's a groupoid) we need to talk about filling using the `hfill`
 operation. There is no time for this today, but the interested reader
-can consult Cubical.Foundations.GroupoidLaws and the documentation for
-`hcomp`:
+can consult the notes for lecture 9 and the documentation for `hcomp`:
 https://agda.readthedocs.io/en/v2.6.2.2/language/cubical.html#homogeneous-composition. The
-following YouTube video might also be very helpful
-https://www.youtube.com/watch?v=MVtlD22Y8SQ
+following YouTube video might also be very helpful to understand the
+geometry behind `hcomp`'s: https://www.youtube.com/watch?v=MVtlD22Y8SQ
 
 Having `hcomp` as a primitive operation lets us prove many things very
 directly. For instance, we can prove that any proposition is also a
-set using a higher dimensional hcomp.
+set using a higher dimensional `hcomp`.
 
 ```agda
 isProp→isSet : isProp A → isSet A
@@ -404,10 +403,10 @@ isPropIsSet h1 h2 i x y = isPropIsProp (h1 x y) (h2 x y) i
 
 In order to really understand what the second argument to `hcomp` is
 and how to use `hfill` one should read about partial elements and
-cubical subtypes. We refer the interested reader to the Cubical Agda
-documentation:
-
-https://agda.readthedocs.io/en/v2.6.2.2/language/cubical.html#partial-elements
+cubical subtypes. For now we refer the interested reader to the
+Cubical Agda documentation
+(https://agda.readthedocs.io/en/v2.6.2.2/language/cubical.html#partial-elements),
+but in lecture 9 these will be discussed in more detail.
 
 However, beginners often doesn't have to write `hcomp` to prove things
 as the library provides many basic lemmas. This is especially true
