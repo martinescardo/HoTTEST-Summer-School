@@ -332,48 +332,6 @@ we have `i : I` in the context already and we put `p i` as bottom. The
 direction `j` that we are doing the composition in is abstracted in
 the first argument to `hcomp`.
 
-Side remark: this operation is related to lifting conditions for Kan
-cubical sets, i.e. it's a form of open box filling analogous to horn
-filling in Kan complexes.
-
-A more natural form of composition of paths in Cubical Agda is
-ternary composition:
-
-```text
-         x             w
-         ^             ^
-         ¦             ¦
- p (~ j) ¦             ¦ r j
-         ¦             ¦
-         y ----------> z
-               q i
-```
-
-This is written `p ∙∙ q ∙∙ r` in the agda/cubical library and
-implemented by:
-
-```agda
-_∙∙_∙∙_ : {x y z w : A} → x ≡ y → y ≡ z → z ≡ w → x ≡ w
-(p ∙∙ q ∙∙ r) i = hcomp (λ j → λ { (i = i0) → p (~ j)
-                                 ; (i = i1) → r j })
-                        (q i)
-```
-
-Using this we can define compPath much slicker:
-
-```text
-_∙_ : {x y z : A} → x ≡ y → y ≡ z → x ≡ z
-p ∙ q = refl ∙∙ p ∙∙ q
-```
-
-To prove algebraic properties of this operation (in particular that
-it's a groupoid) we need to talk about filling using the `hfill`
-operation. There is no time for this today, but the interested reader
-can consult the notes for lecture 9 and the documentation for `hcomp`:
-https://agda.readthedocs.io/en/v2.6.2.2/language/cubical.html#homogeneous-composition. The
-following YouTube video might also be very helpful to understand the
-geometry behind `hcomp`'s: https://www.youtube.com/watch?v=MVtlD22Y8SQ
-
 Having `hcomp` as a primitive operation lets us prove many things very
 directly. For instance, we can prove that any proposition is also a
 set using a higher dimensional `hcomp`.
@@ -402,18 +360,18 @@ isPropIsSet h1 h2 i x y = isPropIsProp (h1 x y) (h2 x y) i
 ```
 
 In order to really understand what the second argument to `hcomp` is
-and how to use `hfill` one should read about partial elements and
-cubical subtypes. For now we refer the interested reader to the
-Cubical Agda documentation
-(https://agda.readthedocs.io/en/v2.6.2.2/language/cubical.html#partial-elements),
-but in lecture 9 these will be discussed in more detail.
+and how to use `hfill` we will need to explain partial elements and
+cubical subtypes. This is documented in the Cubical Agda documentation
+(https://agda.readthedocs.io/en/v2.6.2.2/language/cubical.html#partial-elements)
+and in lecture 9 these will be discussed in more detail.
+
 
 However, beginners often doesn't have to write `hcomp` to prove things
 as the library provides many basic lemmas. This is especially true
-when reasoning about sets. However, when reasoning about types that
-have higher truncation level it's very convenient to be able to
-construct squares and cubes directly and being able to use `hcomp` is
-quite necessary (see exercise 12 on
+when reasoning about sets. But when reasoning about types that have
+higher truncation level it's very convenient to be able to construct
+squares and cubes directly and being able to use `hcomp` is quite
+necessary (see exercise 12 on
 [Exercises7](https://github.com/martinescardo/HoTTEST-Summer-School/blob/main/Agda/Cubical/Exercises7.lagda.md)).
 
 References

@@ -369,3 +369,207 @@ data ⊥ : Type₀ where
 ¬ A = A → ⊥
 
 ```
+
+
+Binary numbers code:
+
+```agda
+
+localrefl : {A : Type} {x : A} → x ≡ x
+localrefl {x = x} = λ i → x
+
+localap : {A B : Type} (f : A → B) {x y : A} → x ≡ y → f x ≡ f y
+localap f p i = f (p i)
+
+localfunExt : {A B : Type} {f g : A → B} (p : (x : A) → f x ≡ g x) → f ≡ g
+localfunExt p i x = p x i
+
+
+data Pos : Type where
+  pos1  : Pos
+  x0    : Pos → Pos
+  x1    : Pos → Pos
+
+sucPos : Pos → Pos
+sucPos pos1     = x0 pos1
+sucPos (x0 ps)  = x1 ps
+sucPos (x1 ps)  = x0 (sucPos ps)
+
+Pos→ℕ : Pos → ℕ
+Pos→ℕ pos1     = suc zero
+Pos→ℕ (x0 ps)  = doubleℕ (Pos→ℕ ps)
+Pos→ℕ (x1 ps)  = suc (doubleℕ (Pos→ℕ ps))
+
+posInd : {P : Pos → Type} → P pos1 → ((p : Pos) → P p → P (sucPos p)) → (p : Pos) → P p
+posInd {P} h1 hs = f
+  where
+  H : (p : Pos) → P (x0 p) → P (x0 (sucPos p))
+  H p hx0p  = hs (x1 p) (hs (x0 p) hx0p)
+
+  f : (ps : Pos) → P ps
+  f pos1     = h1
+  f (x0 ps)  = posInd (hs pos1 h1) H ps
+  f (x1 ps)  = hs (x0 ps) (posInd (hs pos1 h1) H ps)
+
+Pos→ℕsucPos : (p : Pos) → Pos→ℕ (sucPos p) ≡ suc (Pos→ℕ p)
+Pos→ℕsucPos pos1    = localrefl
+Pos→ℕsucPos (x0 p)  = localrefl
+Pos→ℕsucPos (x1 p)  = λ i → doubleℕ (Pos→ℕsucPos p i)
+
+caseNat : ∀ {ℓ} → {A : Type ℓ} → (a0 aS : A) → ℕ → A
+caseNat a0 aS zero    = a0
+caseNat a0 aS (suc n) = aS
+
+-- zero is not in the image of Pos→ℕ.
+znots : {n : ℕ} → ¬ (0 ≡ suc n)
+znots eq = transp (λ i → caseNat ℕ ⊥ (eq i)) i0 0
+
+zero≠Pos→ℕ : (p : Pos) → ¬ (zero ≡ Pos→ℕ p)
+zero≠Pos→ℕ p  = posInd (λ prf → znots prf) hs p
+  where
+  hs : (p : Pos) → ¬ (zero ≡ Pos→ℕ p) → zero ≡ Pos→ℕ (sucPos p) → ⊥
+  hs p neq ieq  = ⊥-rec (znots (ieq ∙ Pos→ℕsucPos p))
+
+ℕ→Pos : ℕ → Pos
+ℕ→Pos zero           = pos1
+ℕ→Pos (suc zero)     = pos1
+ℕ→Pos (suc (suc n))  = sucPos (ℕ→Pos (suc n))
+
+ℕ→PosSuc : ∀ n → ¬ (zero ≡ n) → ℕ→Pos (suc n) ≡ sucPos (ℕ→Pos n)
+ℕ→PosSuc zero neq     = ⊥-elim (neq localrefl)
+ℕ→PosSuc (suc n) neq  = localrefl
+
+Pos→ℕ→Pos : (p : Pos) → ℕ→Pos (Pos→ℕ p) ≡ p
+Pos→ℕ→Pos p  = posInd localrefl hs p
+  where
+  hs : (p : Pos) → ℕ→Pos (Pos→ℕ p) ≡ p → ℕ→Pos (Pos→ℕ (sucPos p)) ≡ sucPos p
+  hs p hp  =
+    ℕ→Pos (Pos→ℕ (sucPos p)) ≡⟨ localap ℕ→Pos (Pos→ℕsucPos p) ⟩
+    ℕ→Pos (suc (Pos→ℕ p))    ≡⟨ ℕ→PosSuc (Pos→ℕ p) (zero≠Pos→ℕ p) ⟩
+    sucPos (ℕ→Pos (Pos→ℕ p)) ≡⟨ localap sucPos hp ⟩
+    sucPos p ∎
+
+ℕ→Pos→ℕ : (n : ℕ) → Pos→ℕ (ℕ→Pos (suc n)) ≡ suc n
+ℕ→Pos→ℕ zero     = localrefl
+ℕ→Pos→ℕ (suc n)  =
+  Pos→ℕ (sucPos (ℕ→Pos (suc n))) ≡⟨ Pos→ℕsucPos (ℕ→Pos (suc n)) ⟩
+  suc (Pos→ℕ (ℕ→Pos (suc n)))    ≡⟨ localap suc (ℕ→Pos→ℕ n) ⟩
+  suc (suc n) ∎
+
+-- Binary numbers
+data Bin : Type where
+  bin0    : Bin
+  binPos  : Pos → Bin
+
+ℕ→Bin : ℕ → Bin
+ℕ→Bin zero     = bin0
+ℕ→Bin (suc n)  = binPos (ℕ→Pos (suc n))
+
+Bin→ℕ : Bin → ℕ
+Bin→ℕ bin0        = zero
+Bin→ℕ (binPos x)  = Pos→ℕ x
+
+ℕ→Bin→ℕ : (n : ℕ) → Bin→ℕ (ℕ→Bin n) ≡ n
+ℕ→Bin→ℕ zero           = localrefl
+ℕ→Bin→ℕ (suc zero)     = localrefl
+ℕ→Bin→ℕ (suc (suc n))  =
+    Pos→ℕ (sucPos (ℕ→Pos (suc n))) ≡⟨ Pos→ℕsucPos (ℕ→Pos (suc n)) ⟩
+    suc (Pos→ℕ (ℕ→Pos (suc n)))    ≡⟨ localap suc (ℕ→Bin→ℕ (suc n)) ⟩
+    suc (suc n) ∎
+
+Bin→ℕ→Bin : (n : Bin) → ℕ→Bin (Bin→ℕ n) ≡ n
+Bin→ℕ→Bin bin0  = localrefl
+Bin→ℕ→Bin (binPos p)  = posInd localrefl (λ p _ → rem p) p
+  where
+  rem : (p : Pos) → ℕ→Bin (Pos→ℕ (sucPos p)) ≡ binPos (sucPos p)
+  rem p  =
+    ℕ→Bin (Pos→ℕ (sucPos p))       ≡⟨ localap ℕ→Bin (Pos→ℕsucPos p) ⟩
+    binPos (ℕ→Pos (suc (Pos→ℕ p))) ≡⟨ localap binPos (ℕ→PosSuc (Pos→ℕ p) (zero≠Pos→ℕ p) ∙
+                                                              (localap sucPos (Pos→ℕ→Pos p))) ⟩
+    binPos (sucPos p) ∎
+```
+
+
+Matrix stuff
+
+```agda
+infixr 5 _∷_
+
+data Vec (A : Type) : ℕ → Type where
+  []  : Vec A zero
+  _∷_ : ∀ {n} (x : A) (xs : Vec A n) → Vec A (suc n)
+
+replicate : ∀ {n} {A : Type} → A → Vec A n
+replicate {n = zero}  x = []
+replicate {n = suc n} x = x ∷ replicate x
+
+data Fin : ℕ → Type where
+  zero : {n : ℕ} → Fin (suc n)
+  suc  : {n : ℕ} (i : Fin n) → Fin (suc n)
+
+¬Fin0 : ¬ Fin 0
+¬Fin0 ()
+
+_==_ : ∀ {n} → Fin n → Fin n → Bool
+zero == zero   = true
+zero == suc _  = false
+suc _ == zero  = false
+suc m == suc n = m == n
+
+lookup : {A : Type} {n : ℕ} → Fin n → Vec A n → A
+lookup zero    (x ∷ xs) = x
+lookup (suc i) (x ∷ xs) = lookup i xs
+
+FinVec→Vec : {A : Type} {n : ℕ} → (Fin n → A) → Vec A n
+FinVec→Vec {n = zero}  xs = []
+FinVec→Vec {n = suc _} xs = xs zero ∷ FinVec→Vec (λ x → xs (suc x))
+
+Vec→FinVec : {A : Type} {n : ℕ} → Vec A n → (Fin n → A)
+Vec→FinVec xs f = lookup f xs
+
+Vec→FinVec→Vec : {A : Type} {n : ℕ} (xs : Vec A n) → FinVec→Vec (Vec→FinVec xs) ≡ xs
+Vec→FinVec→Vec {n = zero}  [] = localrefl
+Vec→FinVec→Vec {n = suc n} (x ∷ xs) i = x ∷ Vec→FinVec→Vec xs i
+
+FinVec→Vec→FinVec : {A : Type} {n : ℕ} (xs : Fin n → A) → Vec→FinVec (FinVec→Vec xs) ≡ xs
+FinVec→Vec→FinVec {n = zero} xs = localfunExt λ f → ⊥-rec (¬Fin0 f)
+FinVec→Vec→FinVec {n = suc n} xs = localfunExt goal
+  where
+  goal : (f : Fin (suc n))
+       → Vec→FinVec (xs zero ∷ FinVec→Vec (λ x → xs (suc x))) f ≡ xs f
+  goal zero = localrefl
+  goal (suc f) i = FinVec→Vec→FinVec (λ x → xs (suc x)) i f
+
+
+
+VecMatrix : (A : Type) (m n : ℕ) → Type
+VecMatrix A m n = Vec (Vec A n) m
+
+FinMatrix : (A : Type) (m n : ℕ) → Type
+FinMatrix A m n = Fin m → Fin n → A
+
+FinMatrix→VecMatrix : {A : Type} {m n : ℕ} → FinMatrix A m n → VecMatrix A m n
+FinMatrix→VecMatrix M = FinVec→Vec (λ fm → FinVec→Vec (λ fn → M fm fn))
+
+VecMatrix→FinMatrix : {A : Type} {m n : ℕ} → VecMatrix A m n → FinMatrix A m n
+VecMatrix→FinMatrix M fn fm = Vec→FinVec (Vec→FinVec M fn) fm
+
+FinMatrix→VecMatrix→FinMatrix : {A : Type} {m n : ℕ} (M : FinMatrix A m n) → VecMatrix→FinMatrix (FinMatrix→VecMatrix M) ≡ M
+FinMatrix→VecMatrix→FinMatrix {m = zero} M = localfunExt λ f → ⊥-rec (¬Fin0 f)
+FinMatrix→VecMatrix→FinMatrix {m = suc m} {n = zero} M = funExt₂ λ _ f → ⊥-rec (¬Fin0 f)
+FinMatrix→VecMatrix→FinMatrix {m = suc m} {n = suc n} M = funExt₂ goal
+  where
+  goal : (fm : Fin (suc m)) (fn : Fin (suc n)) →
+         VecMatrix→FinMatrix (_ ∷ FinMatrix→VecMatrix (λ z → M (suc z))) fm fn ≡ M fm fn
+  goal zero zero = localrefl
+  goal zero (suc fn) i = FinVec→Vec→FinVec (λ z → M zero (suc z)) i fn
+  goal (suc fm) fn i = FinMatrix→VecMatrix→FinMatrix (λ z → M (suc z)) i fm fn
+
+VecMatrix→FinMatrix→VecMatrix : {A : Type} {m n : ℕ} (M : VecMatrix A m n) → FinMatrix→VecMatrix (VecMatrix→FinMatrix M) ≡ M
+VecMatrix→FinMatrix→VecMatrix {m = zero} [] = localrefl
+VecMatrix→FinMatrix→VecMatrix {m = suc m} (M ∷ MS) i = Vec→FinVec→Vec M i ∷ VecMatrix→FinMatrix→VecMatrix MS i
+
+FinMatrixIsoVecMatrix : (A : Type) (m n : ℕ) → Iso (FinMatrix A m n) (VecMatrix A m n)
+FinMatrixIsoVecMatrix A m n =
+  iso FinMatrix→VecMatrix VecMatrix→FinMatrix VecMatrix→FinMatrix→VecMatrix FinMatrix→VecMatrix→FinMatrix
+```

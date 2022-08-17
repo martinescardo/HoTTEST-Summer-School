@@ -3,9 +3,8 @@
 Contents:
 
 - More about homogeneous composition (`hcomp`)
-- Cubical univalence (Glue types) + SIP
-- Some cool example of transporting programs/proofs using the SIP and
-  then computing with the result
+- Cubical univalence (Glue types)
+- The structure identity principle (SIP)
 
 ```agda
 {-# OPTIONS --cubical #-}
@@ -14,12 +13,11 @@ module Lecture9-notes where
 
 open import cubical-prelude
 open import Lecture7-notes
-open import Lecture8-notes hiding (compPath ; _∙∙_∙∙_)
+open import Lecture8-notes hiding (compPath)
 
 private
   variable
     A B : Type ℓ
-
 ```
 
 ## More about homogeneous composition (`hcomp`)
@@ -51,6 +49,10 @@ we have `i : I` in the context already and we put `p i` as bottom. The
 direction `j` that we are doing the composition in is abstracted in
 the first argument to `hcomp`.
 
+As we can see here the `hcomp` operation has a very natural geometric
+motivation. The following YouTube video might be very helpful to
+clarify this: https://www.youtube.com/watch?v=MVtlD22Y8SQ
+
 Side remark: this operation is related to lifting conditions for Kan
 cubical sets, i.e. it's a form of open box filling analogous to horn
 filling in Kan complexes.
@@ -78,7 +80,7 @@ _∙∙_∙∙_ : {x y z w : A} → x ≡ y → y ≡ z → z ≡ w → x ≡ w
                         (q i)
 ```
 
-Using this we can define compPath much slicker:
+Using this we can define `compPath` much slicker:
 
 ```text
 _∙_ : {x y z : A} → x ≡ y → y ≡ z → x ≡ z
@@ -229,10 +231,11 @@ gets quite annoying to write `inS`/`outS` everywhere. So the builtin
 the side conditions are then implicit and checked internally.
 
 Another very useful operation is open box *filling*. This produces an
-element corresponding to the interior of the open box:
+element corresponding to the interior of an open box:
 
 ```agda
-hfill' : {A : Type ℓ} {φ : I}
+hfill' : {A : Type ℓ}
+         {φ : I}
          (u : ∀ i → Partial φ A)
          (u0 : A [ φ ↦ u i0 ])
          (i : I) →
@@ -241,14 +244,19 @@ hfill' : {A : Type ℓ} {φ : I}
                ; (i = i0) → outS u0
                ; (i = i1) → hcomp u (outS u0) }) ]
 hfill' {φ = φ} u u0 i = inS (hcomp (λ j → λ { (φ = i1) → u (i ∧ j) 1=1
-                                       ; (i = i0) → outS u0 })
-                              (outS u0))
+                                            ; (i = i0) → outS u0 })
+                                   (outS u0))
 ```
 
 This has a slightly less informative type in the cubical-prelude:
 
 ```text
-hfill : {A : Type ℓ} {φ : I} (u : ∀ i → Partial φ A) (u0 : A [ φ ↦ u i0 ]) (i : I) → A
+hfill : {A : Type ℓ}
+        {φ : I}
+        (u : ∀ i → Partial φ A)
+        (u0 : A [ φ ↦ u i0 ])
+        (i : I) →
+        A
 hfill {φ = φ} u u0 i =
   hcomp (λ j → λ { (φ = i1) → u (i ∧ j) 1=1
                  ; (i = i0) → outS u0 })
@@ -272,7 +280,7 @@ For more examples see Cubical.Foundations.GroupoidLaws in agda/cubical.
 ## Cubical univalence (Glue types) + SIP
 
 A key concept in HoTT/UF is univalence. As we have seen earlier in the
-week this is assumed as an axiom in Book HoTT. In Cubical Agda it is
+course this is assumed as an axiom in Book HoTT. In Cubical Agda it is
 instead provable and has computational content. This means that
 transporting with paths constructed using univalence reduces as
 opposed to Book HoTT where they would be stuck. This simplifies many
@@ -294,9 +302,10 @@ CCHM paper. We won't have time to go into too much details about them
 today, but for practical applications one can usually forget about
 them and use `ua` as a black box. The key idea though is that they are
 similar to `hcomp`'s, but instead of attaching (higher dimensional)
-paths to a base we attach equivalence to a type. One of the original
-applications of this was to give computational meaning to transporting
-in a line of types constructed by `hcomp` in the universe (`Type`).
+paths to a base we attach equivalences to a type. One of the original
+applications of Glue types was to give computational meaning to
+transporting in a line of types constructed by `hcomp` in the universe
+`Type`.
 
 For us today the important point is that transporting along the path
 constructed using `ua` applies the function underlying the
@@ -307,16 +316,22 @@ uaβ : (e : A ≃ B) (x : A) → transport (ua e) x ≡ pr₁ e x
 uaβ e x = transportRefl (equivFun e x)
 ```
 
-Note that for concrete types this typically hold definitionally, but
-for an arbitrary equivalence `e` we have to prove it.
+Note that for concrete types this typically holds definitionally, but
+for an arbitrary equivalence `e` between abstract types `A` and `B` we
+have to prove it.
 
-The fact that we have both ua and uaβ suffices to be able to prove the
-standard formulation of univalence. For details see
-Cubical.Foundations.Univalence in the agda/cubical library.x
+```agda
+uaβℕ : (e : ℕ ≃ ℕ) (x : ℕ) → transport (ua e) x ≡ pr₁ e x
+uaβℕ e x = refl
+```
+
+The fact that we have both `ua` and `uaβ` suffices to be able to prove
+the standard formulation of univalence. For details see
+Cubical.Foundations.Univalence in the agda/cubical library.
 
 The standard way of constructing equivalences is to start with an
-isomorphism and then improve it into an equivalence. The lemma in
-the library which does this is
+isomorphism and then improve it into an equivalence. The lemma in the
+agda/cubical library that does this is
 
 ```text
 isoToEquiv : {A B : Type ℓ} → Iso A B → A ≃ B
@@ -360,13 +375,13 @@ _ : transport (sym sucPath) (pos 0) ≡ negsuc 0
 _ = refl
 ```
 
-Note that we have already used this in the `winding` function in Lecture 7.
+Note that we have already used this in the `winding` function in
+Lecture 7.
 
 One can do more fun things with `sucPath`. For example by composing it
-with `n` times and then transporting along this we get a new addition
-function. By transporting along it backwards we will get subtraction.
-We can use this to `_+ℤ'_` for which is easier to prove `isEquiv (λ n
-→ n +ℤ' m)` since `_+ℤ'_` is defined by `transport`.
+with itself `n` times and then transporting we get a new addition
+function `_+ℤ'_`. It is direct to prove `isEquiv (λ n → n +ℤ' m)` as
+`_+ℤ'_` is defined by `transport`.
 
 ```agda
 addPath : ℕ → ℤ ≡ ℤ
@@ -405,190 +420,90 @@ isEquivAddℤ : (m : ℤ) → isEquiv (λ n → n +ℤ m)
 isEquivAddℤ = subst (λ add → (m : ℤ) → isEquiv (λ n → add n m)) +ℤ'≡+ℤ isEquivAddℤ'
 ```
 
-
 ### The structure identity principle
 
-Combining subst and ua lets us transport any structure on A to get
-a structure on an equivalent type B
+Combining `subst` and `ua` lets us transport any structure on `A` to
+get a structure on an equivalent type `B`:
 
 ```agda
-substEquiv : (S : Type ℓ → Type ℓ') (e : A ≃ B) → S A → S B
+substEquiv : (S : Type → Type) (e : A ≃ B) → S A → S B
 substEquiv S e = subst S (ua e)
 ```
 
-
-**TODO:** do something about the SIP!
+In fact this induces an equivalence:
 
 ```agda
+substEquiv≃ : (S : Type → Type) (e : A ≃ B) → S A ≃ S B
+substEquiv≃ S e = (substEquiv S e) , (isEquivTransport (ap S (ua e)))
+```
 
+What this says is that any structure on types must be invariant under
+equivalence. We can for example take `IsMonoid` for `S` and get that
+any two monoid structures on equivalent types `A` and `B` are
+themselves equivalent. This is a simple version of the *structure
+identity principle* (SIP). There are various more high powered and
+generalized versions which also work for *structured* types
+(e.g. monoids, groups, etc.) together with their corresponding notions
+of *structured* equivalences (e.g. monoid and group isomorphism,
+etc.). We will look more at this later, but for now let's look at a
+nice example where we can use `substEquiv` to transport functions and
+their properties between equivalent types.
 
+When programming and proving properties of programs there are usually
+various tradeoffs between different data representations. Very often
+one version is suitable for proofs while the other is more suitable
+for efficient programming. The standard example of them is unary and
+binary numbers. One way to define binary numbers in Agda is as:
+
+```text
 data Pos : Type where
   pos1  : Pos
   x0    : Pos → Pos
   x1    : Pos → Pos
 
-sucPos : Pos → Pos
-sucPos pos1     = x0 pos1
-sucPos (x0 ps)  = x1 ps
-sucPos (x1 ps)  = x0 (sucPos ps)
-
--- Conversion of Pos to ℕ.
-
-Pos→ℕ : Pos → ℕ
-Pos→ℕ pos1     = suc zero
-Pos→ℕ (x0 ps)  = doubleℕ (Pos→ℕ ps)
-Pos→ℕ (x1 ps)  = suc (doubleℕ (Pos→ℕ ps))
-
--- Unary number induction on Pos.
-
-posInd : {P : Pos → Type} → P pos1 → ((p : Pos) → P p → P (sucPos p)) → (p : Pos) → P p
-posInd {P} h1 hs = f
-  where
-  H : (p : Pos) → P (x0 p) → P (x0 (sucPos p))
-  H p hx0p  = hs (x1 p) (hs (x0 p) hx0p)
-
-  f : (ps : Pos) → P ps
-  f pos1     = h1
-  f (x0 ps)  = posInd (hs pos1 h1) H ps
-  f (x1 ps)  = hs (x0 ps) (posInd (hs pos1 h1) H ps)
-
--- Pos→ℕ is suc-morphism.
-
-Pos→ℕsucPos : (p : Pos) → Pos→ℕ (sucPos p) ≡ suc (Pos→ℕ p)
-Pos→ℕsucPos pos1    = refl
-Pos→ℕsucPos (x0 p)  = refl
-Pos→ℕsucPos (x1 p)  = λ i → doubleℕ (Pos→ℕsucPos p i)
-
-caseNat : ∀ {ℓ} → {A : Type ℓ} → (a0 aS : A) → ℕ → A
-caseNat a0 aS zero    = a0
-caseNat a0 aS (suc n) = aS
-
--- zero is not in the image of Pos→ℕ.
-znots : {n : ℕ} → ¬ (0 ≡ suc n)
-znots eq = subst (caseNat ℕ ⊥) eq 0
-
-zero≠Pos→ℕ : (p : Pos) → ¬ (zero ≡ Pos→ℕ p)
-zero≠Pos→ℕ p  = posInd (λ prf → znots prf) hs p
-  where
-  hs : (p : Pos) → ¬ (zero ≡ Pos→ℕ p) → zero ≡ Pos→ℕ (sucPos p) → ⊥
-  hs p neq ieq  = ⊥-rec (znots (ieq ∙ Pos→ℕsucPos p))
-
--- Conversion from ℕ to Pos.
-
-ℕ→Pos : ℕ → Pos
-ℕ→Pos zero           = pos1
-ℕ→Pos (suc zero)     = pos1
-ℕ→Pos (suc (suc n))  = sucPos (ℕ→Pos (suc n))
-
--- ℕ→Pos is a suc-morphism on { n | n ≥ 1 }.
-
-ℕ→PosSuc : ∀ n → ¬ (zero ≡ n) → ℕ→Pos (suc n) ≡ sucPos (ℕ→Pos n)
-ℕ→PosSuc zero neq     = ⊥-elim (neq refl)
-ℕ→PosSuc (suc n) neq  = refl
-
--- Isomorphism, proven by unary number induction.
-
-Pos→ℕ→Pos : (p : Pos) → ℕ→Pos (Pos→ℕ p) ≡ p
-Pos→ℕ→Pos p  = posInd refl hs p
-  where
-  hs : (p : Pos) → ℕ→Pos (Pos→ℕ p) ≡ p → ℕ→Pos (Pos→ℕ (sucPos p)) ≡ sucPos p
-  hs p hp  =
-    ℕ→Pos (Pos→ℕ (sucPos p)) ≡⟨ ap ℕ→Pos (Pos→ℕsucPos p) ⟩
-    ℕ→Pos (suc (Pos→ℕ p))    ≡⟨ ℕ→PosSuc (Pos→ℕ p) (zero≠Pos→ℕ p) ⟩
-    sucPos (ℕ→Pos (Pos→ℕ p)) ≡⟨ ap sucPos hp ⟩
-    sucPos p ∎
-
-ℕ→Pos→ℕ : (n : ℕ) → Pos→ℕ (ℕ→Pos (suc n)) ≡ suc n
-ℕ→Pos→ℕ zero     = refl
-ℕ→Pos→ℕ (suc n)  =
-  Pos→ℕ (sucPos (ℕ→Pos (suc n))) ≡⟨ Pos→ℕsucPos (ℕ→Pos (suc n)) ⟩
-  suc (Pos→ℕ (ℕ→Pos (suc n)))    ≡⟨ ap suc (ℕ→Pos→ℕ n) ⟩
-  suc (suc n) ∎
-
--- Binary numbers
 data Bin : Type where
   bin0    : Bin
   binPos  : Pos → Bin
+```
 
-ℕ→Bin : ℕ → Bin
-ℕ→Bin zero     = bin0
-ℕ→Bin (suc n)  = binPos (ℕ→Pos (suc n))
+With some work one can prove that this is equivalent to unary numbers
+(see the cubical-prelude for details):
 
-Bin→ℕ : Bin → ℕ
-Bin→ℕ bin0        = zero
-Bin→ℕ (binPos x)  = Pos→ℕ x
-
-ℕ→Bin→ℕ : (n : ℕ) → Bin→ℕ (ℕ→Bin n) ≡ n
-ℕ→Bin→ℕ zero           = refl
-ℕ→Bin→ℕ (suc zero)     = refl
-ℕ→Bin→ℕ (suc (suc n))  =
-    Pos→ℕ (sucPos (ℕ→Pos (suc n))) ≡⟨ Pos→ℕsucPos (ℕ→Pos (suc n)) ⟩
-    suc (Pos→ℕ (ℕ→Pos (suc n)))    ≡⟨ ap suc (ℕ→Bin→ℕ (suc n)) ⟩
-    suc (suc n) ∎
-
-Bin→ℕ→Bin : (n : Bin) → ℕ→Bin (Bin→ℕ n) ≡ n
-Bin→ℕ→Bin bin0  = refl
-Bin→ℕ→Bin (binPos p)  = posInd refl (λ p _ → rem p) p
-  where
-  rem : (p : Pos) → ℕ→Bin (Pos→ℕ (sucPos p)) ≡ binPos (sucPos p)
-  rem p  =
-    ℕ→Bin (Pos→ℕ (sucPos p))       ≡⟨ ap ℕ→Bin (Pos→ℕsucPos p) ⟩
-    binPos (ℕ→Pos (suc (Pos→ℕ p))) ≡⟨ ap binPos (ℕ→PosSuc (Pos→ℕ p) (zero≠Pos→ℕ p) ∙
-                                                              (ap sucPos (Pos→ℕ→Pos p))) ⟩
-    binPos (sucPos p) ∎
-
+```agda
 ℕ≃Bin : ℕ ≃ Bin
 ℕ≃Bin  = isoToEquiv (iso ℕ→Bin Bin→ℕ Bin→ℕ→Bin ℕ→Bin→ℕ)
+```
 
-ℕ≡Bin : ℕ ≡ Bin
-ℕ≡Bin  = ua ℕ≃Bin
+We can now use `substEquiv` to transport addition on `ℕ` together with
+the fact that it's associative over to `Bin`:
 
+```agda
+SemiGroup : Type → Type
+SemiGroup X = Σ _+_ ꞉ (X → X → X) , ((x y z : X) → x + (y + z) ≡ (x + y) + z)
 
-
-T : Type → Type
-T X = Σ _+_ ꞉ (X → X → X) , ((x y z : X) → x + (y + z) ≡ (x + y) + z)
-
-
-TBin : T Bin
-TBin = subst T ℕ≡Bin (_+_ , +-assoc)
+SemiGroupBin : SemiGroup Bin
+SemiGroupBin = substEquiv SemiGroup ℕ≃Bin (_+_ , +-assoc)
 
 _+Bin_ : Bin → Bin → Bin
-_+Bin_  = pr₁ TBin
+_+Bin_  = pr₁ SemiGroupBin
 
 +Bin-assoc : (m n o : Bin) → m +Bin (n +Bin o) ≡ (m +Bin n) +Bin o
-+Bin-assoc = pr₂ TBin
++Bin-assoc = pr₂ SemiGroupBin
 ```
 
+This is nice as it helps us avoid having to repeat work on `Bin` that
+we have already done on `ℕ`. This is however not always what we want
+as `_+Bin_` is not very efficient as an addition function on binary
+numbers. In fact, it will translate its input to unary numbers, add
+using unary addition, and then translate back. This is of course very
+naive and what we instead want to do is to use efficient addition on
+binary numbers, but get the associativity proof for free.
 
-This is however not always what we want as _+Bin_ will translate its
-input to unary numbers, add, and then translate back. Instead we want
-to use efficient addition on binary numbers, but get the associativity
-proof for free. So what we really want is to characterize the equality
-of T-structured types, i.e. we want a proof that two types equipped
-with T-structures are equal if there is a T-structure preserving
-equivalence between them. This is the usual meaning of the *structure
-identity principle* (SIP). This implies in particular that the type of
-paths of monoids/groups/rings/R-modules/... is equivalent to the type
-of monoid/group/ring/R-module/... preserving equivalences.
-
-We formalize this and much more using a cubical version of the SIP in:
-
-Internalizing Representation Independence with Univalence
-Carlo Angiuli, Evan Cavallo, Anders Mörtberg, Max Zeuner
-https://arxiv.org/abs/2009.05547
-
-The binary numbers example with efficient addition is spelled out
-in detail in Section 2.1.1 of:
-
-https://www.doi.org/10.1017/S0956796821000034
-(Can be downloaded from: https://staff.math.su.se/anders.mortberg/papers/cubicalagda2.pdf)
-
+This can be achieved by first defining our fast addition `_+B_ : Bin →
+Bin → Bin` and then prove that the map `ℕ→Bin : ℕ → Bin` maps `x + y :
+ℕ` to `ℕ→Bin x +B ℕ→Bin y : Bin`.
 
 ```
-
-
-
--- fast add
 mutual
   _+P_ : Pos → Pos → Pos
   pos1  +P y     = sucPos y
@@ -647,8 +562,12 @@ sucPos-+P (x1 x) (x1 y) = ap x1 (+PC-suc  x y ∙ sucPos-+P x y)
 ℕ→Bin-+B zero y          = refl
 ℕ→Bin-+B (suc x) zero    = ap (λ x → binPos (ℕ→Pos (suc x))) (+-zero x)
 ℕ→Bin-+B (suc x) (suc y) = ap binPos (ℕ→Pos-+P x y)
+```
 
--- This amounts to proving that (x y : Bin) → x +B y ≡ ℕ→Bin (Bin→ℕ x + Bin→ℕ y)
+Having done this it's now straightforward to prove that `_+B_` is
+associative using the fact that `_+Bin_` is:
+
+```agda
 +B≡+Bin : _+B_ ≡ _+Bin_
 +B≡+Bin i x y = goal x y i
   where
@@ -657,100 +576,45 @@ sucPos-+P (x1 x) (x1 y) = ap x1 (+PC-suc  x y ∙ sucPos-+P x y)
            ∙  sym (ℕ→Bin-+B (Bin→ℕ x) (Bin→ℕ y))
 
 +B-assoc : (m n o : Bin) → m +B (n +B o) ≡ (m +B n) +B o
-+B-assoc m n o =  (λ i → +B≡+Bin i m (+B≡+Bin i n o))
-               ∙  +Bin-assoc m n o
-               ∙  (λ i → +B≡+Bin (~ i) (+B≡+Bin (~ i) m n) o)
-
++B-assoc m n o =
+           (λ i → +B≡+Bin i m (+B≡+Bin i n o))
+               ∙∙ +Bin-assoc m n o
+               ∙∙ (λ i → +B≡+Bin (~ i) (+B≡+Bin (~ i) m n) o)
 ```
 
+This kind of proofs quickly get tedious and it turns out we can
+streamline them using a more high prowered version of the SIP.
+Indeed, what we really want to do is to characterize the equality of
+T-structured types, i.e. we want a proof that two types equipped with
+T-structures are equal if there is a T-structure preserving
+equivalence between them. In the semigroup example above `T` would
+just be the structure of a magma (i.e. a type with a binary operation)
+together with magma preserving equivalence so that we can transport
+for example the fact that the magma is a semigroup over to the other
+magma.
+
+We formalize this and make it more convenient to use using a lot of
+automation in the agda/cubical library. This is documented with
+various more examples in:
+
+Internalizing Representation Independence with Univalence
+Carlo Angiuli, Evan Cavallo, Anders Mörtberg, Max Zeuner
+https://dl.acm.org/doi/10.1145/3434293
+
+The binary numbers example with efficient addition is spelled out in
+detail in Section 2.1.1 of:
+
+https://www.doi.org/10.1017/S0956796821000034
+(Can be downloaded from: https://staff.math.su.se/anders.mortberg/papers/cubicalagda2.pdf)
 
 
 
+Bonus stuff:
 
-
-Here's another cooler example involving matrices:
+If there is time I might show the following slightly cooler example
+involving matrices:
 
 ```agda
-infixr 5 _∷_
-
-data Vec (A : Type) : ℕ → Type where
-  []  : Vec A zero
-  _∷_ : ∀ {n} (x : A) (xs : Vec A n) → Vec A (suc n)
-
-replicate : ∀ {n} {A : Type} → A → Vec A n
-replicate {n = zero}  x = []
-replicate {n = suc n} x = x ∷ replicate x
-
-data Fin : ℕ → Type where
-  zero : {n : ℕ} → Fin (suc n)
-  suc  : {n : ℕ} (i : Fin n) → Fin (suc n)
-
-¬Fin0 : ¬ Fin 0
-¬Fin0 ()
-
-_==_ : ∀ {n} → Fin n → Fin n → Bool
-zero == zero   = true
-zero == suc _  = false
-suc _ == zero  = false
-suc m == suc n = m == n
-
-lookup : {A : Type} {n : ℕ} → Fin n → Vec A n → A
-lookup zero    (x ∷ xs) = x
-lookup (suc i) (x ∷ xs) = lookup i xs
-
-FinVec→Vec : {A : Type} {n : ℕ} → (Fin n → A) → Vec A n
-FinVec→Vec {n = zero}  xs = []
-FinVec→Vec {n = suc _} xs = xs zero ∷ FinVec→Vec (λ x → xs (suc x))
-
-Vec→FinVec : {A : Type} {n : ℕ} → Vec A n → (Fin n → A)
-Vec→FinVec xs f = lookup f xs
-
-Vec→FinVec→Vec : {A : Type} {n : ℕ} (xs : Vec A n) → FinVec→Vec (Vec→FinVec xs) ≡ xs
-Vec→FinVec→Vec {n = zero}  [] = refl
-Vec→FinVec→Vec {n = suc n} (x ∷ xs) i = x ∷ Vec→FinVec→Vec xs i
-
-FinVec→Vec→FinVec : {A : Type} {n : ℕ} (xs : Fin n → A) → Vec→FinVec (FinVec→Vec xs) ≡ xs
-FinVec→Vec→FinVec {n = zero} xs = funExt λ f → ⊥-rec (¬Fin0 f)
-FinVec→Vec→FinVec {n = suc n} xs = funExt goal
-  where
-  goal : (f : Fin (suc n))
-       → Vec→FinVec (xs zero ∷ FinVec→Vec (λ x → xs (suc x))) f ≡ xs f
-  goal zero = refl
-  goal (suc f) i = FinVec→Vec→FinVec (λ x → xs (suc x)) i f
-
-
-
-VecMatrix : (A : Type) (m n : ℕ) → Type
-VecMatrix A m n = Vec (Vec A n) m
-
-FinMatrix : (A : Type) (m n : ℕ) → Type
-FinMatrix A m n = Fin m → Fin n → A
-
-FinMatrix→VecMatrix : {A : Type} {m n : ℕ} → FinMatrix A m n → VecMatrix A m n
-FinMatrix→VecMatrix M = FinVec→Vec (λ fm → FinVec→Vec (λ fn → M fm fn))
-
-VecMatrix→FinMatrix : {A : Type} {m n : ℕ} → VecMatrix A m n → FinMatrix A m n
-VecMatrix→FinMatrix M fn fm = Vec→FinVec (Vec→FinVec M fn) fm
-
-FinMatrix→VecMatrix→FinMatrix : {A : Type} {m n : ℕ} (M : FinMatrix A m n) → VecMatrix→FinMatrix (FinMatrix→VecMatrix M) ≡ M
-FinMatrix→VecMatrix→FinMatrix {m = zero} M = funExt λ f → ⊥-rec (¬Fin0 f)
-FinMatrix→VecMatrix→FinMatrix {m = suc m} {n = zero} M = funExt₂ λ _ f → ⊥-rec (¬Fin0 f)
-FinMatrix→VecMatrix→FinMatrix {m = suc m} {n = suc n} M = funExt₂ goal
-  where
-  goal : (fm : Fin (suc m)) (fn : Fin (suc n)) →
-         VecMatrix→FinMatrix (_ ∷ FinMatrix→VecMatrix (λ z → M (suc z))) fm fn ≡ M fm fn
-  goal zero zero = refl
-  goal zero (suc fn) i = FinVec→Vec→FinVec (λ z → M zero (suc z)) i fn
-  goal (suc fm) fn i = FinMatrix→VecMatrix→FinMatrix (λ z → M (suc z)) i fm fn
-
-VecMatrix→FinMatrix→VecMatrix : {A : Type} {m n : ℕ} (M : VecMatrix A m n) → FinMatrix→VecMatrix (VecMatrix→FinMatrix M) ≡ M
-VecMatrix→FinMatrix→VecMatrix {m = zero} [] = refl
-VecMatrix→FinMatrix→VecMatrix {m = suc m} (M ∷ MS) i = Vec→FinVec→Vec M i ∷ VecMatrix→FinMatrix→VecMatrix MS i
-
-FinMatrixIsoVecMatrix : (A : Type) (m n : ℕ) → Iso (FinMatrix A m n) (VecMatrix A m n)
-FinMatrixIsoVecMatrix A m n =
-  iso FinMatrix→VecMatrix VecMatrix→FinMatrix VecMatrix→FinMatrix→VecMatrix FinMatrix→VecMatrix→FinMatrix
-
 FinMatrix≃VecMatrix : (A : Type) (m n : ℕ) → FinMatrix A m n ≃ VecMatrix A m n
 FinMatrix≃VecMatrix A m n = isoToEquiv (FinMatrixIsoVecMatrix A m n)
 
@@ -758,11 +622,18 @@ FinMatrix≡VecMatrix : (A : Type) (m n : ℕ) → FinMatrix A m n ≡ VecMatrix
 FinMatrix≡VecMatrix A m n = ua (FinMatrix≃VecMatrix A m n)
 
 
-
-
 -- Example done using ℕ, but could easily be generalized
 addFinMatrix :  {m n : ℕ} → FinMatrix ℕ m n → FinMatrix ℕ m n → FinMatrix ℕ m n
 addFinMatrix M N i j = M i j + N i j
+
+-- Associativity is trivial as addition is pointwise
+addFinMatrixAssoc : {m n : ℕ} → (M N K : FinMatrix ℕ m n)
+                  → addFinMatrix M (addFinMatrix N K) ≡ addFinMatrix (addFinMatrix M N) K
+addFinMatrixAssoc M N K i j k = +-assoc (M j k) (N j k) (K j k) i
+
+
+
+-- Better addition
 
 addVec : {m : ℕ} → Vec ℕ m → Vec ℕ m → Vec ℕ m
 addVec [] [] = []
@@ -771,9 +642,6 @@ addVec (x ∷ xs) (y ∷ ys) = x + y ∷ addVec xs ys
 addVecMatrix : {m n : ℕ} → VecMatrix ℕ m n → VecMatrix ℕ m n → VecMatrix ℕ m n
 addVecMatrix [] [] = []
 addVecMatrix (M ∷ MS) (N ∷ NS) = addVec M N ∷ addVecMatrix MS NS
-
-
--- TODO: the following computation does not use univalence...
 
 M : FinMatrix ℕ 2 2
 M i j = if i == j then 1 else 0
@@ -803,17 +671,27 @@ _ = replaceGoal (FinMatrix≃VecMatrix ℕ 2 2) refl
 
 
 
--- Can also transport proofs
 
 
-addFinMatrixAssoc :  {m n : ℕ} → (M N K : FinMatrix ℕ m n)
-                  → addFinMatrix M (addFinMatrix N K) ≡ addFinMatrix (addFinMatrix M N) K
-addFinMatrixAssoc M N K i j k = +-assoc (M j k) (N j k) (K j k) i
+-- Proving that addVecMatrix is associative is a pain by hand... We
+-- can do it like we did for binary numbers.
+
+SemiGroupFinMatrix : (m n : ℕ) → SemiGroup (FinMatrix ℕ m n)
+SemiGroupFinMatrix m n = (addFinMatrix {m} {n} , addFinMatrixAssoc) 
+
+SemiGroupVecMatrix : (m n : ℕ) → SemiGroup (VecMatrix ℕ m n)
+SemiGroupVecMatrix m n = substEquiv SemiGroup (FinMatrix≃VecMatrix ℕ m n) (SemiGroupFinMatrix m n)
+
+addVecMatrixBad : {m n : ℕ} → VecMatrix ℕ m n → VecMatrix ℕ m n → VecMatrix ℕ m n
+addVecMatrixBad M N = SemiGroupVecMatrix _ _ .pr₁ M N
+
+addVecMatrixBadAssoc : {m n : ℕ} → (M N K : VecMatrix ℕ m n)
+                     → addVecMatrixBad M (addVecMatrixBad N K) ≡ addVecMatrixBad (addVecMatrixBad M N) K  
+addVecMatrixBadAssoc M N K = SemiGroupVecMatrix _ _ .pr₂ M N K
 
 
--- Proving that addVecMatrix is associative is a pain by hand...
 
--- Proof that FinMatrix→VecMatrix is a group homorphism
+-- Proof that FinMatrix→VecMatrix preserves addition
 FinMatrix→VecMatrixHomAdd : (m n : ℕ) (M N : FinMatrix ℕ m n)
   → FinMatrix→VecMatrix (addFinMatrix M N) ≡
     addVecMatrix (FinMatrix→VecMatrix M) (FinMatrix→VecMatrix N)
@@ -827,8 +705,9 @@ FinMatrix→VecMatrixHomAdd (suc m) n M N =
    lem zero V W = refl
    lem (suc n) V W = λ i → V zero + W zero ∷ lem n (λ x → V (suc x)) (λ x → W (suc x)) i
 
-
-
+-- TODO: with some work we can now prove addVecMatrix is
+-- associative. However it is nicer with the infrastructure of the
+-- library...
 ```
 
 
