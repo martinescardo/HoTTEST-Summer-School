@@ -157,6 +157,29 @@ module _ {ℓ ℓ'} {A : Type ℓ} {B : Type ℓ'} where
   retract : (f : A → B) → (g : B → A) → Type ℓ
   retract f g = ∀ a → g (f a) ≡ a
 
+module _ {A B : Type} {f : A → B} (equivF : isEquiv f) where
+  funIsEq : A → B
+  funIsEq = f
+
+  invIsEq : B → A
+  invIsEq y = equivF .equiv-proof y .pr₁ .pr₁
+
+  secIsEq : section f invIsEq
+  secIsEq y = equivF .equiv-proof y .pr₁ .pr₂
+
+  retIsEq : retract f invIsEq
+  retIsEq a i = equivF .equiv-proof (f a) .pr₂ (a , λ _ → f a) i .pr₁
+
+module _ {A B : Type} (w : A ≃ B) where
+  invEq : B → A
+  invEq = invIsEq (pr₂ w)
+
+  retEq : retract (w .pr₁) invEq
+  retEq = retIsEq (pr₂ w)
+
+  secEq : section (w .pr₁) invEq
+  secEq = secIsEq (pr₂ w)
+
 -- Isomorphisms
 record Iso {ℓ ℓ'} (A : Type ℓ) (B : Type ℓ') : Type (ℓ ⊔ ℓ') where
   no-eta-equality
@@ -280,6 +303,18 @@ predSuc (negsuc (suc n)) = λ i → negsuc (suc n)
 sucPath : ℤ ≡ ℤ
 sucPath = isoToPath (iso sucℤ predℤ sucPred predSuc)
 
+_+ℤ_ : ℤ → ℤ → ℤ
+m +ℤ pos n = m +pos n
+  where
+  _+pos_ : ℤ → ℕ  → ℤ
+  z +pos 0 = z
+  z +pos (suc n) = sucℤ (z +pos n)
+m +ℤ negsuc n = m +negsuc n
+  where
+  _+negsuc_ : ℤ → ℕ → ℤ
+  z +negsuc 0 = predℤ z
+  z +negsuc (suc n) = predℤ (z +negsuc n)
+
 
 
 -- 'Data' types from Martín's prelude
@@ -292,4 +327,166 @@ open Unit public
 data Bool : Type where
  true false : Bool
 
+if_then_else_ : {A : Type ℓ} → Bool → A → A → A
+if true  then x else y = x
+if false then x else y = y
 ```
+
+
+```agda
+
+
+funExt₂ : {A : Type ℓ} {B : A → Type} {C : (x : A) → B x → I → Type}
+          {f : (x : A) → (y : B x) → C x y i0}
+          {g : (x : A) → (y : B x) → C x y i1}
+          → ((x : A) (y : B x) → PathP (C x y) (f x y) (g x y))
+          → PathP (λ i → ∀ x y → C x y i) f g
+funExt₂ p i x y = p x y i
+
+doubleℕ : ℕ → ℕ
+doubleℕ zero = zero
+doubleℕ (suc x) = suc (suc (doubleℕ x))
+
++-zero : ∀ m → m + 0 ≡ m
++-zero zero i = zero
++-zero (suc m) i = suc (+-zero m i)
+
++-assoc : ∀ m n o → m + (n + o) ≡ (m + n) + o
++-assoc zero n o i    = n + o
++-assoc (suc m) n o i = suc (+-assoc m n o i)
+
+
+data ⊥ : Type₀ where
+
+
+⊥-elim : {A : ⊥ → Type ℓ} → (x : ⊥) → A x
+⊥-elim ()
+
+⊥-rec : {A : Type ℓ} → ⊥ → A
+⊥-rec ()
+
+¬_ : Type ℓ → Type ℓ
+¬ A = A → ⊥
+
+```
+
+
+Binary numbers code:
+
+```agda
+
+localrefl : {A : Type} {x : A} → x ≡ x
+localrefl {x = x} = λ i → x
+
+localap : {A B : Type} (f : A → B) {x y : A} → x ≡ y → f x ≡ f y
+localap f p i = f (p i)
+
+localfunExt : {A B : Type} {f g : A → B} (p : (x : A) → f x ≡ g x) → f ≡ g
+localfunExt p i x = p x i
+
+
+data Pos : Type where
+  pos1  : Pos
+  x0    : Pos → Pos
+  x1    : Pos → Pos
+
+sucPos : Pos → Pos
+sucPos pos1     = x0 pos1
+sucPos (x0 ps)  = x1 ps
+sucPos (x1 ps)  = x0 (sucPos ps)
+
+Pos→ℕ : Pos → ℕ
+Pos→ℕ pos1     = suc zero
+Pos→ℕ (x0 ps)  = doubleℕ (Pos→ℕ ps)
+Pos→ℕ (x1 ps)  = suc (doubleℕ (Pos→ℕ ps))
+
+posInd : {P : Pos → Type} → P pos1 → ((p : Pos) → P p → P (sucPos p)) → (p : Pos) → P p
+posInd {P} h1 hs = f
+  where
+  H : (p : Pos) → P (x0 p) → P (x0 (sucPos p))
+  H p hx0p  = hs (x1 p) (hs (x0 p) hx0p)
+
+  f : (ps : Pos) → P ps
+  f pos1     = h1
+  f (x0 ps)  = posInd (hs pos1 h1) H ps
+  f (x1 ps)  = hs (x0 ps) (posInd (hs pos1 h1) H ps)
+
+Pos→ℕsucPos : (p : Pos) → Pos→ℕ (sucPos p) ≡ suc (Pos→ℕ p)
+Pos→ℕsucPos pos1    = localrefl
+Pos→ℕsucPos (x0 p)  = localrefl
+Pos→ℕsucPos (x1 p)  = λ i → doubleℕ (Pos→ℕsucPos p i)
+
+caseNat : ∀ {ℓ} → {A : Type ℓ} → (a0 aS : A) → ℕ → A
+caseNat a0 aS zero    = a0
+caseNat a0 aS (suc n) = aS
+
+-- zero is not in the image of Pos→ℕ.
+znots : {n : ℕ} → ¬ (0 ≡ suc n)
+znots eq = transp (λ i → caseNat ℕ ⊥ (eq i)) i0 0
+
+zero≠Pos→ℕ : (p : Pos) → ¬ (zero ≡ Pos→ℕ p)
+zero≠Pos→ℕ p  = posInd (λ prf → znots prf) hs p
+  where
+  hs : (p : Pos) → ¬ (zero ≡ Pos→ℕ p) → zero ≡ Pos→ℕ (sucPos p) → ⊥
+  hs p neq ieq  = ⊥-rec (znots (ieq ∙ Pos→ℕsucPos p))
+
+ℕ→Pos : ℕ → Pos
+ℕ→Pos zero           = pos1
+ℕ→Pos (suc zero)     = pos1
+ℕ→Pos (suc (suc n))  = sucPos (ℕ→Pos (suc n))
+
+ℕ→PosSuc : ∀ n → ¬ (zero ≡ n) → ℕ→Pos (suc n) ≡ sucPos (ℕ→Pos n)
+ℕ→PosSuc zero neq     = ⊥-elim (neq localrefl)
+ℕ→PosSuc (suc n) neq  = localrefl
+
+Pos→ℕ→Pos : (p : Pos) → ℕ→Pos (Pos→ℕ p) ≡ p
+Pos→ℕ→Pos p  = posInd localrefl hs p
+  where
+  hs : (p : Pos) → ℕ→Pos (Pos→ℕ p) ≡ p → ℕ→Pos (Pos→ℕ (sucPos p)) ≡ sucPos p
+  hs p hp  =
+    ℕ→Pos (Pos→ℕ (sucPos p)) ≡⟨ localap ℕ→Pos (Pos→ℕsucPos p) ⟩
+    ℕ→Pos (suc (Pos→ℕ p))    ≡⟨ ℕ→PosSuc (Pos→ℕ p) (zero≠Pos→ℕ p) ⟩
+    sucPos (ℕ→Pos (Pos→ℕ p)) ≡⟨ localap sucPos hp ⟩
+    sucPos p ∎
+
+ℕ→Pos→ℕ : (n : ℕ) → Pos→ℕ (ℕ→Pos (suc n)) ≡ suc n
+ℕ→Pos→ℕ zero     = localrefl
+ℕ→Pos→ℕ (suc n)  =
+  Pos→ℕ (sucPos (ℕ→Pos (suc n))) ≡⟨ Pos→ℕsucPos (ℕ→Pos (suc n)) ⟩
+  suc (Pos→ℕ (ℕ→Pos (suc n)))    ≡⟨ localap suc (ℕ→Pos→ℕ n) ⟩
+  suc (suc n) ∎
+
+-- Binary numbers
+data Bin : Type where
+  bin0    : Bin
+  binPos  : Pos → Bin
+
+ℕ→Bin : ℕ → Bin
+ℕ→Bin zero     = bin0
+ℕ→Bin (suc n)  = binPos (ℕ→Pos (suc n))
+
+Bin→ℕ : Bin → ℕ
+Bin→ℕ bin0        = zero
+Bin→ℕ (binPos x)  = Pos→ℕ x
+
+ℕ→Bin→ℕ : (n : ℕ) → Bin→ℕ (ℕ→Bin n) ≡ n
+ℕ→Bin→ℕ zero           = localrefl
+ℕ→Bin→ℕ (suc zero)     = localrefl
+ℕ→Bin→ℕ (suc (suc n))  =
+    Pos→ℕ (sucPos (ℕ→Pos (suc n))) ≡⟨ Pos→ℕsucPos (ℕ→Pos (suc n)) ⟩
+    suc (Pos→ℕ (ℕ→Pos (suc n)))    ≡⟨ localap suc (ℕ→Bin→ℕ (suc n)) ⟩
+    suc (suc n) ∎
+
+Bin→ℕ→Bin : (n : Bin) → ℕ→Bin (Bin→ℕ n) ≡ n
+Bin→ℕ→Bin bin0  = localrefl
+Bin→ℕ→Bin (binPos p)  = posInd localrefl (λ p _ → rem p) p
+  where
+  rem : (p : Pos) → ℕ→Bin (Pos→ℕ (sucPos p)) ≡ binPos (sucPos p)
+  rem p  =
+    ℕ→Bin (Pos→ℕ (sucPos p))       ≡⟨ localap ℕ→Bin (Pos→ℕsucPos p) ⟩
+    binPos (ℕ→Pos (suc (Pos→ℕ p))) ≡⟨ localap binPos (ℕ→PosSuc (Pos→ℕ p) (zero≠Pos→ℕ p) ∙
+                                                              (localap sucPos (Pos→ℕ→Pos p))) ⟩
+    binPos (sucPos p) ∎
+```
+
+
