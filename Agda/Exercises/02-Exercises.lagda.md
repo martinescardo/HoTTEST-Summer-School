@@ -149,7 +149,7 @@ bool-≡-char₁ = {!!}
 
 ### Exercise 3 (★★)
 
-Using ex. 2, concldude that
+Using ex. 2, conclude that
 ```agda
 true≢false : ¬ (true ≡ false)
 true≢false ()
