@@ -111,8 +111,11 @@ Eckmann-Hilton = {!!}
 # Part 2: Binary numbers as a HIT
 Here is another HIT describing binary numbers. The idea is that a binary number is a list of booleans, modulo trailing zeros.
 
-For instance, `true ∷ false ∷ true ∷ []` is the binary number 101...
-... and so is `true ∷ false ∷ true ∷ false ∷ false ∷ []`
+For instance, `true ∷ true ∷ true ∷ []` is the binary number 110 ...
+... and so is `true ∷ true ∷ false ∷ false ∷ false ∷ []`
+
+(!) Note that we're interpreting 110 as 1·2⁰ + 1·2¹ + 0·2² here.
+
 ```agda
 0B = false
 1B = true
