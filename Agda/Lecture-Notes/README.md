@@ -42,7 +42,7 @@ Notes originally written for the module *Advanced Functional Programming* of the
 
 ## Advanced further reading
 
- 1. [Introduction to Homotopy Type Theory and Univalent Foundations (HoTT/UF) with Agda](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-files/HoTT-UF-Agda.html#contents).
+ 1. [Introduction to Homotopy Type Theory and Univalent Foundations (HoTT/UF) with Agda](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#contents).
 
 ## Follow the links
 
