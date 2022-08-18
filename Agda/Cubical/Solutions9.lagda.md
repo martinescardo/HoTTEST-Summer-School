@@ -171,13 +171,11 @@ rUnit+LB : (x : ListBin) → x +LB [] ≡ x
 (x ∷ xs) +LB [] = x ∷ xs
 (true ∷ xs) +LB (true ∷ ys) = false ∷ sucListBin (xs +LB ys)
 (true ∷ xs) +LB (false ∷ ys) = true ∷ (xs +LB ys)
-(false ∷ xs) +LB (true ∷ ys) = true ∷ (xs +LB ys)
-(false ∷ xs) +LB (false ∷ ys) = false ∷ (xs +LB ys)
+(false ∷ xs) +LB (y ∷ ys) = y ∷ (xs +LB ys)
 (true ∷ xs) +LB drop0 i = true ∷ (rUnit+LB xs i)
 (false ∷ xs) +LB drop0 i = false ∷ (rUnit+LB xs i)
 drop0 i +LB [] = drop0 i
-drop0 i +LB (true ∷ y) = true ∷ y
-drop0 i +LB (false ∷ y) = false ∷ y
+drop0 i +LB (y ∷ ys) = y ∷ ys
 drop0 i +LB drop0 j = drop0 (j ∧ i)
 rUnit+LB [] = refl
 rUnit+LB (x ∷ x₁) = refl
