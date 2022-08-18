@@ -210,8 +210,6 @@ comp-filler {x = x} p q j i = hfill (λ k → λ { (i = i0) → x
 rUnit : {x y : A} (p : x ≡ y) → p ∙ refl ≡ p
 rUnit p = sym (comp-filler p refl)
 
-
-
 suspBoolChar : Susp Bool ≡ S¹
 suspBoolChar = isoToPath (iso to fro toFro froTo)
   where

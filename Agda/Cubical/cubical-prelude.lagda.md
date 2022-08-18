@@ -347,6 +347,19 @@ doubleℕ : ℕ → ℕ
 doubleℕ zero = zero
 doubleℕ (suc x) = suc (suc (doubleℕ x))
 
++-suc : ∀ m n → suc (m + n) ≡ m + suc n
++-suc zero n i = suc n
++-suc (suc m) n i = suc (+-suc m n i)
+
++-comm : ∀ m n → m + n ≡ n + m
++-comm zero zero i = 0
++-comm zero (suc n) i = suc (+-comm zero n i)
++-comm (suc m) zero i = suc (+-comm m zero i)
++-comm (suc m) (suc n) i =
+  suc (((λ i →  (+-suc m n) (~ i))
+  ∙ (λ j → suc (+-comm m n j))
+  ∙ +-suc n m) i)
+
 +-zero : ∀ m → m + 0 ≡ m
 +-zero zero i = zero
 +-zero (suc m) i = suc (+-zero m i)
