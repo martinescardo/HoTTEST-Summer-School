@@ -1,4 +1,4 @@
-# Week 8 - Cubical Agda Exercises
+# Week 9 - Cubical Agda Exercises
 
 ## Standard disclaimer:
 
@@ -31,25 +31,25 @@ open import Lecture8-notes
 open import Lecture9-notes
 open import Solutions7 hiding (rUnit)
 open import Solutions8
-open import Lecture9-live hiding (_∙_ ; ua ; SemiGroup ; substEquiv)
+open import Lecture9-live using (SemiGroupℕ)
 ```
 
-## Part I: more hcomps
+## Part I: More hcomps
 
 ### Exercise 1 (★★)
-## (a)
-Show the left cancellation law for path composition
-Hint: one hcomp should suffice. Use comp-filler and connections
+### (a)
+Show the left cancellation law for path composition using an hcomp.
+Hint: one hcomp should suffice. Use `comp-filler` and connections
 
 ```agda
 lUnit : {A : Type ℓ} {x y : A} (p : x ≡ y) → refl ∙ p ≡ p
 lUnit = {!!}
 
-
 ```
-(b) Try to mimic the construction of lUnit for rUnit (i.e. redefine it)
-in such a way that rUnit refl ≡ lUnit refl holds by refl.
-Hint: use (almost) the exact same hcomp
+### (b)
+Try to mimic the construction of lUnit for rUnit (i.e. redefine it)
+in such a way that `rUnit refl ≡ lUnit refl` holds by `refl`.
+Hint: use (almost) the exact same hcomp.
 
 ```agda
 rUnit : {A : Type ℓ} {x y : A} (p : x ≡ y) → p ∙ refl ≡ p
@@ -81,12 +81,12 @@ assoc = {!!}
 The goal of this exercise is to give a cubical proof of the Eckmann-Hilton argument,
 which says that path composition for higher loops is commutative
 
-(a) While we cannot get p ∙ q ≡ q ∙ p as a one-liner, we can get a
+(a) While we cannot get `p ∙ q ≡ q ∙ p` as a one-liner, we can get a
 one-liner showing that the identiy holds up to some annoying
 coherences.  Try to understand the following statement (and why it's
 well-typed). After that, fill the holes
 
-Hint: each hole will need a ∨ or a ∧
+Hint: each hole will need a `∨` or a `∧`
 
 ```agda
 pre-EH : {A : Type ℓ} {x : A} (p q : refl {x = x} ≡ refl)
@@ -111,8 +111,8 @@ Eckmann-Hilton = {!!}
 # Part 2: Binary numbers as a HIT
 Here is another HIT describing binary numbers. The idea is that a binary number is a list of booleans, modulo trailing zeros.
 
-For instance, true ∷ false ∷ true ∷ [] is the binary number 101...
-... and so is true ∷ false ∷ true ∷ false ∷ false ∷ []
+For instance, `true ∷ false ∷ true ∷ []` is the binary number 101...
+... and so is `true ∷ false ∷ true ∷ false ∷ false ∷ []`
 ```agda
 0B = false
 1B = true
@@ -125,17 +125,17 @@ data ListBin : Type where
 -- 1 as a binary number
 1LB : ListBin
 1LB = 1B ∷ []
-
 ```
 ### Exercise 4 (★)
 Define the successor function on ListBin
 ```agda
+
 sucListBin : ListBin → ListBin
 sucListBin = {!!}
 
 ```
 ### Exercise 5 (★★)
-Define addition (_+LB_) on ListBin and prove that x +LB [] ≡ x
+Define an addition `+LB` on ListBin and prove that `x +LB [] ≡ x`
 Do this by mutual induction! Make sure the three cases for the right unit law hold by refl.
 ```agda
 
@@ -145,15 +145,16 @@ x +LB y = {!!}
 rUnit+LB = {!!}
 
 ```
-(c) Prove that sucListBin is left distributive over +LB (★★)
-Hint: If you pattern match deep enough, there will be a lot of refls...
+(c) Prove that sucListBin is left distributive over `+LB`
+Hint: If you pattern match deep enough, there should be a lot of refls...
 ```agda
+
 sucListBinDistrL : (x y : ListBin) → sucListBin (x +LB y) ≡ (sucListBin x +LB y)
-sucListBinDistrL x y = {!!}
+sucListBinDistrL = {!!}
 ```
 
 ### Exercise 6 (★)
-Define a map LB→ℕ : ListBin → ℕ and show that it preserves addition
+Define a map `LB→ℕ : ListBin → ℕ` and show that it preserves addition
 
 ```
 ℕ→ListBin : ℕ → ListBin
@@ -165,16 +166,15 @@ Define a map LB→ℕ : ListBin → ℕ and show that it preserves addition
 ```
 
 ### Exercise 7 (★★★)
-Show that ℕ ≃ ListBin.
+Show that `ℕ ≃ ListBin`.
 
 ```agda
 
-
 ListBin→ℕ : ListBin → ℕ
-ListBin→ℕ x = {!!}
+ListBin→ℕ = {!!}
 
-ListBin→ℕ-suc : (x : ListBin) → ListBin→ℕ (sucListBin x) ≡ suc (ListBin→ℕ x)
-ListBin→ℕ-suc = {!!}
+ListBin→ℕ→ListBin : (x : ListBin) → ℕ→ListBin (ListBin→ℕ x) ≡ x
+ListBin→ℕ→ListBin = {!!}
 
 ℕ→ListBin→ℕ : (x : ℕ) → ListBin→ℕ (ℕ→ListBin x) ≡ x
 ℕ→ListBin→ℕ = {!!}
@@ -182,54 +182,21 @@ ListBin→ℕ-suc = {!!}
 ℕ≃ListBin : ℕ ≃ ListBin
 ℕ≃ListBin = {!!}
 
-
 ```
 # Part 3: The SIP
-### Exericise 7 (★★)
-Show that, using an SIP inspired argument, if (A , _+A_) is a semigroup and (B , _+B_) is some other type with a composition satisfying:
-(i) (e : A ≃ B)
-(ii) ((x y : A) → e (x +A y) ≡ e x +B e y
-then (B , _+B_) defines a semigroup.
+### Exericise 8 (★★)
+Show that, using an SIP inspired argument, if `(A , _+A_)` is a semigroup and `(B , _+B_)` is some other type with a composition satisfying:
 
-Conclude that (ListBin , _+LB_) is a semigroup
+(i) `e : A ≃ B`
+
+(ii) `((x y : A) → e (x +A y) ≡ e x +B e y`
+
+then `(B , _+B_)` defines a semigroup.
+
+Conclude that `(ListBin , _+LB_)` is a semigroup
 
 For inspiration, see Lecture9-notes
 ```agda
 
-
-module _ {A B : Type} (SA : SemiGroup A) (e : A ≃ B)
-  (_+B_ : B → B → B)
-  (hom : (x y : A) → pr₁ e (pr₁ SA x y) ≡ ((pr₁ e x) +B pr₁ e y))
-  where
-  f = pr₁ e
-  f⁻ = invEq e
-
-  _+A_ = pr₁ SA
-
-  SemiGroupSIPAux : SemiGroup B
-  SemiGroupSIPAux = substEquiv SemiGroup e SA
-
-  _+B'_ = pr₁ SemiGroupSIPAux
-
-  +B'≡+B : (x y : B) → x +B' y ≡ (x +B y)
-  +B'≡+B x y =
-    (x +B' y)                                          ≡⟨ transportRefl (f (f⁻ (transport refl x)
-                                                                        +A (f⁻ (transport refl y)))) ⟩
-    f (f⁻ (transport refl x) +A f⁻ (transport refl y)) ≡⟨ (λ i → f (f⁻ (transportRefl x i)
-                                                         +A f⁻ (transportRefl y i))) ⟩
-    f (f⁻ x +A f⁻ y)                                   ≡⟨ hom (f⁻ x) (f⁻ y) ⟩
-    (f (f⁻ x) +B f (f⁻ y))                             ≡⟨ (λ i → secEq e x i +B secEq e y i) ⟩
-    x +B y ∎
-
-  assoc+B : ∀ m n o → m +B (n +B o) ≡ (m +B n) +B o
-  assoc+B m n o =
-     (m +B (n +B o))          ≡⟨ (λ i → +B'≡+B m (+B'≡+B n o (~ i)) (~ i)) ⟩
-     (m +B' (n +B' o))        ≡⟨ pr₂ SemiGroupSIPAux m n o ⟩
-     ((m +B' n) +B' o)        ≡⟨ (λ i → +B'≡+B (+B'≡+B m n i) o i) ⟩
-     ((m +B n) +B o) ∎
-
-  inducedSemiGroup : SemiGroup B
-  inducedSemiGroup = _+B_ , assoc+B
-
 SemiGroupListBin : SemiGroup ListBin
-SemiGroupListBin = inducedSemiGroup SemiGroupℕ ℕ≃ListBin _+LB_ ℕ→ListBin-pres+
+SemiGroupListBin = {!!}

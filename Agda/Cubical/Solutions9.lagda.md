@@ -1,4 +1,4 @@
-# Week 8 - Cubical Agda Exercises
+# Week 9 - Cubical Agda Exercises
 
 ## Standard disclaimer:
 
@@ -31,7 +31,7 @@ open import Lecture8-notes
 open import Lecture9-notes
 open import Solutions7 hiding (rUnit)
 open import Solutions8
-open import Lecture9-live hiding (_∙_ ; ua ; SemiGroup ; substEquiv)
+open import Lecture9-live using (SemiGroupℕ)
 ```
 
 ## Part I: More hcomps
@@ -184,7 +184,7 @@ rUnit+LB (x ∷ x₁) = refl
 rUnit+LB (drop0 i) = refl
 
 ```
-(c) Prove that sucListBin is left distributive over `+LB` (★★)
+(c) Prove that sucListBin is left distributive over `+LB`
 Hint: If you pattern match deep enough, there should be a lot of refls...
 ```agda
 
