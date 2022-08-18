@@ -34,12 +34,12 @@ open import Solutions8
 open import Lecture9-live hiding (_∙_ ; ua ; SemiGroup ; substEquiv)
 ```
 
-## Part I: more hcomps
+## Part I: More hcomps
 
 ### Exercise 1 (★★)
-## (a)
-Show the left cancellation law for path composition
-Hint: one hcomp should suffice. Use comp-filler and connections
+### (a)
+Show the left cancellation law for path composition using an hcomp.
+Hint: one hcomp should suffice. Use `comp-filler` and connections
 
 ```agda
 lUnit : {A : Type ℓ} {x y : A} (p : x ≡ y) → refl ∙ p ≡ p
@@ -52,9 +52,10 @@ lUnit {x = x} {y = y} p i j =
 
 
 ```
-(b) Try to mimic the construction of lUnit for rUnit (i.e. redefine it)
-in such a way that rUnit refl ≡ lUnit refl holds by refl.
-Hint: use (almost) the exact same hcomp
+### (b)
+Try to mimic the construction of lUnit for rUnit (i.e. redefine it)
+in such a way that `rUnit refl ≡ lUnit refl` holds by `refl`.
+Hint: use (almost) the exact same hcomp.
 
 ```agda
 rUnit : {A : Type ℓ} {x y : A} (p : x ≡ y) → p ∙ refl ≡ p
@@ -96,12 +97,12 @@ assoc {x = x} {y = y} p q r i j =
 The goal of this exercise is to give a cubical proof of the Eckmann-Hilton argument,
 which says that path composition for higher loops is commutative
 
-(a) While we cannot get p ∙ q ≡ q ∙ p as a one-liner, we can get a
+(a) While we cannot get `p ∙ q ≡ q ∙ p` as a one-liner, we can get a
 one-liner showing that the identiy holds up to some annoying
 coherences.  Try to understand the following statement (and why it's
 well-typed). After that, fill the holes
 
-Hint: each hole will need a ∨ or a ∧
+Hint: each hole will need a `∨` or a `∧`
 
 ```agda
 pre-EH : {A : Type ℓ} {x : A} (p q : refl {x = x} ≡ refl)
@@ -131,8 +132,8 @@ Eckmann-Hilton {x = x} p q k i =
 # Part 2: Binary numbers as a HIT
 Here is another HIT describing binary numbers. The idea is that a binary number is a list of booleans, modulo trailing zeros.
 
-For instance, true ∷ false ∷ true ∷ [] is the binary number 101...
-... and so is true ∷ false ∷ true ∷ false ∷ false ∷ []
+For instance, `true ∷ false ∷ true ∷ []` is the binary number 101...
+... and so is `true ∷ false ∷ true ∷ false ∷ false ∷ []`
 ```agda
 0B = false
 1B = true
@@ -160,7 +161,7 @@ sucListBin (drop0 i) = 1LB
 
 ```
 ### Exercise 5 (★★)
-Define addition (_+LB_) on ListBin and prove that x +LB [] ≡ x
+Define an addition `+LB` on ListBin and prove that `x +LB [] ≡ x`
 Do this by mutual induction! Make sure the three cases for the right unit law hold by refl.
 ```agda
 
@@ -183,8 +184,8 @@ rUnit+LB (x ∷ x₁) = refl
 rUnit+LB (drop0 i) = refl
 
 ```
-(c) Prove that sucListBin is left distributive over +LB (★★)
-Hint: If you pattern match deep enough, there will be a lot of refls...
+(c) Prove that sucListBin is left distributive over `+LB` (★★)
+Hint: If you pattern match deep enough, there should be a lot of refls...
 ```agda
 
 sucListBinDistrL : (x y : ListBin) → sucListBin (x +LB y) ≡ (sucListBin x +LB y)
@@ -210,7 +211,7 @@ sucListBinDistrL (drop0 i) (drop0 j) = refl
 ```
 
 ### Exercise 6 (★)
-Define a map LB→ℕ : ListBin → ℕ and show that it preserves addition
+Define a map `LB→ℕ : ListBin → ℕ` and show that it preserves addition
 
 ```
 ℕ→ListBin : ℕ → ListBin
@@ -229,8 +230,7 @@ Define a map LB→ℕ : ListBin → ℕ and show that it preserves addition
 ```
 
 ### Exercise 7 (★★★)
-Show that ℕ ≃ ListBin.
-As a hint, I have outlined some useful lemmas to this end. Feel free to delete them if you don't need them
+Show that `ℕ ≃ ListBin`.
 
 ```agda
 
@@ -305,13 +305,16 @@ ListBin→ℕ→ListBin (drop0 i) = help i
 
 ```
 # Part 3: The SIP
-### Exericise 7 (★★)
-Show that, using an SIP inspired argument, if (A , _+A_) is a semigroup and (B , _+B_) is some other type with a composition satisfying:
-(i) (e : A ≃ B)
-(ii) ((x y : A) → e (x +A y) ≡ e x +B e y
-then (B , _+B_) defines a semigroup.
+### Exericise 8 (★★)
+Show that, using an SIP inspired argument, if `(A , _+A_)` is a semigroup and `(B , _+B_)` is some other type with a composition satisfying:
 
-Conclude that (ListBin , _+LB_) is a semigroup
+(i) `e : A ≃ B`
+
+(ii) `((x y : A) → e (x +A y) ≡ e x +B e y`
+
+then `(B , _+B_)` defines a semigroup.
+
+Conclude that `(ListBin , _+LB_)` is a semigroup
 
 For inspiration, see Lecture9-notes
 ```agda
