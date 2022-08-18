@@ -213,7 +213,7 @@ sucListBinDistrL (drop0 i) (drop0 j) = refl
 ### Exercise 6 (★)
 Define a map `LB→ℕ : ListBin → ℕ` and show that it preserves addition
 
-```
+```agda
 ℕ→ListBin : ℕ → ListBin
 ℕ→ListBin zero = []
 ℕ→ListBin (suc x) = sucListBin (ℕ→ListBin x)
@@ -234,7 +234,7 @@ Show that `ℕ ≃ ListBin`.
 
 ```agda
 
--- The following lemma might come in handy
+-- useful lemma
 move4 : (x y z w : ℕ) → (x + y) + (z + w) ≡ (x + z) + (y + w)
 move4 x y z w =
   (x + y) + (z + w)   ≡⟨ +-assoc (x + y) z w ⟩

@@ -156,7 +156,7 @@ sucListBinDistrL = {!!}
 ### Exercise 6 (★)
 Define a map `LB→ℕ : ListBin → ℕ` and show that it preserves addition
 
-```
+```agda
 ℕ→ListBin : ℕ → ListBin
 ℕ→ListBin = {!!}
 
