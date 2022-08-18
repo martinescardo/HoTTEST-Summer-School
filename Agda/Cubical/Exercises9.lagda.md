@@ -114,7 +114,7 @@ Here is another HIT describing binary numbers. The idea is that a binary number 
 For instance, `true ∷ true ∷ true ∷ []` is the binary number 110 ...
 ... and so is `true ∷ true ∷ false ∷ false ∷ false ∷ []`
 
-(!) Note that we're interpreting 110 as 1*2⁰ + 1*2¹ + 0*2² here.
+(!) Note that we're interpreting 110 as 1·2⁰ + 1·2¹ + 0·2² here.
 
 ```agda
 0B = false
