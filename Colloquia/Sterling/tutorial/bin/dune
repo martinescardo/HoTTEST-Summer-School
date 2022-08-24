@@ -1,0 +1,4 @@
+(executable
+ (public_name tutorial)
+ (name main)
+ (libraries tutorial))
