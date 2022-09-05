@@ -268,7 +268,7 @@ leq-zero n = {!!}
 ## Part V -- The well-ordering principle of ℕ
 
 Classically, the well-ordering principle states that every non-empty set
-of natural numbers has a least element.
+of natural numbers has a least one element.
 
 In HoTT, such subsets can be translated as decidable type family.
 Recall the definition of decidability:
