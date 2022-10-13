@@ -1,6 +1,6 @@
 The video recording is available at <https://youtu.be/VbBDxVEu_bA>. The slides contain no known mistakes, but the recording has some:
 
-1. At 00:25:38, I meant to mention the mathematician “Danial Kan,” but said something like “Don??? Kan” instead.
+1. At 00:25:38, I meant to mention the mathematician “Daniel Kan,” but said something like “Don??? Kan” instead.
 
 2. Around 00:27:18, I said the type theory would have been broken. A better answer is that the types would likely be forced to have compositions due to the global coherence of a type theory, but if so, it is not obvious how terms compute in the presence of those forced compositions. That said, I feel this explanation is not entirely satisfactory, either.
 
