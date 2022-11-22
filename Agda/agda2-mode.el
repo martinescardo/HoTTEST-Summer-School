@@ -1,0 +1,1 @@
+.cabal/store/ghc-9.2.5/Agd-2.6.2.2-da9228b3/share/emacs-mode/agda2-mode.el
