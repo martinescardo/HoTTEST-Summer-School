@@ -34,7 +34,7 @@ Most people use emacs with agda-mode to edit, but you can also use neovim with
 cornelis or vscode with the agda-mode port.
 
 To get emacs with agda-mode set up, there's a [tutorial
-here](https://agda.readthedocs.io/en/v2.6.2.2/getting-started/installation.html#running-the-agda-mode-program)
+here](https://agda.readthedocs.io/en/v2.6.2.2/getting-started/installation.html#running-the-agda-mode-program); installing from `cabal` leads to a complaint that some comments in `agda-mode2.el` are wider than 80 characters.  In case you run into that comment, an edited version of the file is provided [here](agda-mode2.el), simply replace it.
 
 To get neovim with corenlis setup, there's installation instructions on [their
 GitHub](https://github.com/isovector/cornelis)
