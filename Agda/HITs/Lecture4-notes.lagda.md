@@ -327,11 +327,18 @@ module _  {C : Type} {A : Type} {B : Type} {f : C → A} {g : C → B} where
     inr : B → Pushout C A B f g
     glue : (c : C) → inl (f c) ≡ inr (g c)
     Push-rec : {X : Type} (l : A → X) (r : B → X) (gl : (c : C) → l (f c) ≡ r (g c))
-             → Pushout C A B f g → X           
-    Push-rec-glue-l : {X : Type} (l : A → X) (r : B → X) (gl : (c : C) → l (f c) ≡ r (g c))
+             → Pushout C A B f g → X
+             
+    Push-rec-inl : {X : Type} (l : A → X) (r : B → X) (gl : (c : C) → l (f c) ≡ r (g c))
                     → (a : A) → (Push-rec l r gl) (inl a) ≡ l a            
-    Push-rec-glue-r : {X : Type} (l : A → X) (r : B → X) (gl : (c : C) → l (f c) ≡ r (g c))
+    Push-rec-inr : {X : Type} (l : A → X) (r : B → X) (gl : (c : C) → l (f c) ≡ r (g c))
                     → (b : B) → (Push-rec l r gl) (inr b) ≡ r b
+                           
+    Push-rec-glue : {X : Type} (l : A → X) (r : B → X) (gl : (c : C) → l (f c) ≡ r (g c))
+                    → (c : C) → gl c ≡ (l (f c)                    ≡⟨ !  (Push-rec-inl l r gl (f c)) ⟩
+                                       Push-rec l r gl (inl (f c)) ≡⟨ ap (Push-rec l r gl) (glue c) ⟩
+                                       Push-rec l r gl (inr (g c)) ≡⟨     Push-rec-inr l r gl (g c) ⟩
+                                       r (g c) ∎)                                       
 ```                    
 
 # Relation quotient
