@@ -1,2 +1,5 @@
 name: hits-lectures
 include: .
+flags:
+  --cubical-compatible
+  -WnoUnsupportedIndexedMatch
