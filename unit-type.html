@@ -31,29 +31,29 @@ Birmingham</a>, UK.</p>
 </pre>-->
 <h1 id="the-unit-type-𝟙">The unit type 𝟙</h1>
 We now redefine the unit type as a record:
-<pre class="Agda"><a id="389" class="Keyword">record</a> <a id="𝟙"></a><a id="396" href="unit-type.html#396" data-type="Type" class="Record">𝟙</a> <a id="398" class="Symbol">:</a> <a id="400" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a> <a id="405" class="Keyword">where</a>
+<pre class="Agda"><a id="389" class="Keyword">record</a> <a id="𝟙"></a><a id="396" href="unit-type.html#396" data-type="general-notation.Type" class="Record">𝟙</a> <a id="398" class="Symbol">:</a> <a id="400" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a> <a id="405" class="Keyword">where</a>
  <a id="412" class="Keyword">constructor</a>
-  <a id="⋆"></a><a id="426" href="unit-type.html#426" data-type="𝟙" class="InductiveConstructor">⋆</a>
+  <a id="⋆"></a><a id="426" href="unit-type.html#426" data-type="unit-type.𝟙" class="InductiveConstructor">⋆</a>
 
-<a id="429" class="Keyword">open</a> <a id="434" href="unit-type.html#396" data-type="Type" class="Module">𝟙</a> <a id="436" class="Keyword">public</a>
+<a id="429" class="Keyword">open</a> <a id="434" href="unit-type.html#396" data-type="general-notation.Type" class="Module">𝟙</a> <a id="436" class="Keyword">public</a>
 </pre>
 In logical terms, we can interpret <code>𝟙</code> as “true”, because we
 can always exhibit an element of it, namely <code>⋆</code>. Its
 elimination principle is as follows:
-<pre class="Agda"><a id="𝟙-elim"></a><a id="606" href="unit-type.html#606" data-type="A ⋆ → (x : 𝟙) → A x" class="Function">𝟙-elim</a> <a id="613" class="Symbol">:</a> <a id="615" class="Symbol">{</a><a id="616" href="unit-type.html#616" class="Bound">A</a> <a id="618" class="Symbol">:</a> <a id="620" href="unit-type.html#396" data-type="Type" class="Record">𝟙</a> <a id="622" class="Symbol">→</a> <a id="624" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="628" class="Symbol">}</a>
-       <a id="637" class="Symbol">→</a> <a id="639" href="unit-type.html#616" class="Bound">A</a> <a id="641" href="unit-type.html#426" data-type="𝟙" class="InductiveConstructor">⋆</a>
-       <a id="650" class="Symbol">→</a> <a id="652" class="Symbol">(</a><a id="653" href="unit-type.html#653" class="Bound">x</a> <a id="655" class="Symbol">:</a> <a id="657" href="unit-type.html#396" data-type="Type" class="Record">𝟙</a><a id="658" class="Symbol">)</a> <a id="660" class="Symbol">→</a> <a id="662" href="unit-type.html#616" class="Bound">A</a> <a id="664" href="unit-type.html#653" class="Bound">x</a>
-<a id="666" href="unit-type.html#606" data-type="A ⋆ → (x : 𝟙) → A x" class="Function">𝟙-elim</a> <a id="673" href="unit-type.html#673" class="Bound">a</a> <a id="675" href="unit-type.html#426" data-type="𝟙" class="InductiveConstructor">⋆</a> <a id="677" class="Symbol">=</a> <a id="679" href="unit-type.html#673" class="Bound">a</a>
+<pre class="Agda"><a id="𝟙-elim"></a><a id="606" href="unit-type.html#606" data-type="A unit-type.⋆ → (x : unit-type.𝟙) → A x" class="Function">𝟙-elim</a> <a id="613" class="Symbol">:</a> <a id="615" class="Symbol">{</a><a id="616" href="unit-type.html#616" class="Bound">A</a> <a id="618" class="Symbol">:</a> <a id="620" href="unit-type.html#396" data-type="general-notation.Type" class="Record">𝟙</a> <a id="622" class="Symbol">→</a> <a id="624" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="628" class="Symbol">}</a>
+       <a id="637" class="Symbol">→</a> <a id="639" href="unit-type.html#616" class="Bound">A</a> <a id="641" href="unit-type.html#426" data-type="unit-type.𝟙" class="InductiveConstructor">⋆</a>
+       <a id="650" class="Symbol">→</a> <a id="652" class="Symbol">(</a><a id="653" href="unit-type.html#653" class="Bound">x</a> <a id="655" class="Symbol">:</a> <a id="657" href="unit-type.html#396" data-type="general-notation.Type" class="Record">𝟙</a><a id="658" class="Symbol">)</a> <a id="660" class="Symbol">→</a> <a id="662" href="unit-type.html#616" class="Bound">A</a> <a id="664" href="unit-type.html#653" class="Bound">x</a>
+<a id="666" href="unit-type.html#606" data-type="A unit-type.⋆ → (x : unit-type.𝟙) → A x" class="Function">𝟙-elim</a> <a id="673" href="unit-type.html#673" class="Bound">a</a> <a id="675" href="unit-type.html#426" data-type="unit-type.𝟙" class="InductiveConstructor">⋆</a> <a id="677" class="Symbol">=</a> <a id="679" href="unit-type.html#673" class="Bound">a</a>
 </pre>
 In logical terms, this says that it order to prove that a property
 <code>A</code> of elements of the unit type <code>𝟙</code> holds for all
 elements of the type <code>𝟙</code>, it is enough to prove that it holds
 for the element <code>⋆</code>. The non-dependent version says that if A
 holds, then “true implies A”.
-<pre class="Agda"><a id="𝟙-nondep-elim"></a><a id="965" href="unit-type.html#965" data-type="A → 𝟙 → A" class="Function">𝟙-nondep-elim</a> <a id="979" class="Symbol">:</a> <a id="981" class="Symbol">{</a><a id="982" href="unit-type.html#982" class="Bound">A</a> <a id="984" class="Symbol">:</a> <a id="986" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="990" class="Symbol">}</a>
+<pre class="Agda"><a id="𝟙-nondep-elim"></a><a id="965" href="unit-type.html#965" data-type="A → unit-type.𝟙 → A" class="Function">𝟙-nondep-elim</a> <a id="979" class="Symbol">:</a> <a id="981" class="Symbol">{</a><a id="982" href="unit-type.html#982" class="Bound">A</a> <a id="984" class="Symbol">:</a> <a id="986" href="general-notation.html#715" data-type="Set₁" class="Function">Type</a><a id="990" class="Symbol">}</a>
               <a id="1006" class="Symbol">→</a> <a id="1008" href="unit-type.html#982" class="Bound">A</a>
-              <a id="1024" class="Symbol">→</a> <a id="1026" href="unit-type.html#396" data-type="Type" class="Record">𝟙</a> <a id="1028" class="Symbol">→</a> <a id="1030" href="unit-type.html#982" class="Bound">A</a>
-<a id="1032" href="unit-type.html#965" data-type="A → 𝟙 → A" class="Function">𝟙-nondep-elim</a> <a id="1046" class="Symbol">{</a><a id="1047" href="unit-type.html#1047" class="Bound">A</a><a id="1048" class="Symbol">}</a> <a id="1050" class="Symbol">=</a> <a id="1052" href="unit-type.html#606" data-type="A ⋆ → (x : 𝟙) → A x" class="Function">𝟙-elim</a> <a id="1059" class="Symbol">{λ</a> <a id="1062" href="unit-type.html#1062" class="Bound">_</a> <a id="1064" class="Symbol">→</a> <a id="1066" href="unit-type.html#1047" class="Bound">A</a><a id="1067" class="Symbol">}</a>
+              <a id="1024" class="Symbol">→</a> <a id="1026" href="unit-type.html#396" data-type="general-notation.Type" class="Record">𝟙</a> <a id="1028" class="Symbol">→</a> <a id="1030" href="unit-type.html#982" class="Bound">A</a>
+<a id="1032" href="unit-type.html#965" data-type="A → unit-type.𝟙 → A" class="Function">𝟙-nondep-elim</a> <a id="1046" class="Symbol">{</a><a id="1047" href="unit-type.html#1047" class="Bound">A</a><a id="1048" class="Symbol">}</a> <a id="1050" class="Symbol">=</a> <a id="1052" href="unit-type.html#606" data-type="A unit-type.⋆ → (x : unit-type.𝟙) → A x" class="Function">𝟙-elim</a> <a id="1059" class="Symbol">{λ</a> <a id="1062" href="unit-type.html#1062" class="Bound">_</a> <a id="1064" class="Symbol">→</a> <a id="1066" href="unit-type.html#1047" class="Bound">A</a><a id="1067" class="Symbol">}</a>
 </pre>
 <p><a href="https://martinescardo.github.io/HoTTEST-Summer-School/">Go
 back to the table of contents</a></p>
