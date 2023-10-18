@@ -144,4 +144,6 @@ data ℕ : Type where
  zero : ℕ
  suc  : ℕ → ℕ
 
+the : ∀ {l} (A : Type l) → A → A
+the _ x = x
 ```

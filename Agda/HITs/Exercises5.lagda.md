@@ -132,7 +132,7 @@ PathOver-endo≡ : ∀ {A : Type} {f : A → A}
                  {a a' : A} {p : a ≡ a'}
                  {q : (f a) ≡ a}
                  {r : (f a') ≡ a'}
-               → {!!}
+               → the Type {! !}
                → q ≡ r [ (\ x → f x ≡ x) ↓ p ]
 PathOver-endo≡ {p = (refl _)} {q = q} {r} h = {!!}
 
