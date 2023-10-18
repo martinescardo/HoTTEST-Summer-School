@@ -9,8 +9,7 @@ module cubical-prelude where
 
 open import Agda.Builtin.Cubical.Path public
 open import Agda.Builtin.Cubical.Sub public
-  renaming ( inc to inS
-           ; primSubOut to outS
+  renaming ( primSubOut to outS
            )
 open import Agda.Primitive.Cubical public
   renaming ( primIMin       to _∧_  -- I → I → I
@@ -501,5 +500,3 @@ Bin→ℕ→Bin (binPos p)  = posInd localrefl (λ p _ → rem p) p
                                                               (localap sucPos (Pos→ℕ→Pos p))) ⟩
     binPos (sucPos p) ∎
 ```
-
-

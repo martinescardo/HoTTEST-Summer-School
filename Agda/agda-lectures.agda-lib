@@ -4,3 +4,4 @@ include: Lecture-Notes/files
          Exercises
          Auxiliary
          Cubical
+flags: -WnoUnsupportedIndexedMatch

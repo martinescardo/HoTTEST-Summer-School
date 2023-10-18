@@ -4,7 +4,7 @@ Notes originally written for the module *Advanced Functional Programming* of the
 
 <!--
 ```agda
-{-# OPTIONS --without-K --safe #-}
+{-# OPTIONS --cubical-compatible --safe #-}
 
 module introduction where
 ```
