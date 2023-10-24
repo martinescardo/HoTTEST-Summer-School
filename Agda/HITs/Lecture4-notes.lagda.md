@@ -302,7 +302,16 @@ postulate
   merid  : {A : Type} → A → northS ≡ southS [ Susp A ]
   Susp-rec : {l : Level} {A : Type} {X : Type l}
              (n : X) (s : X) (m : A → n ≡ s)
-          → Susp A → X
+          → Susp A → X     
+  Susp-rec-north : {l : Level} {A : Type} {X : Type l} (n : X) (s : X) (m : A → n ≡ s)
+                   → Susp-rec n s m northS ≡ n
+  Susp-rec-south : {l : Level} {A : Type} {X : Type l} (n : X) (s : X) (m : A → n ≡ s)
+                   → Susp-rec n s m southS ≡ s                 
+{-# REWRITE Susp-rec-north #-}
+{-# REWRITE Susp-rec-south #-}
+postulate
+  Susp-rec-meridan : {l : Level} {A : Type} {X : Type l} (n : X) (s : X) (m : A → n ≡ s)
+                     → (a : A) → ap (Susp-rec n s m) (merid a) ≡ m a 
 ```
 
 # Pushouts
@@ -319,7 +328,18 @@ module _  {C : Type} {A : Type} {B : Type} {f : C → A} {g : C → B} where
     glue : (c : C) → inl (f c) ≡ inr (g c)
     Push-rec : {X : Type} (l : A → X) (r : B → X) (gl : (c : C) → l (f c) ≡ r (g c))
              → Pushout C A B f g → X
-```
+             
+    Push-rec-inl : {X : Type} (l : A → X) (r : B → X) (gl : (c : C) → l (f c) ≡ r (g c))
+                    → (a : A) → (Push-rec l r gl) (inl a) ≡ l a            
+    Push-rec-inr : {X : Type} (l : A → X) (r : B → X) (gl : (c : C) → l (f c) ≡ r (g c))
+                    → (b : B) → (Push-rec l r gl) (inr b) ≡ r b
+                           
+    Push-rec-glue : {X : Type} (l : A → X) (r : B → X) (gl : (c : C) → l (f c) ≡ r (g c))
+                    → (c : C) → gl c ≡ (l (f c)                    ≡⟨ !  (Push-rec-inl l r gl (f c)) ⟩
+                                       Push-rec l r gl (inl (f c)) ≡⟨ ap (Push-rec l r gl) (glue c) ⟩
+                                       Push-rec l r gl (inr (g c)) ≡⟨     Push-rec-inr l r gl (g c) ⟩
+                                       r (g c) ∎)                                       
+```                    
 
 # Relation quotient
 
