@@ -3,7 +3,7 @@ Notes originally written for the module *Advanced Functional Programming* of the
 
 ## [Preferred link to see these lecture notes](https://martinescardo.github.io/HoTTEST-Summer-School/)
 
-## [Lecture Notes](./files/)
+## [Lecture Notes](./files/all.lagda.md)
 
  1. [Introduction](files/introduction.lagda.md)
  1. Propositions as types and basic Martin-Löf type theory
